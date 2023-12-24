@@ -29,7 +29,6 @@ class Tank:
         self.fish.append(fish)
 
     def update(self):
-
         # Clear buffer
         self.buffer = [[" " for _ in range(self.width)] for _ in range(self.height)]
 

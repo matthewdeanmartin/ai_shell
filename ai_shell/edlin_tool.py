@@ -14,15 +14,12 @@ import logging
 import logging.config
 import traceback
 
-import dotenv
-
 import dedlin
 from ai_shell.cat_tool import CatTool
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import sanitize_path
 from dedlin.command_sources import StringCommandGenerator
 
-dotenv.load_dotenv()
 
 logger = logging.getLogger(__name__)
 

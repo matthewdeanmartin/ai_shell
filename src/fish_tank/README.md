@@ -1,6 +1,17 @@
-# Welcome to the Fish Tank
-
 # Console Fish Tank
 
+## Usage
 
-TODO: When shark is adjacent to fish, shark eats fish.
+```shell
+python -m fish_tank
+```
+
+## Testing
+
+```shell
+pytest tests
+```
+
+## TODO
+
+- When shark is adjacent to fish, shark eats fish.

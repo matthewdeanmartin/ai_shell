@@ -4,15 +4,14 @@
 
 - Aggressively reduce tool count
 - Multiple "go-on" prompts
-    - Static ("If done, report done, otherwise keep working.")
-    - Self Check ("You haven't run the self check tool, keep working")
-    - Self Check With Success ("You haven't run the self check tool with a success flag, keep working")
-    - Dynamic ("See output of lambda {output}, if done, stop, otherwise keep working")
-    - Dynamic with inputs ("See output of lambda(folder, min_pass, max_fail), not good enough, keep working.")
-    - 2nd bot "Did this bot achieve the goal? No? What should we tell him."
+  - Static ("If done, report done, otherwise keep working.")
+  - Self Check ("You haven't run the self check tool, keep working")
+  - Self Check With Success ("You haven't run the self check tool with a success flag, keep working")
+  - Dynamic ("See output of lambda {output}, if done, stop, otherwise keep working")
+  - Dynamic with inputs ("See output of lambda(folder, min_pass, max_fail), not good enough, keep working.")
+  - 2nd bot "Did this bot achieve the goal? No? What should we tell him."
 - Temp folder other than OS temp folder.
 - Set pwd in one folder, but only allow certain folders (eg. /src/, but only allow /src/module)
-
 
 ## AI prompt/response size concerns
 
@@ -26,8 +25,8 @@
 - History - history just for the bot. Different from developer oriented logging.
 - fuzzy search based on fuzzy source code search tools
 - Regex tester
-    - Built into tool, e.g. grep(search_regex, example_hit, example_miss)
-    - Standalone, e.g regex_test(search_regex, example_hit, example_miss)
+  - Built into tool, e.g. grep(search_regex, example_hit, example_miss)
+  - Standalone, e.g regex_test(search_regex, example_hit, example_miss)
 - Regex tester bot, e.g. "Hey bot does regex {regex} make sense for {goal}?"
 
 ## Editing

@@ -17,7 +17,8 @@ from ai_shell.utils.log_conversation import DialogLoggerWithMarkdown
 logger = logging.getLogger(__name__)
 
 # Adding line so module isn't unused
-print("Reminder, using a monkey patch for parallel tool call support " + str(openai_multi_tool_use_parallel_patch))
+if not openai_multi_tool_use_parallel_patch:
+    print("Adding code so pylint doesn't think the module is unused.")
 
 
 class TaskBot:

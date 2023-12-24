@@ -10,7 +10,7 @@ import traceback
 from typing import Any
 
 from openai.types.beta.threads import Run
-from typing_extensions import Callable
+from typing import Callable
 
 from ai_shell.utils import medias
 from ai_shell.utils.json_utils import LoosyGoosyEncoder, exception_to_rfc7807_dict, try_everything

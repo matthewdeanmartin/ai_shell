@@ -40,7 +40,6 @@ def find_function_code(file_path, function_name):
 
 
 if __name__ == "__main__":
-
     # Example usage
     file_name, func_name, lines = find_function_code("source_refs.py", "find_function_code")
     if lines:

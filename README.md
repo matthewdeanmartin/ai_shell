@@ -1,8 +1,9 @@
 # ai_shell
+
 OpenAI-centric shell for giving safe, chat-optimized, filesystem access to an Assistant as a "tool".
 
 Even if you trust the bot to run bash directly on your machine or docker container, standard tools will run up your
-bill with excess tokens in the reply, or a command generates too few tokens and the bot doesn't know what is 
+bill with excess tokens in the reply, or a command generates too few tokens and the bot doesn't know what is
 going on.
 
 This is an alternative to `code_interpreter`, tools running code in docker container locally, or tools running arbitrary shell code locally.
@@ -14,13 +15,16 @@ This is an alternative to `code_interpreter`, tools running code in docker conta
 ## Usage
 
 See these full examples. As long as the OPENAI_API_KEY environment variable is set, you can run these examples.
+
 - [Pylint bot](example_pylint_bot.py) will attempt to fix python code lint issues.
 - [Test writer bot](example_test_writer_bot.py) will attempt to write unit tests for python code.
 - [Tool tester bot](example_tool_tester_bot.py) tries out tools to see if they basically work.
 
 This is the python interface to the tools, how you're expected to wire up the tool to your bot.
+
 ```python
 import ai_shell
+
 cat = ai_shell.CatTool(".")
 print(cat.cat(["file.py"]))
 print(cat.cat_markdown(["file.py"]))
@@ -31,6 +35,7 @@ print(ls.ls_markdown("docs"))
 ```
 
 This is the smallest example to illustrate basic capabilities.
+
 ```python
 import asyncio
 import ai_shell
@@ -40,9 +45,13 @@ async def main():
     def static_keep_going(toolkit: ai_shell.ToolKit):
         usage = toolkit.get_tool_usage_for("ls")
         if usage["count"] > 0:
-            return "Great job! You've used ls. Summarize in paragraph form and we're done."
-        return "You haven't used the ls tool yet. Do you have access to the ls tool? If" \
-               " there is a problem report it to the report_text tool to end the session."
+            return (
+                "Great job! You've used ls. Summarize in paragraph form and we're done."
+            )
+        return (
+            "You haven't used the ls tool yet. Do you have access to the ls tool? If"
+            " there is a problem report it to the report_text tool to end the session."
+        )
 
     # Creates temporary bots
     bot = ai_shell.TaskBot(
@@ -55,20 +64,27 @@ async def main():
     await bot.initialize()
     the_ask = f"""You are in the './' folder. You do not need to guess the pwd, it is './'. 
     Run ls and tell me what you see in paragraph format."""
-    await bot.basic_tool_loop(the_ask=the_ask,
-                              root_folder="./src",
-                              tool_names=["ls", "report_text", ],
-                              keep_going_prompt=static_keep_going)
+    await bot.basic_tool_loop(
+        the_ask=the_ask,
+        root_folder="./src",
+        tool_names=[
+            "ls",
+            "report_text",
+        ],
+        keep_going_prompt=static_keep_going,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(main())
 ```
 
 This is the cli interface, which is intended for testing, not for bot usage.
+
 ```shell
-ais cat cat --file-paths "minimal_shell_example.sh" --number-lines --squeeze-blank --squeeze-blank
+ais cat_markdown --file-paths pyproject.toml
 ```
+
 ## Features in Brief
 
 - Many cli-like tools interfaces, such as ls, cat, grep, head, tail, and git.
@@ -76,17 +92,17 @@ ais cat cat --file-paths "minimal_shell_example.sh" --number-lines --squeeze-bla
 - UX with a bot in mind.
 - Security with mischievous but not especially malicious bot in mind.
 - Bot (Assistant) boilerplate help
-- Support for bots doing one shot tool use and goal function driven tool use. 
+- Support for bots doing one shot tool use and goal function driven tool use.
 - Bot have extensibility points.
 - TODO: plugin system for tools.
 
-
 ## Analogues supported today
+
 **Directories**: ls, find
 
 **Files**: cat, grep, head, tail
 
-**Editing**: sed, ed, edlin, patch, replace, insert, rewrite, write new 
+**Editing**: sed, ed, edlin, patch, replace, insert, rewrite, write new
 
 **Data**: cut
 
@@ -94,15 +110,15 @@ ais cat cat --file-paths "minimal_shell_example.sh" --number-lines --squeeze-bla
 
 **Tasking**: todo
 
-
 ## Prior Art
-ai_shell draws inspiration from various command-line interface (CLI) tools and shell environments, integrating 
-features from traditional shells with OpenAI's language models. It is designed to provide an easy and secure interface 
+
+ai_shell draws inspiration from various command-line interface (CLI) tools and shell environments, integrating
+features from traditional shells with OpenAI's language models. It is designed to provide an easy and secure interface
 for AI-assisted file system interactions, keeping in mind both usability and safety.
 
 ## Documentation
 
-- [Features](docs/Features.md)
-- [Design](docs/Design.md)
-- [Use Cases](docs/Usecases.md)
-- [TODO](docs/TODO.md)
+- [Features](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Features.md)
+- [Design](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Design.md)
+- [Use Cases](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Usecases.md)
+- [TODO](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/TODO.md)

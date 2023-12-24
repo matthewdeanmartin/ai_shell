@@ -10,7 +10,7 @@ def test_assigned_incomplete_tasks_to_markdown(snapshot):
     ]
 
     markdown_output = assigned_incomplete_tasks_to_markdown("Developer", tasks)
-    snapshot.assert_match(markdown_output, "assigned_incomplete_tasks.md")
+    snapshot.assert_match(markdown_output, "assigned_incomplete_tasks.mdx")
 
 
 def test_search_results_to_markdown(snapshot):
@@ -21,4 +21,4 @@ def test_search_results_to_markdown(snapshot):
     ]
 
     markdown_output = search_results_to_markdown("Feature", tasks)
-    snapshot.assert_match(markdown_output, "search_results.md")
+    snapshot.assert_match(markdown_output, "search_results.mdx")

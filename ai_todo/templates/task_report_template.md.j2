@@ -1,0 +1,13 @@
+# Incomplete Tasks Assigned to {{ assignee_name }}
+
+{% for category, tasks in tasks_by_category.items() %}
+## Category: {{ category }}
+{% for task in tasks %}
+- **Title**: {{ task.title }}
+- **Description**: {{ task.description }}
+- **Source Code Reference**: {{ task.source_code_ref }}
+{% endfor %}
+{% endfor %}
+
+## Summary
+- Total Tasks: {{ total_tasks }}

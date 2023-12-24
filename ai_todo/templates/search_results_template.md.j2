@@ -1,0 +1,12 @@
+# Search Results
+
+{% for task in tasks %}
+## {{ task.title }}
+- **Description**: {{ task.description }}
+- **Category**: {{ task.category }}
+- **Source Code Reference**: {{ task.source_code_ref }}
+- **Assigned to**: {{ task.assignee or "Unassigned" }}
+{% endfor %}
+
+## Summary
+- Total Matching Tasks: {{ total_tasks }}

@@ -1,0 +1,26 @@
+diff --git a/ai_shell/logging_utils.py b/ai_shell/logging_utils.py
+index de67f64..51ab37c 100644
+--- a/ai_shell/logging_utils.py
++++ b/ai_shell/logging_utils.py
+@@ -140,6 +140,7 @@ def method_to_command_subcommand(method_name: str) -> tuple[str, str]:
+         for name, _ in tools.items():
+             if name == method_name:
+                 return ns, name
++    return "", ""
+ 
+ 
+ def log():
+@@ -163,12 +164,12 @@ def log():
+ 
+ 
+ if __name__ == "__main__":
+-
+     @log()
+     def example(path: Optional[str] = ".", all: bool = False, long: bool = False) -> str:
+         # Function implementation goes here
+         return f"Listing markdown files at {path}"
+ 
++
+     # Set log folder and enable logging
+     set_log_folder("custom_logs")
+     enable_logging(True)

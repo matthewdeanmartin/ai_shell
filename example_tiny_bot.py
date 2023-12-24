@@ -1,0 +1,40 @@
+"""Bot with no extra logging or config."""
+import asyncio
+
+import ai_shell
+
+
+async def main():
+    def static_keep_going(toolkit: ai_shell.ToolKit):
+        usage = toolkit.get_tool_usage_for("ls")
+        if usage["count"] > 0:
+            return "Great job! You've used ls. Summarize in paragraph form and we're done."
+        return (
+            "You haven't used the ls tool yet. Do you have access to the ls tool? If"
+            " there is a problem report it to the report_text tool to end the session."
+        )
+
+    # Creates temporary bots
+    bot = ai_shell.TaskBot(
+        ai_shell.Config(),
+        name="Folder inspection bot.",
+        bot_instructions="Run the ls tool and tell me what you see.",
+        model="gpt-3.5-turbo-1106",
+        dialog_logger_md=ai_shell.DialogLoggerWithMarkdown("./tmp"),
+    )
+    await bot.initialize()
+    the_ask = """You are in the './' folder. You do not need to guess the pwd, it is './'. 
+    Run ls and tell me what you see in paragraph format."""
+    await bot.basic_tool_loop(
+        the_ask=the_ask,
+        root_folder="./src",
+        tool_names=[
+            "ls",
+            "report_text",
+        ],
+        keep_going_prompt=static_keep_going,
+    )
+
+
+if __name__ == "__main__":
+    asyncio.run(main())

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ai_shell"
-version = "0.1.1"
+version = "0.1.2"
 description = "Filesystem Shell interface that an OpenAI Assitant can use as a tool."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["openai", "chatgpt",]
@@ -18,12 +18,16 @@ include = [
     "ai_shell/**/*.txt",
     "ai_shell/**/*.html",
     "ai_shell/**/*.jinja",
+    "ai_todo/**/*.md.j2",
+    "ai_shell/py.typed",
 
     "ai_todo/**/*.py",
     "ai_todo/**/*.md",
     "ai_todo/**/*.txt",
     "ai_todo/**/*.html",
     "ai_todo/**/*.jinja",
+    "ai_todo/**/*.md.j2",
+    "ai_todo/py.typed",
 ]
 exclude = [
 ]
@@ -89,7 +93,7 @@ pyyaml = ">=6.0.1"
 pytest = ">=7.4.3"
 pytest-cov = ">=4.1.0"
 pylint = ">=3.0.2"
-
+ruff = ">=0.1.9"
 
 [tool.poetry.dev-dependencies]
 python-dotenv = ">=1.0.0"
@@ -102,6 +106,8 @@ python-dotenv = ">=1.0.0"
 # types
 mypy = ">=1.7.0"
 types-jsonschema = "*"
+types-PyYAML = "*"
+types-toml = "*"
 
 # build toolkit_factory
 black = ">=23.11.0"
@@ -212,3 +218,7 @@ version = "literal: pyproject.toml: tool.poetry.version"
 format = "md"
 main_branches = "master, main, develop, dev"
 
+[mypy]
+warn_return_any = true
+warn_unused_configs = true
+strict = true

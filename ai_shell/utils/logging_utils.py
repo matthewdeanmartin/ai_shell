@@ -49,7 +49,7 @@ def configure_logging() -> dict[str, Any]:
     # json handler
     for name in ["openai"]:
         logging_config["loggers"][name] = {
-            "handlers": ["default", "json"],
+            "handlers": ["json"],
             "level": "DEBUG",
             "propagate": False,
         }

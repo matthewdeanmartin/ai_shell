@@ -1,6 +1,7 @@
 """
 Code generate reverse client
 """
+from typing import Any, cast
 
 import ai_shell.openai_schemas as schemas
 
@@ -64,6 +65,7 @@ def generate_method_code(schema: dict, prologue: str):
 
 
 def run() -> None:
+    """Main entry point."""
     tools = ""
     for ns, json_schema in schemas.SCHEMAS.items():
         for tool, _ in json_schema.items():
@@ -153,7 +155,7 @@ def run() -> None:
             middle += f'    """Invoke {method}"""\n'
             middle += f"    tool = {data['class']}('.')\n"
             middle += f"    pretty_console(tool.{method}("
-            for arg_name, arg_details in method_data["properties"].items():
+            for arg_name, arg_details in cast(dict[str, Any], method_data["properties"]).items():
                 if arg_name != "mime_type":
                     # don't know how to handle mime types in CLI yet.
                     middle += f"\n        {arg_name} = args.{arg_name},"
@@ -166,10 +168,12 @@ def run() -> None:
     """
     for ns, data in meta.items():
         for method, method_data in schemas.SCHEMAS[ns].items():
-            escaped_method_description = method_data.get("description", "").replace("'", "\\'").replace("\n", "\\n")
+            escaped_method_description = (
+                cast(str, method_data.get("description", "")).replace("'", "\\'").replace("\n", "\\n")
+            )
             argparse_part += f'    # Create a parser for the "{method}" command\n'
             argparse_part += f"""    {method}_parser = subparsers.add_parser('{method}', help=\"\"\"{escaped_method_description}.\"\"\")\n"""
-            for arg_name, arg_details in method_data["properties"].items():
+            for arg_name, arg_details in cast(dict[str, Any], method_data["properties"]).items():
                 dashed_arg_name = arg_name.replace("_", "-")
                 escaped_description = arg_details.get("description", "").replace("'", "\\'")
 

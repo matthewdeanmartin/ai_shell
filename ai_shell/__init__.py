@@ -1,5 +1,5 @@
 """
-Filesystem shell toolkit_factory for OpenAI Assistant
+Filesystem shell tools for OpenAI Assistant
 """
 from ai_shell.answer_tool import AnswerCollectorTool
 from ai_shell.bot_glue.bot import TaskBot

@@ -4,6 +4,7 @@ AI Optimized TODO tool. Alternative to JIRA or the like.
 The bot doesn't understand the assignee field.
 """
 import logging
+from typing import Optional
 
 import ai_todo
 from ai_shell.utils.logging_utils import log
@@ -25,7 +26,9 @@ class TodoTool:
         self.task_manager = ai_todo.TaskManager(self.root_folder, ["Tester", "Programmer"])
 
     @log()
-    def add_todo(self, title: str, description: str, category: str, source_code_ref: str, assignee: str = None) -> str:
+    def add_todo(
+        self, title: str, description: str, category: str, source_code_ref: str, assignee: Optional[str] = None
+    ) -> str:
         """
         Adds a new task to the task manager.
 

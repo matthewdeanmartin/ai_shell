@@ -9,11 +9,17 @@ import logging.config
 from dotenv import load_dotenv
 
 import ai_shell
+import ai_shell.externals.pytest_call
 
 ai_shell.utils.logging_utils.LOGGING_ENABLED = True
 
 with ai_shell.change_directory("src"):
-    initial_passed_tests, initial_failed_tests = ai_shell.pytest_call.count_pytest_results("tests")
+    (
+        initial_passed_tests,
+        initial_failed_tests,
+        initial_coverage,
+        initial_pytest_output,
+    ) = ai_shell.externals.pytest_call.count_pytest_results("fish_tank", "tests", 80)
 
 
 async def pytest_goal_checker(toolkit: ai_shell.ToolKit):
@@ -32,6 +38,7 @@ async def pytest_goal_checker(toolkit: ai_shell.ToolKit):
             " Remember: read the code with cat_markdown, write tests with write_new_file, run tests with pytest."
         )
     write_new_file_stats = toolkit.get_tool_usage_for("write_new_file")
+
     if write_new_file_stats["count"] == 0:
         return (
             "You haven't written any tests (no usage of write_new_file)."
@@ -39,28 +46,44 @@ async def pytest_goal_checker(toolkit: ai_shell.ToolKit):
         )
 
     with ai_shell.change_directory("src"):
-        passed_tests, failed_tests = ai_shell.pytest_call.count_pytest_results("tests")
-    if passed_tests > initial_passed_tests and failed_tests == 0:
-        return (
-            f"Current pytest results : {passed_tests} passed, {failed_tests} failed, so nothing is failing and we"
-            f"have more tests than when we started. "
-            "Do you feel that you have written enough tests? If so, report your results using report_text."
+        passed_tests, failed_tests, coverage, pytest_output = ai_shell.externals.pytest_call.count_pytest_results(
+            "fish_tank", "tests", 80
         )
+    if coverage >= 80:
+        return "DONE"
+    if passed_tests > initial_passed_tests and initial_coverage == coverage:
+        return (
+            "You've written more tests, but coverage didn't go up. Was that a meaningful test? Try harder. "
+            "We are counting on you."
+        )
+
+    message = (
+        f"Current pytest results : {passed_tests} passed, {failed_tests} failed, coverage {coverage}%\n\n"
+        + pytest_output.stdout
+        + "\n\n"
+    )
+    # if passed_tests > initial_passed_tests and failed_tests == 0:
+    #     return (
+    #         f"{message}\n"
+    #         f"So nothing is failing and we "
+    #         f"have more tests than when we started. "
+    #     )
     if passed_tests == initial_passed_tests:
         return (
-            f"Current pytest results : {passed_tests} passed, {failed_tests} failed, that no more passing tests than"
-            f"when we started. I'd hoped for some more passing tests. "
-            "Do you feel that you have written enough tests? If so, report your results using report_text."
+            f"{message}\n"
+            " That's no more passing tests than "
+            f"when we started. I'd hoped for some more passing tests. Keep writing tests, please."
         )
     if passed_tests == 0 and failed_tests > 0:
         return (
-            f"Current pytest results : {passed_tests} passed, {failed_tests} failed, thats no passing tests and"
-            f"everything is failing. We need to do better. "
-            "Do you feel that you have written enough tests? If so, report your results using report_text."
+            f"{message}\n"
+            f"That's no passing tests and "
+            f"everything is failing. We need to do better. Keep writing tests, please."
         )
+
     return (
-        f"Current pytest results : {passed_tests} passed, {failed_tests} failed "
-        "Do you feel that you have written enough tests? If so, report your results using report_text."
+        f"{message}\n"
+        f"Current pytest results : {passed_tests} passed, {failed_tests} failed. Keep writing tests, please."
     )
 
 
@@ -76,17 +99,17 @@ async def main():
     model = "gpt-3.5-turbo-1106"
 
     bot_instructions = (
-        "You are a unit test writer. You write unit tests at the bottom of code files and you use the `unittest`"
-        " library and invoke the runner in an if name == main block."
+        "You are a unit test writer. You write pytest style unit tests in the tests folder and you use the `pytest`"
+        " tool, write_new_file tool, cat_markdown tool and report_text tool to accomplish your goal."
     )
     tool_names = [
         # "query_todos_by_regex", "remove_todo", "add_todo",
         "ls",
         "cat_markdown",
-        # "rewrite_file",
+        "rewrite_file",
         "write_new_file",
         # "grep",
-        "report_text",
+        # "report_text", # Don't let it self-certify.
         # "insert_text_after_context",
         # "insert_text_after_multiline_context",
         # "insert_text_at_start_or_end",
@@ -97,8 +120,11 @@ async def main():
     ]
     bot_name = "Unit test writer."
 
-    dialog_logger_md = ai_shell.DialogLoggerWithMarkdown(bot_name, model, bot_instructions)
-    request = """You are in the './' folder. The base folder is './'. You do not need to guess the pwd, it is './'.
+    dialog_logger_md = ai_shell.DialogLoggerWithMarkdown()
+    request = """We have an important task. You are the best unit test writer we have. We are counting
+on you to get this right.
+
+You are in the './' folder. The base folder is './'. You do not need to guess the pwd, it is './'.
 
 The code to test is in the fish_tank folder, `./fish_tank`.  The tests are in the `./tests` folder. 
 
@@ -106,17 +132,26 @@ Here is a map.
 fish_tank
 ├── __init__.py
 ├── __main__.py
-├── README.md
 tests
-├── __init__.py
-└── test_basic.py
+├── test_import_module.py
+└── __init__.py
+
+Do not start writing tests until you use cat_markdown tool to read the fish_tank code.
 
 Now that is out of the way, use the tools available to write pytest unit tests for each .py file in `fish_tank`
  with code, e.g. ./fish_tank/__main__.py is a good place to start. Put test files into the tests folder.
 
-You have permission to write NEW FILES. Do not attempt to overwrite existing files.
+You have permission to write new files with write_new_file. 
 
-Write tests, run tests, then report results using report_text. Then you are done.
+You have permission to rewrite entire files with the rewrite_file tool.
+
+Tests should meaningfully exercise the code in the fish_tank folder and achieve 80% coverage.
+
+- Do not write unit tests with out assertions. 
+- Do not write unit tests with `pass` as the body.
+- Do not add new functions to fish_tank module just to test them, test only pre-existing functions.
+
+Write tests, run tests. You are done when the coverage is 80% or more.
 """
     root_folder = "e:/github/ai_shell/src"
 

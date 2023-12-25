@@ -15,10 +15,16 @@ logger = logging.getLogger(__name__)
 
 # TODO: Support automatically adding a branch on start of session.
 class GitTool:
-    def __init__(self, repo_path: str) -> None:
+    def __init__(self, root_folder: str) -> None:
+        """
+        Initialize the EdTool class.
+
+        Args:
+            root_folder (str): The root folder path for repo operations.
+        """
         # Initialize the repository
-        self.repo_path = repo_path
-        self.repo = Repo(repo_path)
+        self.repo_path = root_folder
+        self.repo = Repo(root_folder)
 
     def is_ignored_by_gitignore(self, file_path: str, gitignore_path: str = ".gitignore") -> bool:
         """

@@ -13,7 +13,16 @@ from ai_shell.utils.read_fs import sanitize_path
 
 
 class EdTool:
+    """A python version of ed."""
+
     def __init__(self, root_folder: str):
+        """
+        Initialize the EdTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations.
+        """
+
         self.root_folder = root_folder if root_folder.endswith("/") else root_folder + "/"
         self.buffer = Buffer()
         self.auto_cat = True

@@ -156,7 +156,18 @@ class InsertTool:
 
         return self._save_if_changed(file_path, lines, new_file_string)
 
-    def _save_if_changed(self, file_path: str, original_lines, new_file_string: Union[str, list[str]]):
+    def _save_if_changed(self, file_path: str, original_lines, new_file_string: Union[str, list[str]]) -> str:
+        """
+        Save the file if it has changed.
+
+        Args:
+            file_path: The path of the file to save.
+            original_lines: The original file contents.
+            new_file_string: The new file contents.
+
+        Returns:
+            A message for the bot with the result of the save.
+        """
         if not new_file_string:
             raise TypeError("Something went wrong in insert and all text disappeared. Cancelling.")
         if isinstance(new_file_string, list):
@@ -175,8 +186,10 @@ class InsertTool:
             )
         if is_python_file(file_path):
             is_valid, error = is_valid_python_source(source)
-            if not is_valid:
+            if not is_valid and error:
                 return f"Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}"
+            if not is_valid:
+                return f"Invalid Python source code. No changes made. {error}."
 
         # Write back to the file
         with open(file_path, "w", encoding="utf-8") as file:

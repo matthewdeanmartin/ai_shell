@@ -5,10 +5,13 @@ import ai_shell
 
 
 async def main():
-    def static_keep_going(toolkit: ai_shell.ToolKit):
+    async def static_keep_going(toolkit: ai_shell.ToolKit):
         usage = toolkit.get_tool_usage_for("ls")
         if usage["count"] > 0:
-            return "Great job! You've used ls. Summarize in paragraph form and we're done."
+            # Objective completion of goal.
+            return "DONE"
+            # TODO: Let people thank the bot.
+            # " Great job! You've used ls. Summarize in paragraph form and we're done."
         return (
             "You haven't used the ls tool yet. Do you have access to the ls tool? If"
             " there is a problem report it to the report_text tool to end the session."

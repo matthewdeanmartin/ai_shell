@@ -1,3 +1,6 @@
+"""
+Generates JsonSchema in form of a python file.
+"""
 import logging
 from pprint import pformat
 
@@ -6,7 +9,7 @@ from ai_shell.code_generate.method_to_jsonschema import convert_to_json_schema
 
 
 def run() -> None:
-    """run it"""
+    """Main entrypoint."""
 
     # Setup logging for my_app
     # We will only setup a console handler

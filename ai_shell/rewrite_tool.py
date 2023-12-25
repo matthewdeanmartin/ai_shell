@@ -126,23 +126,24 @@ class RewriteTool:
         if not is_file_in_root_folder(full_path, self.root_folder):
             raise ValueError("File path must be within the root folder.")
 
-        _unchanged_proportion, initial, unchanged, added, removed = file_similarity(full_path, text.split("\n"))
-        if 5 < initial <= removed:
-            # concern is taking a large file, and deleting everything (ie. confusing full rewrite for an insert or edit)
-            raise TypeError(
-                "Removed lines is equal initial number of lines. "
-                "When rewriting files, you have to re-write the previous lines, too."
-            )
-        if unchanged > 0 and initial > 0 and added == 0 and removed == 0:
-            raise TypeError(
-                "Nothing changed, nothing was added or removed. "
-                "When rewriting files, you have to re-write the whole file "
-                "with lines changed, added or removed."
-            )
+        # not sure this is working right.
+        # _unchanged_proportion, initial, unchanged, added, removed = file_similarity(full_path, text.split("\n"))
+        # if 5 < initial <= removed:
+        #     # concern is taking a large file, and deleting everything (ie. confusing full rewrite for an insert or edit)
+        #     raise TypeError(
+        #         "Removed lines is equal initial number of lines. "
+        #         "When rewriting files, you have to re-write the previous lines, too."
+        #     )
+        # if unchanged > 0 and initial > 0 and added == 0 and removed == 0:
+        #     raise TypeError(
+        #         "Nothing changed, nothing was added or removed. "
+        #         "When rewriting files, you have to re-write the whole file "
+        #         "with lines changed, added or removed."
+        #     )
 
         try:
             if not os.path.exists(full_path):
-                raise FileNotFoundError("File does not exist.")
+                raise FileNotFoundError("File does not exist, use ls tool to see what files there are.")
 
             with open(full_path, "w", encoding="utf-8") as file:
                 file.write(text)

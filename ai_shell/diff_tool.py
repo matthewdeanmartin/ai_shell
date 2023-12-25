@@ -19,7 +19,8 @@ def apply_git_patch(diff_string: str, target_file: str):
         bool: True if the patch was successfully applied, False otherwise.
     """
     # Create a PatchSet from the diff string
-    patch_set = unidiff.PatchSet(diff_string.splitlines(keepends=True))
+    # was diff_string.splitlines(keepends=True)...
+    patch_set = unidiff.PatchSet(diff_string)
 
     # Find the specific patch for the target file
     target_patch = None

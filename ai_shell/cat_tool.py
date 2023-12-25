@@ -85,10 +85,13 @@ class CatTool:
             for file_path in safe_glob(glob_pattern, self.root_folder):
                 if not os.path.isabs(file_path):
                     file_path = self.root_folder + "/" + file_path
-                with open(file_path, "rb") as file:
-                    for line in self._process_cat_file(file, line_number, number_lines, squeeze_blank):
-                        yield line
-                        line_number += 1
+                try:
+                    with open(file_path, "rb") as file:
+                        for line in self._process_cat_file(file, line_number, number_lines, squeeze_blank):
+                            yield line
+                            line_number += 1
+                except PermissionError:
+                    logger.warning(f"Permission denied: {file_path}, suppressing from output.")
 
     def _process_cat_file(
         self,
@@ -136,7 +139,7 @@ class CatTool:
 
 
 if __name__ == "__main__":
-    tool = CatTool(root_folder="./")
+    tool = CatTool(root_folder="./..")
 
-    for thing in tool.cat(file_paths=["cat_tool.py"]):
+    for thing in tool.cat(file_paths=["*.py"]):
         print(thing, end="")

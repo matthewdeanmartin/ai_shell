@@ -1,3 +1,3 @@
 """
-Sub-bot that will pick toolkit_factory and prevent distraction.
+Sub-bot that will pick tools and prevent distraction.
 """

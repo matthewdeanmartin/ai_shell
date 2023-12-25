@@ -1,5 +1,5 @@
 import fish_tank
 
 
-def test_main_import():
+def test_import():
     assert fish_tank

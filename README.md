@@ -6,7 +6,8 @@ Even if you trust the bot to run bash directly on your machine or docker contain
 bill with excess tokens in the reply, or a command generates too few tokens and the bot doesn't know what is
 going on.
 
-This is an alternative to `code_interpreter`, tools running code in docker container locally, or tools running arbitrary shell code locally.
+This is an alternative to `code_interpreter`, tools running code in docker container locally, or tools running arbitrary
+shell code locally.
 
 ## Installation
 
@@ -16,9 +17,12 @@ This is an alternative to `code_interpreter`, tools running code in docker conta
 
 See these full examples. As long as the OPENAI_API_KEY environment variable is set, you can run these examples.
 
-- [Pylint bot](example_pylint_bot.py) will attempt to fix python code lint issues.
-- [Test writer bot](example_test_writer_bot.py) will attempt to write unit tests for python code.
-- [Tool tester bot](example_tool_tester_bot.py) tries out tools to see if they basically work.
+- [Pylint bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/example_pylint_bot.py) will attempt to fix python
+  code lint issues.
+- [Test writer bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/example_test_writer_bot.py) will attempt to
+  write unit tests for python code.
+- [Tool tester bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/example_tool_tester_bot.py) tries out tools
+  to see if they basically work.
 
 This is the python interface to the tools, how you're expected to wire up the tool to your bot.
 
@@ -34,7 +38,8 @@ print(ls.ls("docs"))
 print(ls.ls_markdown("docs"))
 ```
 
-This is the smallest example to illustrate basic capabilities.
+This is the smallest example to illustrate basic capabilities, also
+see [here](https://github.com/matthewdeanmartin/ai_shell/blob/main/example_tiny_bot.py).
 
 ```python
 import asyncio

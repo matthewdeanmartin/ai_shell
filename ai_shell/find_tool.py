@@ -18,6 +18,12 @@ logger = logging.getLogger(__name__)
 
 class FindTool:
     def __init__(self, root_folder: str) -> None:
+        """
+        Initialize the FindTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations.
+        """
         self.root_folder = root_folder
 
     @log()

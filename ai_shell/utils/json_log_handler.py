@@ -1,3 +1,6 @@
+"""
+This module contains a custom logging handler that writes JSON-formatted log messages to a folder.
+"""
 import ast
 import json
 from logging import Handler
@@ -5,6 +8,13 @@ from pathlib import Path
 
 
 def almost_json_to_json(data_str: str) -> str:
+    """
+    Convert a string that is almost JSON into a JSON string.
+    Args:
+        data_str (str): A string that is almost JSON.
+    Returns:
+        str: A JSON string.
+    """
     # Remove the initial "Request options:" part
     cleaned_data_str = data_str.replace("Request options:", "").replace("'HTTP Request:", "").strip()
 
@@ -21,7 +31,15 @@ def almost_json_to_json(data_str: str) -> str:
 
 
 class JSONFileHandler(Handler):
-    def __init__(self, directory, module_name):
+    """Logs openai requests to JSON files in a folder"""
+
+    def __init__(self, directory: str, module_name: str) -> None:
+        """
+        Initialize the JSONFileHandler class.
+        Args:
+            directory (str): The directory path for file operations.
+            module_name (str): The name of the module whose logs to write.
+        """
         super().__init__()
         self.directory = directory
         self.module_name = module_name
@@ -30,6 +48,7 @@ class JSONFileHandler(Handler):
         self._ensure_directory_exists()
 
     def emit(self, record):
+        """Handles emitted records."""
         # Check if the message is from the specified module
         if record.name.startswith(self.module_name):
             try:
@@ -47,9 +66,11 @@ class JSONFileHandler(Handler):
                 self.handleError(record)
 
     def _ensure_directory_exists(self):
+        """Creates the directory if it doesn't exist."""
         Path(self.directory, f"session{self.session_count}").mkdir(parents=True, exist_ok=True)
 
     def _get_next_session_number(self):
+        """Returns the next session number."""
         session_dir = Path(self.directory)
         if not session_dir.exists():
             return 1

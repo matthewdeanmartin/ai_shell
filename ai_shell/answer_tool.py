@@ -12,28 +12,35 @@ How is this different from a tool call?
 
 
 """
-from typing import Any
+from typing import Any, Optional
 
 from ai_shell.utils.logging_utils import log
 
 
 class AnswerCollectorTool:
     def __init__(self, root_folder: str):
-        self.comment = None
-        self.bool_answer = None
-        self.json_answer = None
-        self.xml_answer = None
-        self.toml_answer = None
-        self.tuple_answer = None
-        self.set_answer = None
-        self.text_answer = None
-        self.list_answer = None
-        self.int_answer = None
-        self.float_answer = None
-        self.dict_answer = None
+        """
+        Initialize the PytestTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations. (Not used yet)
+        """
+        self.comment: Optional[str] = None
+        self.bool_answer: Optional[bool] = None
+        self.json_answer: Optional[str] = None
+        self.xml_answer: Optional[str] = None
+        self.toml_answer: Optional[str] = None
+        self.tuple_answer: Optional[tuple] = None
+        self.set_answer: Optional[set] = None
+        self.text_answer: Optional[str] = None
+        self.list_answer: Optional[list[str]] = None
+        self.int_answer: Optional[int] = None
+        self.float_answer: Optional[float] = None
+        self.dict_answer: Optional[dict[str, Any]] = None
         self.response_received = "Response received."
 
     def _answered(self) -> None:
+        """Check if this tool has been used."""
         if any(
             [
                 self.comment,

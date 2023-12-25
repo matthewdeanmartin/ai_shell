@@ -24,13 +24,3 @@ echo
 echo "Are the links okay?"
 echo
 poetry run linkcheckMarkdown content
-
-#echo
-#echo "Precommit"
-#echo
-# pre-commit run --all-files
-
-echo
-echo "Does pelican like it?"
-echo 
-poetry run pelican content -s pelicanconf.py -t themes/pelican-hyde

@@ -1,12 +1,12 @@
 """
-All the toolkit_factory are optimized for LLMs, but not openai specifically.
+All the tools are optimized for LLMs, but not openai specifically.
 
 This Toolkit and schemas handles some of the boilerplate for interfacing with
 the openai python client.
 """
 
 import logging
-from typing import Optional
+from typing import Collection, Optional, Union
 
 from ai_shell.ls_tool import LsTool
 from ai_shell.openai_schemas import SCHEMAS
@@ -26,7 +26,7 @@ def just_tool_names() -> list[str]:
 
 
 def initialize_all_tools(skips: Optional[list[str]] = None, keeps: Optional[list[str]] = None) -> None:
-    """Initialize all toolkit_factory"""
+    """Initialize all tools"""
     if keeps is not None:
         keep = keeps
     elif skips is None:
@@ -36,18 +36,17 @@ def initialize_all_tools(skips: Optional[list[str]] = None, keeps: Optional[list
 
     for _ns, tools in SCHEMAS.items():
         for name, schema in tools.items():
-            function_style = {}
-            function_style["name"] = name
+            function_style: dict[str, Union[str, Collection[str]]] = {"name": name}
             parameters = {"type": "object", "properties": schema["properties"], "required": schema["required"]}
             function_style["parameters"] = parameters
             function_style["description"] = schema["description"]
             if name in keep:
                 ALL_TOOLS.append(function_style)
-    logger.info(f"Active toolkit_factory {ALL_TOOLS}")
+    logger.info(f"Active tools {ALL_TOOLS}")
 
 
 def recommendations(root_folder: str):
-    """Recommend toolkit_factory based on the root folder."""
+    """Recommend tools based on the root folder."""
     tool = LsTool(root_folder)
     files = tool.ls("**/*")
     tool_set = set()
@@ -65,5 +64,5 @@ def recommendations(root_folder: str):
 
 
 def initialize_recommended_tools(root_folder: str) -> None:
-    """Initialize recommended toolkit_factory"""
+    """Initialize recommended tools"""
     initialize_all_tools(keeps=recommendations(root_folder))

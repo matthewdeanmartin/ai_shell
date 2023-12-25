@@ -75,7 +75,7 @@ def generate_method_code(schema: dict, prologue: str, namespace: str):
 
 
 def run() -> None:
-    """Run it"""
+    """Main entry point"""
     tools = ""
     for ns, json_schema in schemas.SCHEMAS.items():
         for tool, _ in json_schema.items():

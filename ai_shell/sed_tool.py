@@ -4,7 +4,7 @@ Optimized for AI version of sed. For file editing.
 However, the bot keeps trying to use features of real sed that this tool doesn't support.
 """
 import re
-from typing import Optional
+from typing import Optional, Sequence
 
 from ai_shell.cat_tool import CatTool
 from ai_shell.pycat_tool import is_python_file, is_valid_python_source
@@ -96,7 +96,7 @@ class SedTool:
         if isinstance(commands, str):
             commands = [commands]
 
-        lines: list[Optional[str]] = input_text.split("\n")
+        lines: Sequence[Optional[str]] = input_text.split("\n")
 
         for i in range(len(lines)):
             for command in commands:
@@ -150,7 +150,7 @@ class SedTool:
 if __name__ == "__main__":
 
     def run():
-        # Example usage
+        """Example usage"""
         # input_text = "Hello World\nThis is a test\nAnother line"
         # commands = ["s/World/Universe/", "a\\Appended text", "i\\Inserted text", "2c\\Changed line", "3d"]
         input_text = """

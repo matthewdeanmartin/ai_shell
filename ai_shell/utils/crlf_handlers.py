@@ -1,5 +1,16 @@
+"""
+This module contains classes for converting line endings between CRLF and LF.
+"""
+
+
 class LineEndingConverter:
-    def __init__(self, file_path):
+    def __init__(self, file_path: str) -> None:
+        """
+        Initialize the LineEndingConverter class.
+
+        Args:
+            file_path (str): The path of the file to convert.
+        """
         self.file_path = file_path
         self.lines = None
         self.line_endings_type = None
@@ -68,9 +79,14 @@ class LineEndingConverter:
 
 if __name__ == "__main__":
     # Example usage
-    converter = LineEndingConverter(__file__)
-    print(converter.check_line_endings())
-    converter.unix2dos()
+    def run() -> None:
+        """
+        Example usage
+        """
+        converter = LineEndingConverter(__file__)
+        print(converter.check_line_endings())
+        converter.unix2dos()
 
-    converter.dos2unix()
-    # or
+        converter.dos2unix()
+
+    run()

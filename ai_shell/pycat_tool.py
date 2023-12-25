@@ -73,6 +73,15 @@ class PyCatTool:
 
 
 def is_valid_python_file(file_name: str) -> bool:
+    """
+    Check if a given file is a valid Python file.
+
+    Args:
+        file_name (str): The file name or path to check.
+
+    Returns:
+        bool: True if the file is a valid Python file, False otherwise.
+    """
     with open(file_name, encoding="utf-8") as file:
         contents = file.read()
     is_valid, error = is_valid_python_source(contents)
@@ -80,6 +89,15 @@ def is_valid_python_file(file_name: str) -> bool:
 
 
 def is_valid_python_source(text: str) -> Tuple[bool, Optional[SyntaxError]]:
+    """
+    Check if a given string is valid Python source code.
+
+    Args:
+        text (str): The Python source code to check.
+    Returns:
+        bool: True if the source code is valid, False otherwise.
+        SyntaxError: The SyntaxError that was raised, if any.
+    """
     try:
         ast.parse(text)
         # or compile(contents, fname, 'exec', ast.PyCF_ONLY_AST)

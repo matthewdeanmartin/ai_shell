@@ -1,9 +1,22 @@
-from ai_shell.externals.subprocess_utils import safe_subprocess
+"""
+Runs pylint.
+
+External tools are not pure python and have subprocess risks.
+"""
+from ai_shell.externals.subprocess_utils import CommandResult, safe_subprocess
 
 
-def invoke_pylint(module_name: str) -> str:
-    command_name = "pytest"
-    arg_string = f"'{module_name}'"
+def invoke_pylint(module_name: str, mimimum_score: float) -> CommandResult:
+    """
+    Runs pylint on the module.
+
+    Args:
+        module_name (str): The name of the module to run pylint on.
+    Returns:
+        CommandResult: The result of the command.
+    """
+    command_name = "pylint"
+    arg_string = f"'{module_name}' --fail-under {mimimum_score}"
 
     # generic response.
     return safe_subprocess(command_name, arg_string)

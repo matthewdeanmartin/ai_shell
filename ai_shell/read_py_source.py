@@ -1,5 +1,5 @@
 """
-Read source with toolkit_factory that understand the stucture of python
+Read source with tools that understand the stucture of python
 """
 import ast
 import inspect

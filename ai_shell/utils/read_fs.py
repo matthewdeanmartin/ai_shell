@@ -9,11 +9,12 @@ import re
 from contextlib import contextmanager
 from itertools import islice
 from pathlib import Path
+from typing import Union
 
 logger = logging.getLogger(__name__)
 
 
-def sanitize_path(file_path):
+def sanitize_path(file_path: str) -> str:
     """Attempt to prevent parent directory traversal attacks by removing any leading '..' or '../' from the path."""
     # Pattern to match sequences like '.', '..', '../', '..\', and so on at the beginning of the path
     pattern = r"^(?:\.\.?[\\/])*"
@@ -63,7 +64,7 @@ def is_file_in_root_folder(file_path: str, root_folder: str) -> bool:
     return is_same
 
 
-def tree(dir_path: Path, level: int = -1, limit_to_directories: bool = False, length_limit: int = 1000):
+def tree(dir_path: Union[str, Path], level: int = -1, limit_to_directories: bool = False, length_limit: int = 1000):
     """Given a directory Path object print a visual tree structure
     Credits: https://stackoverflow.com/a/59109706/33264
     """
@@ -72,7 +73,8 @@ def tree(dir_path: Path, level: int = -1, limit_to_directories: bool = False, le
     tee = "├── "
     last = "└── "
 
-    dir_path = Path(dir_path)  # accept string coerceable to Path
+    if isinstance(dir_path, str):
+        dir_path = Path(dir_path)  # accept string coerceable to Path
     files = 0
     directories = 0
 

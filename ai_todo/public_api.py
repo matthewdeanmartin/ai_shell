@@ -1,3 +1,5 @@
+from typing import Optional
+
 from ai_todo.models import Task, Work
 from ai_todo.views import assigned_incomplete_tasks_to_markdown, search_results_to_markdown
 
@@ -16,7 +18,9 @@ class TaskManager:
         results = self.work.incomplete.query_tasks(keyword)
         return search_results_to_markdown(keyword, results)
 
-    def add_task(self, title: str, description: str, category: str, source_code_ref: str, assignee: str = None) -> None:
+    def add_task(
+        self, title: str, description: str, category: str, source_code_ref: str, assignee: Optional[str] = None
+    ) -> None:
         new_task = Task(title, description, False, category, source_code_ref, assignee)
         self.work.incomplete.add_task(new_task)
         self.work.incomplete.save_tasks()  # Save after adding task

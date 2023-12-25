@@ -1,12 +1,14 @@
 """
-Simple bot that doesn't need any toolkit_factory
+Simple bot that doesn't need any tools
 """
+if True:
+    import openai_multi_tool_use_parallel_patch
 import logging.config
-from typing import Any, Optional
+from typing import Any, Awaitable, Callable, Optional
 
 import openai
-import openai_multi_tool_use_parallel_patch
-from openai.types.beta import Assistant
+
+from openai.types.beta import Assistant, Thread
 
 from ai_shell.bot_glue.tool_utils import loop_tools
 from ai_shell.openai_toolkit import ToolKit
@@ -42,9 +44,9 @@ class TaskBot:
         self.bot_instructions = bot_instructions
         """Model, name and instructions uniquely identify a bot."""
 
-        self.client = openai.AsyncOpenAI()
-        self.thread = None
-        self.assistant = None
+        self.client: openai.AsyncOpenAI = openai.AsyncOpenAI()
+        self.thread: Optional[Thread] = None
+        self.assistant: Optional[Assistant] = None
 
         self.dialog_logger_md = dialog_logger_md
         """Conversation style logger"""
@@ -64,28 +66,41 @@ class TaskBot:
         self.toolkit: Optional[ToolKit] = None
         """Reference to toolkit so that goal checkers can check if any tools were used."""
 
-    async def initialize(self):
+        self.allow_self_certification = False
+        """Do you want to trust the bot when it says it has achieved the goal?"""
+
+    async def initialize(self) -> None:
+        """Get or create a bot and store it in the config."""
         bot = await self.get_create_bot()
         logger.debug(f"Assistant id: {bot.id}")
         self.assistant = bot
         self.dialog_logger_md.write_header(bot_name=self.name, model=self.model, bot_instructions=self.bot_instructions)
 
     async def get_create_bot(self) -> Assistant:
+        """Get or create a bot and store it in the config."""
         current_bot = self.config.get_bot(self.name)
         if not current_bot:
-            assistant = await self.client.beta.assistants.create(
-                name=self.name,
-                instructions=self.bot_instructions,
-                model=self.model,
-                # no toolkit_factory
-            )
-            self.config.add_bot(self.assistant.id, self.name)
-            logger.debug(f"Assistant created: {assistant.id}")
+            await self.create_bot()
         else:
-            assistant = await self.client.beta.assistants.retrieve(current_bot.assistant_id)
-            logger.debug(f"Assistant retrieved: {assistant.id}")
-        logger.debug(f"Assistant id: {assistant.id}")
-        return assistant
+            try:
+                self.assistant = await self.client.beta.assistants.retrieve(current_bot.assistant_id)
+                logger.debug(f"Assistant retrieved: {self.assistant.id}")
+            except openai.NotFoundError:
+                await self.create_bot()
+        if not self.assistant:
+            raise TypeError("Assistant not found or created.")
+        logger.debug(f"Assistant id: {self.assistant.id}")
+        return self.assistant
+
+    async def create_bot(self):
+        """Create a bot and store it in the config.""" ""
+        self.assistant = await self.client.beta.assistants.create(
+            name=self.name,
+            instructions=self.bot_instructions,
+            model=self.model,
+        )
+        self.config.add_bot(self.assistant.id, self.name)
+        logger.debug(f"Assistant created: {self.assistant.id}")
 
     def toolkit_factory(
         self, root_folder: str, model: str, tool_names: list[str]
@@ -94,11 +109,21 @@ class TaskBot:
         initialize_all_tools(keeps=tool_names)
         tools_schema = [{"function": schema, "type": "function"} for schema in ALL_TOOLS]
         if not tools_schema:
-            raise Exception("Not enough toolkit_factory!")
+            raise Exception("Not enough tools!")
         return self.toolkit, tools_schema
 
     async def one_shot_ask(self, the_ask: str) -> Any:
-        """Free-form request, structured response."""
+        """Free-form request, structured response.
+
+        Args:
+            the_ask (str): The request.
+        Returns:
+            Any: The response.
+        """
+        if not self.toolkit:
+            raise TypeError("Missing toolkit before one_shot_ask")
+        if not self.assistant:
+            raise TypeError("Missing assistant before one_shot_ask")
         try:
             _, tool_schemas = self.toolkit_factory(
                 ".",
@@ -149,15 +174,26 @@ class TaskBot:
                 await self.client.beta.assistants.delete(self.assistant.id)
 
     async def basic_tool_loop(
-        self, the_ask: str, root_folder: str, tool_names: list[Any], keep_going_prompt: str
-    ) -> Any:
-        """Work flow:
-
-        - ask for something
-        - let bot loop through tool usage
-        - Ask bot if they are done (static message, bot decides)
-        - Loop until they say they are done.
+        self,
+        the_ask: str,
+        root_folder: str,
+        tool_names: list[Any],
+        keep_going_prompt: Callable[[ToolKit], Awaitable[str]],
+    ) -> None:
         """
+        Loop through tool requests.
+
+        Args:
+            the_ask (str): The initial request.
+            root_folder (str): The root folder for file operations.
+            tool_names (list[Any]): The tools to use.
+            keep_going_prompt (str): The prompt to use to keep going.
+        Returns:
+            None
+        """
+        if not self.assistant:
+            raise TypeError("Missing assistant before basic_tool_loop")
+
         if self.dialog_logger_md:
             self.dialog_logger_md.add_user(the_ask)
             self.dialog_logger_md.add_toolkit(tool_names)
@@ -168,6 +204,8 @@ class TaskBot:
             tool_names.append("report_text")
             tool_names = list(set(tool_names))
             _, tool_schemas = self.toolkit_factory(root_folder, self.model, tool_names)
+            if not self.toolkit:
+                raise TypeError("Missing toolkit before basic_tool_loop")
             thread = await self.client.beta.threads.create()
             logger.info(the_ask)
             _message = await self.client.beta.threads.messages.create(
@@ -189,7 +227,7 @@ class TaskBot:
             initial_bot_response = parse_message(messages)
             self.dialog_logger_md.add_bot(initial_bot_response)
 
-            # Did you use any toolkit_factory?
+            # Did you use any tools?
             if tools_used_this_round == 0:
                 initial_user_response = (
                     "I see you didn't use any tools.  "
@@ -216,7 +254,7 @@ class TaskBot:
 
             # TODO: intializee this in constructor
             if hasattr(self.toolkit, "tool_answer_collector") and self.toolkit.tool_answer_collector:
-                final_report = str(self.toolkit.tool_answer_collector.text_answer).upper().strip()
+                final_report = self.toolkit.tool_answer_collector.text_answer
                 final_comment = self.toolkit.tool_answer_collector.comment
                 self.dialog_logger_md.add_bot(f"Final word: {final_report}, {final_comment}")
                 return
@@ -224,10 +262,10 @@ class TaskBot:
             # Bot has at least 3 ways to stop
             # - return message of DONE
             # - use answer tool to submit DONE, or IMPOSSIBLE
-            # - stop using toolkit_factory
+            # - stop using tools
             while done != "DONE" or tools_used_this_round == 0:
                 tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
-                # Did we use any toolkit_factory
+                # Did we use any tools
                 total_tool_use_count += tools_used_this_round
 
                 # infinite loop protection
@@ -242,15 +280,23 @@ class TaskBot:
                 if done == "DONE":
                     break
 
-                # Did bot use tool to submit final report
-                if hasattr(self.toolkit, "tool_answer_collector") and self.toolkit.tool_answer_collector:
+                # Did bot use tool to submit final report. Wow. Can't trust all bots.
+                if (
+                    self.allow_self_certification
+                    and hasattr(self.toolkit, "tool_answer_collector")
+                    and self.toolkit.tool_answer_collector
+                ):
                     final_report = str(self.toolkit.tool_answer_collector.text_answer).upper().strip()
                     final_comment = self.toolkit.tool_answer_collector.comment
                     self.dialog_logger_md.add_bot(f"Final word: {final_report}, {final_comment}")
                     break
+
                 if done != "DONE":
                     # Replace with 2nd bot?
                     keep_going_text = await keep_going_prompt(self.toolkit)
+                    if keep_going_text == "DONE":
+                        # The bot did a good job and we can certify that.
+                        break
                     self.dialog_logger_md.add_user(keep_going_text)
                     logger.info(keep_going_text)
                     await self.client.beta.threads.messages.create(
@@ -275,6 +321,7 @@ class TaskBot:
 
 
 def parse_message(messages) -> str:
+    """Return the last message in messages"""
     for key, message in messages:
         if key == "data":
             text_message = message[0].content[0].text.value
@@ -283,6 +330,7 @@ def parse_message(messages) -> str:
 
 
 def capture_done_message(messages) -> str:
+    """Return DONE if found in messages"""
     # Replace with structured?
     done = ""
     for key, message in messages:

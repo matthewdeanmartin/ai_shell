@@ -137,8 +137,10 @@ class ReplaceTool:
 
         if is_python_file(file_path):
             is_valid, error = is_valid_python_source(final)
-            if not is_valid:
+            if not is_valid and error:
                 return f"Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}"
+            if not is_valid:
+                return f"Invalid Python source code. No changes made. {error}."
 
         if input_text != final:
             with open(file_path, "w", encoding="utf-8") as output_file:

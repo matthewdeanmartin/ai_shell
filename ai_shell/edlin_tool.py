@@ -20,7 +20,6 @@ from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import sanitize_path
 from dedlin.command_sources import StringCommandGenerator
 
-
 logger = logging.getLogger(__name__)
 
 VERBOSE = True
@@ -28,6 +27,12 @@ VERBOSE = True
 
 class EdlinTool:
     def __init__(self, root_folder: str):
+        """
+        Initialize the EdlinTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations.
+        """
         self.root_folder = root_folder if root_folder.endswith("/") else root_folder + "/"
         self.auto_cat = True
 

@@ -1,12 +1,42 @@
+"""
+This module contains the loop_tools function, which is used to process
+tools in a thread.
+"""
 import logging
 import time
 
+if True:
+    import openai_multi_tool_use_parallel_patch
+
+    if not openai_multi_tool_use_parallel_patch:
+        print("Needs to not move!")
+
+import openai
+from openai.types.beta import Thread
+from openai.types.beta.threads import Run
+
 from ai_shell.openai_toolkit import ToolKit
+from ai_shell.utils.log_conversation import DialogLoggerWithMarkdown
 
 logger = logging.getLogger(__name__)
 
 
-async def loop_tools(client, kit: ToolKit, run, thread, dialog_logger_md) -> int:
+async def loop_tools(
+    client: openai.AsyncClient, kit: ToolKit, run: Run, thread: Thread, dialog_logger_md: DialogLoggerWithMarkdown
+) -> int:
+    """
+    Loop over the tools in a thread.
+
+    Args:
+        client (openai.AsyncClient): The OpenAI client.
+        kit (ToolKit): The toolkit.
+        run (Run): The run object.
+        thread (Thread): The thread object.
+        dialog_logger_md (DialogLoggerWithMarkdown): The dialog logger.
+
+    Returns:
+        int: The number of tools used.
+    """
     waiting = False
     tool_use_count = 0
     while True:
@@ -26,6 +56,9 @@ async def loop_tools(client, kit: ToolKit, run, thread, dialog_logger_md) -> int
             if waiting:
                 print()
                 waiting = False
+            if not run.required_action:
+                # Why would this happen? Mypy says it is possible.
+                raise TypeError("Missing required_action")
             for tool_call in run.required_action.submit_tool_outputs.tool_calls:
                 tool_use_count += 1
                 dialog_logger_md.add_tool(tool_call.function.name, tool_call.function.arguments)

@@ -1,7 +1,7 @@
 import json
 import os
 from contextlib import contextmanager
-from typing import Any, Optional
+from typing import Any, Iterator, Never, Optional
 
 import markpickle
 
@@ -43,7 +43,7 @@ class DialogLoggerWithMarkdown:
         write_header: Writes the header information to the log file.
         add_user: Logs the user's input text.
         add_bot: Logs the bot's response text.
-        add_toolkit: Logs the toolkit_factory used in the dialog.
+        add_toolkit: Logs the tools used in the dialog.
         add_tool: Logs a single tool and its arguments used in the dialog.
         add_tool_result: Logs the results from a tool.
         add_error: Logs an error that occurred during the dialog.
@@ -66,7 +66,6 @@ class DialogLoggerWithMarkdown:
         self.log_file_path = os.path.join(self.base_directory, f"dialog_{log_number}.md")
         os.makedirs(os.path.dirname(self.log_file_path), exist_ok=True)
         self.log_file = open(self.log_file_path, "a", buffering=1, encoding="utf-8")
-        self.write_header()
 
     def write_header(self, bot_name: str, model: str, bot_instructions: str) -> None:
         """
@@ -103,7 +102,7 @@ class DialogLoggerWithMarkdown:
 
     def add_toolkit(self, tools: list[str]) -> None:
         """
-        Logs the toolkit_factory used in the dialog.
+        Logs the tools used in the dialog.
 
         Args:
             tools (List[str]): A list of tool names used in the dialog.
@@ -120,7 +119,12 @@ class DialogLoggerWithMarkdown:
             tool_args (str): The arguments passed to the tool, in JSON string format.
         """
         self.log_file.write(f"**Tool**: `{tool_name}`, **Args**: {tool_args}\n")
-        for name, value in json.loads(tool_args).items():
+        try:
+            json_bits = json.loads(tool_args)
+        except:
+            self.log_file.write(f"Bad JSON: {tool_args}")
+            return
+        for name, value in json_bits.items():
             self.log_file.write(f"{name} : {value}")
 
     def add_tool_result(self, tool_results: list[dict[str, Any]]) -> None:
@@ -134,6 +138,7 @@ class DialogLoggerWithMarkdown:
             self.log_file.write("### Result\n\n")
             for key, value in result.items():
                 if key == "output":
+                    # json.loads here should work, it isn't bot-json
                     self.log_file.write(f" {try_markpickle(json.loads(value))}\n")
                 else:
                     self.log_file.write(f"{key}: {value}\n")
@@ -148,7 +153,7 @@ class DialogLoggerWithMarkdown:
         self.log_file.write(f"**Error**: {error}\n\n")
 
     @contextmanager
-    def ensure_log(self) -> None:
+    def ensure_log(self) -> Iterator[Never]:
         """
         A context manager to ensure that the log file is closed properly.
 

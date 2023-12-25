@@ -1,17 +1,31 @@
 """
 Bot frequently does lists in 3 different ways.
 """
+import csv
+from io import StringIO
+from typing import Union
 
 
-def convert_to_list(possible_list: str) -> list[str]:
-    # Check for list mess up.
+def convert_to_list(possible_list: Union[str, list[str]]) -> list[str]:
+    """
+    Convert a string to a list if it isn't already a list.
+
+    Args:
+        possible_list (Union[str, list[str]]): A string or list.
+
+    Returns:
+        A list.
+    """
+    if possible_list == "":
+        # Degenerate case.
+        return []
     if isinstance(possible_list, str):
-        if ", " in possible_list:
-            # TODO: detect "foo.py, bar.py" as opposed to "'foo bar.py'"
-            possible_list = possible_list.split(", ")
-        elif "," in possible_list:
-            # TODO: detect "foo.py,bar.py" as opposed to "'foo bar.py'"
-            possible_list = possible_list.split(",")
-        else:
-            possible_list = [possible_list]
-    return possible_list
+        # Use csv.reader to handle complex cases
+        # StringIO is used to turn the string into a file-like object
+        reader = csv.reader(StringIO(possible_list))
+        for row in reader:
+            # Assuming there is only one row in the CSV string
+            return row
+    elif isinstance(possible_list, list):
+        return possible_list
+    raise TypeError(f"This list of strings is of invalid type: {possible_list}")

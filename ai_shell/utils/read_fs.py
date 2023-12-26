@@ -15,7 +15,20 @@ logger = logging.getLogger(__name__)
 
 
 def sanitize_path(file_path: str) -> str:
-    """Attempt to prevent parent directory traversal attacks by removing any leading '..' or '../' from the path."""
+    """Attempt to prevent parent directory traversal attacks by removing any leading '..' or '../' from the path.
+
+    Args:
+        file_path (str): The path to sanitize.
+
+    Returns:
+        str: The sanitized path.
+
+    Examples:
+        >>> sanitize_path("../foo/bar")
+        'foo/bar'
+        >>> sanitize_path("../../foo/bar")
+        'foo/bar'
+    """
     # Pattern to match sequences like '.', '..', '../', '..\', and so on at the beginning of the path
     pattern = r"^(?:\.\.?[\\/])*"
     sanitized_path = re.sub(pattern, "", file_path)
@@ -40,11 +53,18 @@ def safe_glob(match_patten: str, root_dir: str):
 
 def is_file_in_root_folder(file_path: str, root_folder: str) -> bool:
     """
-    Check if a file is in a given root folder or its subfolders.
+    Check if a file could be in a given root folder or its subfolders.
 
-    :param file_path: The path of the file to check.
-    :param root_folder: The root folder path to check against.
-    :return: True if the file is in the root folder or its subfolders, False otherwise.
+    Args:
+        file_path (str): The path to the file. It does not mean it exists!
+        root_folder (str): The root folder path.
+
+    Returns:
+        bool: True if the file is in the root folder, False otherwise.
+
+    Examples:
+        >>> is_file_in_root_folder("foo/bar", ".")
+        True
     """
     if "*" in root_folder or "?" in root_folder:
         raise ValueError("Root folder cannot contain wildcards")
@@ -89,7 +109,7 @@ def tree(dir_path: Union[str, Path], level: int = -1, limit_to_directories: bool
         else:
             contents = sorted(_ for _ in dir_path.iterdir() if "__pycache__" not in str(_))
         pointers = [tee] * (len(contents) - 1) + [last]
-        for pointer, path in zip(pointers, contents):
+        for pointer, path in zip(pointers, contents, strict=False):
             if path.is_dir():
                 yield prefix + pointer + path.name
                 directories += 1
@@ -110,8 +130,12 @@ def tree(dir_path: Union[str, Path], level: int = -1, limit_to_directories: bool
 
 
 @contextmanager
-def temporary_change_dir(new_dir):
-    """Context manager to temporarily change the current working directory."""
+def temporary_change_dir(new_dir: str) -> None:
+    """Context manager to temporarily change the current working directory.
+
+    Args:
+        new_dir (str): The new directory path.
+    """
     original_dir = os.getcwd()
     if os.path.isfile(new_dir):
         new_dir = os.path.dirname(new_dir)
@@ -123,7 +147,15 @@ def temporary_change_dir(new_dir):
 
 
 def remove_root_folder(file_path: str, root_folder: str) -> str:
-    """Removing root folder from path"""
+    """Removing root folder from path
+
+    Args:
+        file_path (str): The path to the file.
+        root_folder (str): The root folder path. It must exist for this to succeed.
+
+    Returns:
+        str: The relative path of the file.
+    """
     with temporary_change_dir(root_folder):
         root = Path(".").resolve()
         file = Path(file_path)
@@ -141,9 +173,35 @@ def remove_root_folder(file_path: str, root_folder: str) -> str:
         raise ValueError("File path is not under the root folder")
 
 
-def human_readable_size(size_in_bytes):
-    """Converts a size in bytes to a human-readable format (e.g., KB, MB, GB)."""
+def human_readable_size(size_in_bytes: int) -> str:
+    """Converts a size in bytes to a human-readable format (e.g., KB, MB, GB).
 
+    Args:
+        size_in_bytes (int): The size in bytes.
+
+    Returns:
+        str: The size in human-readable format.
+
+    Examples:
+        >>> human_readable_size(0)
+        '0 Bytes'
+        >>> human_readable_size(1024)
+        '1.0 KB'
+        >>> human_readable_size(1024**2)
+        '1.0 MB'
+        >>> human_readable_size(1024**3)
+        '1.0 GB'
+        >>> human_readable_size(1024**4)
+        '1.0 TB'
+        >>> human_readable_size(1024**5)
+        '1.0 PB'
+        >>> human_readable_size(1024**6)
+        '1.0 EB'
+        >>> human_readable_size(1024**7)
+        '1.0 ZB'
+        >>> human_readable_size(1024**8)
+        '1.0 YB'
+    """
     # Define the units and their corresponding power of 1024
     units = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
     power = 1024
@@ -155,8 +213,11 @@ def human_readable_size(size_in_bytes):
         unit = 0
 
     # Format the size with the appropriate unit
-    readable_size = round(size_in_bytes / (power**unit), 2)
-    return readable_size
+    if size_in_bytes > 0:
+        readable_size = round(size_in_bytes / (power**unit), 2)
+        return f"{readable_size} {units[unit]}"
+    else:
+        return "0 Bytes"
 
 
 if __name__ == "__main__":

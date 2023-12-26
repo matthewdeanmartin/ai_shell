@@ -79,7 +79,8 @@ class TodoTool:
         Queries tasks assigned to a specific assignee. Currently, the assignee is hard-coded as 'Developer'.
 
         Returns:
-            str: The rendered Markdown string of tasks assigned to the specified assignee."""
+        str: The rendered Markdown string of tasks assigned to the specified assignee.
+        """
         assignee_name = "Developer"
         return self.task_manager.query_by_assignee(assignee_name)
 

@@ -6,7 +6,8 @@ the openai python client.
 """
 
 import logging
-from typing import Collection, Optional, Union
+from collections.abc import Collection
+from typing import Optional, Union
 
 from ai_shell.ls_tool import LsTool
 from ai_shell.openai_schemas import SCHEMAS

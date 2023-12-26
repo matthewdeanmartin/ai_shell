@@ -3,8 +3,9 @@ Cat optimized for AI prompts.
 """
 import logging
 import os.path
+from collections.abc import Generator
 from io import StringIO
-from typing import IO, Generator
+from typing import IO
 
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder, safe_glob

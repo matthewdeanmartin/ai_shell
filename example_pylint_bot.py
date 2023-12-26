@@ -47,7 +47,7 @@ async def main():
         "replace_with_regex",
     ]
     bot_name = "Pylint fixer bot"
-
+    language = "python"  # hack so that blacken-docs doesn't try to reformat the string contents
     request = f"""You are in the './' folder. The base folder is './'. You do not need to guess the pwd, it is './'.
 
 Here is a map.
@@ -67,7 +67,7 @@ Do not start addressing pylint issues until you use cat_markdown tool to read th
 If you use the rewrite_file tool, it will blow away any previous contents. Please don't accidentally delete code.
 
 This is an example of google style doc strings.
-```python
+```{language}
 def create_fish(emoji: str, x: int, y: int) -> None:
     \"\"\"
     Create a fish.

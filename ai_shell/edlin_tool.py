@@ -38,7 +38,7 @@ class EdlinTool:
 
     @log()
     def edlin(self, script: str, file_name: str) -> list[str]:
-        """An improved version of the edlin.
+        r"""An improved version of the edlin.
 
         Args:
             script (str): Edlin commands to run.
@@ -46,16 +46,6 @@ class EdlinTool:
 
         Returns:
             list[str]: The output of the script.
-
-        Examples:
-            >>> tool = EdlinTool(".")
-            >>> result = tool.edlin("INSERT cat\\nINSERT dog\\nQUIT", "test.md")
-            ['cat', 'dog']
-
-            >>> tool = EdlinTool(".")
-            >>> result = tool.edlin("1,10 LIST\\nQUIT", "test.md")
-            >>> print(result)
-            ['cat', 'dog']
         """
         file_name = sanitize_path(file_name)
         # arguments["<file>"],

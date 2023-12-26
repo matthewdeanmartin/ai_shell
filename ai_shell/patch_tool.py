@@ -8,7 +8,6 @@ This is hard because of the line counting. So this usually fails.
 import logging
 import subprocess  # nosec
 import tempfile
-from typing import Set
 
 from unidiff import PatchSet
 
@@ -76,7 +75,7 @@ class PatchTool:
 
         return "Patch applied without exception, please verify by other means to see if it was successful."
 
-    def _extract_files_from_patch(self, patch_content: str) -> Set[str]:
+    def _extract_files_from_patch(self, patch_content: str) -> set[str]:
         """
         Extract file names from the patch content.
 

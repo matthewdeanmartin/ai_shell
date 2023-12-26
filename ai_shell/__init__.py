@@ -8,6 +8,8 @@ from ai_shell.cut_tool import CutTool
 from ai_shell.ed_tool import EdTool
 from ai_shell.edlin_tool import EdlinTool
 from ai_shell.externals import pytest_call
+from ai_shell.externals.black_call import invoke_black
+from ai_shell.externals.pygount_call import count_lines_of_code
 from ai_shell.externals.pylint_call import invoke_pylint
 from ai_shell.find_tool import FindTool
 from ai_shell.git_tool import GitTool
@@ -64,6 +66,8 @@ __all__ = [
     # goal checker tools
     "invoke_pylint",
     "pytest_call",
+    "invoke_black",
+    "count_lines_of_code",
     # misc that could have been 3rd party
     "change_directory",
 ]

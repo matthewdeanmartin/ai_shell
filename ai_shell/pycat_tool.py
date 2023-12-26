@@ -6,7 +6,7 @@ import logging
 import os
 from io import StringIO
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional
 
 import python_minifier
 
@@ -88,12 +88,13 @@ def is_valid_python_file(file_name: str) -> bool:
     return is_valid
 
 
-def is_valid_python_source(text: str) -> Tuple[bool, Optional[SyntaxError]]:
+def is_valid_python_source(text: str) -> tuple[bool, Optional[SyntaxError]]:
     """
     Check if a given string is valid Python source code.
 
     Args:
         text (str): The Python source code to check.
+
     Returns:
         bool: True if the source code is valid, False otherwise.
         SyntaxError: The SyntaxError that was raised, if any.

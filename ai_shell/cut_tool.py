@@ -7,7 +7,7 @@ import csv
 import dataclasses
 import io
 import logging
-from typing import List, Tuple, Union
+from typing import Union
 
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder
@@ -15,7 +15,7 @@ from ai_shell.utils.read_fs import is_file_in_root_folder
 logger = logging.getLogger(__name__)
 
 
-def parse_ranges(range_str: str) -> List[Union[int, Tuple[int, int]]]:
+def parse_ranges(range_str: str) -> list[Union[int, tuple[int, int]]]:
     """Parses a range string into a list of integers and integer tuples.
 
     Args:
@@ -24,7 +24,7 @@ def parse_ranges(range_str: str) -> List[Union[int, Tuple[int, int]]]:
     Returns:
         A list where each element is either an integer or a tuple of two integers.
     """
-    ranges: List[Union[int, Tuple[int, int]]] = []
+    ranges: list[Union[int, tuple[int, int]]] = []
     for part in range_str.split(","):
         if "-" in part:
             start, end = part.split("-")
@@ -36,7 +36,7 @@ def parse_ranges(range_str: str) -> List[Union[int, Tuple[int, int]]]:
     return ranges
 
 
-def is_in_ranges(index: int, ranges: List[Union[int, Tuple[int, int]]]) -> bool:
+def is_in_ranges(index: int, ranges: list[Union[int, tuple[int, int]]]) -> bool:
     """Checks if a given index is within the specified ranges.
 
     Args:
@@ -128,7 +128,7 @@ class CutTool:
         return output.getvalue()
 
     @log()
-    def cut_fields_by_name(self, filename: str, field_names: List[str], delimiter: str = ",") -> str:
+    def cut_fields_by_name(self, filename: str, field_names: list[str], delimiter: str = ",") -> str:
         """Reads a file and extracts fields based on specified field names using the given delimiter.
 
         Args:

@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ai_shell.bot_glue.bot API documentation</title>
+<meta name="description" content="Simple bot that doesn&#39;t need any tools" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ai_shell.bot_glue.bot</code></h1>
+</header>
+<section id="section-intro">
+<p>Simple bot that doesn't need any tools</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Simple bot that doesn&#39;t need any tools
+&#34;&#34;&#34;
+if True:
+    import openai_multi_tool_use_parallel_patch
+
+import logging.config
+from collections.abc import Awaitable, Callable
+from typing import Any, Optional
+
+import openai
+from openai.types.beta import Assistant, Thread
+
+from ai_shell.bot_glue.tool_utils import loop_tools
+from ai_shell.openai_toolkit import ToolKit
+from ai_shell.openai_tools import ALL_TOOLS, initialize_all_tools
+from ai_shell.utils.config_manager import Config
+from ai_shell.utils.log_conversation import DialogLoggerWithMarkdown
+
+logger = logging.getLogger(__name__)
+
+# Adding line so module isn&#39;t unused
+if not openai_multi_tool_use_parallel_patch:
+    print(&#34;Adding code so pylint doesn&#39;t think the module is unused.&#34;)
+
+
+class TaskBot:
+    &#34;&#34;&#34;Minimal bot management code.&#34;&#34;&#34;
+
+    def __init__(
+        self,
+        config: Config,
+        name: str,
+        bot_instructions: str,
+        model: str,
+        dialog_logger_md: DialogLoggerWithMarkdown,
+        persist_bots: bool = False,
+        persist_threads: bool = False,
+        maximum_loops: int = 10,
+    ):
+        self.model = model
+        &#34;&#34;&#34;Model, name and instructions uniquely identify a bot.&#34;&#34;&#34;
+        self.name = name
+        &#34;&#34;&#34;Model, name and instructions uniquely identify a bot.&#34;&#34;&#34;
+        self.bot_instructions = bot_instructions
+        &#34;&#34;&#34;Model, name and instructions uniquely identify a bot.&#34;&#34;&#34;
+
+        self.client: openai.AsyncOpenAI = openai.AsyncOpenAI()
+        self.thread: Optional[Thread] = None
+        self.assistant: Optional[Assistant] = None
+
+        self.dialog_logger_md = dialog_logger_md
+        &#34;&#34;&#34;Conversation style logger&#34;&#34;&#34;
+
+        self.persist_bots = persist_bots
+        &#34;&#34;&#34;Keep bots or attempt to delete them at end of session&#34;&#34;&#34;
+
+        self.persist_threads = persist_threads
+        &#34;&#34;&#34;Keep thread or attempt to delete them&#34;&#34;&#34;
+
+        self.config = config
+        &#34;&#34;&#34;Stores bot, thread config and other global config.&#34;&#34;&#34;
+
+        self.maximum_loops = maximum_loops
+        &#34;&#34;&#34;Prevent infinite loops and money wastage.&#34;&#34;&#34;
+
+        self.toolkit: Optional[ToolKit] = None
+        &#34;&#34;&#34;Reference to toolkit so that goal checkers can check if any tools were used.&#34;&#34;&#34;
+
+        self.allow_self_certification = False
+        &#34;&#34;&#34;Do you want to trust the bot when it says it has achieved the goal?&#34;&#34;&#34;
+
+    async def initialize(self) -&gt; None:
+        &#34;&#34;&#34;Get or create a bot and store it in the config.&#34;&#34;&#34;
+        bot = await self.get_create_bot()
+        logger.debug(f&#34;Assistant id: {bot.id}&#34;)
+        self.assistant = bot
+        self.dialog_logger_md.write_header(bot_name=self.name, model=self.model, bot_instructions=self.bot_instructions)
+
+    async def get_create_bot(self) -&gt; Assistant:
+        &#34;&#34;&#34;Get or create a bot and store it in the config.&#34;&#34;&#34;
+        current_bot = self.config.get_bot(self.name)
+        if not current_bot:
+            await self.create_bot()
+        else:
+            try:
+                self.assistant = await self.client.beta.assistants.retrieve(current_bot.assistant_id)
+                logger.debug(f&#34;Assistant retrieved: {self.assistant.id}&#34;)
+            except openai.NotFoundError:
+                await self.create_bot()
+        if not self.assistant:
+            raise TypeError(&#34;Assistant not found or created.&#34;)
+        logger.debug(f&#34;Assistant id: {self.assistant.id}&#34;)
+        return self.assistant
+
+    async def create_bot(self):
+        &#34;&#34;&#34;Create a bot and store it in the config.&#34;&#34;&#34;
+        self.assistant = await self.client.beta.assistants.create(
+            name=self.name,
+            instructions=self.bot_instructions,
+            model=self.model,
+        )
+        self.config.add_bot(self.assistant.id, self.name)
+        logger.debug(f&#34;Assistant created: {self.assistant.id}&#34;)
+
+    def toolkit_factory(
+        self, root_folder: str, model: str, tool_names: list[str]
+    ) -&gt; tuple[ToolKit, list[dict[str, Any]]]:
+        self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names)
+        initialize_all_tools(keeps=tool_names)
+        tools_schema = [{&#34;function&#34;: schema, &#34;type&#34;: &#34;function&#34;} for schema in ALL_TOOLS]
+        if not tools_schema:
+            raise Exception(&#34;Not enough tools!&#34;)
+        return self.toolkit, tools_schema
+
+    async def one_shot_ask(self, the_ask: str) -&gt; Any:
+        &#34;&#34;&#34;Free-form request, structured response.
+
+        Args:
+            the_ask (str): The request.
+
+        Returns:
+            Any: The response.
+        &#34;&#34;&#34;
+        if not self.toolkit:
+            raise TypeError(&#34;Missing toolkit before one_shot_ask&#34;)
+        if not self.assistant:
+            raise TypeError(&#34;Missing assistant before one_shot_ask&#34;)
+        try:
+            _, tool_schemas = self.toolkit_factory(
+                &#34;.&#34;,
+                self.model,
+                [
+                    # &#34;report_bool&#34;,
+                    &#34;report_dict&#34;,
+                    &#34;report_float&#34;,
+                    &#34;report_int&#34;,
+                    # &#34;report_json&#34;,
+                    &#34;report_list&#34;,
+                    # &#34;report_set&#34;,
+                    # &#34;report_text&#34;, Why? Just do an unstructured query.
+                    # &#34;report_toml&#34;,
+                    # &#34;report_tuple&#34;,
+                    # &#34;report_xml&#34;,
+                ],
+            )
+            thread = await self.client.beta.threads.create()
+            logger.info(the_ask)
+            _message = await self.client.beta.threads.messages.create(
+                thread_id=thread.id,
+                role=&#34;user&#34;,
+                content=the_ask,
+            )
+            run = await self.client.beta.threads.runs.create(
+                thread_id=thread.id, assistant_id=self.assistant.id, tools=tool_schemas
+            )
+            tool_use_count = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
+            if tool_use_count == 0:
+                logger.warning(&#34;No tool usage, something went wrong.&#34;)
+
+            messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
+            # logger.info(messages)
+            last_words = parse_message(messages)
+            logger.info(last_words)
+            self.dialog_logger_md.add_bot(last_words)
+
+        except Exception as exception:
+            self.dialog_logger_md.add_error(exception)
+            raise
+        finally:
+            # clean up thread
+            if self.thread and not self.persist_threads:
+                await self.client.beta.threads.delete(self.thread.id)
+            if self.assistant and not self.persist_bots:
+                # clean up assistant
+                await self.client.beta.assistants.delete(self.assistant.id)
+
+    async def basic_tool_loop(
+        self,
+        the_ask: str,
+        root_folder: str,
+        tool_names: list[Any],
+        keep_going_prompt: Callable[[ToolKit], Awaitable[str]],
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Loop through tool requests.
+
+        Args:
+            the_ask (str): The initial request.
+            root_folder (str): The root folder for file operations.
+            tool_names (list[Any]): The tools to use.
+            keep_going_prompt (str): The prompt to use to keep going.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+        if not self.assistant:
+            raise TypeError(&#34;Missing assistant before basic_tool_loop&#34;)
+
+        if self.dialog_logger_md:
+            self.dialog_logger_md.add_user(the_ask)
+            self.dialog_logger_md.add_toolkit(tool_names)
+
+        tool_loops = 0
+        total_tool_use_count = 0
+        try:
+            tool_names.append(&#34;report_text&#34;)
+            tool_names = list(set(tool_names))
+            _, tool_schemas = self.toolkit_factory(root_folder, self.model, tool_names)
+            if not self.toolkit:
+                raise TypeError(&#34;Missing toolkit before basic_tool_loop&#34;)
+            thread = await self.client.beta.threads.create()
+            logger.info(the_ask)
+            _message = await self.client.beta.threads.messages.create(
+                thread_id=thread.id,
+                role=&#34;user&#34;,
+                content=the_ask,
+            )
+            run = await self.client.beta.threads.runs.create(
+                thread_id=thread.id, assistant_id=self.assistant.id, tools=tool_schemas
+            )
+            tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
+            tool_loops += 1
+            if tool_loops &gt; self.maximum_loops:
+                raise TypeError(&#34;Too many tool loops&#34;)
+
+            total_tool_use_count += tools_used_this_round
+
+            messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
+            initial_bot_response = parse_message(messages)
+            self.dialog_logger_md.add_bot(initial_bot_response)
+
+            # Did you use any tools?
+            if tools_used_this_round == 0:
+                initial_user_response = (
+                    &#34;I see you didn&#39;t use any tools.  &#34;
+                    &#34;Please list what tools you have available, and if there are some available, &#34;
+                    &#34;why they were not useful.&#34;
+                )
+            else:
+                if not self.toolkit:
+                    raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
+                initial_user_response = await keep_going_prompt(self.toolkit)
+
+            # TODO: make into method.
+            await self.client.beta.threads.messages.create(
+                thread_id=thread.id,
+                role=&#34;user&#34;,
+                content=initial_user_response,
+            )
+            run = await self.client.beta.threads.runs.create(thread_id=thread.id, assistant_id=self.assistant.id)
+            self.dialog_logger_md.add_user(initial_user_response)
+
+            # &#34;keep going/done&#34; loop
+            done = &#34;NOPE&#34;
+            tools_used_this_round = -1
+
+            # TODO: intializee this in constructor
+            if hasattr(self.toolkit, &#34;tool_answer_collector&#34;) and self.toolkit.tool_answer_collector:
+                final_report = self.toolkit.tool_answer_collector.text_answer
+                final_comment = self.toolkit.tool_answer_collector.comment
+                self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
+                return
+
+            # Bot has at least 3 ways to stop
+            # - return message of DONE
+            # - use answer tool to submit DONE, or IMPOSSIBLE
+            # - stop using tools
+            while done != &#34;DONE&#34; or tools_used_this_round == 0:
+                tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
+                # Did we use any tools
+                total_tool_use_count += tools_used_this_round
+
+                # infinite loop protection
+                tool_loops += 1
+                if tool_loops &gt; self.maximum_loops:
+                    raise TypeError(&#34;Too many tool loops&#34;)
+
+                messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
+                successive_response = parse_message(messages)
+                self.dialog_logger_md.add_bot(successive_response)
+                done = capture_done_message(messages)
+                if done == &#34;DONE&#34;:
+                    break
+
+                # Did bot use tool to submit final report. Wow. Can&#39;t trust all bots.
+                if (
+                    self.allow_self_certification
+                    and hasattr(self.toolkit, &#34;tool_answer_collector&#34;)
+                    and self.toolkit.tool_answer_collector
+                ):
+                    final_report = str(self.toolkit.tool_answer_collector.text_answer).upper().strip()
+                    final_comment = self.toolkit.tool_answer_collector.comment
+                    self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
+                    break
+
+                if done != &#34;DONE&#34;:
+                    # Replace with 2nd bot?
+                    keep_going_text = await keep_going_prompt(self.toolkit)
+                    if keep_going_text == &#34;DONE&#34;:
+                        # The bot did a good job and we can certify that.
+                        break
+                    self.dialog_logger_md.add_user(keep_going_text)
+                    logger.info(keep_going_text)
+                    await self.client.beta.threads.messages.create(
+                        thread_id=thread.id,
+                        role=&#34;user&#34;,
+                        content=keep_going_text,
+                    )
+                    run = await self.client.beta.threads.runs.create(
+                        thread_id=thread.id, assistant_id=self.assistant.id
+                    )
+
+        except Exception as exception:
+            self.dialog_logger_md.add_error(exception)
+            raise
+        finally:
+            # clean up thread
+            if self.thread and not self.persist_threads:
+                await self.client.beta.threads.delete(self.thread.id)
+            if self.assistant and not self.persist_bots:
+                # clean up assistant
+                await self.client.beta.assistants.delete(self.assistant.id)
+
+
+def parse_message(messages) -&gt; str:
+    &#34;&#34;&#34;Return the last message in messages&#34;&#34;&#34;
+    for key, message in messages:
+        if key == &#34;data&#34;:
+            text_message = message[0].content[0].text.value
+            return text_message
+    raise TypeError(&#34;Couldn&#39;t find data/message/content&#34;)
+
+
+def capture_done_message(messages) -&gt; str:
+    &#34;&#34;&#34;Return DONE if found in messages&#34;&#34;&#34;
+    # Replace with structured?
+    done = &#34;&#34;
+    for key, message in messages:
+        if key == &#34;data&#34;:
+            text_message = message[0].content[0].text.value
+            if &#34;DONE&#34; in str(text_message).upper():
+                done = &#34;DONE&#34;
+                break
+    return done</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="ai_shell.bot_glue.bot.capture_done_message"><code class="name flex">
+<span>def <span class="ident">capture_done_message</span></span>(<span>messages) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return DONE if found in messages</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def capture_done_message(messages) -&gt; str:
+    &#34;&#34;&#34;Return DONE if found in messages&#34;&#34;&#34;
+    # Replace with structured?
+    done = &#34;&#34;
+    for key, message in messages:
+        if key == &#34;data&#34;:
+            text_message = message[0].content[0].text.value
+            if &#34;DONE&#34; in str(text_message).upper():
+                done = &#34;DONE&#34;
+                break
+    return done</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.bot_glue.bot.parse_message"><code class="name flex">
+<span>def <span class="ident">parse_message</span></span>(<span>messages) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the last message in messages</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse_message(messages) -&gt; str:
+    &#34;&#34;&#34;Return the last message in messages&#34;&#34;&#34;
+    for key, message in messages:
+        if key == &#34;data&#34;:
+            text_message = message[0].content[0].text.value
+            return text_message
+    raise TypeError(&#34;Couldn&#39;t find data/message/content&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="ai_shell.bot_glue.bot.TaskBot"><code class="flex name class">
+<span>class <span class="ident">TaskBot</span></span>
+<span>(</span><span>config: <a title="ai_shell.utils.config_manager.Config" href="../utils/config_manager.html#ai_shell.utils.config_manager.Config">Config</a>, name: str, bot_instructions: str, model: str, dialog_logger_md: <a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown" href="../utils/log_conversation.html#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown">DialogLoggerWithMarkdown</a>, persist_bots: bool = False, persist_threads: bool = False, maximum_loops: int = 10)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Minimal bot management code.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class TaskBot:
+    &#34;&#34;&#34;Minimal bot management code.&#34;&#34;&#34;
+
+    def __init__(
+        self,
+        config: Config,
+        name: str,
+        bot_instructions: str,
+        model: str,
+        dialog_logger_md: DialogLoggerWithMarkdown,
+        persist_bots: bool = False,
+        persist_threads: bool = False,
+        maximum_loops: int = 10,
+    ):
+        self.model = model
+        &#34;&#34;&#34;Model, name and instructions uniquely identify a bot.&#34;&#34;&#34;
+        self.name = name
+        &#34;&#34;&#34;Model, name and instructions uniquely identify a bot.&#34;&#34;&#34;
+        self.bot_instructions = bot_instructions
+        &#34;&#34;&#34;Model, name and instructions uniquely identify a bot.&#34;&#34;&#34;
+
+        self.client: openai.AsyncOpenAI = openai.AsyncOpenAI()
+        self.thread: Optional[Thread] = None
+        self.assistant: Optional[Assistant] = None
+
+        self.dialog_logger_md = dialog_logger_md
+        &#34;&#34;&#34;Conversation style logger&#34;&#34;&#34;
+
+        self.persist_bots = persist_bots
+        &#34;&#34;&#34;Keep bots or attempt to delete them at end of session&#34;&#34;&#34;
+
+        self.persist_threads = persist_threads
+        &#34;&#34;&#34;Keep thread or attempt to delete them&#34;&#34;&#34;
+
+        self.config = config
+        &#34;&#34;&#34;Stores bot, thread config and other global config.&#34;&#34;&#34;
+
+        self.maximum_loops = maximum_loops
+        &#34;&#34;&#34;Prevent infinite loops and money wastage.&#34;&#34;&#34;
+
+        self.toolkit: Optional[ToolKit] = None
+        &#34;&#34;&#34;Reference to toolkit so that goal checkers can check if any tools were used.&#34;&#34;&#34;
+
+        self.allow_self_certification = False
+        &#34;&#34;&#34;Do you want to trust the bot when it says it has achieved the goal?&#34;&#34;&#34;
+
+    async def initialize(self) -&gt; None:
+        &#34;&#34;&#34;Get or create a bot and store it in the config.&#34;&#34;&#34;
+        bot = await self.get_create_bot()
+        logger.debug(f&#34;Assistant id: {bot.id}&#34;)
+        self.assistant = bot
+        self.dialog_logger_md.write_header(bot_name=self.name, model=self.model, bot_instructions=self.bot_instructions)
+
+    async def get_create_bot(self) -&gt; Assistant:
+        &#34;&#34;&#34;Get or create a bot and store it in the config.&#34;&#34;&#34;
+        current_bot = self.config.get_bot(self.name)
+        if not current_bot:
+            await self.create_bot()
+        else:
+            try:
+                self.assistant = await self.client.beta.assistants.retrieve(current_bot.assistant_id)
+                logger.debug(f&#34;Assistant retrieved: {self.assistant.id}&#34;)
+            except openai.NotFoundError:
+                await self.create_bot()
+        if not self.assistant:
+            raise TypeError(&#34;Assistant not found or created.&#34;)
+        logger.debug(f&#34;Assistant id: {self.assistant.id}&#34;)
+        return self.assistant
+
+    async def create_bot(self):
+        &#34;&#34;&#34;Create a bot and store it in the config.&#34;&#34;&#34;
+        self.assistant = await self.client.beta.assistants.create(
+            name=self.name,
+            instructions=self.bot_instructions,
+            model=self.model,
+        )
+        self.config.add_bot(self.assistant.id, self.name)
+        logger.debug(f&#34;Assistant created: {self.assistant.id}&#34;)
+
+    def toolkit_factory(
+        self, root_folder: str, model: str, tool_names: list[str]
+    ) -&gt; tuple[ToolKit, list[dict[str, Any]]]:
+        self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names)
+        initialize_all_tools(keeps=tool_names)
+        tools_schema = [{&#34;function&#34;: schema, &#34;type&#34;: &#34;function&#34;} for schema in ALL_TOOLS]
+        if not tools_schema:
+            raise Exception(&#34;Not enough tools!&#34;)
+        return self.toolkit, tools_schema
+
+    async def one_shot_ask(self, the_ask: str) -&gt; Any:
+        &#34;&#34;&#34;Free-form request, structured response.
+
+        Args:
+            the_ask (str): The request.
+
+        Returns:
+            Any: The response.
+        &#34;&#34;&#34;
+        if not self.toolkit:
+            raise TypeError(&#34;Missing toolkit before one_shot_ask&#34;)
+        if not self.assistant:
+            raise TypeError(&#34;Missing assistant before one_shot_ask&#34;)
+        try:
+            _, tool_schemas = self.toolkit_factory(
+                &#34;.&#34;,
+                self.model,
+                [
+                    # &#34;report_bool&#34;,
+                    &#34;report_dict&#34;,
+                    &#34;report_float&#34;,
+                    &#34;report_int&#34;,
+                    # &#34;report_json&#34;,
+                    &#34;report_list&#34;,
+                    # &#34;report_set&#34;,
+                    # &#34;report_text&#34;, Why? Just do an unstructured query.
+                    # &#34;report_toml&#34;,
+                    # &#34;report_tuple&#34;,
+                    # &#34;report_xml&#34;,
+                ],
+            )
+            thread = await self.client.beta.threads.create()
+            logger.info(the_ask)
+            _message = await self.client.beta.threads.messages.create(
+                thread_id=thread.id,
+                role=&#34;user&#34;,
+                content=the_ask,
+            )
+            run = await self.client.beta.threads.runs.create(
+                thread_id=thread.id, assistant_id=self.assistant.id, tools=tool_schemas
+            )
+            tool_use_count = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
+            if tool_use_count == 0:
+                logger.warning(&#34;No tool usage, something went wrong.&#34;)
+
+            messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
+            # logger.info(messages)
+            last_words = parse_message(messages)
+            logger.info(last_words)
+            self.dialog_logger_md.add_bot(last_words)
+
+        except Exception as exception:
+            self.dialog_logger_md.add_error(exception)
+            raise
+        finally:
+            # clean up thread
+            if self.thread and not self.persist_threads:
+                await self.client.beta.threads.delete(self.thread.id)
+            if self.assistant and not self.persist_bots:
+                # clean up assistant
+                await self.client.beta.assistants.delete(self.assistant.id)
+
+    async def basic_tool_loop(
+        self,
+        the_ask: str,
+        root_folder: str,
+        tool_names: list[Any],
+        keep_going_prompt: Callable[[ToolKit], Awaitable[str]],
+    ) -&gt; None:
+        &#34;&#34;&#34;
+        Loop through tool requests.
+
+        Args:
+            the_ask (str): The initial request.
+            root_folder (str): The root folder for file operations.
+            tool_names (list[Any]): The tools to use.
+            keep_going_prompt (str): The prompt to use to keep going.
+
+        Returns:
+            None
+        &#34;&#34;&#34;
+        if not self.assistant:
+            raise TypeError(&#34;Missing assistant before basic_tool_loop&#34;)
+
+        if self.dialog_logger_md:
+            self.dialog_logger_md.add_user(the_ask)
+            self.dialog_logger_md.add_toolkit(tool_names)
+
+        tool_loops = 0
+        total_tool_use_count = 0
+        try:
+            tool_names.append(&#34;report_text&#34;)
+            tool_names = list(set(tool_names))
+            _, tool_schemas = self.toolkit_factory(root_folder, self.model, tool_names)
+            if not self.toolkit:
+                raise TypeError(&#34;Missing toolkit before basic_tool_loop&#34;)
+            thread = await self.client.beta.threads.create()
+            logger.info(the_ask)
+            _message = await self.client.beta.threads.messages.create(
+                thread_id=thread.id,
+                role=&#34;user&#34;,
+                content=the_ask,
+            )
+            run = await self.client.beta.threads.runs.create(
+                thread_id=thread.id, assistant_id=self.assistant.id, tools=tool_schemas
+            )
+            tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
+            tool_loops += 1
+            if tool_loops &gt; self.maximum_loops:
+                raise TypeError(&#34;Too many tool loops&#34;)
+
+            total_tool_use_count += tools_used_this_round
+
+            messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
+            initial_bot_response = parse_message(messages)
+            self.dialog_logger_md.add_bot(initial_bot_response)
+
+            # Did you use any tools?
+            if tools_used_this_round == 0:
+                initial_user_response = (
+                    &#34;I see you didn&#39;t use any tools.  &#34;
+                    &#34;Please list what tools you have available, and if there are some available, &#34;
+                    &#34;why they were not useful.&#34;
+                )
+            else:
+                if not self.toolkit:
+                    raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
+                initial_user_response = await keep_going_prompt(self.toolkit)
+
+            # TODO: make into method.
+            await self.client.beta.threads.messages.create(
+                thread_id=thread.id,
+                role=&#34;user&#34;,
+                content=initial_user_response,
+            )
+            run = await self.client.beta.threads.runs.create(thread_id=thread.id, assistant_id=self.assistant.id)
+            self.dialog_logger_md.add_user(initial_user_response)
+
+            # &#34;keep going/done&#34; loop
+            done = &#34;NOPE&#34;
+            tools_used_this_round = -1
+
+            # TODO: intializee this in constructor
+            if hasattr(self.toolkit, &#34;tool_answer_collector&#34;) and self.toolkit.tool_answer_collector:
+                final_report = self.toolkit.tool_answer_collector.text_answer
+                final_comment = self.toolkit.tool_answer_collector.comment
+                self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
+                return
+
+            # Bot has at least 3 ways to stop
+            # - return message of DONE
+            # - use answer tool to submit DONE, or IMPOSSIBLE
+            # - stop using tools
+            while done != &#34;DONE&#34; or tools_used_this_round == 0:
+                tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
+                # Did we use any tools
+                total_tool_use_count += tools_used_this_round
+
+                # infinite loop protection
+                tool_loops += 1
+                if tool_loops &gt; self.maximum_loops:
+                    raise TypeError(&#34;Too many tool loops&#34;)
+
+                messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
+                successive_response = parse_message(messages)
+                self.dialog_logger_md.add_bot(successive_response)
+                done = capture_done_message(messages)
+                if done == &#34;DONE&#34;:
+                    break
+
+                # Did bot use tool to submit final report. Wow. Can&#39;t trust all bots.
+                if (
+                    self.allow_self_certification
+                    and hasattr(self.toolkit, &#34;tool_answer_collector&#34;)
+                    and self.toolkit.tool_answer_collector
+                ):
+                    final_report = str(self.toolkit.tool_answer_collector.text_answer).upper().strip()
+                    final_comment = self.toolkit.tool_answer_collector.comment
+                    self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
+                    break
+
+                if done != &#34;DONE&#34;:
+                    # Replace with 2nd bot?
+                    keep_going_text = await keep_going_prompt(self.toolkit)
+                    if keep_going_text == &#34;DONE&#34;:
+                        # The bot did a good job and we can certify that.
+                        break
+                    self.dialog_logger_md.add_user(keep_going_text)
+                    logger.info(keep_going_text)
+                    await self.client.beta.threads.messages.create(
+                        thread_id=thread.id,
+                        role=&#34;user&#34;,
+                        content=keep_going_text,
+                    )
+                    run = await self.client.beta.threads.runs.create(
+                        thread_id=thread.id, assistant_id=self.assistant.id
+                    )
+
+        except Exception as exception:
+            self.dialog_logger_md.add_error(exception)
+            raise
+        finally:
+            # clean up thread
+            if self.thread and not self.persist_threads:
+                await self.client.beta.threads.delete(self.thread.id)
+            if self.assistant and not self.persist_bots:
+                # clean up assistant
+                await self.client.beta.assistants.delete(self.assistant.id)</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="ai_shell.bot_glue.bot.TaskBot.allow_self_certification"><code class="name">var <span class="ident">allow_self_certification</span></code></dt>
+<dd>
+<div class="desc"><p>Do you want to trust the bot when it says it has achieved the goal?</p></div>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.bot_instructions"><code class="name">var <span class="ident">bot_instructions</span></code></dt>
+<dd>
+<div class="desc"><p>Model, name and instructions uniquely identify a bot.</p></div>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.config"><code class="name">var <span class="ident">config</span></code></dt>
+<dd>
+<div class="desc"><p>Stores bot, thread config and other global config.</p></div>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.dialog_logger_md"><code class="name">var <span class="ident">dialog_logger_md</span></code></dt>
+<dd>
+<div class="desc"><p>Conversation style logger</p></div>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.maximum_loops"><code class="name">var <span class="ident">maximum_loops</span></code></dt>
+<dd>
+<div class="desc"><p>Prevent infinite loops and money wastage.</p></div>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.model"><code class="name">var <span class="ident">model</span></code></dt>
+<dd>
+<div class="desc"><p>Model, name and instructions uniquely identify a bot.</p></div>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dd>
+<div class="desc"><p>Model, name and instructions uniquely identify a bot.</p></div>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.persist_bots"><code class="name">var <span class="ident">persist_bots</span></code></dt>
+<dd>
+<div class="desc"><p>Keep bots or attempt to delete them at end of session</p></div>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.persist_threads"><code class="name">var <span class="ident">persist_threads</span></code></dt>
+<dd>
+<div class="desc"><p>Keep thread or attempt to delete them</p></div>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.toolkit"><code class="name">var <span class="ident">toolkit</span></code></dt>
+<dd>
+<div class="desc"><p>Reference to toolkit so that goal checkers can check if any tools were used.</p></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="ai_shell.bot_glue.bot.TaskBot.basic_tool_loop"><code class="name flex">
+<span>async def <span class="ident">basic_tool_loop</span></span>(<span>self, the_ask: str, root_folder: str, tool_names: list[typing.Any], keep_going_prompt: collections.abc.Callable[[<a title="ai_shell.openai_toolkit.ToolKit" href="../openai_toolkit.html#ai_shell.openai_toolkit.ToolKit">ToolKit</a>], collections.abc.Awaitable[str]]) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Loop through tool requests.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>the_ask</code></strong> :&ensp;<code>str</code></dt>
+<dd>The initial request.</dd>
+<dt><strong><code>root_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The root folder for file operations.</dd>
+<dt><strong><code>tool_names</code></strong> :&ensp;<code>list[Any]</code></dt>
+<dd>The tools to use.</dd>
+<dt><strong><code>keep_going_prompt</code></strong> :&ensp;<code>str</code></dt>
+<dd>The prompt to use to keep going.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>None</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def basic_tool_loop(
+    self,
+    the_ask: str,
+    root_folder: str,
+    tool_names: list[Any],
+    keep_going_prompt: Callable[[ToolKit], Awaitable[str]],
+) -&gt; None:
+    &#34;&#34;&#34;
+    Loop through tool requests.
+
+    Args:
+        the_ask (str): The initial request.
+        root_folder (str): The root folder for file operations.
+        tool_names (list[Any]): The tools to use.
+        keep_going_prompt (str): The prompt to use to keep going.
+
+    Returns:
+        None
+    &#34;&#34;&#34;
+    if not self.assistant:
+        raise TypeError(&#34;Missing assistant before basic_tool_loop&#34;)
+
+    if self.dialog_logger_md:
+        self.dialog_logger_md.add_user(the_ask)
+        self.dialog_logger_md.add_toolkit(tool_names)
+
+    tool_loops = 0
+    total_tool_use_count = 0
+    try:
+        tool_names.append(&#34;report_text&#34;)
+        tool_names = list(set(tool_names))
+        _, tool_schemas = self.toolkit_factory(root_folder, self.model, tool_names)
+        if not self.toolkit:
+            raise TypeError(&#34;Missing toolkit before basic_tool_loop&#34;)
+        thread = await self.client.beta.threads.create()
+        logger.info(the_ask)
+        _message = await self.client.beta.threads.messages.create(
+            thread_id=thread.id,
+            role=&#34;user&#34;,
+            content=the_ask,
+        )
+        run = await self.client.beta.threads.runs.create(
+            thread_id=thread.id, assistant_id=self.assistant.id, tools=tool_schemas
+        )
+        tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
+        tool_loops += 1
+        if tool_loops &gt; self.maximum_loops:
+            raise TypeError(&#34;Too many tool loops&#34;)
+
+        total_tool_use_count += tools_used_this_round
+
+        messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
+        initial_bot_response = parse_message(messages)
+        self.dialog_logger_md.add_bot(initial_bot_response)
+
+        # Did you use any tools?
+        if tools_used_this_round == 0:
+            initial_user_response = (
+                &#34;I see you didn&#39;t use any tools.  &#34;
+                &#34;Please list what tools you have available, and if there are some available, &#34;
+                &#34;why they were not useful.&#34;
+            )
+        else:
+            if not self.toolkit:
+                raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
+            initial_user_response = await keep_going_prompt(self.toolkit)
+
+        # TODO: make into method.
+        await self.client.beta.threads.messages.create(
+            thread_id=thread.id,
+            role=&#34;user&#34;,
+            content=initial_user_response,
+        )
+        run = await self.client.beta.threads.runs.create(thread_id=thread.id, assistant_id=self.assistant.id)
+        self.dialog_logger_md.add_user(initial_user_response)
+
+        # &#34;keep going/done&#34; loop
+        done = &#34;NOPE&#34;
+        tools_used_this_round = -1
+
+        # TODO: intializee this in constructor
+        if hasattr(self.toolkit, &#34;tool_answer_collector&#34;) and self.toolkit.tool_answer_collector:
+            final_report = self.toolkit.tool_answer_collector.text_answer
+            final_comment = self.toolkit.tool_answer_collector.comment
+            self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
+            return
+
+        # Bot has at least 3 ways to stop
+        # - return message of DONE
+        # - use answer tool to submit DONE, or IMPOSSIBLE
+        # - stop using tools
+        while done != &#34;DONE&#34; or tools_used_this_round == 0:
+            tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
+            # Did we use any tools
+            total_tool_use_count += tools_used_this_round
+
+            # infinite loop protection
+            tool_loops += 1
+            if tool_loops &gt; self.maximum_loops:
+                raise TypeError(&#34;Too many tool loops&#34;)
+
+            messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
+            successive_response = parse_message(messages)
+            self.dialog_logger_md.add_bot(successive_response)
+            done = capture_done_message(messages)
+            if done == &#34;DONE&#34;:
+                break
+
+            # Did bot use tool to submit final report. Wow. Can&#39;t trust all bots.
+            if (
+                self.allow_self_certification
+                and hasattr(self.toolkit, &#34;tool_answer_collector&#34;)
+                and self.toolkit.tool_answer_collector
+            ):
+                final_report = str(self.toolkit.tool_answer_collector.text_answer).upper().strip()
+                final_comment = self.toolkit.tool_answer_collector.comment
+                self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
+                break
+
+            if done != &#34;DONE&#34;:
+                # Replace with 2nd bot?
+                keep_going_text = await keep_going_prompt(self.toolkit)
+                if keep_going_text == &#34;DONE&#34;:
+                    # The bot did a good job and we can certify that.
+                    break
+                self.dialog_logger_md.add_user(keep_going_text)
+                logger.info(keep_going_text)
+                await self.client.beta.threads.messages.create(
+                    thread_id=thread.id,
+                    role=&#34;user&#34;,
+                    content=keep_going_text,
+                )
+                run = await self.client.beta.threads.runs.create(
+                    thread_id=thread.id, assistant_id=self.assistant.id
+                )
+
+    except Exception as exception:
+        self.dialog_logger_md.add_error(exception)
+        raise
+    finally:
+        # clean up thread
+        if self.thread and not self.persist_threads:
+            await self.client.beta.threads.delete(self.thread.id)
+        if self.assistant and not self.persist_bots:
+            # clean up assistant
+            await self.client.beta.assistants.delete(self.assistant.id)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.create_bot"><code class="name flex">
+<span>async def <span class="ident">create_bot</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a bot and store it in the config.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def create_bot(self):
+    &#34;&#34;&#34;Create a bot and store it in the config.&#34;&#34;&#34;
+    self.assistant = await self.client.beta.assistants.create(
+        name=self.name,
+        instructions=self.bot_instructions,
+        model=self.model,
+    )
+    self.config.add_bot(self.assistant.id, self.name)
+    logger.debug(f&#34;Assistant created: {self.assistant.id}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.get_create_bot"><code class="name flex">
+<span>async def <span class="ident">get_create_bot</span></span>(<span>self) ‑> openai.types.beta.assistant.Assistant</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get or create a bot and store it in the config.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def get_create_bot(self) -&gt; Assistant:
+    &#34;&#34;&#34;Get or create a bot and store it in the config.&#34;&#34;&#34;
+    current_bot = self.config.get_bot(self.name)
+    if not current_bot:
+        await self.create_bot()
+    else:
+        try:
+            self.assistant = await self.client.beta.assistants.retrieve(current_bot.assistant_id)
+            logger.debug(f&#34;Assistant retrieved: {self.assistant.id}&#34;)
+        except openai.NotFoundError:
+            await self.create_bot()
+    if not self.assistant:
+        raise TypeError(&#34;Assistant not found or created.&#34;)
+    logger.debug(f&#34;Assistant id: {self.assistant.id}&#34;)
+    return self.assistant</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.initialize"><code class="name flex">
+<span>async def <span class="ident">initialize</span></span>(<span>self) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get or create a bot and store it in the config.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def initialize(self) -&gt; None:
+    &#34;&#34;&#34;Get or create a bot and store it in the config.&#34;&#34;&#34;
+    bot = await self.get_create_bot()
+    logger.debug(f&#34;Assistant id: {bot.id}&#34;)
+    self.assistant = bot
+    self.dialog_logger_md.write_header(bot_name=self.name, model=self.model, bot_instructions=self.bot_instructions)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.one_shot_ask"><code class="name flex">
+<span>async def <span class="ident">one_shot_ask</span></span>(<span>self, the_ask: str) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Free-form request, structured response.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>the_ask</code></strong> :&ensp;<code>str</code></dt>
+<dd>The request.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>Any</code></dt>
+<dd>The response.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def one_shot_ask(self, the_ask: str) -&gt; Any:
+    &#34;&#34;&#34;Free-form request, structured response.
+
+    Args:
+        the_ask (str): The request.
+
+    Returns:
+        Any: The response.
+    &#34;&#34;&#34;
+    if not self.toolkit:
+        raise TypeError(&#34;Missing toolkit before one_shot_ask&#34;)
+    if not self.assistant:
+        raise TypeError(&#34;Missing assistant before one_shot_ask&#34;)
+    try:
+        _, tool_schemas = self.toolkit_factory(
+            &#34;.&#34;,
+            self.model,
+            [
+                # &#34;report_bool&#34;,
+                &#34;report_dict&#34;,
+                &#34;report_float&#34;,
+                &#34;report_int&#34;,
+                # &#34;report_json&#34;,
+                &#34;report_list&#34;,
+                # &#34;report_set&#34;,
+                # &#34;report_text&#34;, Why? Just do an unstructured query.
+                # &#34;report_toml&#34;,
+                # &#34;report_tuple&#34;,
+                # &#34;report_xml&#34;,
+            ],
+        )
+        thread = await self.client.beta.threads.create()
+        logger.info(the_ask)
+        _message = await self.client.beta.threads.messages.create(
+            thread_id=thread.id,
+            role=&#34;user&#34;,
+            content=the_ask,
+        )
+        run = await self.client.beta.threads.runs.create(
+            thread_id=thread.id, assistant_id=self.assistant.id, tools=tool_schemas
+        )
+        tool_use_count = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
+        if tool_use_count == 0:
+            logger.warning(&#34;No tool usage, something went wrong.&#34;)
+
+        messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
+        # logger.info(messages)
+        last_words = parse_message(messages)
+        logger.info(last_words)
+        self.dialog_logger_md.add_bot(last_words)
+
+    except Exception as exception:
+        self.dialog_logger_md.add_error(exception)
+        raise
+    finally:
+        # clean up thread
+        if self.thread and not self.persist_threads:
+            await self.client.beta.threads.delete(self.thread.id)
+        if self.assistant and not self.persist_bots:
+            # clean up assistant
+            await self.client.beta.assistants.delete(self.assistant.id)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.toolkit_factory"><code class="name flex">
+<span>def <span class="ident">toolkit_factory</span></span>(<span>self, root_folder: str, model: str, tool_names: list[str]) ‑> tuple[<a title="ai_shell.openai_toolkit.ToolKit" href="../openai_toolkit.html#ai_shell.openai_toolkit.ToolKit">ToolKit</a>, list[dict[str, typing.Any]]]</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def toolkit_factory(
+    self, root_folder: str, model: str, tool_names: list[str]
+) -&gt; tuple[ToolKit, list[dict[str, Any]]]:
+    self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names)
+    initialize_all_tools(keeps=tool_names)
+    tools_schema = [{&#34;function&#34;: schema, &#34;type&#34;: &#34;function&#34;} for schema in ALL_TOOLS]
+    if not tools_schema:
+        raise Exception(&#34;Not enough tools!&#34;)
+    return self.toolkit, tools_schema</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ai_shell.bot_glue" href="index.html">ai_shell.bot_glue</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="ai_shell.bot_glue.bot.capture_done_message" href="#ai_shell.bot_glue.bot.capture_done_message">capture_done_message</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.parse_message" href="#ai_shell.bot_glue.bot.parse_message">parse_message</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="ai_shell.bot_glue.bot.TaskBot" href="#ai_shell.bot_glue.bot.TaskBot">TaskBot</a></code></h4>
+<ul class="">
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.allow_self_certification" href="#ai_shell.bot_glue.bot.TaskBot.allow_self_certification">allow_self_certification</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.basic_tool_loop" href="#ai_shell.bot_glue.bot.TaskBot.basic_tool_loop">basic_tool_loop</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.bot_instructions" href="#ai_shell.bot_glue.bot.TaskBot.bot_instructions">bot_instructions</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.config" href="#ai_shell.bot_glue.bot.TaskBot.config">config</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.create_bot" href="#ai_shell.bot_glue.bot.TaskBot.create_bot">create_bot</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.dialog_logger_md" href="#ai_shell.bot_glue.bot.TaskBot.dialog_logger_md">dialog_logger_md</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.get_create_bot" href="#ai_shell.bot_glue.bot.TaskBot.get_create_bot">get_create_bot</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.initialize" href="#ai_shell.bot_glue.bot.TaskBot.initialize">initialize</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.maximum_loops" href="#ai_shell.bot_glue.bot.TaskBot.maximum_loops">maximum_loops</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.model" href="#ai_shell.bot_glue.bot.TaskBot.model">model</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.name" href="#ai_shell.bot_glue.bot.TaskBot.name">name</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.one_shot_ask" href="#ai_shell.bot_glue.bot.TaskBot.one_shot_ask">one_shot_ask</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.persist_bots" href="#ai_shell.bot_glue.bot.TaskBot.persist_bots">persist_bots</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.persist_threads" href="#ai_shell.bot_glue.bot.TaskBot.persist_threads">persist_threads</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.toolkit" href="#ai_shell.bot_glue.bot.TaskBot.toolkit">toolkit</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.toolkit_factory" href="#ai_shell.bot_glue.bot.TaskBot.toolkit_factory">toolkit_factory</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

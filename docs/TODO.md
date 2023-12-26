@@ -1,5 +1,9 @@
 # TODO
 
+- check for repetition in replies, e.g "I'm sorry I can't do that", can mean it is stuck.
+- DEMO BOTs: ais demo -bot botname
+- can't use certain tools until they're unlocked (e.g no edit w/o looking at file)
+
 ## Uncategorized
 
 - Aggressively reduce tool count

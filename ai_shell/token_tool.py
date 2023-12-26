@@ -29,6 +29,8 @@ class TokenCounterTool:
         Returns:
             int: The number of tokens.
         """
+        if not text:
+            return 0
         # gpt3 turbo - cl100k_base
         # gpt2 (or r50k_base) 	Most GPT-3 models
         # p50k_base 	Code models, text-davinci-002, text-davinci-003

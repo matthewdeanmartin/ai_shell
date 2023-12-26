@@ -21,6 +21,7 @@ class ReplaceTool:
         self.root_folder = root_folder
         self.auto_cat = True
 
+
     @log()
     def replace_line_by_line(
         self, file_path: str, old_text: str, new_text: str, line_start: int = 0, line_end: int = -1

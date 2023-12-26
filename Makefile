@@ -31,8 +31,9 @@ clean: clean-pyc clean-test
 # tests are often slow and linting is fast, so run tests on linted code.
 test: clean .build_history/pylint .build_history/bandit poetry.lock
 	@echo "Running unit tests"
+	$(VENV) pytest --doctest-modules ai_shell ai_todo
 	$(VENV) python -m unittest discover
-	$(VENV) py.test tests --cov=ai_shell --cov-report=html --cov-fail-under 40
+	$(VENV) py.test tests --cov=ai_shell --cov-report=html --cov-fail-under 65
 
 .build_history:
 	@mkdir -p .build_history
@@ -74,6 +75,7 @@ bandit: .build_history/bandit
 .PHONY: pylint
 .build_history/pylint: .build_history .build_history/isort .build_history/black $(FILES)
 	@echo "Linting with pylint"
+	$(VENV) ruff --fix
 	$(VENV) pylint ai_shell --fail-under 9.7
 	@touch .build_history/pylint
 
@@ -94,3 +96,6 @@ publish: test
 docker:
 	docker build -t ai_shell -f Dockerfile .
 
+check_docs:
+	pydoctest --config .pydoctest.json
+	interrogage ai_shell

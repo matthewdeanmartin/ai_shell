@@ -33,7 +33,7 @@ def test_simple():
     # Converting to JSON schema
     json_schema = convert_to_json_schema(SampleClass)
     assert json_schema
-    for function_name, schema in json_schema.items():
+    for _function_name, schema in json_schema.items():
         Draft7Validator.check_schema(schema)
     # Display the JSON schema in a readable format
     # print(json.dumps(json_schema, indent=4))
@@ -63,7 +63,7 @@ def test_with_docstring():
 
     # Convert to JSON schema with descriptions
     json_schema_with_descriptions = convert_to_json_schema(SampleClass)
-    for function_name, schema in json_schema_with_descriptions.items():
+    for _function_name, schema in json_schema_with_descriptions.items():
         Draft7Validator.check_schema(schema)
     # Display the JSON schema in a readable format
     # print(json.dumps(json_schema_with_descriptions, indent=4))
@@ -88,5 +88,8 @@ def test_extract_class_methods_details():
     }
 
     actual_output = extract_class_methods_details(TestClassForMethodInfo)
-
-    assert actual_output == expected_output, "Method details extraction does not match expected output."
+    # Why is this here?!
+    cloned_actual_output = actual_output.copy()
+    if "__pytest_asyncio_scoped_event_loop" in actual_output:
+        del cloned_actual_output["__pytest_asyncio_scoped_event_loop"]
+    assert cloned_actual_output == expected_output, "Method details extraction does not match expected output."

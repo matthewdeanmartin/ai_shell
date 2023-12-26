@@ -33,7 +33,6 @@ class PytestTool:
         Returns:
             str: Output from pytest.
         """
-
         with change_directory(self.root_folder):
             # What is -rA
             passed_tests, failed_tests, coverage, command_result = count_pytest_results(

@@ -1,0 +1,1975 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ai_shell.openai_schemas API documentation</title>
+<meta name="description" content="jsonschema for functions" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ai_shell.openai_schemas</code></h1>
+</header>
+<section id="section-intro">
+<p>jsonschema for functions</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;jsonschema for functions&#34;&#34;&#34;
+
+SCHEMAS = {
+    &#34;answer_collector&#34;: {
+        &#34;report_bool&#34;: {
+            &#34;description&#34;: &#34;Report answer in bool &#34; &#34;format.&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;bool &#34; &#34;format.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;report_dict&#34;: {
+            &#34;description&#34;: &#34;Report answer in dict &#34; &#34;format.&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;dict &#34; &#34;format.&#34;,
+                    &#34;type&#34;: [&#34;object&#34;],
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;report_float&#34;: {
+            &#34;description&#34;: &#34;Report answer in &#34; &#34;string format.&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;float &#34; &#34;format.&#34;,
+                    &#34;type&#34;: &#34;number&#34;,
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;report_int&#34;: {
+            &#34;description&#34;: &#34;Report answer in &#34; &#34;integer format&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;integer &#34; &#34;format.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;report_json&#34;: {
+            &#34;description&#34;: &#34;Report answer in json &#34; &#34;format.&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;json &#34; &#34;format.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;report_list&#34;: {
+            &#34;description&#34;: &#34;Report answer in list &#34; &#34;format.&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;list &#34; &#34;format.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;report_set&#34;: {
+            &#34;description&#34;: &#34;Report answer in set &#34; &#34;format.&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;set &#34; &#34;format.&#34;,
+                    &#34;type&#34;: &#34;array&#34;,
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;report_text&#34;: {
+            &#34;description&#34;: &#34;Report answer in &#34; &#34;string format.&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;string &#34; &#34;format.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;report_toml&#34;: {
+            &#34;description&#34;: &#34;Report answer in toml &#34; &#34;format.&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;toml &#34; &#34;format.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;report_tuple&#34;: {
+            &#34;description&#34;: &#34;Report answer in &#34; &#34;tuple format.&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;tuple &#34; &#34;format.&#34;,
+                    &#34;type&#34;: &#34;array&#34;,
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;report_xml&#34;: {
+            &#34;description&#34;: &#34;Report answer in xml &#34; &#34;format.&#34;,
+            &#34;properties&#34;: {
+                &#34;answer&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;xml &#34; &#34;format.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;comment&#34;: {
+                    &#34;default&#34;: &#34;&#34;,
+                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;answer&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;cat&#34;: {
+        &#34;cat&#34;: {
+            &#34;description&#34;: &#34;Mimics the basic functionalities of the &#34; &#34;&#39;cat&#39; command in Unix.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_paths&#34;: {&#34;description&#34;: &#34;A list of &#34; &#34;file paths &#34; &#34;to &#34; &#34;concatenate.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;number_lines&#34;: {
+                    &#34;default&#34;: True,
+                    &#34;description&#34;: &#34;If True, &#34; &#34;number &#34; &#34;all &#34; &#34;output &#34; &#34;lines.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+                &#34;squeeze_blank&#34;: {
+                    &#34;default&#34;: False,
+                    &#34;description&#34;: &#34;If &#34; &#34;True, &#34; &#34;consecutive &#34; &#34;blank &#34; &#34;lines &#34; &#34;are &#34; &#34;squeezed &#34; &#34;to one.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_paths&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;cat_markdown&#34;: {
+            &#34;description&#34;: &#34;Concatenates the content of given &#34; &#34;file paths and formats them as &#34; &#34;markdown.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_paths&#34;: {&#34;description&#34;: &#34;List &#34; &#34;of &#34; &#34;file &#34; &#34;paths &#34; &#34;to &#34; &#34;concatenate.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;number_lines&#34;: {
+                    &#34;default&#34;: True,
+                    &#34;description&#34;: &#34;If &#34; &#34;True, &#34; &#34;number &#34; &#34;all &#34; &#34;output &#34; &#34;lines.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+                &#34;squeeze_blank&#34;: {
+                    &#34;default&#34;: False,
+                    &#34;description&#34;: &#34;If &#34; &#34;True, &#34; &#34;consecutive &#34; &#34;blank &#34; &#34;lines &#34; &#34;are &#34; &#34;squeezed &#34; &#34;to &#34; &#34;one.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_paths&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;cut&#34;: {
+        &#34;cut_characters&#34;: {
+            &#34;description&#34;: &#34;Reads a file and extracts &#34; &#34;characters based on specified &#34; &#34;ranges.&#34;,
+            &#34;properties&#34;: {
+                &#34;character_ranges&#34;: {
+                    &#34;description&#34;: &#34;A &#34; &#34;string &#34; &#34;representing &#34; &#34;character &#34; &#34;ranges, &#34; &#34;e.g., &#34; &#39;&#34;1-5,10&#34;.&#39;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;name &#34; &#34;of &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;process.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;character_ranges&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;cut_fields&#34;: {
+            &#34;description&#34;: &#34;Reads a file and extracts fields &#34;
+            &#34;based on specified ranges using the &#34;
+            &#34;given delimiter.&#34;,
+            &#34;properties&#34;: {
+                &#34;delimiter&#34;: {
+                    &#34;default&#34;: &#34;,&#34;,
+                    &#34;description&#34;: &#34;A &#34; &#34;single &#34; &#34;character &#34; &#34;used &#34; &#34;as &#34; &#34;the &#34; &#34;field &#34; &#34;delimiter.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;field_ranges&#34;: {
+                    &#34;description&#34;: &#34;A &#34; &#34;string &#34; &#34;representing &#34; &#34;field &#34; &#34;ranges, &#34; &#34;e.g., &#34; &#39;&#34;1-3,5&#34;.&#39;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;filename&#34;: {&#34;description&#34;: &#34;The &#34; &#34;name &#34; &#34;of &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;process.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;filename&#34;, &#34;field_ranges&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;cut_fields_by_name&#34;: {
+            &#34;description&#34;: &#34;Reads a file and extracts &#34;
+            &#34;fields based on specified &#34;
+            &#34;field names using the given &#34;
+            &#34;delimiter.&#34;,
+            &#34;properties&#34;: {
+                &#34;delimiter&#34;: {
+                    &#34;default&#34;: &#34;,&#34;,
+                    &#34;description&#34;: &#34;A &#34; &#34;single &#34; &#34;character &#34; &#34;used &#34; &#34;as &#34; &#34;the &#34; &#34;field &#34; &#34;delimiter.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;field_names&#34;: {&#34;description&#34;: &#34;A &#34; &#34;list &#34; &#34;of &#34; &#34;field &#34; &#34;names &#34; &#34;to &#34; &#34;extract.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;filename&#34;: {&#34;description&#34;: &#34;The &#34; &#34;name &#34; &#34;of &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;process.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;filename&#34;, &#34;field_names&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;ed&#34;: {
+        &#34;ed&#34;: {
+            &#34;description&#34;: &#34;A python version of ed.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_name&#34;: {&#34;description&#34;: &#34;Script &#34; &#34;creates or &#34; &#34;edits this &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return value &#34;
+                    &#34;as text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or text/yaml &#34;
+                    &#34;inside the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;script&#34;: {&#34;description&#34;: &#34;Ed commands to &#34; &#34;run.&#34;, &#34;type&#34;: &#34;string&#34;},
+            },
+            &#34;required&#34;: [&#34;script&#34;, &#34;file_name&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        }
+    },
+    &#34;edlin&#34;: {
+        &#34;edlin&#34;: {
+            &#34;description&#34;: &#34;An improved version of the edlin.\n&#34;
+            &#34;\n&#34;
+            &#34;Example:\n&#34;
+            &#34;\n&#34;
+            &#39;&gt;&gt;&gt; tool = EdlinTool(&#34;.&#34;)\n&#39;
+            &#39;&gt;&gt;&gt; result = tool.edlin(&#34;INSERT &#39;
+            &#39;cat\\nINSERT dog\\nQUIT&#34;, &#34;test.md&#34;)\n&#39;
+            &#34;[&#39;cat&#39;, &#39;dog&#39;]\n&#34;
+            &#34;\n&#34;
+            &#39;&gt;&gt;&gt; tool = EdlinTool(&#34;.&#34;)\n&#39;
+            &#39;&gt;&gt;&gt; result = tool.edlin(&#34;1,10 &#39;
+            &#39;LIST\\nQUIT&#34;, &#34;test.md&#34;)\n&#39;
+            &#34;&gt;&gt;&gt; print(result)\n&#34;
+            &#34;[&#39;cat&#39;, &#39;dog&#39;]&#34;,
+            &#34;properties&#34;: {
+                &#34;file_name&#34;: {&#34;description&#34;: &#34;Script &#34; &#34;creates &#34; &#34;or &#34; &#34;edits &#34; &#34;this &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;script&#34;: {&#34;description&#34;: &#34;Edlin &#34; &#34;commands &#34; &#34;to run.&#34;, &#34;type&#34;: &#34;string&#34;},
+            },
+            &#34;required&#34;: [&#34;script&#34;, &#34;file_name&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        }
+    },
+    &#34;find&#34;: {
+        &#34;find_files&#34;: {
+            &#34;description&#34;: &#34;Recursively search for files or &#34;
+            &#34;directories matching given &#34;
+            &#34;criteria in a directory and its &#34;
+            &#34;subdirectories.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_type&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;type &#34; &#34;to &#34; &#34;filter &#34; &#34;(&#39;file&#39; &#34; &#34;or &#34; &#34;&#39;directory&#39;).&#34;,
+                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;name&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;exact &#34; &#34;name to &#34; &#34;match &#34; &#34;filenames &#34; &#34;against.&#34;,
+                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
+                },
+                &#34;regex&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;regex &#34; &#34;pattern &#34; &#34;to &#34; &#34;match &#34; &#34;filenames &#34; &#34;against.&#34;,
+                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
+                },
+                &#34;size&#34;: {
+                    &#34;description&#34;: &#34;The size &#34;
+                    &#34;to &#34;
+                    &#34;filter &#34;
+                    &#34;files &#34;
+                    &#34;by, &#34;
+                    &#34;e.g., &#34;
+                    &#34;&#39;+100&#39; &#34;
+                    &#34;for &#34;
+                    &#34;files &#34;
+                    &#34;larger &#34;
+                    &#34;than 100 &#34;
+                    &#34;bytes.&#34;,
+                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
+                },
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;regex&#34;, &#34;file_type&#34;, &#34;size&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;find_files_markdown&#34;: {
+            &#34;description&#34;: &#34;Recursively search for &#34;
+            &#34;files or directories &#34;
+            &#34;matching given criteria &#34;
+            &#34;in a directory and its &#34;
+            &#34;subdirectories.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_type&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;type &#34; &#34;to &#34; &#34;filter &#34; &#34;(&#39;file&#39; &#34; &#34;or &#34; &#34;&#39;directory&#39;).&#34;,
+                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;name&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;exact &#34; &#34;name &#34; &#34;to &#34; &#34;match &#34; &#34;filenames &#34; &#34;against.&#34;,
+                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
+                },
+                &#34;regex&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;regex &#34; &#34;pattern &#34; &#34;to &#34; &#34;match &#34; &#34;filenames &#34; &#34;against.&#34;,
+                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
+                },
+                &#34;size&#34;: {
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;size &#34;
+                    &#34;to &#34;
+                    &#34;filter &#34;
+                    &#34;files &#34;
+                    &#34;by, &#34;
+                    &#34;e.g., &#34;
+                    &#34;&#39;+100&#39; &#34;
+                    &#34;for &#34;
+                    &#34;files &#34;
+                    &#34;larger &#34;
+                    &#34;than &#34;
+                    &#34;100 &#34;
+                    &#34;bytes.&#34;,
+                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
+                },
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;regex&#34;, &#34;file_type&#34;, &#34;size&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;git&#34;: {
+        &#34;get_current_branch&#34;: {
+            &#34;description&#34;: &#34;Retrieves the current &#34; &#34;branch name of the &#34; &#34;repository.&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                }
+            },
+            &#34;required&#34;: [],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;get_recent_commits&#34;: {
+            &#34;description&#34;: &#34;Retrieves the most recent &#34; &#34;commit hashes from the &#34; &#34;current branch.&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;n&#34;: {
+                    &#34;default&#34;: 10,
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;number &#34;
+                    &#34;of &#34;
+                    &#34;recent &#34;
+                    &#34;commits &#34;
+                    &#34;to &#34;
+                    &#34;retrieve. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#34;10.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;short_hash&#34;: {
+                    &#34;default&#34;: False,
+                    &#34;description&#34;: &#34;If &#34;
+                    &#34;True, &#34;
+                    &#34;return &#34;
+                    &#34;short &#34;
+                    &#34;hashes; &#34;
+                    &#34;otherwise, &#34;
+                    &#34;return &#34;
+                    &#34;full &#34;
+                    &#34;hashes. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#34;False.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+            },
+            &#34;required&#34;: [],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;git_diff&#34;: {
+            &#34;description&#34;: &#34;Returns the differences in the &#34; &#34;working directory.&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                }
+            },
+            &#34;required&#34;: [],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;git_diff_commit&#34;: {
+            &#34;description&#34;: &#34;Shows changes between two &#34; &#34;commits.&#34;,
+            &#34;properties&#34;: {
+                &#34;commit1&#34;: {&#34;description&#34;: &#34;First &#34; &#34;commit&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;commit2&#34;: {&#34;description&#34;: &#34;Second &#34; &#34;commit&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;commit1&#34;, &#34;commit2&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;git_log_file&#34;: {
+            &#34;description&#34;: &#34;Returns the commit history for a &#34; &#34;specific file.&#34;,
+            &#34;properties&#34;: {
+                &#34;filename&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;filename&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;git_log_search&#34;: {
+            &#34;description&#34;: &#34;Returns the commit history that &#34; &#34;matches the search string.&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;search_string&#34;: {&#34;description&#34;: &#34;The &#34; &#34;search &#34; &#34;string.&#34;, &#34;type&#34;: &#34;string&#34;},
+            },
+            &#34;required&#34;: [&#34;search_string&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;git_show&#34;: {
+            &#34;description&#34;: &#34;Shows various types of objects &#34; &#34;(commits, tags, etc.).&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                }
+            },
+            &#34;required&#34;: [],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;git_status&#34;: {
+            &#34;description&#34;: &#34;Returns the status of the &#34; &#34;repository.&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                }
+            },
+            &#34;required&#34;: [],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;is_ignored_by_gitignore&#34;: {
+            &#34;description&#34;: &#34;Check if a file is &#34; &#34;ignored by .gitignore.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;of &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;check.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;gitignore_path&#34;: {
+                    &#34;default&#34;: &#34;.gitignore&#34;,
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;path &#34;
+                    &#34;to &#34;
+                    &#34;the &#34;
+                    &#34;.gitignore &#34;
+                    &#34;file. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#34;&#39;.gitignore&#39; &#34;
+                    &#34;in &#34;
+                    &#34;the &#34;
+                    &#34;current &#34;
+                    &#34;directory.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;grep&#34;: {
+        &#34;grep&#34;: {
+            &#34;description&#34;: &#34;Search for lines matching a regular &#34; &#34;expression in files specified by a glob &#34; &#34;pattern.&#34;,
+            &#34;properties&#34;: {
+                &#34;glob_pattern&#34;: {
+                    &#34;description&#34;: &#34;A glob &#34; &#34;pattern &#34; &#34;string &#34; &#34;to &#34; &#34;specify &#34; &#34;files.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;maximum_matches_per_file&#34;: {
+                    &#34;default&#34;: -1,
+                    &#34;description&#34;: &#34;Maximum &#34; &#34;number &#34; &#34;of &#34; &#34;matches &#34; &#34;to &#34; &#34;return &#34; &#34;for &#34; &#34;one &#34; &#34;file.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;maximum_matches_total&#34;: {
+                    &#34;default&#34;: -1,
+                    &#34;description&#34;: &#34;Maximum &#34; &#34;number &#34; &#34;of &#34; &#34;matches &#34; &#34;to &#34; &#34;return &#34; &#34;total.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;regex&#34;: {&#34;description&#34;: &#34;A regular &#34; &#34;expression &#34; &#34;string to &#34; &#34;search for.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;skip_first_matches&#34;: {
+                    &#34;default&#34;: -1,
+                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;initial &#34; &#34;matches &#34; &#34;to &#34; &#34;skip.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;regex&#34;, &#34;glob_pattern&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;grep_markdown&#34;: {
+            &#34;description&#34;: &#34;Search for lines matching a &#34;
+            &#34;regular expression in files and &#34;
+            &#34;returns markdown formatted &#34;
+            &#34;results.&#34;,
+            &#34;properties&#34;: {
+                &#34;glob_pattern&#34;: {
+                    &#34;description&#34;: &#34;A &#34; &#34;glob &#34; &#34;pattern &#34; &#34;string &#34; &#34;to &#34; &#34;specify &#34; &#34;files.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;maximum_matches&#34;: {
+                    &#34;default&#34;: -1,
+                    &#34;description&#34;: &#34;Maximum &#34; &#34;number &#34; &#34;of &#34; &#34;matches &#34; &#34;to &#34; &#34;return.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;regex&#34;: {
+                    &#34;description&#34;: &#34;A &#34; &#34;regular &#34; &#34;expression &#34; &#34;string &#34; &#34;to &#34; &#34;search &#34; &#34;for.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;skip_first_matches&#34;: {
+                    &#34;default&#34;: -1,
+                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;initial &#34; &#34;matches &#34; &#34;to &#34; &#34;skip.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;regex&#34;, &#34;glob_pattern&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;headtail&#34;: {
+        &#34;head&#34;: {
+            &#34;description&#34;: &#34;Return the first &#39;lines&#39; or &#34; &#34;&#39;byte_count&#39; from a file.&#34;,
+            &#34;properties&#34;: {
+                &#34;byte_count&#34;: {
+                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;bytes &#34; &#34;to &#34; &#34;return. &#34; &#34;If &#34; &#34;specified, &#34; &#34;overrides &#34; &#34;lines.&#34;,
+                    &#34;type&#34;: [&#34;integer&#34;, &#34;null&#34;],
+                },
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;lines&#34;: {
+                    &#34;default&#34;: 10,
+                    &#34;description&#34;: &#34;Number of &#34;
+                    &#34;lines to &#34;
+                    &#34;return. &#34;
+                    &#34;Ignored &#34;
+                    &#34;if &#34;
+                    &#34;byte_count &#34;
+                    &#34;is &#34;
+                    &#34;specified. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to 10.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;byte_count&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;head_markdown&#34;: {
+            &#34;description&#34;: &#34;Return the first &#39;lines&#39; &#34; &#34;lines of a file formatted &#34; &#34;as markdown.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;lines&#34;: {
+                    &#34;default&#34;: 10,
+                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;lines &#34; &#34;to &#34; &#34;return. &#34; &#34;Defaults &#34; &#34;to &#34; &#34;10.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;head_tail&#34;: {
+            &#34;description&#34;: &#34;Read lines or bytes from the &#34; &#34;start (&#39;head&#39;) or end (&#39;tail&#39;) &#34; &#34;of a file.&#34;,
+            &#34;properties&#34;: {
+                &#34;byte_count&#34;: {
+                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;bytes &#34; &#34;to &#34; &#34;read. &#34; &#34;If &#34; &#34;specified, &#34; &#34;overrides &#34; &#34;lines.&#34;,
+                    &#34;type&#34;: [&#34;integer&#34;, &#34;null&#34;],
+                },
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;lines&#34;: {
+                    &#34;default&#34;: 10,
+                    &#34;description&#34;: &#34;Number &#34;
+                    &#34;of &#34;
+                    &#34;lines &#34;
+                    &#34;to &#34;
+                    &#34;read. &#34;
+                    &#34;Ignored &#34;
+                    &#34;if &#34;
+                    &#34;byte_count &#34;
+                    &#34;is &#34;
+                    &#34;specified. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#34;10.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mode&#34;: {
+                    &#34;default&#34;: &#34;head&#34;,
+                    &#34;description&#34;: &#34;Operation &#34;
+                    &#34;mode, &#34;
+                    &#34;either &#34;
+                    &#34;&#39;head&#39; &#34;
+                    &#34;or &#34;
+                    &#34;&#39;tail&#39;. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#34;&#39;head&#39;.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;byte_count&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;tail&#34;: {
+            &#34;description&#34;: &#34;Return the last &#39;lines&#39; or &#39;bytes&#39; &#34; &#34;from a file.&#34;,
+            &#34;properties&#34;: {
+                &#34;byte_count&#34;: {
+                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;bytes &#34; &#34;to &#34; &#34;return. &#34; &#34;If &#34; &#34;specified, &#34; &#34;overrides &#34; &#34;lines.&#34;,
+                    &#34;type&#34;: [&#34;integer&#34;, &#34;null&#34;],
+                },
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;lines&#34;: {
+                    &#34;default&#34;: 10,
+                    &#34;description&#34;: &#34;Number of &#34;
+                    &#34;lines to &#34;
+                    &#34;return. &#34;
+                    &#34;Ignored &#34;
+                    &#34;if &#34;
+                    &#34;byte_count &#34;
+                    &#34;is &#34;
+                    &#34;specified. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to 10.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;byte_count&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;tail_markdown&#34;: {
+            &#34;description&#34;: &#34;Return the last &#39;lines&#39; &#34; &#34;lines of a file formatted &#34; &#34;as markdown.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;lines&#34;: {
+                    &#34;default&#34;: 10,
+                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;lines &#34; &#34;to &#34; &#34;return. &#34; &#34;Defaults &#34; &#34;to &#34; &#34;10.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;insert&#34;: {
+        &#34;insert_text_after_context&#34;: {
+            &#34;description&#34;: &#34;Inserts a given &#34; &#34;text immediately &#34; &#34;after a specified &#34; &#34;context in a &#34; &#34;file.&#34;,
+            &#34;properties&#34;: {
+                &#34;context&#34;: {
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;context &#34;
+                    &#34;string &#34;
+                    &#34;to &#34;
+                    &#34;search &#34;
+                    &#34;for &#34;
+                    &#34;in &#34;
+                    &#34;the &#34;
+                    &#34;file. &#34;
+                    &#34;The &#34;
+                    &#34;text &#34;
+                    &#34;is\n&#34;
+                    &#34;inserted &#34;
+                    &#34;after &#34;
+                    &#34;the &#34;
+                    &#34;line &#34;
+                    &#34;containing &#34;
+                    &#34;this &#34;
+                    &#34;context.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;file_path&#34;: {
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;path &#34;
+                    &#34;of &#34;
+                    &#34;the &#34;
+                    &#34;file &#34;
+                    &#34;in &#34;
+                    &#34;which &#34;
+                    &#34;the &#34;
+                    &#34;text &#34;
+                    &#34;is &#34;
+                    &#34;to &#34;
+                    &#34;be &#34;
+                    &#34;inserted.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;text_to_insert&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;insert &#34; &#34;into &#34; &#34;the &#34; &#34;file.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;context&#34;, &#34;text_to_insert&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;insert_text_after_multiline_context&#34;: {
+            &#34;description&#34;: &#34;Inserts &#34;
+            &#34;text &#34;
+            &#34;immediately &#34;
+            &#34;after a &#34;
+            &#34;specified &#34;
+            &#34;multiline &#34;
+            &#34;context &#34;
+            &#34;in a &#34;
+            &#34;file.&#34;,
+            &#34;properties&#34;: {
+                &#34;context_lines&#34;: {
+                    &#34;description&#34;: &#34;A &#34;
+                    &#34;list &#34;
+                    &#34;of &#34;
+                    &#34;strings &#34;
+                    &#34;representing &#34;
+                    &#34;the &#34;
+                    &#34;multiline\n&#34;
+                    &#34;context &#34;
+                    &#34;to &#34;
+                    &#34;search &#34;
+                    &#34;for &#34;
+                    &#34;in &#34;
+                    &#34;the &#34;
+                    &#34;file.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;file_path&#34;: {
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;path &#34;
+                    &#34;of &#34;
+                    &#34;the &#34;
+                    &#34;file &#34;
+                    &#34;in &#34;
+                    &#34;which &#34;
+                    &#34;the &#34;
+                    &#34;text &#34;
+                    &#34;is &#34;
+                    &#34;to &#34;
+                    &#34;be &#34;
+                    &#34;inserted.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;text_to_insert&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;insert &#34; &#34;into &#34; &#34;the &#34; &#34;file &#34; &#34;after &#34; &#34;the &#34; &#34;context.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;context_lines&#34;, &#34;text_to_insert&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;insert_text_at_start_or_end&#34;: {
+            &#34;description&#34;: &#34;Inserts text at &#34; &#34;the start or &#34; &#34;end of a file.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_path&#34;: {
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;path &#34;
+                    &#34;of &#34;
+                    &#34;the &#34;
+                    &#34;file &#34;
+                    &#34;in &#34;
+                    &#34;which &#34;
+                    &#34;the &#34;
+                    &#34;text &#34;
+                    &#34;is &#34;
+                    &#34;to &#34;
+                    &#34;be &#34;
+                    &#34;inserted.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;position&#34;: {
+                    &#34;default&#34;: &#34;end&#34;,
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;position &#34;
+                    &#34;where &#34;
+                    &#34;the &#34;
+                    &#34;text &#34;
+                    &#34;should &#34;
+                    &#34;be &#34;
+                    &#34;inserted.\n&#34;
+                    &#34;Should &#34;
+                    &#34;be &#34;
+                    &#34;either &#34;
+                    &#34;&#39;start&#39; &#34;
+                    &#34;or &#34;
+                    &#34;&#39;end&#39;. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#34;&#39;end&#39;.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;text_to_insert&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;insert &#34; &#34;into &#34; &#34;the &#34; &#34;file.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;text_to_insert&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;ls&#34;: {
+        &#34;ls&#34;: {
+            &#34;description&#34;: &#34;List directory contents, with options to &#34; &#34;include all files and detailed view.&#34;,
+            &#34;properties&#34;: {
+                &#34;all&#34;: {
+                    &#34;default&#34;: False,
+                    &#34;description&#34;: &#34;If True, include &#34; &#34;hidden files. &#34; &#34;Defaults to False.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+                &#34;long&#34;: {
+                    &#34;default&#34;: False,
+                    &#34;description&#34;: &#34;If True, include &#34;
+                    &#34;details like &#34;
+                    &#34;permissions, &#34;
+                    &#34;owner, size, and &#34;
+                    &#34;modification date. &#34;
+                    &#34;Defaults to False.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return value &#34;
+                    &#34;as text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or text/yaml &#34;
+                    &#34;inside the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;path&#34;: {
+                    &#34;description&#34;: &#34;The directory path &#34; &#34;to list. Defaults &#34; &#34;to the current &#34; &#34;directory &#39;.&#39;.&#34;,
+                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
+                },
+            },
+            &#34;required&#34;: [&#34;path&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;ls_markdown&#34;: {
+            &#34;description&#34;: &#34;List directory contents, with &#34; &#34;options to include all files and &#34; &#34;detailed view.&#34;,
+            &#34;properties&#34;: {
+                &#34;all&#34;: {
+                    &#34;default&#34;: False,
+                    &#34;description&#34;: &#34;If True, &#34; &#34;include &#34; &#34;hidden &#34; &#34;files. &#34; &#34;Defaults &#34; &#34;to False.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+                &#34;long&#34;: {
+                    &#34;default&#34;: False,
+                    &#34;description&#34;: &#34;If True, &#34;
+                    &#34;include &#34;
+                    &#34;details &#34;
+                    &#34;like &#34;
+                    &#34;permissions, &#34;
+                    &#34;owner, &#34;
+                    &#34;size, and &#34;
+                    &#34;modification &#34;
+                    &#34;date. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to False.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;path&#34;: {
+                    &#34;default&#34;: &#34;.&#34;,
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;directory &#34;
+                    &#34;path to &#34;
+                    &#34;list. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to the &#34;
+                    &#34;current &#34;
+                    &#34;directory &#34;
+                    &#34;&#39;.&#39;.&#34;,
+                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
+                },
+            },
+            &#34;required&#34;: [],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;patch&#34;: {
+        &#34;apply_git_patch&#34;: {
+            &#34;description&#34;: &#34;Apply a git patch to the &#34; &#34;files in the root folder.&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;patch_content&#34;: {&#34;description&#34;: &#34;The &#34; &#34;content &#34; &#34;of &#34; &#34;the &#34; &#34;git &#34; &#34;patch.&#34;, &#34;type&#34;: &#34;string&#34;},
+            },
+            &#34;required&#34;: [&#34;patch_content&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        }
+    },
+    &#34;pycat&#34;: {
+        &#34;format_code_as_markdown&#34;: {
+            &#34;description&#34;: &#34;Combine all Python &#34; &#34;files in a directory &#34; &#34;into a single &#34; &#34;Markdown file.&#34;,
+            &#34;properties&#34;: {
+                &#34;base_path&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;base &#34; &#34;path &#34; &#34;of &#34; &#34;the &#34; &#34;directory &#34; &#34;to &#34; &#34;start &#34; &#34;traversing.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;header&#34;: {
+                    &#34;description&#34;: &#34;A &#34;
+                    &#34;header &#34;
+                    &#34;string &#34;
+                    &#34;to &#34;
+                    &#34;be &#34;
+                    &#34;included &#34;
+                    &#34;at &#34;
+                    &#34;the &#34;
+                    &#34;beginning &#34;
+                    &#34;of &#34;
+                    &#34;the &#34;
+                    &#34;Markdown &#34;
+                    &#34;file.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;no_comments&#34;: {
+                    &#34;default&#34;: False,
+                    &#34;description&#34;: &#34;Whether &#34;
+                    &#34;to &#34;
+                    &#34;exclude &#34;
+                    &#34;comments &#34;
+                    &#34;from &#34;
+                    &#34;the &#34;
+                    &#34;output. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#34;False.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+                &#34;no_docs&#34;: {
+                    &#34;default&#34;: False,
+                    &#34;description&#34;: &#34;Whether &#34;
+                    &#34;to &#34;
+                    &#34;exclude &#34;
+                    &#34;docstrings &#34;
+                    &#34;from &#34;
+                    &#34;the &#34;
+                    &#34;output. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#34;False.&#34;,
+                    &#34;type&#34;: &#34;boolean&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;base_path&#34;, &#34;header&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        }
+    },
+    &#34;pytest&#34;: {
+        &#34;pytest&#34;: {
+            &#34;description&#34;: &#34;Runs pytest on tests in tests &#34; &#34;folder..&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                }
+            },
+            &#34;required&#34;: [],
+            &#34;type&#34;: &#34;object&#34;,
+        }
+    },
+    &#34;replace&#34;: {
+        &#34;replace_all&#34;: {
+            &#34;description&#34;: &#34;Replaces all occurrences of a &#34; &#34;specified text with new text &#34; &#34;in a file.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;new_text&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;new &#34; &#34;text &#34; &#34;to &#34; &#34;replace &#34; &#34;the &#34; &#34;old &#34; &#34;text.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;old_text&#34;: {&#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;be &#34; &#34;replaced.&#34;, &#34;type&#34;: &#34;string&#34;},
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;old_text&#34;, &#34;new_text&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;replace_line_by_line&#34;: {
+            &#34;description&#34;: &#34;Replaces occurrences &#34;
+            &#34;of a specified text &#34;
+            &#34;with new text in a &#34;
+            &#34;range of lines in a &#34;
+            &#34;file.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;line_end&#34;: {
+                    &#34;default&#34;: -1,
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;ending &#34;
+                    &#34;line &#34;
+                    &#34;number &#34;
+                    &#34;(0-indexed) &#34;
+                    &#34;for &#34;
+                    &#34;the &#34;
+                    &#34;replacement.\n&#34;
+                    &#34;If &#34;
+                    &#34;-1, &#34;
+                    &#34;it &#34;
+                    &#34;goes &#34;
+                    &#34;to &#34;
+                    &#34;the &#34;
+                    &#34;end &#34;
+                    &#34;of &#34;
+                    &#34;the &#34;
+                    &#34;file. &#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#34;-1.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;line_start&#34;: {
+                    &#34;default&#34;: 0,
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;starting &#34;
+                    &#34;line &#34;
+                    &#34;number &#34;
+                    &#34;(0-indexed) &#34;
+                    &#34;for &#34;
+                    &#34;the &#34;
+                    &#34;replacement.\n&#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#34;0.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;new_text&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;new &#34; &#34;text &#34; &#34;to &#34; &#34;replace &#34; &#34;the &#34; &#34;old &#34; &#34;text.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;old_text&#34;: {&#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;be &#34; &#34;replaced.&#34;, &#34;type&#34;: &#34;string&#34;},
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;old_text&#34;, &#34;new_text&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;replace_with_regex&#34;: {
+            &#34;description&#34;: &#34;Replaces text in a file &#34; &#34;based on a regular &#34; &#34;expression match.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;regex_match_expression&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;regular &#34; &#34;expression &#34; &#34;pattern &#34; &#34;to &#34; &#34;match.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;replacement&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;replace &#34; &#34;the &#34; &#34;matched &#34; &#34;pattern.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;regex_match_expression&#34;, &#34;replacement&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;save_if_changed&#34;: {
+            &#34;description&#34;: &#34;Saves the modified text to &#34; &#34;the file if changes have &#34; &#34;been made.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;final&#34;: {&#34;description&#34;: &#34;The &#34; &#34;modified &#34; &#34;text.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;input_text&#34;: {&#34;description&#34;: &#34;The &#34; &#34;original &#34; &#34;text.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;final&#34;, &#34;input_text&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;rewrite&#34;: {
+        &#34;rewrite_file&#34;: {
+            &#34;description&#34;: &#34;Rewrite an existing file at &#34; &#34;file_path within the &#34; &#34;root_folder.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_path&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;relative &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;be &#34; &#34;rewritten.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;text&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;new &#34; &#34;content &#34; &#34;to &#34; &#34;write &#34; &#34;into &#34; &#34;the &#34; &#34;file.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;text&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;write_new_file&#34;: {
+            &#34;description&#34;: &#34;Write a new file at &#34; &#34;file_path within the &#34; &#34;root_folder.&#34;,
+            &#34;properties&#34;: {
+                &#34;file_path&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;relative &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;be &#34; &#34;written.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;text&#34;: {&#34;description&#34;: &#34;The &#34; &#34;content &#34; &#34;to &#34; &#34;write &#34; &#34;into &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;text&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;sed&#34;: {
+        &#34;sed&#34;: {
+            &#34;description&#34;: &#34;Transform the contents of a file located &#34;
+            &#34;at file_path as per the provided sed-like &#34;
+            &#34;commands.&#34;,
+            &#34;properties&#34;: {
+                &#34;commands&#34;: {
+                    &#34;description&#34;: &#34;A list of &#34; &#34;sed-like &#34; &#34;commands for &#34; &#34;text &#34; &#34;transformation.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The path of &#34; &#34;the file to &#34; &#34;be &#34; &#34;transformed.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;file_path&#34;, &#34;commands&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        }
+    },
+    &#34;todo&#34;: {
+        &#34;add_todo&#34;: {
+            &#34;description&#34;: &#34;Adds a new task to the task manager.&#34;,
+            &#34;properties&#34;: {
+                &#34;assignee&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;name &#34; &#34;of the &#34; &#34;assignee. &#34; &#34;Defaults &#34; &#34;to &#34; &#34;None.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;category&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;category &#34; &#34;of the &#34; &#34;task &#34; &#34;(e.g., &#34; &#34;&#39;bug&#39;, &#34; &#34;&#39;feature&#39;).&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;description&#34;: {&#34;description&#34;: &#34;A &#34; &#34;description &#34; &#34;of &#34; &#34;the &#34; &#34;task.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;source_code_ref&#34;: {
+                    &#34;description&#34;: &#34;Reference &#34; &#34;to &#34; &#34;the &#34; &#34;source &#34; &#34;code &#34; &#34;related &#34; &#34;to &#34; &#34;the &#34; &#34;task.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;title&#34;: {&#34;description&#34;: &#34;The title &#34; &#34;of the &#34; &#34;task.&#34;, &#34;type&#34;: &#34;string&#34;},
+            },
+            &#34;required&#34;: [&#34;title&#34;, &#34;description&#34;, &#34;category&#34;, &#34;source_code_ref&#34;, &#34;assignee&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;query_todos_by_assignee&#34;: {
+            &#34;description&#34;: &#34;Queries tasks &#34;
+            &#34;assigned to a &#34;
+            &#34;specific assignee. &#34;
+            &#34;Currently, the &#34;
+            &#34;assignee is &#34;
+            &#34;hard-coded as &#34;
+            &#34;&#39;Developer&#39;.&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                }
+            },
+            &#34;required&#34;: [],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;query_todos_by_regex&#34;: {
+            &#34;description&#34;: &#34;Queries tasks by a &#34; &#34;keyword in their title, &#34; &#34;using a regular &#34; &#34;expression pattern.&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;regex_pattern&#34;: {
+                    &#34;default&#34;: &#34;[\\s\\S]+&#34;,
+                    &#34;description&#34;: &#34;The &#34;
+                    &#34;regular &#34;
+                    &#34;expression &#34;
+                    &#34;pattern &#34;
+                    &#34;to &#34;
+                    &#34;match &#34;
+                    &#34;in &#34;
+                    &#34;task &#34;
+                    &#34;titles.\n&#34;
+                    &#34;Defaults &#34;
+                    &#34;to &#34;
+                    &#39;&#34;[\\s\\S]+&#34;, &#39;
+                    &#34;which &#34;
+                    &#34;matches &#34;
+                    &#34;any &#34;
+                    &#34;title.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+        &#34;remove_todo&#34;: {
+            &#34;description&#34;: &#34;Marks a task as finished based on &#34; &#34;its title.&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;title&#34;: {
+                    &#34;description&#34;: &#34;The &#34; &#34;title &#34; &#34;of the &#34; &#34;task &#34; &#34;to be &#34; &#34;marked &#34; &#34;as &#34; &#34;finished.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;title&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
+    },
+    &#34;token_counter&#34;: {
+        &#34;count_tokens&#34;: {
+            &#34;description&#34;: &#34;Count the number of &#34; &#34;tokens in a string.&#34;,
+            &#34;properties&#34;: {
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return &#34;
+                    &#34;value &#34;
+                    &#34;as &#34;
+                    &#34;text/csv, &#34;
+                    &#34;text/markdown, &#34;
+                    &#34;or &#34;
+                    &#34;text/yaml &#34;
+                    &#34;inside &#34;
+                    &#34;the &#34;
+                    &#34;JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+                &#34;text&#34;: {&#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;count &#34; &#34;the &#34; &#34;tokens &#34; &#34;in.&#34;, &#34;type&#34;: &#34;string&#34;},
+            },
+            &#34;required&#34;: [&#34;text&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        }
+    },
+}</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ai_shell" href="index.html">ai_shell</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

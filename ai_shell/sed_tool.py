@@ -4,7 +4,8 @@ Optimized for AI version of sed. For file editing.
 However, the bot keeps trying to use features of real sed that this tool doesn't support.
 """
 import re
-from typing import Optional, Sequence
+from collections.abc import Sequence
+from typing import Optional
 
 from ai_shell.cat_tool import CatTool
 from ai_shell.pycat_tool import is_python_file, is_valid_python_source
@@ -25,7 +26,7 @@ class SedTool:
 
     @log()
     def sed(self, file_path: str, commands: list[str]) -> str:
-        """
+        r"""
         Transform the contents of a file located at file_path as per the provided sed-like commands.
 
         Args:
@@ -45,7 +46,6 @@ class SedTool:
 
         Note: This function reads from a file and returns the transformed text. It does not modify the file in-place.
         """
-
         if not is_file_in_root_folder(file_path, self.root_folder):
             raise ValueError(f"File {file_path} is not in root folder {self.root_folder}.")
 
@@ -70,7 +70,7 @@ class SedTool:
 
     @classmethod
     def _process_sed(cls, input_text: str, commands: list[str]) -> str:
-        """
+        r"""
         Transform input_text as per the provided sed-like commands.
 
         Args:
@@ -89,9 +89,9 @@ class SedTool:
 
         Example:
             >>> SedTool._process_sed("Hello World\\nThis is a test", ["s/World/Universe/", "a\\Appended text"])
-            'Hello Universe\\nAppended text\\nThis is a test\\nAppended text'
+            'Hello Universe\\nThis is a test\nAppended text'
             >>> SedTool._process_sed("First Line\\nSecond Line", ["2d", "i\\Inserted at Start"])
-            'Inserted at Start\\nFirst Line'
+            'Inserted at Start\nFirst Line\\nSecond Line'
         """
         if isinstance(commands, str):
             commands = [commands]

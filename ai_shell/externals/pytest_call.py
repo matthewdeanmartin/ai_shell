@@ -23,6 +23,7 @@ def count_pytest_results(module: str, test_folder: str, min_coverage: int) -> tu
         module: The module to run pytest on.
         test_folder: The folder containing the tests.
         min_coverage: The minimum coverage percentage.
+
     Returns:
         A tuple of the number of passed and failed tests.
     """

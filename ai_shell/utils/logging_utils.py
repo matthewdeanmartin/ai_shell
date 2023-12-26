@@ -3,7 +3,8 @@ Dedupe some logging code
 """
 import functools
 import os
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any, Optional
 
 import ai_shell.openai_schemas as schemas
 

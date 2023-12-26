@@ -57,7 +57,7 @@ class Todos:
 
     def query_tasks(self, pattern: str):
         matching_tasks = []
-        for title, task in self.tasks.items():
+        for _title, task in self.tasks.items():
             if re.search(pattern, task.title) or re.search(pattern, task.description):
                 matching_tasks.append(task)
         return matching_tasks
@@ -87,17 +87,22 @@ class Work:
 
 
 if __name__ == "__main__":
-    work = Work("completed_tasks.toml", "incomplete_tasks.toml", ASSIGNEES)
 
-    # Example of adding a new task
-    new_task = Task("New Feature", "Implement XYZ", False, "feature", "feature.py:30-45")
-    work.incomplete.add_task(new_task)
-    work.incomplete.save_tasks()
+    def run() -> None:
+        """Example"""
+        work = Work("completed_tasks.toml", "incomplete_tasks.toml", ASSIGNEES)
 
-    new_task = Task("New Feature", "Implement ABC", False, "feature", "feature.py:30-45")
-    work.incomplete.add_task(new_task)
-    work.incomplete.save_tasks()
+        # Example of adding a new task
+        new_task = Task("New Feature", "Implement XYZ", False, "feature", "feature.py:30-45")
+        work.incomplete.add_task(new_task)
+        work.incomplete.save_tasks()
 
-    xyz = work.incomplete.query_tasks("XYZ")
-    xyz[0].done_status = True
-    work.archive_completed_tasks()
+        new_task = Task("New Feature", "Implement ABC", False, "feature", "feature.py:30-45")
+        work.incomplete.add_task(new_task)
+        work.incomplete.save_tasks()
+
+        xyz = work.incomplete.query_tasks("XYZ")
+        xyz[0].done_status = True
+        work.archive_completed_tasks()
+
+    run()

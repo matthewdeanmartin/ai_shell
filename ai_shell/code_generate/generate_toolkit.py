@@ -11,6 +11,8 @@ def generate_method_code(schema: dict, prologue: str, namespace: str):
 
     Args:
     schema (dict): JSON schema dictionary.
+    prologue (str): Prologue to be added to the method.
+    namespace (str): Namespace of the tool.
 
     Returns:
     str: Generated Python method code.
@@ -74,10 +76,13 @@ def generate_method_code(schema: dict, prologue: str, namespace: str):
     return method_code
 
 
-def run() -> None:
-    """Main entry point"""
+def generate_the_toolkit(target_file: str) -> None:
+    """Main entry point
+    Args:
+        target_file (str): Target file to write the generated code.
+    """
     tools = ""
-    for ns, json_schema in schemas.SCHEMAS.items():
+    for _ns, json_schema in schemas.SCHEMAS.items():
         for tool, _ in json_schema.items():
             tools += f'            "{tool}" : self.{tool},\n'
 
@@ -140,7 +145,7 @@ def run() -> None:
     prologue["pytest"] = "tool = PytestTool(self.root_folder)"
 
     # Generate method code
-    with open("../../ai_shell/openai_toolkit.py", "w", encoding="utf-8") as code:
+    with open(target_file, "w", encoding="utf-8") as code:
         code.write(header)
         for ns, json_schema in schemas.SCHEMAS.items():
             pro = prologue[ns]
@@ -149,4 +154,4 @@ def run() -> None:
 
 
 if __name__ == "__main__":
-    run()
+    generate_the_toolkit("../../ai_shell/openai_toolkit.py")

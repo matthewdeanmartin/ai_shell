@@ -109,6 +109,7 @@ class Config:
         """Return a Bot object with the given name.
         Args:
             name (str): The name of the bot.
+
         Returns:
             Optional[Bot]: The bot with the given name, or None if no bot with that name exists.
         """
@@ -121,6 +122,7 @@ class Config:
         """Return the value of the given flag.
         Args:
             flag_name (str): The name of the flag.
+
         Returns:
             Optional[bool]: The value of the flag, or None if the flag does not exist.
         """

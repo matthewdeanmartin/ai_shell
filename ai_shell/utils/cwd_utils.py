@@ -1,8 +1,9 @@
 """Utilities for working with the current working directory."""
 
 import os
+from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Iterator, Never
+from typing import Never
 
 
 @contextmanager

@@ -22,7 +22,6 @@ class EdTool:
         Args:
             root_folder (str): The root folder path for file operations.
         """
-
         self.root_folder = root_folder if root_folder.endswith("/") else root_folder + "/"
         self.buffer = Buffer()
         self.auto_cat = True
@@ -51,7 +50,7 @@ class EdTool:
         current_command = None
         current_list: list[str] = []
 
-        for command, upcoming in zip(commands, commands[1:]):
+        for command, upcoming in zip(commands, commands[1:], strict=False):
             command = command.strip()
             if command.startswith("# "):
                 # comments, because this is unreadable without them

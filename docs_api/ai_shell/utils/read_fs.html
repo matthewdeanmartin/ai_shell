@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ai_shell.utils.read_fs API documentation</title>
+<meta name="description" content="Grab bag of functions for file system." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ai_shell.utils.read_fs</code></h1>
+</header>
+<section id="section-intro">
+<p>Grab bag of functions for file system.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Grab bag of functions for file system.
+&#34;&#34;&#34;
+import glob
+import logging
+import math
+import os
+import re
+from contextlib import contextmanager
+from itertools import islice
+from pathlib import Path
+from typing import Union
+
+logger = logging.getLogger(__name__)
+
+
+def sanitize_path(file_path: str) -&gt; str:
+    &#34;&#34;&#34;Attempt to prevent parent directory traversal attacks by removing any leading &#39;..&#39; or &#39;../&#39; from the path.
+
+    Args:
+        file_path (str): The path to sanitize.
+
+    Returns:
+        str: The sanitized path.
+
+    Examples:
+        &gt;&gt;&gt; sanitize_path(&#34;../foo/bar&#34;)
+        &#39;foo/bar&#39;
+        &gt;&gt;&gt; sanitize_path(&#34;../../foo/bar&#34;)
+        &#39;foo/bar&#39;
+    &#34;&#34;&#34;
+    # Pattern to match sequences like &#39;.&#39;, &#39;..&#39;, &#39;../&#39;, &#39;..\&#39;, and so on at the beginning of the path
+    pattern = r&#34;^(?:\.\.?[\\/])*&#34;
+    sanitized_path = re.sub(pattern, &#34;&#34;, file_path)
+    return sanitized_path
+
+
+def safe_glob(match_patten: str, root_dir: str):
+    &#34;&#34;&#34;Safely check for anything that doesn&#39;t break out of the root_dir&#34;&#34;&#34;
+    match_patten = sanitize_path(match_patten)
+    # dir_fd=None, recursive=False, include_hidden=False
+    for result in glob.glob(
+        match_patten,
+        root_dir=root_dir,
+    ):
+        is_safe = is_file_in_root_folder(result, root_dir)
+        if not is_safe:
+            logger.warning(f&#34;File {result} is not in root folder {root_dir}&#34;)
+            continue
+
+        yield result
+
+
+def is_file_in_root_folder(file_path: str, root_folder: str) -&gt; bool:
+    &#34;&#34;&#34;
+    Check if a file could be in a given root folder or its subfolders.
+
+    Args:
+        file_path (str): The path to the file. It does not mean it exists!
+        root_folder (str): The root folder path.
+
+    Returns:
+        bool: True if the file is in the root folder, False otherwise.
+
+    Examples:
+        &gt;&gt;&gt; is_file_in_root_folder(&#34;foo/bar&#34;, &#34;.&#34;)
+        True
+    &#34;&#34;&#34;
+    if &#34;*&#34; in root_folder or &#34;?&#34; in root_folder:
+        raise ValueError(&#34;Root folder cannot contain wildcards&#34;)
+
+    # Normalize paths to create absolute paths
+    if not os.path.isabs(file_path):
+        file_path = root_folder + &#34;/&#34; + file_path
+    absolute_file_path = os.path.abspath(file_path)
+    absolute_root_folder = os.path.abspath(root_folder)
+
+    # Use os.path.commonpath to check if the root folder is a prefix of the file path
+    common_path = os.path.commonpath([absolute_file_path, absolute_root_folder])
+    # This won&#39;t work on linux, but on Windows I&#39;m getting e: and E:!
+    is_same = common_path.lower() == absolute_root_folder.lower()
+    if not is_same:
+        logger.warning(f&#34;File {absolute_file_path} is not in root folder {absolute_root_folder}&#34;)
+    return is_same
+
+
+def tree(dir_path: Union[str, Path], level: int = -1, limit_to_directories: bool = False, length_limit: int = 1000):
+    &#34;&#34;&#34;Given a directory Path object print a visual tree structure
+    Credits: https://stackoverflow.com/a/59109706/33264
+    &#34;&#34;&#34;
+    space = &#34;    &#34;
+    branch = &#34;│   &#34;
+    tee = &#34;├── &#34;
+    last = &#34;└── &#34;
+
+    if isinstance(dir_path, str):
+        dir_path = Path(dir_path)  # accept string coerceable to Path
+    files = 0
+    directories = 0
+
+    result = &#34;&#34;
+
+    def inner(dir_path: Path, prefix: str = &#34;&#34;, level: int = -1):
+        nonlocal files, directories
+        if not level:
+            return  # 0, stop iterating
+        if limit_to_directories:
+            contents = sorted(d for d in dir_path.iterdir() if d.is_dir())
+        else:
+            contents = sorted(_ for _ in dir_path.iterdir() if &#34;__pycache__&#34; not in str(_))
+        pointers = [tee] * (len(contents) - 1) + [last]
+        for pointer, path in zip(pointers, contents, strict=False):
+            if path.is_dir():
+                yield prefix + pointer + path.name
+                directories += 1
+                extension = branch if pointer == tee else space
+                yield from inner(path, prefix=prefix + extension, level=level - 1)
+            elif not limit_to_directories:
+                yield prefix + pointer + path.name
+                files += 1
+
+    result += dir_path.name + &#34;\n&#34;
+    iterator = inner(dir_path, level=level)
+    for line in islice(iterator, length_limit):
+        result += line + &#34;\n&#34;
+    if next(iterator, None):
+        result += f&#34;... length_limit, {length_limit}, reached, counted:&#34; + &#34;\n&#34;
+    result += f&#34;\n{directories} directories&#34; + (f&#34;, {files} files&#34; if files else &#34;&#34;) + &#34;\n&#34;
+    return result
+
+
+@contextmanager
+def temporary_change_dir(new_dir: str) -&gt; None:
+    &#34;&#34;&#34;Context manager to temporarily change the current working directory.
+
+    Args:
+        new_dir (str): The new directory path.
+    &#34;&#34;&#34;
+    original_dir = os.getcwd()
+    if os.path.isfile(new_dir):
+        new_dir = os.path.dirname(new_dir)
+    os.chdir(new_dir)
+    try:
+        yield
+    finally:
+        os.chdir(original_dir)
+
+
+def remove_root_folder(file_path: str, root_folder: str) -&gt; str:
+    &#34;&#34;&#34;Removing root folder from path
+
+    Args:
+        file_path (str): The path to the file.
+        root_folder (str): The root folder path. It must exist for this to succeed.
+
+    Returns:
+        str: The relative path of the file.
+    &#34;&#34;&#34;
+    with temporary_change_dir(root_folder):
+        root = Path(&#34;.&#34;).resolve()
+        file = Path(file_path)
+
+        # Handling the case where file_path is the same as root_folder
+        if file.resolve() == root:
+            return &#34;.&#34;
+
+        # Handling relative paths
+        file = root / file if not file.is_absolute() else file
+        file = file.resolve()
+
+        if root in file.parents:
+            return str(file.relative_to(root)).replace(&#34;\\&#34;, &#34;/&#34;)
+        raise ValueError(&#34;File path is not under the root folder&#34;)
+
+
+def human_readable_size(size_in_bytes: int) -&gt; str:
+    &#34;&#34;&#34;Converts a size in bytes to a human-readable format (e.g., KB, MB, GB).
+
+    Args:
+        size_in_bytes (int): The size in bytes.
+
+    Returns:
+        str: The size in human-readable format.
+
+    Examples:
+        &gt;&gt;&gt; human_readable_size(0)
+        &#39;0 Bytes&#39;
+        &gt;&gt;&gt; human_readable_size(1024)
+        &#39;1.0 KB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**2)
+        &#39;1.0 MB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**3)
+        &#39;1.0 GB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**4)
+        &#39;1.0 TB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**5)
+        &#39;1.0 PB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**6)
+        &#39;1.0 EB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**7)
+        &#39;1.0 ZB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**8)
+        &#39;1.0 YB&#39;
+    &#34;&#34;&#34;
+    # Define the units and their corresponding power of 1024
+    units = [&#34;Bytes&#34;, &#34;KB&#34;, &#34;MB&#34;, &#34;GB&#34;, &#34;TB&#34;, &#34;PB&#34;, &#34;EB&#34;, &#34;ZB&#34;, &#34;YB&#34;]
+    power = 1024
+
+    # Calculate the logarithmic unit of the size
+    if size_in_bytes &gt; 0:
+        unit = int(min((len(units) - 1), int(math.log(size_in_bytes, power))))
+    else:
+        unit = 0
+
+    # Format the size with the appropriate unit
+    if size_in_bytes &gt; 0:
+        readable_size = round(size_in_bytes / (power**unit), 2)
+        return f&#34;{readable_size} {units[unit]}&#34;
+    else:
+        return &#34;0 Bytes&#34;
+
+
+if __name__ == &#34;__main__&#34;:
+    print(tree(&#34;../&#34;))</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="ai_shell.utils.read_fs.human_readable_size"><code class="name flex">
+<span>def <span class="ident">human_readable_size</span></span>(<span>size_in_bytes: int) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Converts a size in bytes to a human-readable format (e.g., KB, MB, GB).</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>size_in_bytes</code></strong> :&ensp;<code>int</code></dt>
+<dd>The size in bytes.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The size in human-readable format.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; human_readable_size(0)
+'0 Bytes'
+&gt;&gt;&gt; human_readable_size(1024)
+'1.0 KB'
+&gt;&gt;&gt; human_readable_size(1024**2)
+'1.0 MB'
+&gt;&gt;&gt; human_readable_size(1024**3)
+'1.0 GB'
+&gt;&gt;&gt; human_readable_size(1024**4)
+'1.0 TB'
+&gt;&gt;&gt; human_readable_size(1024**5)
+'1.0 PB'
+&gt;&gt;&gt; human_readable_size(1024**6)
+'1.0 EB'
+&gt;&gt;&gt; human_readable_size(1024**7)
+'1.0 ZB'
+&gt;&gt;&gt; human_readable_size(1024**8)
+'1.0 YB'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def human_readable_size(size_in_bytes: int) -&gt; str:
+    &#34;&#34;&#34;Converts a size in bytes to a human-readable format (e.g., KB, MB, GB).
+
+    Args:
+        size_in_bytes (int): The size in bytes.
+
+    Returns:
+        str: The size in human-readable format.
+
+    Examples:
+        &gt;&gt;&gt; human_readable_size(0)
+        &#39;0 Bytes&#39;
+        &gt;&gt;&gt; human_readable_size(1024)
+        &#39;1.0 KB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**2)
+        &#39;1.0 MB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**3)
+        &#39;1.0 GB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**4)
+        &#39;1.0 TB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**5)
+        &#39;1.0 PB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**6)
+        &#39;1.0 EB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**7)
+        &#39;1.0 ZB&#39;
+        &gt;&gt;&gt; human_readable_size(1024**8)
+        &#39;1.0 YB&#39;
+    &#34;&#34;&#34;
+    # Define the units and their corresponding power of 1024
+    units = [&#34;Bytes&#34;, &#34;KB&#34;, &#34;MB&#34;, &#34;GB&#34;, &#34;TB&#34;, &#34;PB&#34;, &#34;EB&#34;, &#34;ZB&#34;, &#34;YB&#34;]
+    power = 1024
+
+    # Calculate the logarithmic unit of the size
+    if size_in_bytes &gt; 0:
+        unit = int(min((len(units) - 1), int(math.log(size_in_bytes, power))))
+    else:
+        unit = 0
+
+    # Format the size with the appropriate unit
+    if size_in_bytes &gt; 0:
+        readable_size = round(size_in_bytes / (power**unit), 2)
+        return f&#34;{readable_size} {units[unit]}&#34;
+    else:
+        return &#34;0 Bytes&#34;</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.read_fs.is_file_in_root_folder"><code class="name flex">
+<span>def <span class="ident">is_file_in_root_folder</span></span>(<span>file_path: str, root_folder: str) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Check if a file could be in a given root folder or its subfolders.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the file. It does not mean it exists!</dd>
+<dt><strong><code>root_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The root folder path.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>bool</code></dt>
+<dd>True if the file is in the root folder, False otherwise.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; is_file_in_root_folder(&quot;foo/bar&quot;, &quot;.&quot;)
+True
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_file_in_root_folder(file_path: str, root_folder: str) -&gt; bool:
+    &#34;&#34;&#34;
+    Check if a file could be in a given root folder or its subfolders.
+
+    Args:
+        file_path (str): The path to the file. It does not mean it exists!
+        root_folder (str): The root folder path.
+
+    Returns:
+        bool: True if the file is in the root folder, False otherwise.
+
+    Examples:
+        &gt;&gt;&gt; is_file_in_root_folder(&#34;foo/bar&#34;, &#34;.&#34;)
+        True
+    &#34;&#34;&#34;
+    if &#34;*&#34; in root_folder or &#34;?&#34; in root_folder:
+        raise ValueError(&#34;Root folder cannot contain wildcards&#34;)
+
+    # Normalize paths to create absolute paths
+    if not os.path.isabs(file_path):
+        file_path = root_folder + &#34;/&#34; + file_path
+    absolute_file_path = os.path.abspath(file_path)
+    absolute_root_folder = os.path.abspath(root_folder)
+
+    # Use os.path.commonpath to check if the root folder is a prefix of the file path
+    common_path = os.path.commonpath([absolute_file_path, absolute_root_folder])
+    # This won&#39;t work on linux, but on Windows I&#39;m getting e: and E:!
+    is_same = common_path.lower() == absolute_root_folder.lower()
+    if not is_same:
+        logger.warning(f&#34;File {absolute_file_path} is not in root folder {absolute_root_folder}&#34;)
+    return is_same</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.read_fs.remove_root_folder"><code class="name flex">
+<span>def <span class="ident">remove_root_folder</span></span>(<span>file_path: str, root_folder: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Removing root folder from path</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the file.</dd>
+<dt><strong><code>root_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The root folder path. It must exist for this to succeed.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The relative path of the file.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_root_folder(file_path: str, root_folder: str) -&gt; str:
+    &#34;&#34;&#34;Removing root folder from path
+
+    Args:
+        file_path (str): The path to the file.
+        root_folder (str): The root folder path. It must exist for this to succeed.
+
+    Returns:
+        str: The relative path of the file.
+    &#34;&#34;&#34;
+    with temporary_change_dir(root_folder):
+        root = Path(&#34;.&#34;).resolve()
+        file = Path(file_path)
+
+        # Handling the case where file_path is the same as root_folder
+        if file.resolve() == root:
+            return &#34;.&#34;
+
+        # Handling relative paths
+        file = root / file if not file.is_absolute() else file
+        file = file.resolve()
+
+        if root in file.parents:
+            return str(file.relative_to(root)).replace(&#34;\\&#34;, &#34;/&#34;)
+        raise ValueError(&#34;File path is not under the root folder&#34;)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.read_fs.safe_glob"><code class="name flex">
+<span>def <span class="ident">safe_glob</span></span>(<span>match_patten: str, root_dir: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Safely check for anything that doesn't break out of the root_dir</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def safe_glob(match_patten: str, root_dir: str):
+    &#34;&#34;&#34;Safely check for anything that doesn&#39;t break out of the root_dir&#34;&#34;&#34;
+    match_patten = sanitize_path(match_patten)
+    # dir_fd=None, recursive=False, include_hidden=False
+    for result in glob.glob(
+        match_patten,
+        root_dir=root_dir,
+    ):
+        is_safe = is_file_in_root_folder(result, root_dir)
+        if not is_safe:
+            logger.warning(f&#34;File {result} is not in root folder {root_dir}&#34;)
+            continue
+
+        yield result</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.read_fs.sanitize_path"><code class="name flex">
+<span>def <span class="ident">sanitize_path</span></span>(<span>file_path: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Attempt to prevent parent directory traversal attacks by removing any leading '..' or '../' from the path.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to sanitize.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The sanitized path.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<pre><code class="language-python-repl">&gt;&gt;&gt; sanitize_path(&quot;../foo/bar&quot;)
+'foo/bar'
+&gt;&gt;&gt; sanitize_path(&quot;../../foo/bar&quot;)
+'foo/bar'
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sanitize_path(file_path: str) -&gt; str:
+    &#34;&#34;&#34;Attempt to prevent parent directory traversal attacks by removing any leading &#39;..&#39; or &#39;../&#39; from the path.
+
+    Args:
+        file_path (str): The path to sanitize.
+
+    Returns:
+        str: The sanitized path.
+
+    Examples:
+        &gt;&gt;&gt; sanitize_path(&#34;../foo/bar&#34;)
+        &#39;foo/bar&#39;
+        &gt;&gt;&gt; sanitize_path(&#34;../../foo/bar&#34;)
+        &#39;foo/bar&#39;
+    &#34;&#34;&#34;
+    # Pattern to match sequences like &#39;.&#39;, &#39;..&#39;, &#39;../&#39;, &#39;..\&#39;, and so on at the beginning of the path
+    pattern = r&#34;^(?:\.\.?[\\/])*&#34;
+    sanitized_path = re.sub(pattern, &#34;&#34;, file_path)
+    return sanitized_path</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.read_fs.temporary_change_dir"><code class="name flex">
+<span>def <span class="ident">temporary_change_dir</span></span>(<span>new_dir: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Context manager to temporarily change the current working directory.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>new_dir</code></strong> :&ensp;<code>str</code></dt>
+<dd>The new directory path.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@contextmanager
+def temporary_change_dir(new_dir: str) -&gt; None:
+    &#34;&#34;&#34;Context manager to temporarily change the current working directory.
+
+    Args:
+        new_dir (str): The new directory path.
+    &#34;&#34;&#34;
+    original_dir = os.getcwd()
+    if os.path.isfile(new_dir):
+        new_dir = os.path.dirname(new_dir)
+    os.chdir(new_dir)
+    try:
+        yield
+    finally:
+        os.chdir(original_dir)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.read_fs.tree"><code class="name flex">
+<span>def <span class="ident">tree</span></span>(<span>dir_path: Union[str, pathlib.Path], level: int = -1, limit_to_directories: bool = False, length_limit: int = 1000)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Given a directory Path object print a visual tree structure
+Credits: <a href="https://stackoverflow.com/a/59109706/33264">https://stackoverflow.com/a/59109706/33264</a></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def tree(dir_path: Union[str, Path], level: int = -1, limit_to_directories: bool = False, length_limit: int = 1000):
+    &#34;&#34;&#34;Given a directory Path object print a visual tree structure
+    Credits: https://stackoverflow.com/a/59109706/33264
+    &#34;&#34;&#34;
+    space = &#34;    &#34;
+    branch = &#34;│   &#34;
+    tee = &#34;├── &#34;
+    last = &#34;└── &#34;
+
+    if isinstance(dir_path, str):
+        dir_path = Path(dir_path)  # accept string coerceable to Path
+    files = 0
+    directories = 0
+
+    result = &#34;&#34;
+
+    def inner(dir_path: Path, prefix: str = &#34;&#34;, level: int = -1):
+        nonlocal files, directories
+        if not level:
+            return  # 0, stop iterating
+        if limit_to_directories:
+            contents = sorted(d for d in dir_path.iterdir() if d.is_dir())
+        else:
+            contents = sorted(_ for _ in dir_path.iterdir() if &#34;__pycache__&#34; not in str(_))
+        pointers = [tee] * (len(contents) - 1) + [last]
+        for pointer, path in zip(pointers, contents, strict=False):
+            if path.is_dir():
+                yield prefix + pointer + path.name
+                directories += 1
+                extension = branch if pointer == tee else space
+                yield from inner(path, prefix=prefix + extension, level=level - 1)
+            elif not limit_to_directories:
+                yield prefix + pointer + path.name
+                files += 1
+
+    result += dir_path.name + &#34;\n&#34;
+    iterator = inner(dir_path, level=level)
+    for line in islice(iterator, length_limit):
+        result += line + &#34;\n&#34;
+    if next(iterator, None):
+        result += f&#34;... length_limit, {length_limit}, reached, counted:&#34; + &#34;\n&#34;
+    result += f&#34;\n{directories} directories&#34; + (f&#34;, {files} files&#34; if files else &#34;&#34;) + &#34;\n&#34;
+    return result</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ai_shell.utils" href="index.html">ai_shell.utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="ai_shell.utils.read_fs.human_readable_size" href="#ai_shell.utils.read_fs.human_readable_size">human_readable_size</a></code></li>
+<li><code><a title="ai_shell.utils.read_fs.is_file_in_root_folder" href="#ai_shell.utils.read_fs.is_file_in_root_folder">is_file_in_root_folder</a></code></li>
+<li><code><a title="ai_shell.utils.read_fs.remove_root_folder" href="#ai_shell.utils.read_fs.remove_root_folder">remove_root_folder</a></code></li>
+<li><code><a title="ai_shell.utils.read_fs.safe_glob" href="#ai_shell.utils.read_fs.safe_glob">safe_glob</a></code></li>
+<li><code><a title="ai_shell.utils.read_fs.sanitize_path" href="#ai_shell.utils.read_fs.sanitize_path">sanitize_path</a></code></li>
+<li><code><a title="ai_shell.utils.read_fs.temporary_change_dir" href="#ai_shell.utils.read_fs.temporary_change_dir">temporary_change_dir</a></code></li>
+<li><code><a title="ai_shell.utils.read_fs.tree" href="#ai_shell.utils.read_fs.tree">tree</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

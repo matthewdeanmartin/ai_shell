@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ai_shell.answer_tool API documentation</title>
+<meta name="description" content="Call a tool, but actually the tool is just a way to get a structured response …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ai_shell.answer_tool</code></h1>
+</header>
+<section id="section-intro">
+<p>Call a tool, but actually the tool is just a way to get a structured response.</p>
+<p>Work flow:
+- Ask bot free form question
+- Get back an answer in a parsable format.</p>
+<p>How is this different from a tool call?
+- Tool calls are because the bot wants to know something
+- Tool calls args are likely info we gave the bot in the initial prompt
+- Tool body does significant work. Here the body just collects the args.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Call a tool, but actually the tool is just a way to get a structured response.
+
+Work flow:
+- Ask bot free form question
+- Get back an answer in a parsable format.
+
+How is this different from a tool call?
+- Tool calls are because the bot wants to know something
+- Tool calls args are likely info we gave the bot in the initial prompt
+- Tool body does significant work. Here the body just collects the args.
+
+
+&#34;&#34;&#34;
+from typing import Any, Optional
+
+from ai_shell.utils.logging_utils import log
+
+
+class AnswerCollectorTool:
+    def __init__(self, root_folder: str):
+        &#34;&#34;&#34;
+        Initialize the PytestTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations. (Not used yet)
+        &#34;&#34;&#34;
+        self.comment: Optional[str] = None
+        self.bool_answer: Optional[bool] = None
+        self.json_answer: Optional[str] = None
+        self.xml_answer: Optional[str] = None
+        self.toml_answer: Optional[str] = None
+        self.tuple_answer: Optional[tuple] = None
+        self.set_answer: Optional[set] = None
+        self.text_answer: Optional[str] = None
+        self.list_answer: Optional[list[str]] = None
+        self.int_answer: Optional[int] = None
+        self.float_answer: Optional[float] = None
+        self.dict_answer: Optional[dict[str, Any]] = None
+        self.response_received = &#34;Response received.&#34;
+
+    def _answered(self) -&gt; None:
+        &#34;&#34;&#34;Check if this tool has been used.&#34;&#34;&#34;
+        if any(
+            [
+                self.comment,
+                self.bool_answer is not None,
+                self.json_answer,
+                self.xml_answer,
+                self.toml_answer,
+                self.tuple_answer,
+                self.set_answer,
+                self.text_answer,
+                self.list_answer,
+                self.int_answer,
+                self.float_answer,
+                self.dict_answer,
+            ]
+        ):
+            raise TypeError(&#34;This Answer tool has been used. Please create a new one for another answer.&#34;)
+
+    @log()
+    def report_list(self, answer: list[str], comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in list format.
+
+        Args:
+            answer (list[str]): The answer to be reported in list format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.list_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_int(self, answer: int, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in integer format
+        Args:
+            answer (int): The answer to be reported in integer format.
+            comment (str): Any comments, supplemental info about the answer.
+
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.int_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_float(self, answer: float, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in string format.
+
+        Args:
+            answer (float): The answer to be reported in float format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.float_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_dict(self, answer: dict[str, Any], comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in dict format.
+
+        Args:
+            answer (dict[str, Any]): The answer to be reported in dict format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.dict_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_text(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in string format.
+
+        Args:
+            answer (str): The answer to be reported in string format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.text_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_bool(self, answer: bool, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in bool format.
+
+        Args:
+            answer (bool): The answer to be reported in bool format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.bool_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_tuple(self, answer: tuple, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in tuple format.
+
+        Args:
+            answer (tuple): The answer to be reported in tuple format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.tuple_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_set(self, answer: set, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in set format.
+
+        Args:
+            answer (set): The answer to be reported in set format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.set_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_json(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in json format.
+
+        Args:
+            answer (str): The answer to be reported in json format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.json_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_xml(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in xml format.
+
+        Args:
+            answer (str): The answer to be reported in xml format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.xml_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_toml(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in toml format.
+
+        Args:
+            answer (str): The answer to be reported in toml format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.toml_answer = answer
+        self.comment = comment
+        return self.response_received</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool"><code class="flex name class">
+<span>class <span class="ident">AnswerCollectorTool</span></span>
+<span>(</span><span>root_folder: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initialize the PytestTool class.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>root_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The root folder path for file operations. (Not used yet)</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AnswerCollectorTool:
+    def __init__(self, root_folder: str):
+        &#34;&#34;&#34;
+        Initialize the PytestTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations. (Not used yet)
+        &#34;&#34;&#34;
+        self.comment: Optional[str] = None
+        self.bool_answer: Optional[bool] = None
+        self.json_answer: Optional[str] = None
+        self.xml_answer: Optional[str] = None
+        self.toml_answer: Optional[str] = None
+        self.tuple_answer: Optional[tuple] = None
+        self.set_answer: Optional[set] = None
+        self.text_answer: Optional[str] = None
+        self.list_answer: Optional[list[str]] = None
+        self.int_answer: Optional[int] = None
+        self.float_answer: Optional[float] = None
+        self.dict_answer: Optional[dict[str, Any]] = None
+        self.response_received = &#34;Response received.&#34;
+
+    def _answered(self) -&gt; None:
+        &#34;&#34;&#34;Check if this tool has been used.&#34;&#34;&#34;
+        if any(
+            [
+                self.comment,
+                self.bool_answer is not None,
+                self.json_answer,
+                self.xml_answer,
+                self.toml_answer,
+                self.tuple_answer,
+                self.set_answer,
+                self.text_answer,
+                self.list_answer,
+                self.int_answer,
+                self.float_answer,
+                self.dict_answer,
+            ]
+        ):
+            raise TypeError(&#34;This Answer tool has been used. Please create a new one for another answer.&#34;)
+
+    @log()
+    def report_list(self, answer: list[str], comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in list format.
+
+        Args:
+            answer (list[str]): The answer to be reported in list format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.list_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_int(self, answer: int, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in integer format
+        Args:
+            answer (int): The answer to be reported in integer format.
+            comment (str): Any comments, supplemental info about the answer.
+
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.int_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_float(self, answer: float, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in string format.
+
+        Args:
+            answer (float): The answer to be reported in float format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.float_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_dict(self, answer: dict[str, Any], comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in dict format.
+
+        Args:
+            answer (dict[str, Any]): The answer to be reported in dict format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.dict_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_text(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in string format.
+
+        Args:
+            answer (str): The answer to be reported in string format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.text_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_bool(self, answer: bool, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in bool format.
+
+        Args:
+            answer (bool): The answer to be reported in bool format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.bool_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_tuple(self, answer: tuple, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in tuple format.
+
+        Args:
+            answer (tuple): The answer to be reported in tuple format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.tuple_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_set(self, answer: set, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in set format.
+
+        Args:
+            answer (set): The answer to be reported in set format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.set_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_json(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in json format.
+
+        Args:
+            answer (str): The answer to be reported in json format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.json_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_xml(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in xml format.
+
+        Args:
+            answer (str): The answer to be reported in xml format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.xml_answer = answer
+        self.comment = comment
+        return self.response_received
+
+    @log()
+    def report_toml(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+        &#34;&#34;&#34;Report answer in toml format.
+
+        Args:
+            answer (str): The answer to be reported in toml format.
+            comment (str): Any comments, supplemental info about the answer.
+
+        Returns:
+            str: A string indicating that the response has been received.
+        &#34;&#34;&#34;
+        self._answered()
+        self.toml_answer = answer
+        self.comment = comment
+        return self.response_received</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_bool"><code class="name flex">
+<span>def <span class="ident">report_bool</span></span>(<span>self, answer: bool, comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in bool format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>bool</code></dt>
+<dd>The answer to be reported in bool format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_bool(self, answer: bool, comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in bool format.
+
+    Args:
+        answer (bool): The answer to be reported in bool format.
+        comment (str): Any comments, supplemental info about the answer.
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.bool_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_dict"><code class="name flex">
+<span>def <span class="ident">report_dict</span></span>(<span>self, answer: dict[str, typing.Any], comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in dict format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>dict[str, Any]</code></dt>
+<dd>The answer to be reported in dict format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_dict(self, answer: dict[str, Any], comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in dict format.
+
+    Args:
+        answer (dict[str, Any]): The answer to be reported in dict format.
+        comment (str): Any comments, supplemental info about the answer.
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.dict_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_float"><code class="name flex">
+<span>def <span class="ident">report_float</span></span>(<span>self, answer: float, comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in string format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>float</code></dt>
+<dd>The answer to be reported in float format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_float(self, answer: float, comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in string format.
+
+    Args:
+        answer (float): The answer to be reported in float format.
+        comment (str): Any comments, supplemental info about the answer.
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.float_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_int"><code class="name flex">
+<span>def <span class="ident">report_int</span></span>(<span>self, answer: int, comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in integer format</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>int</code></dt>
+<dd>The answer to be reported in integer format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_int(self, answer: int, comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in integer format
+    Args:
+        answer (int): The answer to be reported in integer format.
+        comment (str): Any comments, supplemental info about the answer.
+
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.int_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_json"><code class="name flex">
+<span>def <span class="ident">report_json</span></span>(<span>self, answer: str, comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in json format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>str</code></dt>
+<dd>The answer to be reported in json format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_json(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in json format.
+
+    Args:
+        answer (str): The answer to be reported in json format.
+        comment (str): Any comments, supplemental info about the answer.
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.json_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_list"><code class="name flex">
+<span>def <span class="ident">report_list</span></span>(<span>self, answer: list[str], comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in list format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>list[str]</code></dt>
+<dd>The answer to be reported in list format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_list(self, answer: list[str], comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in list format.
+
+    Args:
+        answer (list[str]): The answer to be reported in list format.
+        comment (str): Any comments, supplemental info about the answer.
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.list_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_set"><code class="name flex">
+<span>def <span class="ident">report_set</span></span>(<span>self, answer: set, comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in set format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>set</code></dt>
+<dd>The answer to be reported in set format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_set(self, answer: set, comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in set format.
+
+    Args:
+        answer (set): The answer to be reported in set format.
+        comment (str): Any comments, supplemental info about the answer.
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.set_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_text"><code class="name flex">
+<span>def <span class="ident">report_text</span></span>(<span>self, answer: str, comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in string format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>str</code></dt>
+<dd>The answer to be reported in string format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_text(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in string format.
+
+    Args:
+        answer (str): The answer to be reported in string format.
+        comment (str): Any comments, supplemental info about the answer.
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.text_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_toml"><code class="name flex">
+<span>def <span class="ident">report_toml</span></span>(<span>self, answer: str, comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in toml format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>str</code></dt>
+<dd>The answer to be reported in toml format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_toml(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in toml format.
+
+    Args:
+        answer (str): The answer to be reported in toml format.
+        comment (str): Any comments, supplemental info about the answer.
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.toml_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_tuple"><code class="name flex">
+<span>def <span class="ident">report_tuple</span></span>(<span>self, answer: tuple, comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in tuple format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>tuple</code></dt>
+<dd>The answer to be reported in tuple format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_tuple(self, answer: tuple, comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in tuple format.
+
+    Args:
+        answer (tuple): The answer to be reported in tuple format.
+        comment (str): Any comments, supplemental info about the answer.
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.tuple_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.answer_tool.AnswerCollectorTool.report_xml"><code class="name flex">
+<span>def <span class="ident">report_xml</span></span>(<span>self, answer: str, comment: str = '') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Report answer in xml format.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>answer</code></strong> :&ensp;<code>str</code></dt>
+<dd>The answer to be reported in xml format.</dd>
+<dt><strong><code>comment</code></strong> :&ensp;<code>str</code></dt>
+<dd>Any comments, supplemental info about the answer.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A string indicating that the response has been received.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def report_xml(self, answer: str, comment: str = &#34;&#34;) -&gt; str:
+    &#34;&#34;&#34;Report answer in xml format.
+
+    Args:
+        answer (str): The answer to be reported in xml format.
+        comment (str): Any comments, supplemental info about the answer.
+
+    Returns:
+        str: A string indicating that the response has been received.
+    &#34;&#34;&#34;
+    self._answered()
+    self.xml_answer = answer
+    self.comment = comment
+    return self.response_received</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ai_shell" href="index.html">ai_shell</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="ai_shell.answer_tool.AnswerCollectorTool" href="#ai_shell.answer_tool.AnswerCollectorTool">AnswerCollectorTool</a></code></h4>
+<ul class="two-column">
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_bool" href="#ai_shell.answer_tool.AnswerCollectorTool.report_bool">report_bool</a></code></li>
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_dict" href="#ai_shell.answer_tool.AnswerCollectorTool.report_dict">report_dict</a></code></li>
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_float" href="#ai_shell.answer_tool.AnswerCollectorTool.report_float">report_float</a></code></li>
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_int" href="#ai_shell.answer_tool.AnswerCollectorTool.report_int">report_int</a></code></li>
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_json" href="#ai_shell.answer_tool.AnswerCollectorTool.report_json">report_json</a></code></li>
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_list" href="#ai_shell.answer_tool.AnswerCollectorTool.report_list">report_list</a></code></li>
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_set" href="#ai_shell.answer_tool.AnswerCollectorTool.report_set">report_set</a></code></li>
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_text" href="#ai_shell.answer_tool.AnswerCollectorTool.report_text">report_text</a></code></li>
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_toml" href="#ai_shell.answer_tool.AnswerCollectorTool.report_toml">report_toml</a></code></li>
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_tuple" href="#ai_shell.answer_tool.AnswerCollectorTool.report_tuple">report_tuple</a></code></li>
+<li><code><a title="ai_shell.answer_tool.AnswerCollectorTool.report_xml" href="#ai_shell.answer_tool.AnswerCollectorTool.report_xml">report_xml</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

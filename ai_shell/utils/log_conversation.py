@@ -1,7 +1,8 @@
 import json
 import os
+from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Any, Iterator, Never, Optional
+from typing import Any, Never, Optional
 
 import markpickle
 

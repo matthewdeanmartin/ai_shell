@@ -8,9 +8,12 @@ import ai_shell
 from ai_shell.code_generate.method_to_jsonschema import convert_to_json_schema
 
 
-def run() -> None:
-    """Main entrypoint."""
+def generate_the_schema(target_file: str) -> None:
+    """Main entrypoint.
 
+    Args:
+        target_file (str): The target file path for the generated code.
+    """
     # Setup logging for my_app
     # We will only setup a console handler
     logger = logging.getLogger()
@@ -40,11 +43,11 @@ def run() -> None:
     schemas["rewrite"] = convert_to_json_schema(ai_shell.RewriteTool)
     schemas["pytest"] = convert_to_json_schema(ai_shell.PytestTool)
 
-    with open("../../ai_shell/openai_schemas.py", "w", encoding="utf-8") as source:
+    with open(target_file, "w", encoding="utf-8") as source:
         source.write('"""jsonschema for functions"""')
         source.write("\n\n")
         source.write(f"SCHEMAS = {pformat(schemas, indent=2)}")
 
 
 if __name__ == "__main__":
-    run()
+    generate_the_schema("../../ai_shell/openai_schemas.py")

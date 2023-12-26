@@ -70,7 +70,7 @@ def convert_to_json_schema(cls) -> dict[str, Any]:
         set: "array",
         tuple: "array",
         list[str]: "string",  # TODO how to express this?
-        typing.List[str]: "string",
+        list[str]: "string",
         typing.Optional[int]: ["integer", "null"],  # will nullable types work?
         typing.Optional[str]: ["string", "null"],
         dict[str, typing.Any]: ["object"],

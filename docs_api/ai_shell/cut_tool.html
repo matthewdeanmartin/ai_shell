@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ai_shell.cut_tool API documentation</title>
+<meta name="description" content="AI optimized cut tool …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ai_shell.cut_tool</code></h1>
+</header>
+<section id="section-intro">
+<p>AI optimized cut tool.</p>
+<p>The real version makes for sense for creating sql-like chains of pipes. I don't support pipe-like behavior yet.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+AI optimized cut tool.
+
+The real version makes for sense for creating sql-like chains of pipes. I don&#39;t support pipe-like behavior yet.
+&#34;&#34;&#34;
+import csv
+import dataclasses
+import io
+import logging
+from typing import Union
+
+from ai_shell.utils.logging_utils import log
+from ai_shell.utils.read_fs import is_file_in_root_folder
+
+logger = logging.getLogger(__name__)
+
+
+def parse_ranges(range_str: str) -&gt; list[Union[int, tuple[int, int]]]:
+    &#34;&#34;&#34;Parses a range string into a list of integers and integer tuples.
+
+    Args:
+        range_str: A string representing ranges and numbers, e.g., &#34;1-5,10&#34;.
+
+    Returns:
+        A list where each element is either an integer or a tuple of two integers.
+    &#34;&#34;&#34;
+    ranges: list[Union[int, tuple[int, int]]] = []
+    for part in range_str.split(&#34;,&#34;):
+        if &#34;-&#34; in part:
+            start, end = part.split(&#34;-&#34;)
+            start = int(start) if start else 1  # Handle incomplete ranges like &#39;-5&#39;
+            end = int(end) if end else None  # Handle incomplete ranges like &#39;5-&#39;
+            ranges.append((start, end))
+        else:
+            ranges.append(int(part))
+    return ranges
+
+
+def is_in_ranges(index: int, ranges: list[Union[int, tuple[int, int]]]) -&gt; bool:
+    &#34;&#34;&#34;Checks if a given index is within the specified ranges.
+
+    Args:
+        index: The index to check.
+        ranges: A list of integers and integer tuples representing ranges.
+
+    Returns:
+        True if the index is within any of the ranges, False otherwise.
+    &#34;&#34;&#34;
+    for r in ranges:
+        if isinstance(r, tuple):
+            start, end = r
+            if end is None:
+                if index &gt;= start:
+                    return True
+            elif start &lt;= index &lt;= end:
+                return True
+        elif index == r:
+            return True
+    return False
+
+
+@dataclasses.dataclass
+class CutTool:
+    &#34;&#34;&#34;
+    Simulates `cut` cli tool.
+    &#34;&#34;&#34;
+
+    def __init__(self, root_folder: str) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the CatTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations.
+        &#34;&#34;&#34;
+        self.root_folder = root_folder
+
+    @log()
+    def cut_characters(self, file_path: str, character_ranges: str) -&gt; str:
+        &#34;&#34;&#34;Reads a file and extracts characters based on specified ranges.
+
+        Args:
+            file_path: The name of the file to process.
+            character_ranges: A string representing character ranges, e.g., &#34;1-5,10&#34;.
+
+        Returns:
+            A string containing the selected characters from the file.
+        &#34;&#34;&#34;
+        if not is_file_in_root_folder(file_path, self.root_folder):
+            raise ValueError(f&#34;File {file_path} is not in root folder {self.root_folder}.&#34;)
+        ranges = parse_ranges(character_ranges)
+        output = io.StringIO()
+
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            for line in file:
+                for i, char in enumerate(line, start=1):
+                    if is_in_ranges(i, ranges):
+                        output.write(char)
+
+                # Optionally add a newline character after each line
+                output.write(&#34;\n&#34;)
+
+        return output.getvalue()
+
+    @log()
+    def cut_fields(self, filename: str, field_ranges: str, delimiter: str = &#34;,&#34;) -&gt; str:
+        &#34;&#34;&#34;Reads a file and extracts fields based on specified ranges using the given delimiter.
+
+        Args:
+            filename: The name of the file to process.
+            field_ranges: A string representing field ranges, e.g., &#34;1-3,5&#34;.
+            delimiter: A single character used as the field delimiter.
+
+        Returns:
+            A string containing the selected fields from the file.
+        &#34;&#34;&#34;
+        if not is_file_in_root_folder(filename, self.root_folder):
+            raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
+        ranges = parse_ranges(field_ranges)
+        output = io.StringIO()
+
+        with open(filename, encoding=&#34;utf-8&#34;) as file:
+            reader = csv.reader(file, delimiter=delimiter)
+
+            for row in reader:
+                selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
+                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+
+        return output.getvalue()
+
+    @log()
+    def cut_fields_by_name(self, filename: str, field_names: list[str], delimiter: str = &#34;,&#34;) -&gt; str:
+        &#34;&#34;&#34;Reads a file and extracts fields based on specified field names using the given delimiter.
+
+        Args:
+            filename: The name of the file to process.
+            field_names: A list of field names to extract.
+            delimiter: A single character used as the field delimiter.
+
+        Returns:
+            A string containing the selected fields from the file.
+        &#34;&#34;&#34;
+        if not is_file_in_root_folder(filename, self.root_folder):
+            raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
+        output = io.StringIO()
+
+        with open(filename, encoding=&#34;utf-8&#34;) as file:
+            reader = csv.DictReader(file, delimiter=delimiter)
+            # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
+
+            for row in reader:
+                selected_fields = [row[field] for field in field_names if field in row]
+                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+
+        return output.getvalue()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="ai_shell.cut_tool.is_in_ranges"><code class="name flex">
+<span>def <span class="ident">is_in_ranges</span></span>(<span>index: int, ranges: list[typing.Union[int, tuple[int, int]]]) ‑> bool</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Checks if a given index is within the specified ranges.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>index</code></strong></dt>
+<dd>The index to check.</dd>
+<dt><strong><code>ranges</code></strong></dt>
+<dd>A list of integers and integer tuples representing ranges.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>True if the index is within any of the ranges, False otherwise.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_in_ranges(index: int, ranges: list[Union[int, tuple[int, int]]]) -&gt; bool:
+    &#34;&#34;&#34;Checks if a given index is within the specified ranges.
+
+    Args:
+        index: The index to check.
+        ranges: A list of integers and integer tuples representing ranges.
+
+    Returns:
+        True if the index is within any of the ranges, False otherwise.
+    &#34;&#34;&#34;
+    for r in ranges:
+        if isinstance(r, tuple):
+            start, end = r
+            if end is None:
+                if index &gt;= start:
+                    return True
+            elif start &lt;= index &lt;= end:
+                return True
+        elif index == r:
+            return True
+    return False</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.cut_tool.parse_ranges"><code class="name flex">
+<span>def <span class="ident">parse_ranges</span></span>(<span>range_str: str) ‑> list[typing.Union[int, tuple[int, int]]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parses a range string into a list of integers and integer tuples.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>range_str</code></strong></dt>
+<dd>A string representing ranges and numbers, e.g., "1-5,10".</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A list where each element is either an integer or a tuple of two integers.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse_ranges(range_str: str) -&gt; list[Union[int, tuple[int, int]]]:
+    &#34;&#34;&#34;Parses a range string into a list of integers and integer tuples.
+
+    Args:
+        range_str: A string representing ranges and numbers, e.g., &#34;1-5,10&#34;.
+
+    Returns:
+        A list where each element is either an integer or a tuple of two integers.
+    &#34;&#34;&#34;
+    ranges: list[Union[int, tuple[int, int]]] = []
+    for part in range_str.split(&#34;,&#34;):
+        if &#34;-&#34; in part:
+            start, end = part.split(&#34;-&#34;)
+            start = int(start) if start else 1  # Handle incomplete ranges like &#39;-5&#39;
+            end = int(end) if end else None  # Handle incomplete ranges like &#39;5-&#39;
+            ranges.append((start, end))
+        else:
+            ranges.append(int(part))
+    return ranges</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="ai_shell.cut_tool.CutTool"><code class="flex name class">
+<span>class <span class="ident">CutTool</span></span>
+<span>(</span><span>root_folder: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Simulates <code>cut</code> cli tool.</p>
+<p>Initialize the CatTool class.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>root_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The root folder path for file operations.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclasses.dataclass
+class CutTool:
+    &#34;&#34;&#34;
+    Simulates `cut` cli tool.
+    &#34;&#34;&#34;
+
+    def __init__(self, root_folder: str) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the CatTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations.
+        &#34;&#34;&#34;
+        self.root_folder = root_folder
+
+    @log()
+    def cut_characters(self, file_path: str, character_ranges: str) -&gt; str:
+        &#34;&#34;&#34;Reads a file and extracts characters based on specified ranges.
+
+        Args:
+            file_path: The name of the file to process.
+            character_ranges: A string representing character ranges, e.g., &#34;1-5,10&#34;.
+
+        Returns:
+            A string containing the selected characters from the file.
+        &#34;&#34;&#34;
+        if not is_file_in_root_folder(file_path, self.root_folder):
+            raise ValueError(f&#34;File {file_path} is not in root folder {self.root_folder}.&#34;)
+        ranges = parse_ranges(character_ranges)
+        output = io.StringIO()
+
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            for line in file:
+                for i, char in enumerate(line, start=1):
+                    if is_in_ranges(i, ranges):
+                        output.write(char)
+
+                # Optionally add a newline character after each line
+                output.write(&#34;\n&#34;)
+
+        return output.getvalue()
+
+    @log()
+    def cut_fields(self, filename: str, field_ranges: str, delimiter: str = &#34;,&#34;) -&gt; str:
+        &#34;&#34;&#34;Reads a file and extracts fields based on specified ranges using the given delimiter.
+
+        Args:
+            filename: The name of the file to process.
+            field_ranges: A string representing field ranges, e.g., &#34;1-3,5&#34;.
+            delimiter: A single character used as the field delimiter.
+
+        Returns:
+            A string containing the selected fields from the file.
+        &#34;&#34;&#34;
+        if not is_file_in_root_folder(filename, self.root_folder):
+            raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
+        ranges = parse_ranges(field_ranges)
+        output = io.StringIO()
+
+        with open(filename, encoding=&#34;utf-8&#34;) as file:
+            reader = csv.reader(file, delimiter=delimiter)
+
+            for row in reader:
+                selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
+                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+
+        return output.getvalue()
+
+    @log()
+    def cut_fields_by_name(self, filename: str, field_names: list[str], delimiter: str = &#34;,&#34;) -&gt; str:
+        &#34;&#34;&#34;Reads a file and extracts fields based on specified field names using the given delimiter.
+
+        Args:
+            filename: The name of the file to process.
+            field_names: A list of field names to extract.
+            delimiter: A single character used as the field delimiter.
+
+        Returns:
+            A string containing the selected fields from the file.
+        &#34;&#34;&#34;
+        if not is_file_in_root_folder(filename, self.root_folder):
+            raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
+        output = io.StringIO()
+
+        with open(filename, encoding=&#34;utf-8&#34;) as file:
+            reader = csv.DictReader(file, delimiter=delimiter)
+            # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
+
+            for row in reader:
+                selected_fields = [row[field] for field in field_names if field in row]
+                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+
+        return output.getvalue()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="ai_shell.cut_tool.CutTool.cut_characters"><code class="name flex">
+<span>def <span class="ident">cut_characters</span></span>(<span>self, file_path: str, character_ranges: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reads a file and extracts characters based on specified ranges.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong></dt>
+<dd>The name of the file to process.</dd>
+<dt><strong><code>character_ranges</code></strong></dt>
+<dd>A string representing character ranges, e.g., "1-5,10".</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A string containing the selected characters from the file.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def cut_characters(self, file_path: str, character_ranges: str) -&gt; str:
+    &#34;&#34;&#34;Reads a file and extracts characters based on specified ranges.
+
+    Args:
+        file_path: The name of the file to process.
+        character_ranges: A string representing character ranges, e.g., &#34;1-5,10&#34;.
+
+    Returns:
+        A string containing the selected characters from the file.
+    &#34;&#34;&#34;
+    if not is_file_in_root_folder(file_path, self.root_folder):
+        raise ValueError(f&#34;File {file_path} is not in root folder {self.root_folder}.&#34;)
+    ranges = parse_ranges(character_ranges)
+    output = io.StringIO()
+
+    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        for line in file:
+            for i, char in enumerate(line, start=1):
+                if is_in_ranges(i, ranges):
+                    output.write(char)
+
+            # Optionally add a newline character after each line
+            output.write(&#34;\n&#34;)
+
+    return output.getvalue()</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.cut_tool.CutTool.cut_fields"><code class="name flex">
+<span>def <span class="ident">cut_fields</span></span>(<span>self, filename: str, field_ranges: str, delimiter: str = ',') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reads a file and extracts fields based on specified ranges using the given delimiter.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The name of the file to process.</dd>
+<dt><strong><code>field_ranges</code></strong></dt>
+<dd>A string representing field ranges, e.g., "1-3,5".</dd>
+<dt><strong><code>delimiter</code></strong></dt>
+<dd>A single character used as the field delimiter.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A string containing the selected fields from the file.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def cut_fields(self, filename: str, field_ranges: str, delimiter: str = &#34;,&#34;) -&gt; str:
+    &#34;&#34;&#34;Reads a file and extracts fields based on specified ranges using the given delimiter.
+
+    Args:
+        filename: The name of the file to process.
+        field_ranges: A string representing field ranges, e.g., &#34;1-3,5&#34;.
+        delimiter: A single character used as the field delimiter.
+
+    Returns:
+        A string containing the selected fields from the file.
+    &#34;&#34;&#34;
+    if not is_file_in_root_folder(filename, self.root_folder):
+        raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
+    ranges = parse_ranges(field_ranges)
+    output = io.StringIO()
+
+    with open(filename, encoding=&#34;utf-8&#34;) as file:
+        reader = csv.reader(file, delimiter=delimiter)
+
+        for row in reader:
+            selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
+            output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+
+    return output.getvalue()</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.cut_tool.CutTool.cut_fields_by_name"><code class="name flex">
+<span>def <span class="ident">cut_fields_by_name</span></span>(<span>self, filename: str, field_names: list[str], delimiter: str = ',') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reads a file and extracts fields based on specified field names using the given delimiter.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filename</code></strong></dt>
+<dd>The name of the file to process.</dd>
+<dt><strong><code>field_names</code></strong></dt>
+<dd>A list of field names to extract.</dd>
+<dt><strong><code>delimiter</code></strong></dt>
+<dd>A single character used as the field delimiter.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>A string containing the selected fields from the file.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def cut_fields_by_name(self, filename: str, field_names: list[str], delimiter: str = &#34;,&#34;) -&gt; str:
+    &#34;&#34;&#34;Reads a file and extracts fields based on specified field names using the given delimiter.
+
+    Args:
+        filename: The name of the file to process.
+        field_names: A list of field names to extract.
+        delimiter: A single character used as the field delimiter.
+
+    Returns:
+        A string containing the selected fields from the file.
+    &#34;&#34;&#34;
+    if not is_file_in_root_folder(filename, self.root_folder):
+        raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
+    output = io.StringIO()
+
+    with open(filename, encoding=&#34;utf-8&#34;) as file:
+        reader = csv.DictReader(file, delimiter=delimiter)
+        # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
+
+        for row in reader:
+            selected_fields = [row[field] for field in field_names if field in row]
+            output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+
+    return output.getvalue()</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ai_shell" href="index.html">ai_shell</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="ai_shell.cut_tool.is_in_ranges" href="#ai_shell.cut_tool.is_in_ranges">is_in_ranges</a></code></li>
+<li><code><a title="ai_shell.cut_tool.parse_ranges" href="#ai_shell.cut_tool.parse_ranges">parse_ranges</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="ai_shell.cut_tool.CutTool" href="#ai_shell.cut_tool.CutTool">CutTool</a></code></h4>
+<ul class="">
+<li><code><a title="ai_shell.cut_tool.CutTool.cut_characters" href="#ai_shell.cut_tool.CutTool.cut_characters">cut_characters</a></code></li>
+<li><code><a title="ai_shell.cut_tool.CutTool.cut_fields" href="#ai_shell.cut_tool.CutTool.cut_fields">cut_fields</a></code></li>
+<li><code><a title="ai_shell.cut_tool.CutTool.cut_fields_by_name" href="#ai_shell.cut_tool.CutTool.cut_fields_by_name">cut_fields_by_name</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

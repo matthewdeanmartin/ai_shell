@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ai_shell.patch_tool API documentation</title>
+<meta name="description" content="Let the bot patch files instead of full rewrite. Also it is an alternative to editing with ed or edlin …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ai_shell.patch_tool</code></h1>
+</header>
+<section id="section-intro">
+<p>Let the bot patch files instead of full rewrite. Also it is an alternative to editing with ed or edlin.</p>
+<p>The bot has to make a perfect patch file or <code>git patch</code> rejects it with an opaque error message.
+This is hard because of the line counting. So this usually fails.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Let the bot patch files instead of full rewrite. Also it is an alternative to editing with ed or edlin.
+
+The bot has to make a perfect patch file or `git patch` rejects it with an opaque error message.
+This is hard because of the line counting. So this usually fails.
+&#34;&#34;&#34;
+
+import logging
+import subprocess  # nosec
+import tempfile
+
+from unidiff import PatchSet
+
+from ai_shell.utils.logging_utils import log
+
+logger = logging.getLogger(__name__)
+
+
+class PatchTool:
+    &#34;&#34;&#34;Edit a file by applying a git patch.&#34;&#34;&#34;
+
+    def __init__(self, root_folder: str) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the PatchTool with a root folder.
+
+        Args:
+            root_folder (str): The root folder for valid patchable files.
+        &#34;&#34;&#34;
+        self.root_folder: str = root_folder
+        self.auto_cat = True
+
+    @log()
+    def apply_git_patch(self, patch_content: str) -&gt; str:
+        &#34;&#34;&#34;
+        Apply a git patch to the files in the root folder.
+
+        Args:
+            patch_content (str): The content of the git patch.
+
+        Returns:
+            str: A message indicating successful patch application.
+
+        Raises:
+            RuntimeError: If the patch application fails.
+        &#34;&#34;&#34;
+        # Create a temporary file to store the patch content
+        with tempfile.NamedTemporaryFile(suffix=&#34;.patch&#34;, delete=False) as tmp_patch:
+            tmp_patch_name = tmp_patch.name
+            tmp_patch.write(patch_content.encode(&#34;utf-8&#34;))
+            tmp_patch.flush()
+
+        try:
+            patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
+            print(patch)
+        except Exception as ex:
+            print(ex)
+
+        cmd = [&#34;git&#34;, &#34;apply&#34;, tmp_patch_name, &#34;--reject&#34;, &#34;--verbose&#34;]
+
+        # Execute the command and capture stdout and stderr
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True, shell=False)  # nosec
+            # Log stdout and stderr
+            logger.info(&#34;STDOUT:\n%s&#34;, result.stdout.replace(&#34; &#34;, &#34;.&#34;).replace(&#34;\n&#34;, &#34;\\n&#34;))
+            logger.info(&#34;STDERR:\n%s&#34;, result.stderr.replace(&#34; &#34;, &#34;.&#34;).replace(&#34;\n&#34;, &#34;\\n&#34;))
+
+            # Check for errors and return the result
+            if result.returncode != 0:
+                raise RuntimeError(f&#34;Failed to apply patch: {result.stderr}&#34;)
+
+        except subprocess.CalledProcessError as cpe:
+            print(cpe)
+            print(cpe.stdout)
+            print(cpe.stderr)
+
+        return &#34;Patch applied without exception, please verify by other means to see if it was successful.&#34;
+
+    def _extract_files_from_patch(self, patch_content: str) -&gt; set[str]:
+        &#34;&#34;&#34;
+        Extract file names from the patch content.
+
+        Args:
+            patch_content (str): The content of the git patch.
+
+        Returns:
+            Set[str]: A set of file names extracted from the patch.
+        &#34;&#34;&#34;
+        file_names = set()
+        lines = patch_content.split(&#34;\n&#34;)
+
+        for line in lines:
+            if line.startswith(&#34;--- a/&#34;) or line.startswith(&#34;+++ b/&#34;):
+                # Extract the file name and add it to the set
+                parts = line.split()
+                if len(parts) &gt; 1:
+                    file_name = parts[1]
+                    if file_name.startswith(&#34;a/&#34;) or file_name.startswith(&#34;b/&#34;):
+                        file_name = file_name[2:]
+                    file_names.add(file_name)
+
+        return file_names
+
+
+# if __name__ == &#34;__main__&#34;:
+#     tool = PatchTool(&#34;.&#34;)
+#     print(tool._extract_files_from_patch(open(&#34;a.patch&#34;, encoding=&#34;utf-8&#34;).read()))
+#     tool.apply_git_patch(open(&#34;a.patch&#34;, encoding=&#34;utf-8&#34;).read())
+
+# if __name__ == &#34;__main__&#34;:
+#
+#     def run1() -&gt; None:
+#         &#34;&#34;&#34;run&#34;&#34;&#34;
+#         # Example usage
+#         patch_content = &#34;&#34;&#34;
+#         --- a/example.txt
+#         +++ b/example.txt
+#         @@ -1,3 +1,4 @@
+#         +Added line
+#          Line 1
+#          Line 2
+#          Line 3
+#         --- a/another_file.txt
+#         +++ b/another_file.txt
+#         @@ -2,3 +2,4 @@
+#          Another line
+#         &#34;&#34;&#34;
+#         tool = PatchTool(&#34;dummy_root_folder&#34;)
+#         file_names = tool._extract_files_from_patch(patch_content)
+#         print(&#34;Files to be patched:&#34;, file_names)
+#
+#     run1()
+#
+# if __name__ == &#34;__main__&#34;:
+#
+#     def run() -&gt; None:
+#         &#34;&#34;&#34;run&#34;&#34;&#34;
+#         # Example usage
+#         patch_content = &#34;--- a/ai_shell/example.txt\n+++ b/ai_shell/example.txt\n@@ -1,3 +1,4 @@\n+Added line\n Line 1\n Line 2\n Line 3\n&#34;
+#         original_content = &#34;Line 1\nLine 2\nLine 3\n&#34;
+#
+#         example_file = &#34;example.txt&#34;
+#         with open(&#34;example.txt&#34;, &#34;wb&#34;) as file:
+#             file.write(original_content.encode(&#34;utf-8&#34;))
+#             file.flush()
+#         convert = LineEndingConverter(example_file)
+#         # convert.dos2unix()
+#         # convert = LineEndingConverter(example_file)
+#         print(&#34;---example----&#34;)
+#         print(convert.check_line_endings())
+#         tool = PatchTool(&#34;.&#34;)
+#         result = tool.apply_git_patch(patch_content)
+#         print(result)
+#
+#     run()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="ai_shell.patch_tool.PatchTool"><code class="flex name class">
+<span>class <span class="ident">PatchTool</span></span>
+<span>(</span><span>root_folder: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Edit a file by applying a git patch.</p>
+<p>Initialize the PatchTool with a root folder.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>root_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The root folder for valid patchable files.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PatchTool:
+    &#34;&#34;&#34;Edit a file by applying a git patch.&#34;&#34;&#34;
+
+    def __init__(self, root_folder: str) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the PatchTool with a root folder.
+
+        Args:
+            root_folder (str): The root folder for valid patchable files.
+        &#34;&#34;&#34;
+        self.root_folder: str = root_folder
+        self.auto_cat = True
+
+    @log()
+    def apply_git_patch(self, patch_content: str) -&gt; str:
+        &#34;&#34;&#34;
+        Apply a git patch to the files in the root folder.
+
+        Args:
+            patch_content (str): The content of the git patch.
+
+        Returns:
+            str: A message indicating successful patch application.
+
+        Raises:
+            RuntimeError: If the patch application fails.
+        &#34;&#34;&#34;
+        # Create a temporary file to store the patch content
+        with tempfile.NamedTemporaryFile(suffix=&#34;.patch&#34;, delete=False) as tmp_patch:
+            tmp_patch_name = tmp_patch.name
+            tmp_patch.write(patch_content.encode(&#34;utf-8&#34;))
+            tmp_patch.flush()
+
+        try:
+            patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
+            print(patch)
+        except Exception as ex:
+            print(ex)
+
+        cmd = [&#34;git&#34;, &#34;apply&#34;, tmp_patch_name, &#34;--reject&#34;, &#34;--verbose&#34;]
+
+        # Execute the command and capture stdout and stderr
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True, shell=False)  # nosec
+            # Log stdout and stderr
+            logger.info(&#34;STDOUT:\n%s&#34;, result.stdout.replace(&#34; &#34;, &#34;.&#34;).replace(&#34;\n&#34;, &#34;\\n&#34;))
+            logger.info(&#34;STDERR:\n%s&#34;, result.stderr.replace(&#34; &#34;, &#34;.&#34;).replace(&#34;\n&#34;, &#34;\\n&#34;))
+
+            # Check for errors and return the result
+            if result.returncode != 0:
+                raise RuntimeError(f&#34;Failed to apply patch: {result.stderr}&#34;)
+
+        except subprocess.CalledProcessError as cpe:
+            print(cpe)
+            print(cpe.stdout)
+            print(cpe.stderr)
+
+        return &#34;Patch applied without exception, please verify by other means to see if it was successful.&#34;
+
+    def _extract_files_from_patch(self, patch_content: str) -&gt; set[str]:
+        &#34;&#34;&#34;
+        Extract file names from the patch content.
+
+        Args:
+            patch_content (str): The content of the git patch.
+
+        Returns:
+            Set[str]: A set of file names extracted from the patch.
+        &#34;&#34;&#34;
+        file_names = set()
+        lines = patch_content.split(&#34;\n&#34;)
+
+        for line in lines:
+            if line.startswith(&#34;--- a/&#34;) or line.startswith(&#34;+++ b/&#34;):
+                # Extract the file name and add it to the set
+                parts = line.split()
+                if len(parts) &gt; 1:
+                    file_name = parts[1]
+                    if file_name.startswith(&#34;a/&#34;) or file_name.startswith(&#34;b/&#34;):
+                        file_name = file_name[2:]
+                    file_names.add(file_name)
+
+        return file_names</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="ai_shell.patch_tool.PatchTool.apply_git_patch"><code class="name flex">
+<span>def <span class="ident">apply_git_patch</span></span>(<span>self, patch_content: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Apply a git patch to the files in the root folder.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>patch_content</code></strong> :&ensp;<code>str</code></dt>
+<dd>The content of the git patch.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A message indicating successful patch application.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>RuntimeError</code></dt>
+<dd>If the patch application fails.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def apply_git_patch(self, patch_content: str) -&gt; str:
+    &#34;&#34;&#34;
+    Apply a git patch to the files in the root folder.
+
+    Args:
+        patch_content (str): The content of the git patch.
+
+    Returns:
+        str: A message indicating successful patch application.
+
+    Raises:
+        RuntimeError: If the patch application fails.
+    &#34;&#34;&#34;
+    # Create a temporary file to store the patch content
+    with tempfile.NamedTemporaryFile(suffix=&#34;.patch&#34;, delete=False) as tmp_patch:
+        tmp_patch_name = tmp_patch.name
+        tmp_patch.write(patch_content.encode(&#34;utf-8&#34;))
+        tmp_patch.flush()
+
+    try:
+        patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
+        print(patch)
+    except Exception as ex:
+        print(ex)
+
+    cmd = [&#34;git&#34;, &#34;apply&#34;, tmp_patch_name, &#34;--reject&#34;, &#34;--verbose&#34;]
+
+    # Execute the command and capture stdout and stderr
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True, shell=False)  # nosec
+        # Log stdout and stderr
+        logger.info(&#34;STDOUT:\n%s&#34;, result.stdout.replace(&#34; &#34;, &#34;.&#34;).replace(&#34;\n&#34;, &#34;\\n&#34;))
+        logger.info(&#34;STDERR:\n%s&#34;, result.stderr.replace(&#34; &#34;, &#34;.&#34;).replace(&#34;\n&#34;, &#34;\\n&#34;))
+
+        # Check for errors and return the result
+        if result.returncode != 0:
+            raise RuntimeError(f&#34;Failed to apply patch: {result.stderr}&#34;)
+
+    except subprocess.CalledProcessError as cpe:
+        print(cpe)
+        print(cpe.stdout)
+        print(cpe.stderr)
+
+    return &#34;Patch applied without exception, please verify by other means to see if it was successful.&#34;</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ai_shell" href="index.html">ai_shell</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="ai_shell.patch_tool.PatchTool" href="#ai_shell.patch_tool.PatchTool">PatchTool</a></code></h4>
+<ul class="">
+<li><code><a title="ai_shell.patch_tool.PatchTool.apply_git_patch" href="#ai_shell.patch_tool.PatchTool.apply_git_patch">apply_git_patch</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

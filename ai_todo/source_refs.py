@@ -12,7 +12,6 @@ def find_function_code(file_path, function_name):
     Returns:
         tuple: A tuple containing the file name, function name, and a range of line numbers, or None if not found.
     """
-
     with open(file_path, encoding="utf-8") as file:
         tokens = tokenize.generate_tokens(file.readline)
         function_line = None

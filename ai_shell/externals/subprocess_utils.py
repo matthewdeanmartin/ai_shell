@@ -37,6 +37,7 @@ def safe_subprocess(command_name: str, arg_string: str) -> CommandResult:
         command_name: The name of the command to execute.
         arg_string: The arguments to pass to the command.
         markdown: Whether to format the output as Markdown.
+
     Returns:
         The output of the command.
     """

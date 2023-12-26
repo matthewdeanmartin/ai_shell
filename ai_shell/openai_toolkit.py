@@ -1,7 +1,8 @@
 """
 Generate code, do not edit.
 """
-from typing import Any, Callable, Optional, cast
+from collections.abc import Callable
+from typing import Any, Optional, cast
 
 from ai_shell.answer_tool import AnswerCollectorTool
 from ai_shell.cat_tool import CatTool

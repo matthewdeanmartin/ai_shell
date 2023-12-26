@@ -15,8 +15,16 @@ def convert_to_list(possible_list: Union[str, list[str]]) -> list[str]:
 
     Returns:
         A list.
+
+    Examples:
+        >>> convert_to_list("a,b,c")
+        ['a', 'b', 'c']
+        >>> convert_to_list(["a", "b", "c"])
+        ['a', 'b', 'c']
+        >>> convert_to_list("")
+        []
     """
-    if possible_list == "":
+    if possible_list == "" or possible_list is None:
         # Degenerate case.
         return []
     if isinstance(possible_list, str):

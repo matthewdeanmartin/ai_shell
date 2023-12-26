@@ -12,6 +12,7 @@ def almost_json_to_json(data_str: str) -> str:
     Convert a string that is almost JSON into a JSON string.
     Args:
         data_str (str): A string that is almost JSON.
+
     Returns:
         str: A JSON string.
     """

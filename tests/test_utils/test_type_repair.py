@@ -24,4 +24,4 @@ def test_convert_empty_string():
 
 def test_convert_non_list_non_string():
     with pytest.raises(TypeError):
-        convert_to_list(None)
+        convert_to_list(Exception("This is not a list or string"))

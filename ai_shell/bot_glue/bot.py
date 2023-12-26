@@ -3,11 +3,12 @@ Simple bot that doesn't need any tools
 """
 if True:
     import openai_multi_tool_use_parallel_patch
+
 import logging.config
-from typing import Any, Awaitable, Callable, Optional
+from collections.abc import Awaitable, Callable
+from typing import Any, Optional
 
 import openai
-
 from openai.types.beta import Assistant, Thread
 
 from ai_shell.bot_glue.tool_utils import loop_tools
@@ -93,7 +94,7 @@ class TaskBot:
         return self.assistant
 
     async def create_bot(self):
-        """Create a bot and store it in the config.""" ""
+        """Create a bot and store it in the config."""
         self.assistant = await self.client.beta.assistants.create(
             name=self.name,
             instructions=self.bot_instructions,
@@ -117,6 +118,7 @@ class TaskBot:
 
         Args:
             the_ask (str): The request.
+
         Returns:
             Any: The response.
         """
@@ -188,6 +190,7 @@ class TaskBot:
             root_folder (str): The root folder for file operations.
             tool_names (list[Any]): The tools to use.
             keep_going_prompt (str): The prompt to use to keep going.
+
         Returns:
             None
         """

@@ -30,10 +30,6 @@ def file_similarity(file1_path: str, file2_lines: list[str]) -> tuple[float, int
             - unchanged (int): The number of lines that remained unchanged.
             - added (int): The number of lines that were added in the second file.
             - removed (int): The number of lines that were removed in the second file.
-
-    Example:
-        >>> unchanged_proportion, total_lines, unchanged, added, removed = file_similarity('file1.txt', ['line1', 'line2'])
-        >>> print(f"Unchanged proportion: {unchanged_proportion}, Total lines: {total_lines}, Unchanged lines: {unchanged}, Added lines: {added}, Removed lines: {removed}")
     """
     # Read the contents of the files
     with open(file1_path, encoding="utf-8") as file1:

@@ -65,7 +65,6 @@ def exception_to_rfc7807_dict(exception: Exception) -> dict[str, Any]:
     The function maps common Python standard library exceptions to HTTP status codes.
     If an exception is not in the predefined mapping, the status code defaults to 500 (Internal Server Error).
     """
-
     # Mapping of standard exceptions to HTTP status codes and documentation URLs
     exception_mapping = {
         ValueError: (http.HTTPStatus.BAD_REQUEST, "https://docs.python.org/3/library/exceptions.html#ValueError"),

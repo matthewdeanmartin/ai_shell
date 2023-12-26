@@ -12,6 +12,7 @@ def generate_method_code(schema: dict, prologue: str):
 
     Args:
     schema (dict): JSON schema dictionary.
+    prologue (str): Prologue to be added to the method.
 
     Returns:
     str: Generated Python method code.
@@ -64,10 +65,13 @@ def generate_method_code(schema: dict, prologue: str):
     return method_code
 
 
-def run() -> None:
-    """Main entry point."""
+def generate_the_cli(target_file: str) -> None:
+    """Main entry point.
+    Args:
+        target_file (str): The target file path for the generated code.
+    """
     tools = ""
-    for ns, json_schema in schemas.SCHEMAS.items():
+    for _ns, json_schema in schemas.SCHEMAS.items():
         for tool, _ in json_schema.items():
             tools += f'            "{tool}" : self.{tool},\n'
 
@@ -142,7 +146,7 @@ def run() -> None:
     # pylint: disable=unused-argument
     """
 
-    for key, value in meta.items():
+    for _key, value in meta.items():
         header += f"\nfrom {value['module']} import {value['class']}"
     header += "\n\n"
 
@@ -155,7 +159,7 @@ def run() -> None:
             middle += f'    """Invoke {method}"""\n'
             middle += f"    tool = {data['class']}('.')\n"
             middle += f"    pretty_console(tool.{method}("
-            for arg_name, arg_details in cast(dict[str, Any], method_data["properties"]).items():
+            for arg_name, _arg_details in cast(dict[str, Any], method_data["properties"]).items():
                 if arg_name != "mime_type":
                     # don't know how to handle mime types in CLI yet.
                     middle += f"\n        {arg_name} = args.{arg_name},"
@@ -166,7 +170,7 @@ def run() -> None:
         parser = argparse.ArgumentParser(prog='ais', description='AI Shell Command Line Interface')
         subparsers = parser.add_subparsers(dest='subcommand', help='sub-command help')
     """
-    for ns, data in meta.items():
+    for ns, _data in meta.items():
         for method, method_data in schemas.SCHEMAS[ns].items():
             escaped_method_description = (
                 cast(str, method_data.get("description", "")).replace("'", "\\'").replace("\n", "\\n")
@@ -211,7 +215,7 @@ def run() -> None:
     """
 
     # Generate method code
-    with open("../../ai_shell/__main__.py", "w", encoding="utf-8") as code:
+    with open(target_file, "w", encoding="utf-8") as code:
         code.write(header)
         code.write(middle)
         code.write(argparse_part)
@@ -219,4 +223,4 @@ def run() -> None:
 
 
 if __name__ == "__main__":
-    run()
+    generate_the_cli(target_file="../../ai_shell/__main__.py")

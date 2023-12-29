@@ -143,9 +143,7 @@ class ToolKit(ToolKitBase):
     prologue["grep"] = "tool = GrepTool(self.root_folder, self.config)"
     prologue["token_counter"] = "tool = TokenCounterTool(self.root_folder, self.config)"  # nosec
     prologue["todo"] = "tool = TodoTool(self.root_folder, self.config)"
-    prologue["answer_collector"] = (
-        "self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)"
-    )
+    prologue["answer_collector"] = "self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)"
     prologue["rewrite"] = "tool = RewriteTool(self.root_folder, self.config)"
     prologue["pytest"] = "tool = PytestTool(self.root_folder, self.config)"
 

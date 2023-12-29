@@ -10,7 +10,6 @@ import asyncio
 import logging
 import logging.config
 import os
-from pathlib import Path
 
 from dotenv import load_dotenv
 

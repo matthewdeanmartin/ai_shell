@@ -12,10 +12,11 @@ import untruncate_json
 
 # TODO: Use orjson because it is faster.
 
+
 class FatalConfigurationError(Exception):
     """A fatal configuration error."""
 
-    pass
+
 class LoosyGoosyEncoder(json.JSONEncoder):
     """Encode what json will not.
     # https://stackoverflow.com/a/8230505/33264

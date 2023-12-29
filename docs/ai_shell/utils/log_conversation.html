@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ai_shell.utils.log_conversation API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ai_shell.utils.log_conversation</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import json
+import os
+from collections.abc import Iterator
+from contextlib import contextmanager
+from typing import Any, Optional
+
+import markpickle
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+LOG_FOLDER = os.path.join(current_dir, &#34;../dialog_log&#34;)
+
+
+pickle_config = markpickle.Config(serialize_child_dict_as_table=False, serialize_dict_as_table=False)
+
+
+def try_markpickle(value: Any) -&gt; str:
+    &#34;&#34;&#34;
+    Attempts to serialize the given value into a Markdown-formatted string using markpickle.
+
+    Args:
+        value (Any): The value to be serialized.
+
+    Returns:
+        str: A Markdown-formatted string representation of the value. If serialization fails,
+             returns a plain string representation of the value.
+    &#34;&#34;&#34;
+    try:
+        return markpickle.dumps(value, config=pickle_config)
+    except BaseException:
+        return str(value)
+
+
+class DialogLoggerWithMarkdown:
+    &#34;&#34;&#34;
+    A class for logging dialog interactions in Markdown format.
+
+    Attributes:
+        bot_name (str): Name of the bot.
+        model (str): Model used by the bot.
+        bot_instructions (str): Instructions or description for the bot.
+        base_directory (str): Base directory for storing log files.
+
+    Methods:
+        write_header: Writes the header information to the log file.
+        add_user: Logs the user&#39;s input text.
+        add_bot: Logs the bot&#39;s response text.
+        add_toolkit: Logs the tools used in the dialog.
+        add_tool: Logs a single tool and its arguments used in the dialog.
+        add_tool_result: Logs the results from a tool.
+        add_error: Logs an error that occurred during the dialog.
+        ensure_log: Context manager to ensure the log file is closed properly.
+    &#34;&#34;&#34;
+
+    def __init__(self, base_directory: str) -&gt; None:
+        &#34;&#34;&#34;
+        Initializes the DialogLoggerWithMarkdown object.
+
+        Args:
+            base_directory (str, optional): Base directory for storing log files. Defaults to LOG_FOLDER if not provided.
+        &#34;&#34;&#34;
+        if not base_directory:
+            raise ValueError(&#34;base_directory must be provided.&#34;)
+        os.makedirs(base_directory, exist_ok=True)
+        self.bot_name: Optional[str] = None
+        self.model: Optional[str] = None
+        self.bot_instructions: Optional[str] = None
+        self.base_directory = base_directory
+        log_files = [f for f in os.listdir(self.base_directory) if f.endswith(&#34;.md&#34;)]
+        log_number = len(log_files) + 1
+        self.log_file_path = os.path.join(self.base_directory, f&#34;dialog_{log_number}.md&#34;)
+        os.makedirs(os.path.dirname(self.log_file_path), exist_ok=True)
+
+        # Context manger handles this, I think.
+        # pylint: disable=consider-using-with
+        self.log_file = open(self.log_file_path, &#34;a&#34;, buffering=1, encoding=&#34;utf-8&#34;)
+
+    def write_header(self, bot_name: str, model: str, bot_instructions: str) -&gt; None:
+        &#34;&#34;&#34;
+        Writes the header information to the log file.
+
+        Args:
+            bot_name (str): Name of the bot.
+            model (str): Model used by the bot.
+            bot_instructions (str): Instructions or description for the bot.
+        &#34;&#34;&#34;
+        self.bot_name = bot_name
+        self.model = model
+        self.bot_instructions = bot_instructions
+        header = f&#34;# Bot Name: {self.bot_name}\n## Model: {self.model}\n### Instructions: {self.bot_instructions}\n\n&#34;
+        self.log_file.write(header)
+
+    def add_user(self, text: str) -&gt; None:
+        &#34;&#34;&#34;
+        Logs the user&#39;s input text.
+
+        Args:
+            text (str): The text input by the user.
+        &#34;&#34;&#34;
+        self.log_file.write(f&#34;**User**: {text}\n\n&#34;)
+
+    def add_bot(self, text: str) -&gt; None:
+        &#34;&#34;&#34;
+        Logs the bot&#39;s response text.
+
+        Args:
+            text (str): The text response from the bot.
+        &#34;&#34;&#34;
+        self.log_file.write(f&#34;**Bot**: {text}\n\n&#34;)
+
+    def add_toolkit(self, tools: list[str]) -&gt; None:
+        &#34;&#34;&#34;
+        Logs the tools used in the dialog.
+
+        Args:
+            tools (List[str]): A list of tool names used in the dialog.
+        &#34;&#34;&#34;
+        toolkit_str = &#34;\n- &#34;.join([f&#34;`{tool}`&#34; for tool in tools])
+        self.log_file.write(f&#34;**Toolkit**: \n\n- {toolkit_str}\n\n&#34;)
+
+    def add_tool(self, tool_name: str, tool_args: str) -&gt; None:
+        &#34;&#34;&#34;
+        Logs a single tool and its arguments used in the dialog.
+
+        Args:
+            tool_name (str): The name of the tool.
+            tool_args (str): The arguments passed to the tool, in JSON string format.
+        &#34;&#34;&#34;
+        self.log_file.write(f&#34;**Tool**: `{tool_name}`, **Args**: {tool_args}\n&#34;)
+        try:
+            json_bits = json.loads(tool_args)
+        except BaseException:
+            self.log_file.write(f&#34;Bad JSON: {tool_args}&#34;)
+            return
+        for name, value in json_bits.items():
+            self.log_file.write(f&#34;{name} : {value}&#34;)
+
+    def add_tool_result(self, tool_results: list[dict[str, Any]]) -&gt; None:
+        &#34;&#34;&#34;
+        Logs the results from a tool.
+
+        Args:
+            tool_results (List[Dict[str, Any]]): A list of dictionaries containing the tool results.
+        &#34;&#34;&#34;
+        for result in tool_results:
+            self.log_file.write(&#34;### Result\n\n&#34;)
+            for key, value in result.items():
+                if key == &#34;output&#34;:
+                    # json.loads here should work, it isn&#39;t bot-json
+                    self.log_file.write(f&#34; {try_markpickle(json.loads(value))}\n&#34;)
+                else:
+                    self.log_file.write(f&#34;{key}: {value}\n&#34;)
+
+    def add_error(self, error: Exception) -&gt; None:
+        &#34;&#34;&#34;
+        Logs an error that occurred during the dialog.
+
+        Args:
+            error (Exception): The exception that was raised.
+        &#34;&#34;&#34;
+        self.log_file.write(f&#34;**Error**: {error}\n\n&#34;)
+
+    @contextmanager
+    def ensure_log(self) -&gt; Iterator[None]:
+        &#34;&#34;&#34;
+        A context manager to ensure that the log file is closed properly.
+
+        Yields:
+            None: Yields control to the block of code using this context manager.
+
+        Ensures:
+            The log file is closed properly upon exiting the block of code.
+        &#34;&#34;&#34;
+        try:
+            yield
+        finally:
+            self.log_file.close()
+
+
+if __name__ == &#34;__main__&#34;:
+
+    def run() -&gt; None:
+        bot_name = &#34;Botty bot&#34;
+        model = &#34;blah&#34;
+        bot_instructions = &#34;Let&#39;s do the thing.&#34;
+        # Example of using the updated class with Markdown formatting
+        dialog_logger_md = DialogLoggerWithMarkdown(&#34;.&#34;)
+        dialog_logger_md.write_header(bot_name, model, bot_instructions)
+
+        # Using the context manager to ensure proper logging
+        with dialog_logger_md.ensure_log():
+            dialog_logger_md.add_user(&#34;Hello, bot!&#34;)
+            dialog_logger_md.add_bot(&#34;Hello, user!&#34;)
+            dialog_logger_md.add_toolkit([&#34;python&#34;, &#34;dalle&#34;])
+            dialog_logger_md.add_tool(&#34;python&#34;, &#34;calculate something&#34;)
+            # In case of an error
+            # dialog_logger_md.add_error(&#34;Some error occurred&#34;)
+
+    run()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="ai_shell.utils.log_conversation.try_markpickle"><code class="name flex">
+<span>def <span class="ident">try_markpickle</span></span>(<span>value: Any) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Attempts to serialize the given value into a Markdown-formatted string using markpickle.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>value</code></strong> :&ensp;<code>Any</code></dt>
+<dd>The value to be serialized.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A Markdown-formatted string representation of the value. If serialization fails,
+returns a plain string representation of the value.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def try_markpickle(value: Any) -&gt; str:
+    &#34;&#34;&#34;
+    Attempts to serialize the given value into a Markdown-formatted string using markpickle.
+
+    Args:
+        value (Any): The value to be serialized.
+
+    Returns:
+        str: A Markdown-formatted string representation of the value. If serialization fails,
+             returns a plain string representation of the value.
+    &#34;&#34;&#34;
+    try:
+        return markpickle.dumps(value, config=pickle_config)
+    except BaseException:
+        return str(value)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown"><code class="flex name class">
+<span>class <span class="ident">DialogLoggerWithMarkdown</span></span>
+<span>(</span><span>base_directory: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A class for logging dialog interactions in Markdown format.</p>
+<h2 id="attributes">Attributes</h2>
+<dl>
+<dt><strong><code>bot_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of the bot.</dd>
+<dt><strong><code>model</code></strong> :&ensp;<code>str</code></dt>
+<dd>Model used by the bot.</dd>
+<dt><strong><code>bot_instructions</code></strong> :&ensp;<code>str</code></dt>
+<dd>Instructions or description for the bot.</dd>
+<dt><strong><code>base_directory</code></strong> :&ensp;<code>str</code></dt>
+<dd>Base directory for storing log files.</dd>
+</dl>
+<h2 id="methods">Methods</h2>
+<p>write_header: Writes the header information to the log file.
+add_user: Logs the user's input text.
+add_bot: Logs the bot's response text.
+add_toolkit: Logs the tools used in the dialog.
+add_tool: Logs a single tool and its arguments used in the dialog.
+add_tool_result: Logs the results from a tool.
+add_error: Logs an error that occurred during the dialog.
+ensure_log: Context manager to ensure the log file is closed properly.</p>
+<p>Initializes the DialogLoggerWithMarkdown object.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>base_directory</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>Base directory for storing log files. Defaults to LOG_FOLDER if not provided.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DialogLoggerWithMarkdown:
+    &#34;&#34;&#34;
+    A class for logging dialog interactions in Markdown format.
+
+    Attributes:
+        bot_name (str): Name of the bot.
+        model (str): Model used by the bot.
+        bot_instructions (str): Instructions or description for the bot.
+        base_directory (str): Base directory for storing log files.
+
+    Methods:
+        write_header: Writes the header information to the log file.
+        add_user: Logs the user&#39;s input text.
+        add_bot: Logs the bot&#39;s response text.
+        add_toolkit: Logs the tools used in the dialog.
+        add_tool: Logs a single tool and its arguments used in the dialog.
+        add_tool_result: Logs the results from a tool.
+        add_error: Logs an error that occurred during the dialog.
+        ensure_log: Context manager to ensure the log file is closed properly.
+    &#34;&#34;&#34;
+
+    def __init__(self, base_directory: str) -&gt; None:
+        &#34;&#34;&#34;
+        Initializes the DialogLoggerWithMarkdown object.
+
+        Args:
+            base_directory (str, optional): Base directory for storing log files. Defaults to LOG_FOLDER if not provided.
+        &#34;&#34;&#34;
+        if not base_directory:
+            raise ValueError(&#34;base_directory must be provided.&#34;)
+        os.makedirs(base_directory, exist_ok=True)
+        self.bot_name: Optional[str] = None
+        self.model: Optional[str] = None
+        self.bot_instructions: Optional[str] = None
+        self.base_directory = base_directory
+        log_files = [f for f in os.listdir(self.base_directory) if f.endswith(&#34;.md&#34;)]
+        log_number = len(log_files) + 1
+        self.log_file_path = os.path.join(self.base_directory, f&#34;dialog_{log_number}.md&#34;)
+        os.makedirs(os.path.dirname(self.log_file_path), exist_ok=True)
+
+        # Context manger handles this, I think.
+        # pylint: disable=consider-using-with
+        self.log_file = open(self.log_file_path, &#34;a&#34;, buffering=1, encoding=&#34;utf-8&#34;)
+
+    def write_header(self, bot_name: str, model: str, bot_instructions: str) -&gt; None:
+        &#34;&#34;&#34;
+        Writes the header information to the log file.
+
+        Args:
+            bot_name (str): Name of the bot.
+            model (str): Model used by the bot.
+            bot_instructions (str): Instructions or description for the bot.
+        &#34;&#34;&#34;
+        self.bot_name = bot_name
+        self.model = model
+        self.bot_instructions = bot_instructions
+        header = f&#34;# Bot Name: {self.bot_name}\n## Model: {self.model}\n### Instructions: {self.bot_instructions}\n\n&#34;
+        self.log_file.write(header)
+
+    def add_user(self, text: str) -&gt; None:
+        &#34;&#34;&#34;
+        Logs the user&#39;s input text.
+
+        Args:
+            text (str): The text input by the user.
+        &#34;&#34;&#34;
+        self.log_file.write(f&#34;**User**: {text}\n\n&#34;)
+
+    def add_bot(self, text: str) -&gt; None:
+        &#34;&#34;&#34;
+        Logs the bot&#39;s response text.
+
+        Args:
+            text (str): The text response from the bot.
+        &#34;&#34;&#34;
+        self.log_file.write(f&#34;**Bot**: {text}\n\n&#34;)
+
+    def add_toolkit(self, tools: list[str]) -&gt; None:
+        &#34;&#34;&#34;
+        Logs the tools used in the dialog.
+
+        Args:
+            tools (List[str]): A list of tool names used in the dialog.
+        &#34;&#34;&#34;
+        toolkit_str = &#34;\n- &#34;.join([f&#34;`{tool}`&#34; for tool in tools])
+        self.log_file.write(f&#34;**Toolkit**: \n\n- {toolkit_str}\n\n&#34;)
+
+    def add_tool(self, tool_name: str, tool_args: str) -&gt; None:
+        &#34;&#34;&#34;
+        Logs a single tool and its arguments used in the dialog.
+
+        Args:
+            tool_name (str): The name of the tool.
+            tool_args (str): The arguments passed to the tool, in JSON string format.
+        &#34;&#34;&#34;
+        self.log_file.write(f&#34;**Tool**: `{tool_name}`, **Args**: {tool_args}\n&#34;)
+        try:
+            json_bits = json.loads(tool_args)
+        except BaseException:
+            self.log_file.write(f&#34;Bad JSON: {tool_args}&#34;)
+            return
+        for name, value in json_bits.items():
+            self.log_file.write(f&#34;{name} : {value}&#34;)
+
+    def add_tool_result(self, tool_results: list[dict[str, Any]]) -&gt; None:
+        &#34;&#34;&#34;
+        Logs the results from a tool.
+
+        Args:
+            tool_results (List[Dict[str, Any]]): A list of dictionaries containing the tool results.
+        &#34;&#34;&#34;
+        for result in tool_results:
+            self.log_file.write(&#34;### Result\n\n&#34;)
+            for key, value in result.items():
+                if key == &#34;output&#34;:
+                    # json.loads here should work, it isn&#39;t bot-json
+                    self.log_file.write(f&#34; {try_markpickle(json.loads(value))}\n&#34;)
+                else:
+                    self.log_file.write(f&#34;{key}: {value}\n&#34;)
+
+    def add_error(self, error: Exception) -&gt; None:
+        &#34;&#34;&#34;
+        Logs an error that occurred during the dialog.
+
+        Args:
+            error (Exception): The exception that was raised.
+        &#34;&#34;&#34;
+        self.log_file.write(f&#34;**Error**: {error}\n\n&#34;)
+
+    @contextmanager
+    def ensure_log(self) -&gt; Iterator[None]:
+        &#34;&#34;&#34;
+        A context manager to ensure that the log file is closed properly.
+
+        Yields:
+            None: Yields control to the block of code using this context manager.
+
+        Ensures:
+            The log file is closed properly upon exiting the block of code.
+        &#34;&#34;&#34;
+        try:
+            yield
+        finally:
+            self.log_file.close()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_bot"><code class="name flex">
+<span>def <span class="ident">add_bot</span></span>(<span>self, text: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Logs the bot's response text.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong> :&ensp;<code>str</code></dt>
+<dd>The text response from the bot.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_bot(self, text: str) -&gt; None:
+    &#34;&#34;&#34;
+    Logs the bot&#39;s response text.
+
+    Args:
+        text (str): The text response from the bot.
+    &#34;&#34;&#34;
+    self.log_file.write(f&#34;**Bot**: {text}\n\n&#34;)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_error"><code class="name flex">
+<span>def <span class="ident">add_error</span></span>(<span>self, error: Exception) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Logs an error that occurred during the dialog.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>error</code></strong> :&ensp;<code>Exception</code></dt>
+<dd>The exception that was raised.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_error(self, error: Exception) -&gt; None:
+    &#34;&#34;&#34;
+    Logs an error that occurred during the dialog.
+
+    Args:
+        error (Exception): The exception that was raised.
+    &#34;&#34;&#34;
+    self.log_file.write(f&#34;**Error**: {error}\n\n&#34;)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_tool"><code class="name flex">
+<span>def <span class="ident">add_tool</span></span>(<span>self, tool_name: str, tool_args: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Logs a single tool and its arguments used in the dialog.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>tool_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the tool.</dd>
+<dt><strong><code>tool_args</code></strong> :&ensp;<code>str</code></dt>
+<dd>The arguments passed to the tool, in JSON string format.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_tool(self, tool_name: str, tool_args: str) -&gt; None:
+    &#34;&#34;&#34;
+    Logs a single tool and its arguments used in the dialog.
+
+    Args:
+        tool_name (str): The name of the tool.
+        tool_args (str): The arguments passed to the tool, in JSON string format.
+    &#34;&#34;&#34;
+    self.log_file.write(f&#34;**Tool**: `{tool_name}`, **Args**: {tool_args}\n&#34;)
+    try:
+        json_bits = json.loads(tool_args)
+    except BaseException:
+        self.log_file.write(f&#34;Bad JSON: {tool_args}&#34;)
+        return
+    for name, value in json_bits.items():
+        self.log_file.write(f&#34;{name} : {value}&#34;)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_tool_result"><code class="name flex">
+<span>def <span class="ident">add_tool_result</span></span>(<span>self, tool_results: list[dict[str, typing.Any]]) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Logs the results from a tool.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>tool_results</code></strong> :&ensp;<code>List[Dict[str, Any]]</code></dt>
+<dd>A list of dictionaries containing the tool results.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_tool_result(self, tool_results: list[dict[str, Any]]) -&gt; None:
+    &#34;&#34;&#34;
+    Logs the results from a tool.
+
+    Args:
+        tool_results (List[Dict[str, Any]]): A list of dictionaries containing the tool results.
+    &#34;&#34;&#34;
+    for result in tool_results:
+        self.log_file.write(&#34;### Result\n\n&#34;)
+        for key, value in result.items():
+            if key == &#34;output&#34;:
+                # json.loads here should work, it isn&#39;t bot-json
+                self.log_file.write(f&#34; {try_markpickle(json.loads(value))}\n&#34;)
+            else:
+                self.log_file.write(f&#34;{key}: {value}\n&#34;)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_toolkit"><code class="name flex">
+<span>def <span class="ident">add_toolkit</span></span>(<span>self, tools: list[str]) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Logs the tools used in the dialog.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>tools</code></strong> :&ensp;<code>List[str]</code></dt>
+<dd>A list of tool names used in the dialog.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_toolkit(self, tools: list[str]) -&gt; None:
+    &#34;&#34;&#34;
+    Logs the tools used in the dialog.
+
+    Args:
+        tools (List[str]): A list of tool names used in the dialog.
+    &#34;&#34;&#34;
+    toolkit_str = &#34;\n- &#34;.join([f&#34;`{tool}`&#34; for tool in tools])
+    self.log_file.write(f&#34;**Toolkit**: \n\n- {toolkit_str}\n\n&#34;)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_user"><code class="name flex">
+<span>def <span class="ident">add_user</span></span>(<span>self, text: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Logs the user's input text.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>text</code></strong> :&ensp;<code>str</code></dt>
+<dd>The text input by the user.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_user(self, text: str) -&gt; None:
+    &#34;&#34;&#34;
+    Logs the user&#39;s input text.
+
+    Args:
+        text (str): The text input by the user.
+    &#34;&#34;&#34;
+    self.log_file.write(f&#34;**User**: {text}\n\n&#34;)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.ensure_log"><code class="name flex">
+<span>def <span class="ident">ensure_log</span></span>(<span>self) ‑> collections.abc.Iterator[None]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A context manager to ensure that the log file is closed properly.</p>
+<h2 id="yields">Yields</h2>
+<dl>
+<dt><code>None</code></dt>
+<dd>Yields control to the block of code using this context manager.</dd>
+</dl>
+<h2 id="ensures">Ensures</h2>
+<p>The log file is closed properly upon exiting the block of code.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@contextmanager
+def ensure_log(self) -&gt; Iterator[None]:
+    &#34;&#34;&#34;
+    A context manager to ensure that the log file is closed properly.
+
+    Yields:
+        None: Yields control to the block of code using this context manager.
+
+    Ensures:
+        The log file is closed properly upon exiting the block of code.
+    &#34;&#34;&#34;
+    try:
+        yield
+    finally:
+        self.log_file.close()</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.write_header"><code class="name flex">
+<span>def <span class="ident">write_header</span></span>(<span>self, bot_name: str, model: str, bot_instructions: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Writes the header information to the log file.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>bot_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Name of the bot.</dd>
+<dt><strong><code>model</code></strong> :&ensp;<code>str</code></dt>
+<dd>Model used by the bot.</dd>
+<dt><strong><code>bot_instructions</code></strong> :&ensp;<code>str</code></dt>
+<dd>Instructions or description for the bot.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_header(self, bot_name: str, model: str, bot_instructions: str) -&gt; None:
+    &#34;&#34;&#34;
+    Writes the header information to the log file.
+
+    Args:
+        bot_name (str): Name of the bot.
+        model (str): Model used by the bot.
+        bot_instructions (str): Instructions or description for the bot.
+    &#34;&#34;&#34;
+    self.bot_name = bot_name
+    self.model = model
+    self.bot_instructions = bot_instructions
+    header = f&#34;# Bot Name: {self.bot_name}\n## Model: {self.model}\n### Instructions: {self.bot_instructions}\n\n&#34;
+    self.log_file.write(header)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ai_shell.utils" href="index.html">ai_shell.utils</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="ai_shell.utils.log_conversation.try_markpickle" href="#ai_shell.utils.log_conversation.try_markpickle">try_markpickle</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown" href="#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown">DialogLoggerWithMarkdown</a></code></h4>
+<ul class="two-column">
+<li><code><a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_bot" href="#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_bot">add_bot</a></code></li>
+<li><code><a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_error" href="#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_error">add_error</a></code></li>
+<li><code><a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_tool" href="#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_tool">add_tool</a></code></li>
+<li><code><a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_tool_result" href="#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_tool_result">add_tool_result</a></code></li>
+<li><code><a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_toolkit" href="#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_toolkit">add_toolkit</a></code></li>
+<li><code><a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_user" href="#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.add_user">add_user</a></code></li>
+<li><code><a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.ensure_log" href="#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.ensure_log">ensure_log</a></code></li>
+<li><code><a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.write_header" href="#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown.write_header">write_header</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

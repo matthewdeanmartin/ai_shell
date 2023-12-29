@@ -7,6 +7,7 @@ import logging
 from typing import Optional
 
 import ai_todo
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 
 logger = logging.getLogger(__name__)
@@ -15,15 +16,18 @@ logger = logging.getLogger(__name__)
 class TodoTool:
     """Keep track of tasks."""
 
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the TodoTool with a root folder.
 
         Args:
             root_folder (str): The root folder for valid files.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder: str = root_folder
-        self.task_manager = ai_todo.TaskManager(self.root_folder, ["Tester", "Programmer"])
+        self.config = config
+        self.roles = config.get_list("todo_roles")
+        self.task_manager = ai_todo.TaskManager(self.root_folder, self.roles)
 
     @log()
     def add_todo(
@@ -86,4 +90,4 @@ class TodoTool:
 
 
 if __name__ == "__main__":
-    tool = TodoTool(".")
+    tool = TodoTool(".", Config(".."))

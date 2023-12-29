@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ai_shell.insert_tool API documentation</title>
+<meta name="description" content="Text editor for simple text insertion at line or context." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ai_shell.insert_tool</code></h1>
+</header>
+<section id="section-intro">
+<p>Text editor for simple text insertion at line or context.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Text editor for simple text insertion at line or context.
+&#34;&#34;&#34;
+from typing import Union
+
+from ai_shell.cat_tool import CatTool
+from ai_shell.pyutils.validate import is_python_file, is_valid_python_source
+from ai_shell.utils.config_manager import Config
+from ai_shell.utils.logging_utils import log
+
+
+class InsertTool:
+    def __init__(self, root_folder: str, config: Config) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the InsertTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn&#39;t set.
+        &#34;&#34;&#34;
+        self.root_folder = root_folder
+        self.config = config
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+
+    @log()
+    def insert_text_after_context(self, file_path: str, context: str, text_to_insert: str) -&gt; str:
+        &#34;&#34;&#34;Inserts a given text immediately after a specified context in a file.
+
+        This method opens the file, finds the line containing the specified context,
+        and inserts the provided text immediately after this line. If the context
+        matches multiple lines, it raises a ValueError due to ambiguity.
+
+        Args:
+            file_path (str): The path of the file in which the text is to be inserted.
+            context (str): The context string to search for in the file. The text is
+                           inserted after the line containing this context.
+            text_to_insert (str): The text to insert into the file.
+
+        Returns:
+            str: A message for the bot with the result of the insert.
+
+        Raises:
+            ValueError: If the provided context matches multiple lines in the file.
+        &#34;&#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not context:
+            raise TypeError(&#34;No context, please context so I can find where to insert the text.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            lines = file.readlines()
+        original_lines = list(lines)
+
+        context_line_indices = [i for i, line in enumerate(lines) if context in line]
+
+        # Check for ambiguity in the context match
+        if len(context_line_indices) != 1:
+            raise ValueError(
+                &#34;Ambiguous context: The provided context matches multiple lines. A context line the &#34;
+                &#34;string or substring of the line just before your desired insertion point. It must &#34;
+                &#34;uniquely identify a location. Either use a longer substring to match or switch to using&#34;
+                &#34;the insert_text_after_multiline_context tool.&#34;
+            )
+
+        # Index of the line after the context line
+        insert_index = context_line_indices[0] + 1
+
+        # Insert the text
+        lines.insert(insert_index, text_to_insert + &#34;\n&#34;)
+
+        return self._save_if_changed(file_path, original_lines, lines)
+
+    @log()
+    def insert_text_at_start_or_end(self, file_path: str, text_to_insert: str, position: str = &#34;end&#34;) -&gt; str:
+        &#34;&#34;&#34;Inserts text at the start or end of a file.
+
+        Opens the file and inserts the specified text either at the beginning or the
+        end of the file, based on the &#39;position&#39; argument. If the position argument
+        is neither &#39;start&#39; nor &#39;end&#39;, it raises a ValueError.
+
+        Args:
+            file_path (str): The path of the file in which the text is to be inserted.
+            text_to_insert (str): The text to insert into the file.
+            position (str, optional): The position where the text should be inserted.
+                                      Should be either &#39;start&#39; or &#39;end&#39;. Defaults to &#39;end&#39;.
+
+        Raises:
+            ValueError: If the &#39;position&#39; argument is not &#39;start&#39; or &#39;end&#39;.
+
+        &#34;&#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not text_to_insert:
+            raise TypeError(&#34;No text_to_insert, please provide so I have something to insert.&#34;)
+        if position not in (&#34;start&#34;, &#34;end&#34;):
+            raise ValueError(&#34;position must be start or end, so I know where to insert text.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            lines = file.readlines()
+        original_lines = list(lines)
+        if position == &#34;start&#34;:
+            lines.insert(0, text_to_insert + &#34;\n&#34;)
+        elif position == &#34;end&#34;:
+            lines.append(text_to_insert + &#34;\n&#34;)
+        else:
+            raise ValueError(&#34;Invalid position: choose &#39;start&#39; or &#39;end&#39;.&#34;)
+
+        return self._save_if_changed(file_path, original_lines, lines)
+
+    @log()
+    def insert_text_after_multiline_context(self, file_path: str, context_lines: list[str], text_to_insert: str) -&gt; str:
+        &#34;&#34;&#34;Inserts text immediately after a specified multiline context in a file.
+
+        Opens the file and searches for a sequence of lines (context). Once the context
+        is found, it inserts the specified text immediately after this context. If the
+        context is not found, it raises a ValueError.
+
+        Args:
+            file_path (str): The path of the file in which the text is to be inserted.
+            context_lines (list of str): A list of strings representing the multiline
+                                         context to search for in the file.
+            text_to_insert (str): The text to insert into the file after the context.
+
+        Raises:
+            ValueError: If the multiline context is not found in the file.
+
+        &#34;&#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not context_lines:
+            raise TypeError(&#34;No context_lines, please context lines so I can find where to insert the new lines.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            lines = file.readlines()
+
+        try:
+            ends_with_n = lines[:-1][0].endswith(&#34;\n&#34;)
+        except IndexError:
+            ends_with_n = False
+
+        # this is going to make it hard to preserve whitespace.
+        # Convert context_lines to a string for easier matching
+        context_string = &#34;&#34;.join([line + &#34;\n&#34; for line in context_lines]).rstrip(&#34;\n&#34;)
+
+        # Convert file lines to a string
+        file_string = &#34;&#34;.join(lines)
+
+        starts_at = file_string.find(context_string)
+        if starts_at == -1:
+            raise ValueError(&#34;Context not found in the file.&#34;)
+
+        # Find the index where the context ends
+        context_end_index = starts_at + len(context_string)
+
+        # Split the file_string back into lines at the context end
+        before_context = file_string[:context_end_index]
+        after_context = file_string[context_end_index:]
+
+        # Insert the new text
+        new_file_string = before_context + &#34;\n&#34; + text_to_insert + &#34;\n&#34; + after_context.strip(&#34;\n&#34;)
+
+        if ends_with_n:
+            new_file_string += &#34;\n&#34;
+
+        return self._save_if_changed(file_path, lines, new_file_string)
+
+    def _save_if_changed(self, file_path: str, original_lines, new_file_string: Union[str, list[str]]) -&gt; str:
+        &#34;&#34;&#34;
+        Save the file if it has changed.
+
+        Args:
+            file_path: The path of the file to save.
+            original_lines: The original file contents.
+            new_file_string: The new file contents.
+
+        Returns:
+            A message for the bot with the result of the save.
+        &#34;&#34;&#34;
+        if not new_file_string:
+            raise TypeError(&#34;Something went wrong in insert and all text disappeared. Cancelling.&#34;)
+        if isinstance(new_file_string, list):
+            source = &#34;\n&#34;.join(new_file_string)
+        else:
+            source = new_file_string
+        if isinstance(new_file_string, str) and &#34;\n&#34;.join(original_lines) == new_file_string:
+            return (
+                &#34;File not changed this means the old file contents are the same as the new. This has nothing &#34;
+                &#34;to do with file permissions.&#34;
+            )
+        if isinstance(new_file_string, list) and original_lines == new_file_string:
+            return (
+                &#34;File not changed, this means the old file contents are the same as the new. This has nothing &#34;
+                &#34;to do with file permissions.&#34;
+            )
+        if is_python_file(file_path):
+            is_valid, error = is_valid_python_source(source)
+            if not is_valid and error:
+                return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
+            if not is_valid:
+                return f&#34;Invalid Python source code. No changes made. {error}.&#34;
+
+        # Write back to the file
+        with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file:
+            if isinstance(new_file_string, str):
+                file.write(new_file_string)
+            else:
+                file.writelines(new_file_string)
+        if self.auto_cat:
+            feedback = &#34;Insert completed and no exceptions thrown.&#34;
+            contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
+            return f&#34;Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}&#34;
+        return &#34;Insert completed and no exceptions thrown. Please verify by other means.&#34;</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="ai_shell.insert_tool.InsertTool"><code class="flex name class">
+<span>class <span class="ident">InsertTool</span></span>
+<span>(</span><span>root_folder: str, config: <a title="ai_shell.utils.config_manager.Config" href="utils/config_manager.html#ai_shell.utils.config_manager.Config">Config</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initialize the InsertTool class.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>root_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The root folder path for file operations.</dd>
+<dt><strong><code>config</code></strong> :&ensp;<code>Config</code></dt>
+<dd>The developer input that bot shouldn't set.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InsertTool:
+    def __init__(self, root_folder: str, config: Config) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the InsertTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn&#39;t set.
+        &#34;&#34;&#34;
+        self.root_folder = root_folder
+        self.config = config
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+
+    @log()
+    def insert_text_after_context(self, file_path: str, context: str, text_to_insert: str) -&gt; str:
+        &#34;&#34;&#34;Inserts a given text immediately after a specified context in a file.
+
+        This method opens the file, finds the line containing the specified context,
+        and inserts the provided text immediately after this line. If the context
+        matches multiple lines, it raises a ValueError due to ambiguity.
+
+        Args:
+            file_path (str): The path of the file in which the text is to be inserted.
+            context (str): The context string to search for in the file. The text is
+                           inserted after the line containing this context.
+            text_to_insert (str): The text to insert into the file.
+
+        Returns:
+            str: A message for the bot with the result of the insert.
+
+        Raises:
+            ValueError: If the provided context matches multiple lines in the file.
+        &#34;&#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not context:
+            raise TypeError(&#34;No context, please context so I can find where to insert the text.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            lines = file.readlines()
+        original_lines = list(lines)
+
+        context_line_indices = [i for i, line in enumerate(lines) if context in line]
+
+        # Check for ambiguity in the context match
+        if len(context_line_indices) != 1:
+            raise ValueError(
+                &#34;Ambiguous context: The provided context matches multiple lines. A context line the &#34;
+                &#34;string or substring of the line just before your desired insertion point. It must &#34;
+                &#34;uniquely identify a location. Either use a longer substring to match or switch to using&#34;
+                &#34;the insert_text_after_multiline_context tool.&#34;
+            )
+
+        # Index of the line after the context line
+        insert_index = context_line_indices[0] + 1
+
+        # Insert the text
+        lines.insert(insert_index, text_to_insert + &#34;\n&#34;)
+
+        return self._save_if_changed(file_path, original_lines, lines)
+
+    @log()
+    def insert_text_at_start_or_end(self, file_path: str, text_to_insert: str, position: str = &#34;end&#34;) -&gt; str:
+        &#34;&#34;&#34;Inserts text at the start or end of a file.
+
+        Opens the file and inserts the specified text either at the beginning or the
+        end of the file, based on the &#39;position&#39; argument. If the position argument
+        is neither &#39;start&#39; nor &#39;end&#39;, it raises a ValueError.
+
+        Args:
+            file_path (str): The path of the file in which the text is to be inserted.
+            text_to_insert (str): The text to insert into the file.
+            position (str, optional): The position where the text should be inserted.
+                                      Should be either &#39;start&#39; or &#39;end&#39;. Defaults to &#39;end&#39;.
+
+        Raises:
+            ValueError: If the &#39;position&#39; argument is not &#39;start&#39; or &#39;end&#39;.
+
+        &#34;&#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not text_to_insert:
+            raise TypeError(&#34;No text_to_insert, please provide so I have something to insert.&#34;)
+        if position not in (&#34;start&#34;, &#34;end&#34;):
+            raise ValueError(&#34;position must be start or end, so I know where to insert text.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            lines = file.readlines()
+        original_lines = list(lines)
+        if position == &#34;start&#34;:
+            lines.insert(0, text_to_insert + &#34;\n&#34;)
+        elif position == &#34;end&#34;:
+            lines.append(text_to_insert + &#34;\n&#34;)
+        else:
+            raise ValueError(&#34;Invalid position: choose &#39;start&#39; or &#39;end&#39;.&#34;)
+
+        return self._save_if_changed(file_path, original_lines, lines)
+
+    @log()
+    def insert_text_after_multiline_context(self, file_path: str, context_lines: list[str], text_to_insert: str) -&gt; str:
+        &#34;&#34;&#34;Inserts text immediately after a specified multiline context in a file.
+
+        Opens the file and searches for a sequence of lines (context). Once the context
+        is found, it inserts the specified text immediately after this context. If the
+        context is not found, it raises a ValueError.
+
+        Args:
+            file_path (str): The path of the file in which the text is to be inserted.
+            context_lines (list of str): A list of strings representing the multiline
+                                         context to search for in the file.
+            text_to_insert (str): The text to insert into the file after the context.
+
+        Raises:
+            ValueError: If the multiline context is not found in the file.
+
+        &#34;&#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not context_lines:
+            raise TypeError(&#34;No context_lines, please context lines so I can find where to insert the new lines.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            lines = file.readlines()
+
+        try:
+            ends_with_n = lines[:-1][0].endswith(&#34;\n&#34;)
+        except IndexError:
+            ends_with_n = False
+
+        # this is going to make it hard to preserve whitespace.
+        # Convert context_lines to a string for easier matching
+        context_string = &#34;&#34;.join([line + &#34;\n&#34; for line in context_lines]).rstrip(&#34;\n&#34;)
+
+        # Convert file lines to a string
+        file_string = &#34;&#34;.join(lines)
+
+        starts_at = file_string.find(context_string)
+        if starts_at == -1:
+            raise ValueError(&#34;Context not found in the file.&#34;)
+
+        # Find the index where the context ends
+        context_end_index = starts_at + len(context_string)
+
+        # Split the file_string back into lines at the context end
+        before_context = file_string[:context_end_index]
+        after_context = file_string[context_end_index:]
+
+        # Insert the new text
+        new_file_string = before_context + &#34;\n&#34; + text_to_insert + &#34;\n&#34; + after_context.strip(&#34;\n&#34;)
+
+        if ends_with_n:
+            new_file_string += &#34;\n&#34;
+
+        return self._save_if_changed(file_path, lines, new_file_string)
+
+    def _save_if_changed(self, file_path: str, original_lines, new_file_string: Union[str, list[str]]) -&gt; str:
+        &#34;&#34;&#34;
+        Save the file if it has changed.
+
+        Args:
+            file_path: The path of the file to save.
+            original_lines: The original file contents.
+            new_file_string: The new file contents.
+
+        Returns:
+            A message for the bot with the result of the save.
+        &#34;&#34;&#34;
+        if not new_file_string:
+            raise TypeError(&#34;Something went wrong in insert and all text disappeared. Cancelling.&#34;)
+        if isinstance(new_file_string, list):
+            source = &#34;\n&#34;.join(new_file_string)
+        else:
+            source = new_file_string
+        if isinstance(new_file_string, str) and &#34;\n&#34;.join(original_lines) == new_file_string:
+            return (
+                &#34;File not changed this means the old file contents are the same as the new. This has nothing &#34;
+                &#34;to do with file permissions.&#34;
+            )
+        if isinstance(new_file_string, list) and original_lines == new_file_string:
+            return (
+                &#34;File not changed, this means the old file contents are the same as the new. This has nothing &#34;
+                &#34;to do with file permissions.&#34;
+            )
+        if is_python_file(file_path):
+            is_valid, error = is_valid_python_source(source)
+            if not is_valid and error:
+                return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
+            if not is_valid:
+                return f&#34;Invalid Python source code. No changes made. {error}.&#34;
+
+        # Write back to the file
+        with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file:
+            if isinstance(new_file_string, str):
+                file.write(new_file_string)
+            else:
+                file.writelines(new_file_string)
+        if self.auto_cat:
+            feedback = &#34;Insert completed and no exceptions thrown.&#34;
+            contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
+            return f&#34;Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}&#34;
+        return &#34;Insert completed and no exceptions thrown. Please verify by other means.&#34;</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="ai_shell.insert_tool.InsertTool.insert_text_after_context"><code class="name flex">
+<span>def <span class="ident">insert_text_after_context</span></span>(<span>self, file_path: str, context: str, text_to_insert: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Inserts a given text immediately after a specified context in a file.</p>
+<p>This method opens the file, finds the line containing the specified context,
+and inserts the provided text immediately after this line. If the context
+matches multiple lines, it raises a ValueError due to ambiguity.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path of the file in which the text is to be inserted.</dd>
+<dt><strong><code>context</code></strong> :&ensp;<code>str</code></dt>
+<dd>The context string to search for in the file. The text is
+inserted after the line containing this context.</dd>
+<dt><strong><code>text_to_insert</code></strong> :&ensp;<code>str</code></dt>
+<dd>The text to insert into the file.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A message for the bot with the result of the insert.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>If the provided context matches multiple lines in the file.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def insert_text_after_context(self, file_path: str, context: str, text_to_insert: str) -&gt; str:
+    &#34;&#34;&#34;Inserts a given text immediately after a specified context in a file.
+
+    This method opens the file, finds the line containing the specified context,
+    and inserts the provided text immediately after this line. If the context
+    matches multiple lines, it raises a ValueError due to ambiguity.
+
+    Args:
+        file_path (str): The path of the file in which the text is to be inserted.
+        context (str): The context string to search for in the file. The text is
+                       inserted after the line containing this context.
+        text_to_insert (str): The text to insert into the file.
+
+    Returns:
+        str: A message for the bot with the result of the insert.
+
+    Raises:
+        ValueError: If the provided context matches multiple lines in the file.
+    &#34;&#34;&#34;
+    if not file_path:
+        raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+    if not context:
+        raise TypeError(&#34;No context, please context so I can find where to insert the text.&#34;)
+    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        lines = file.readlines()
+    original_lines = list(lines)
+
+    context_line_indices = [i for i, line in enumerate(lines) if context in line]
+
+    # Check for ambiguity in the context match
+    if len(context_line_indices) != 1:
+        raise ValueError(
+            &#34;Ambiguous context: The provided context matches multiple lines. A context line the &#34;
+            &#34;string or substring of the line just before your desired insertion point. It must &#34;
+            &#34;uniquely identify a location. Either use a longer substring to match or switch to using&#34;
+            &#34;the insert_text_after_multiline_context tool.&#34;
+        )
+
+    # Index of the line after the context line
+    insert_index = context_line_indices[0] + 1
+
+    # Insert the text
+    lines.insert(insert_index, text_to_insert + &#34;\n&#34;)
+
+    return self._save_if_changed(file_path, original_lines, lines)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.insert_tool.InsertTool.insert_text_after_multiline_context"><code class="name flex">
+<span>def <span class="ident">insert_text_after_multiline_context</span></span>(<span>self, file_path: str, context_lines: list[str], text_to_insert: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Inserts text immediately after a specified multiline context in a file.</p>
+<p>Opens the file and searches for a sequence of lines (context). Once the context
+is found, it inserts the specified text immediately after this context. If the
+context is not found, it raises a ValueError.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path of the file in which the text is to be inserted.</dd>
+<dt><strong><code>context_lines</code></strong> :&ensp;<code>list</code> of <code>str</code></dt>
+<dd>A list of strings representing the multiline
+context to search for in the file.</dd>
+<dt><strong><code>text_to_insert</code></strong> :&ensp;<code>str</code></dt>
+<dd>The text to insert into the file after the context.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>If the multiline context is not found in the file.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def insert_text_after_multiline_context(self, file_path: str, context_lines: list[str], text_to_insert: str) -&gt; str:
+    &#34;&#34;&#34;Inserts text immediately after a specified multiline context in a file.
+
+    Opens the file and searches for a sequence of lines (context). Once the context
+    is found, it inserts the specified text immediately after this context. If the
+    context is not found, it raises a ValueError.
+
+    Args:
+        file_path (str): The path of the file in which the text is to be inserted.
+        context_lines (list of str): A list of strings representing the multiline
+                                     context to search for in the file.
+        text_to_insert (str): The text to insert into the file after the context.
+
+    Raises:
+        ValueError: If the multiline context is not found in the file.
+
+    &#34;&#34;&#34;
+    if not file_path:
+        raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+    if not context_lines:
+        raise TypeError(&#34;No context_lines, please context lines so I can find where to insert the new lines.&#34;)
+    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        lines = file.readlines()
+
+    try:
+        ends_with_n = lines[:-1][0].endswith(&#34;\n&#34;)
+    except IndexError:
+        ends_with_n = False
+
+    # this is going to make it hard to preserve whitespace.
+    # Convert context_lines to a string for easier matching
+    context_string = &#34;&#34;.join([line + &#34;\n&#34; for line in context_lines]).rstrip(&#34;\n&#34;)
+
+    # Convert file lines to a string
+    file_string = &#34;&#34;.join(lines)
+
+    starts_at = file_string.find(context_string)
+    if starts_at == -1:
+        raise ValueError(&#34;Context not found in the file.&#34;)
+
+    # Find the index where the context ends
+    context_end_index = starts_at + len(context_string)
+
+    # Split the file_string back into lines at the context end
+    before_context = file_string[:context_end_index]
+    after_context = file_string[context_end_index:]
+
+    # Insert the new text
+    new_file_string = before_context + &#34;\n&#34; + text_to_insert + &#34;\n&#34; + after_context.strip(&#34;\n&#34;)
+
+    if ends_with_n:
+        new_file_string += &#34;\n&#34;
+
+    return self._save_if_changed(file_path, lines, new_file_string)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.insert_tool.InsertTool.insert_text_at_start_or_end"><code class="name flex">
+<span>def <span class="ident">insert_text_at_start_or_end</span></span>(<span>self, file_path: str, text_to_insert: str, position: str = 'end') ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Inserts text at the start or end of a file.</p>
+<p>Opens the file and inserts the specified text either at the beginning or the
+end of the file, based on the 'position' argument. If the position argument
+is neither 'start' nor 'end', it raises a ValueError.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path of the file in which the text is to be inserted.</dd>
+<dt><strong><code>text_to_insert</code></strong> :&ensp;<code>str</code></dt>
+<dd>The text to insert into the file.</dd>
+<dt><strong><code>position</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>The position where the text should be inserted.
+Should be either 'start' or 'end'. Defaults to 'end'.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>ValueError</code></dt>
+<dd>If the 'position' argument is not 'start' or 'end'.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def insert_text_at_start_or_end(self, file_path: str, text_to_insert: str, position: str = &#34;end&#34;) -&gt; str:
+    &#34;&#34;&#34;Inserts text at the start or end of a file.
+
+    Opens the file and inserts the specified text either at the beginning or the
+    end of the file, based on the &#39;position&#39; argument. If the position argument
+    is neither &#39;start&#39; nor &#39;end&#39;, it raises a ValueError.
+
+    Args:
+        file_path (str): The path of the file in which the text is to be inserted.
+        text_to_insert (str): The text to insert into the file.
+        position (str, optional): The position where the text should be inserted.
+                                  Should be either &#39;start&#39; or &#39;end&#39;. Defaults to &#39;end&#39;.
+
+    Raises:
+        ValueError: If the &#39;position&#39; argument is not &#39;start&#39; or &#39;end&#39;.
+
+    &#34;&#34;&#34;
+    if not file_path:
+        raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+    if not text_to_insert:
+        raise TypeError(&#34;No text_to_insert, please provide so I have something to insert.&#34;)
+    if position not in (&#34;start&#34;, &#34;end&#34;):
+        raise ValueError(&#34;position must be start or end, so I know where to insert text.&#34;)
+    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        lines = file.readlines()
+    original_lines = list(lines)
+    if position == &#34;start&#34;:
+        lines.insert(0, text_to_insert + &#34;\n&#34;)
+    elif position == &#34;end&#34;:
+        lines.append(text_to_insert + &#34;\n&#34;)
+    else:
+        raise ValueError(&#34;Invalid position: choose &#39;start&#39; or &#39;end&#39;.&#34;)
+
+    return self._save_if_changed(file_path, original_lines, lines)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ai_shell" href="index.html">ai_shell</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="ai_shell.insert_tool.InsertTool" href="#ai_shell.insert_tool.InsertTool">InsertTool</a></code></h4>
+<ul class="">
+<li><code><a title="ai_shell.insert_tool.InsertTool.insert_text_after_context" href="#ai_shell.insert_tool.InsertTool.insert_text_after_context">insert_text_after_context</a></code></li>
+<li><code><a title="ai_shell.insert_tool.InsertTool.insert_text_after_multiline_context" href="#ai_shell.insert_tool.InsertTool.insert_text_after_multiline_context">insert_text_after_multiline_context</a></code></li>
+<li><code><a title="ai_shell.insert_tool.InsertTool.insert_text_at_start_or_end" href="#ai_shell.insert_tool.InsertTool.insert_text_at_start_or_end">insert_text_at_start_or_end</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

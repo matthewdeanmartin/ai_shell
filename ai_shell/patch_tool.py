@@ -11,6 +11,7 @@ import tempfile
 
 from unidiff import PatchSet
 
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 
 logger = logging.getLogger(__name__)
@@ -19,15 +20,17 @@ logger = logging.getLogger(__name__)
 class PatchTool:
     """Edit a file by applying a git patch."""
 
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the PatchTool with a root folder.
 
         Args:
             root_folder (str): The root folder for valid patchable files.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder: str = root_folder
-        self.auto_cat = True
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def apply_git_patch(self, patch_content: str) -> str:
@@ -83,7 +86,7 @@ class PatchTool:
             patch_content (str): The content of the git patch.
 
         Returns:
-            Set[str]: A set of file names extracted from the patch.
+            set[str]: A set of file names extracted from the patch.
         """
         file_names = set()
         lines = patch_content.split("\n")

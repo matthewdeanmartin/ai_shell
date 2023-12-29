@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ai_shell.replace_tool API documentation</title>
+<meta name="description" content="Optimized for AI version of sed. For file editing …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ai_shell.replace_tool</code></h1>
+</header>
+<section id="section-intro">
+<p>Optimized for AI version of sed. For file editing.</p>
+<p>However, the bot keeps trying to use features of real sed that this tool doesn't support.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Optimized for AI version of sed. For file editing.
+
+However, the bot keeps trying to use features of real sed that this tool doesn&#39;t support.
+&#34;&#34;&#34;
+import re
+
+from ai_shell.cat_tool import CatTool
+from ai_shell.pyutils.validate import is_python_file, is_valid_python_source
+from ai_shell.utils.config_manager import Config
+from ai_shell.utils.logging_utils import log
+
+
+class ReplaceTool:
+    def __init__(self, root_folder: str, config: Config) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the SedTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn&#39;t set.
+        &#34;&#34;&#34;
+        self.root_folder = root_folder
+        self.config = config
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+
+    @log()
+    def replace_line_by_line(
+        self, file_path: str, old_text: str, new_text: str, line_start: int = 0, line_end: int = -1
+    ) -&gt; str:
+        &#34;&#34;&#34;Replaces occurrences of a specified text with new text in a range of lines in a file.
+
+        Opens the file and replaces occurrences of &#39;old_text&#39; with &#39;new_text&#39; within the specified
+        line range. If &#39;line_end&#39; is -1, it defaults to the end of the file. Returns a message
+        indicating whether changes were successfully applied or not.
+
+        Args:
+            file_path (str): The path to the file.
+            old_text (str): The text to be replaced.
+            new_text (str): The new text to replace the old text.
+            line_start (int, optional): The starting line number (0-indexed) for the replacement.
+                                        Defaults to 0.
+            line_end (int, optional): The ending line number (0-indexed) for the replacement.
+                                      If -1, it goes to the end of the file. Defaults to -1.
+
+        Returns:
+            str: A message indicating the success of the operation.
+
+        Raises:
+            TypeError: If file_path or old_text is None, or if no lines are left after replacement.
+        &#34;&#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not old_text:
+            raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            input_text = file.read()
+        lines = []
+        input_lines = input_text.splitlines()
+        if line_end == -1:
+            line_end = len(input_lines)
+        for line_no, line in enumerate(input_lines):
+            if line_start &lt;= line_no &lt; line_end and old_text in line:
+                line = line.replace(old_text, new_text)
+            lines.append(line)
+        if not lines:
+            raise TypeError(&#34;Nothing left after replace, something went wrong, cancelling.&#34;)
+        final = &#34;\n&#34;.join(lines)
+        return self.save_if_changed(file_path, final, input_text)
+
+    @log()
+    def replace_all(self, file_path: str, old_text: str, new_text: str) -&gt; str:
+        &#34;&#34;&#34;Replaces all occurrences of a specified text with new text in a file.
+
+        Opens the file and replaces all occurrences of &#39;old_text&#39; with &#39;new_text&#39;. Returns a
+        message indicating whether changes were successfully applied or not.
+
+        Args:
+            file_path (str): The path to the file.
+            old_text (str): The text to be replaced.
+            new_text (str): The new text to replace the old text.
+
+        Returns:
+            str: A message indicating the success of the operation.
+
+        Raises:
+            TypeError: If file_path or old_text is None.
+        &#34;&#34;&#34;
+        if new_text is None:
+            new_text = &#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not old_text:
+            raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            input_text = file.read()
+        final = input_text.replace(old_text, new_text)
+        return self.save_if_changed(file_path, final, input_text)
+
+    @log()
+    def replace_with_regex(self, file_path: str, regex_match_expression: str, replacement: str) -&gt; str:
+        &#34;&#34;&#34;Replaces text in a file based on a regular expression match.
+
+        Opens the file and replaces text that matches the regular expression &#39;regex_match_expression&#39;
+        with the &#39;replacement&#39; text. Returns a message indicating whether changes were successfully
+        applied or not.
+
+        Args:
+            file_path (str): The path to the file.
+            regex_match_expression (str): The regular expression pattern to match.
+            replacement (str): The text to replace the matched pattern.
+
+        Returns:
+            str: A message indicating the success of the operation.
+
+        Raises:
+            TypeError: If file_path or regex_match_expression is None.
+        &#34;&#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not regex_match_expression:
+            raise TypeError(&#34;No regex_match_expression, please context so I can find the text to replace.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            input_text = file.read()
+        final = re.sub(regex_match_expression, replacement, input_text)
+        return self.save_if_changed(file_path, final, input_text)
+
+    def save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
+        &#34;&#34;&#34;Saves the modified text to the file if changes have been made.
+
+        Compares the original text with the modified text and writes the modified text
+        to the file if there are changes. Returns a message indicating whether any changes
+        were made.
+
+        Args:
+            file_path (str): The path to the file.
+            final (str): The modified text.
+            input_text (str): The original text.
+
+        Returns:
+            str: A message indicating whether changes were made or not.
+
+        Raises:
+            TypeError: If file_path is None.
+        &#34;&#34;&#34;
+        if not final:
+            raise TypeError(&#34;Something went wrong in replace and all text disappeared. Cancelling.&#34;)
+
+        if is_python_file(file_path):
+            is_valid, error = is_valid_python_source(final)
+            if not is_valid and error:
+                return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
+            if not is_valid:
+                return f&#34;Invalid Python source code. No changes made. {error}.&#34;
+
+        if input_text != final:
+            with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
+                output_file.write(final)
+            if self.auto_cat:
+                feedback = &#34;Changes applied without exception, please verify by other means.\n&#34;
+                contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
+                return f&#34;Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}&#34;
+            return &#34;Changes applied without exception, please verify by other means.&#34;
+        return (
+            &#34;No changes made, this means the old file contents are the same as the new. This has nothing &#34;
+            &#34;to do with file permissions. Try again with a different match pattern.&#34;
+        )</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="ai_shell.replace_tool.ReplaceTool"><code class="flex name class">
+<span>class <span class="ident">ReplaceTool</span></span>
+<span>(</span><span>root_folder: str, config: <a title="ai_shell.utils.config_manager.Config" href="utils/config_manager.html#ai_shell.utils.config_manager.Config">Config</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Initialize the SedTool class.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>root_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The root folder path for file operations.</dd>
+<dt><strong><code>config</code></strong> :&ensp;<code>Config</code></dt>
+<dd>The developer input that bot shouldn't set.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ReplaceTool:
+    def __init__(self, root_folder: str, config: Config) -&gt; None:
+        &#34;&#34;&#34;
+        Initialize the SedTool class.
+
+        Args:
+            root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn&#39;t set.
+        &#34;&#34;&#34;
+        self.root_folder = root_folder
+        self.config = config
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+
+    @log()
+    def replace_line_by_line(
+        self, file_path: str, old_text: str, new_text: str, line_start: int = 0, line_end: int = -1
+    ) -&gt; str:
+        &#34;&#34;&#34;Replaces occurrences of a specified text with new text in a range of lines in a file.
+
+        Opens the file and replaces occurrences of &#39;old_text&#39; with &#39;new_text&#39; within the specified
+        line range. If &#39;line_end&#39; is -1, it defaults to the end of the file. Returns a message
+        indicating whether changes were successfully applied or not.
+
+        Args:
+            file_path (str): The path to the file.
+            old_text (str): The text to be replaced.
+            new_text (str): The new text to replace the old text.
+            line_start (int, optional): The starting line number (0-indexed) for the replacement.
+                                        Defaults to 0.
+            line_end (int, optional): The ending line number (0-indexed) for the replacement.
+                                      If -1, it goes to the end of the file. Defaults to -1.
+
+        Returns:
+            str: A message indicating the success of the operation.
+
+        Raises:
+            TypeError: If file_path or old_text is None, or if no lines are left after replacement.
+        &#34;&#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not old_text:
+            raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            input_text = file.read()
+        lines = []
+        input_lines = input_text.splitlines()
+        if line_end == -1:
+            line_end = len(input_lines)
+        for line_no, line in enumerate(input_lines):
+            if line_start &lt;= line_no &lt; line_end and old_text in line:
+                line = line.replace(old_text, new_text)
+            lines.append(line)
+        if not lines:
+            raise TypeError(&#34;Nothing left after replace, something went wrong, cancelling.&#34;)
+        final = &#34;\n&#34;.join(lines)
+        return self.save_if_changed(file_path, final, input_text)
+
+    @log()
+    def replace_all(self, file_path: str, old_text: str, new_text: str) -&gt; str:
+        &#34;&#34;&#34;Replaces all occurrences of a specified text with new text in a file.
+
+        Opens the file and replaces all occurrences of &#39;old_text&#39; with &#39;new_text&#39;. Returns a
+        message indicating whether changes were successfully applied or not.
+
+        Args:
+            file_path (str): The path to the file.
+            old_text (str): The text to be replaced.
+            new_text (str): The new text to replace the old text.
+
+        Returns:
+            str: A message indicating the success of the operation.
+
+        Raises:
+            TypeError: If file_path or old_text is None.
+        &#34;&#34;&#34;
+        if new_text is None:
+            new_text = &#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not old_text:
+            raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            input_text = file.read()
+        final = input_text.replace(old_text, new_text)
+        return self.save_if_changed(file_path, final, input_text)
+
+    @log()
+    def replace_with_regex(self, file_path: str, regex_match_expression: str, replacement: str) -&gt; str:
+        &#34;&#34;&#34;Replaces text in a file based on a regular expression match.
+
+        Opens the file and replaces text that matches the regular expression &#39;regex_match_expression&#39;
+        with the &#39;replacement&#39; text. Returns a message indicating whether changes were successfully
+        applied or not.
+
+        Args:
+            file_path (str): The path to the file.
+            regex_match_expression (str): The regular expression pattern to match.
+            replacement (str): The text to replace the matched pattern.
+
+        Returns:
+            str: A message indicating the success of the operation.
+
+        Raises:
+            TypeError: If file_path or regex_match_expression is None.
+        &#34;&#34;&#34;
+        if not file_path:
+            raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+        if not regex_match_expression:
+            raise TypeError(&#34;No regex_match_expression, please context so I can find the text to replace.&#34;)
+        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+            input_text = file.read()
+        final = re.sub(regex_match_expression, replacement, input_text)
+        return self.save_if_changed(file_path, final, input_text)
+
+    def save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
+        &#34;&#34;&#34;Saves the modified text to the file if changes have been made.
+
+        Compares the original text with the modified text and writes the modified text
+        to the file if there are changes. Returns a message indicating whether any changes
+        were made.
+
+        Args:
+            file_path (str): The path to the file.
+            final (str): The modified text.
+            input_text (str): The original text.
+
+        Returns:
+            str: A message indicating whether changes were made or not.
+
+        Raises:
+            TypeError: If file_path is None.
+        &#34;&#34;&#34;
+        if not final:
+            raise TypeError(&#34;Something went wrong in replace and all text disappeared. Cancelling.&#34;)
+
+        if is_python_file(file_path):
+            is_valid, error = is_valid_python_source(final)
+            if not is_valid and error:
+                return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
+            if not is_valid:
+                return f&#34;Invalid Python source code. No changes made. {error}.&#34;
+
+        if input_text != final:
+            with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
+                output_file.write(final)
+            if self.auto_cat:
+                feedback = &#34;Changes applied without exception, please verify by other means.\n&#34;
+                contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
+                return f&#34;Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}&#34;
+            return &#34;Changes applied without exception, please verify by other means.&#34;
+        return (
+            &#34;No changes made, this means the old file contents are the same as the new. This has nothing &#34;
+            &#34;to do with file permissions. Try again with a different match pattern.&#34;
+        )</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="ai_shell.replace_tool.ReplaceTool.replace_all"><code class="name flex">
+<span>def <span class="ident">replace_all</span></span>(<span>self, file_path: str, old_text: str, new_text: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Replaces all occurrences of a specified text with new text in a file.</p>
+<p>Opens the file and replaces all occurrences of 'old_text' with 'new_text'. Returns a
+message indicating whether changes were successfully applied or not.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the file.</dd>
+<dt><strong><code>old_text</code></strong> :&ensp;<code>str</code></dt>
+<dd>The text to be replaced.</dd>
+<dt><strong><code>new_text</code></strong> :&ensp;<code>str</code></dt>
+<dd>The new text to replace the old text.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A message indicating the success of the operation.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>TypeError</code></dt>
+<dd>If file_path or old_text is None.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def replace_all(self, file_path: str, old_text: str, new_text: str) -&gt; str:
+    &#34;&#34;&#34;Replaces all occurrences of a specified text with new text in a file.
+
+    Opens the file and replaces all occurrences of &#39;old_text&#39; with &#39;new_text&#39;. Returns a
+    message indicating whether changes were successfully applied or not.
+
+    Args:
+        file_path (str): The path to the file.
+        old_text (str): The text to be replaced.
+        new_text (str): The new text to replace the old text.
+
+    Returns:
+        str: A message indicating the success of the operation.
+
+    Raises:
+        TypeError: If file_path or old_text is None.
+    &#34;&#34;&#34;
+    if new_text is None:
+        new_text = &#34;&#34;
+    if not file_path:
+        raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+    if not old_text:
+        raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
+    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        input_text = file.read()
+    final = input_text.replace(old_text, new_text)
+    return self.save_if_changed(file_path, final, input_text)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.replace_tool.ReplaceTool.replace_line_by_line"><code class="name flex">
+<span>def <span class="ident">replace_line_by_line</span></span>(<span>self, file_path: str, old_text: str, new_text: str, line_start: int = 0, line_end: int = -1) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Replaces occurrences of a specified text with new text in a range of lines in a file.</p>
+<p>Opens the file and replaces occurrences of 'old_text' with 'new_text' within the specified
+line range. If 'line_end' is -1, it defaults to the end of the file. Returns a message
+indicating whether changes were successfully applied or not.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the file.</dd>
+<dt><strong><code>old_text</code></strong> :&ensp;<code>str</code></dt>
+<dd>The text to be replaced.</dd>
+<dt><strong><code>new_text</code></strong> :&ensp;<code>str</code></dt>
+<dd>The new text to replace the old text.</dd>
+<dt><strong><code>line_start</code></strong> :&ensp;<code>int</code>, optional</dt>
+<dd>The starting line number (0-indexed) for the replacement.
+Defaults to 0.</dd>
+<dt><strong><code>line_end</code></strong> :&ensp;<code>int</code>, optional</dt>
+<dd>The ending line number (0-indexed) for the replacement.
+If -1, it goes to the end of the file. Defaults to -1.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A message indicating the success of the operation.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>TypeError</code></dt>
+<dd>If file_path or old_text is None, or if no lines are left after replacement.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def replace_line_by_line(
+    self, file_path: str, old_text: str, new_text: str, line_start: int = 0, line_end: int = -1
+) -&gt; str:
+    &#34;&#34;&#34;Replaces occurrences of a specified text with new text in a range of lines in a file.
+
+    Opens the file and replaces occurrences of &#39;old_text&#39; with &#39;new_text&#39; within the specified
+    line range. If &#39;line_end&#39; is -1, it defaults to the end of the file. Returns a message
+    indicating whether changes were successfully applied or not.
+
+    Args:
+        file_path (str): The path to the file.
+        old_text (str): The text to be replaced.
+        new_text (str): The new text to replace the old text.
+        line_start (int, optional): The starting line number (0-indexed) for the replacement.
+                                    Defaults to 0.
+        line_end (int, optional): The ending line number (0-indexed) for the replacement.
+                                  If -1, it goes to the end of the file. Defaults to -1.
+
+    Returns:
+        str: A message indicating the success of the operation.
+
+    Raises:
+        TypeError: If file_path or old_text is None, or if no lines are left after replacement.
+    &#34;&#34;&#34;
+    if not file_path:
+        raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+    if not old_text:
+        raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
+    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        input_text = file.read()
+    lines = []
+    input_lines = input_text.splitlines()
+    if line_end == -1:
+        line_end = len(input_lines)
+    for line_no, line in enumerate(input_lines):
+        if line_start &lt;= line_no &lt; line_end and old_text in line:
+            line = line.replace(old_text, new_text)
+        lines.append(line)
+    if not lines:
+        raise TypeError(&#34;Nothing left after replace, something went wrong, cancelling.&#34;)
+    final = &#34;\n&#34;.join(lines)
+    return self.save_if_changed(file_path, final, input_text)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.replace_tool.ReplaceTool.replace_with_regex"><code class="name flex">
+<span>def <span class="ident">replace_with_regex</span></span>(<span>self, file_path: str, regex_match_expression: str, replacement: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Replaces text in a file based on a regular expression match.</p>
+<p>Opens the file and replaces text that matches the regular expression 'regex_match_expression'
+with the 'replacement' text. Returns a message indicating whether changes were successfully
+applied or not.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the file.</dd>
+<dt><strong><code>regex_match_expression</code></strong> :&ensp;<code>str</code></dt>
+<dd>The regular expression pattern to match.</dd>
+<dt><strong><code>replacement</code></strong> :&ensp;<code>str</code></dt>
+<dd>The text to replace the matched pattern.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A message indicating the success of the operation.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>TypeError</code></dt>
+<dd>If file_path or regex_match_expression is None.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def replace_with_regex(self, file_path: str, regex_match_expression: str, replacement: str) -&gt; str:
+    &#34;&#34;&#34;Replaces text in a file based on a regular expression match.
+
+    Opens the file and replaces text that matches the regular expression &#39;regex_match_expression&#39;
+    with the &#39;replacement&#39; text. Returns a message indicating whether changes were successfully
+    applied or not.
+
+    Args:
+        file_path (str): The path to the file.
+        regex_match_expression (str): The regular expression pattern to match.
+        replacement (str): The text to replace the matched pattern.
+
+    Returns:
+        str: A message indicating the success of the operation.
+
+    Raises:
+        TypeError: If file_path or regex_match_expression is None.
+    &#34;&#34;&#34;
+    if not file_path:
+        raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
+    if not regex_match_expression:
+        raise TypeError(&#34;No regex_match_expression, please context so I can find the text to replace.&#34;)
+    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        input_text = file.read()
+    final = re.sub(regex_match_expression, replacement, input_text)
+    return self.save_if_changed(file_path, final, input_text)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.replace_tool.ReplaceTool.save_if_changed"><code class="name flex">
+<span>def <span class="ident">save_if_changed</span></span>(<span>self, file_path: str, final: str, input_text: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Saves the modified text to the file if changes have been made.</p>
+<p>Compares the original text with the modified text and writes the modified text
+to the file if there are changes. Returns a message indicating whether any changes
+were made.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
+<dd>The path to the file.</dd>
+<dt><strong><code>final</code></strong> :&ensp;<code>str</code></dt>
+<dd>The modified text.</dd>
+<dt><strong><code>input_text</code></strong> :&ensp;<code>str</code></dt>
+<dd>The original text.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>A message indicating whether changes were made or not.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>TypeError</code></dt>
+<dd>If file_path is None.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
+    &#34;&#34;&#34;Saves the modified text to the file if changes have been made.
+
+    Compares the original text with the modified text and writes the modified text
+    to the file if there are changes. Returns a message indicating whether any changes
+    were made.
+
+    Args:
+        file_path (str): The path to the file.
+        final (str): The modified text.
+        input_text (str): The original text.
+
+    Returns:
+        str: A message indicating whether changes were made or not.
+
+    Raises:
+        TypeError: If file_path is None.
+    &#34;&#34;&#34;
+    if not final:
+        raise TypeError(&#34;Something went wrong in replace and all text disappeared. Cancelling.&#34;)
+
+    if is_python_file(file_path):
+        is_valid, error = is_valid_python_source(final)
+        if not is_valid and error:
+            return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
+        if not is_valid:
+            return f&#34;Invalid Python source code. No changes made. {error}.&#34;
+
+    if input_text != final:
+        with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
+            output_file.write(final)
+        if self.auto_cat:
+            feedback = &#34;Changes applied without exception, please verify by other means.\n&#34;
+            contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
+            return f&#34;Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}&#34;
+        return &#34;Changes applied without exception, please verify by other means.&#34;
+    return (
+        &#34;No changes made, this means the old file contents are the same as the new. This has nothing &#34;
+        &#34;to do with file permissions. Try again with a different match pattern.&#34;
+    )</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ai_shell" href="index.html">ai_shell</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="ai_shell.replace_tool.ReplaceTool" href="#ai_shell.replace_tool.ReplaceTool">ReplaceTool</a></code></h4>
+<ul class="">
+<li><code><a title="ai_shell.replace_tool.ReplaceTool.replace_all" href="#ai_shell.replace_tool.ReplaceTool.replace_all">replace_all</a></code></li>
+<li><code><a title="ai_shell.replace_tool.ReplaceTool.replace_line_by_line" href="#ai_shell.replace_tool.ReplaceTool.replace_line_by_line">replace_line_by_line</a></code></li>
+<li><code><a title="ai_shell.replace_tool.ReplaceTool.replace_with_regex" href="#ai_shell.replace_tool.ReplaceTool.replace_with_regex">replace_with_regex</a></code></li>
+<li><code><a title="ai_shell.replace_tool.ReplaceTool.save_if_changed" href="#ai_shell.replace_tool.ReplaceTool.save_if_changed">save_if_changed</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,3935 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>ai_shell.openai_toolkit API documentation</title>
+<meta name="description" content="Generate code, do not edit." />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>ai_shell.openai_toolkit</code></h1>
+</header>
+<section id="section-intro">
+<p>Generate code, do not edit.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Generate code, do not edit.
+&#34;&#34;&#34;
+from collections.abc import Callable
+from typing import Any, Optional, cast
+
+from ai_shell.answer_tool import AnswerCollectorTool
+from ai_shell.cat_tool import CatTool
+from ai_shell.cut_tool import CutTool
+from ai_shell.ed_tool import EdTool
+from ai_shell.edlin_tool import EdlinTool
+from ai_shell.find_tool import FindTool
+from ai_shell.git_tool import GitTool
+from ai_shell.grep_tool import GrepTool
+from ai_shell.head_tail_tool import HeadTailTool
+from ai_shell.insert_tool import InsertTool
+from ai_shell.ls_tool import LsTool
+from ai_shell.openai_support import ToolKitBase
+from ai_shell.patch_tool import PatchTool
+from ai_shell.pycat_tool import PyCatTool
+from ai_shell.pytest_tool import PytestTool
+from ai_shell.replace_tool import ReplaceTool
+from ai_shell.rewrite_tool import RewriteTool
+from ai_shell.sed_tool import SedTool
+from ai_shell.todo_tool import TodoTool
+from ai_shell.token_tool import TokenCounterTool
+from ai_shell.utils.config_manager import Config
+
+# pylint: disable=unused-argument
+
+
+class ToolKit(ToolKitBase):
+    &#34;&#34;&#34;AI Shell Toolkit&#34;&#34;&#34;
+
+    def __init__(
+        self, root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config: Config
+    ) -&gt; None:
+        super().__init__(root_folder, token_model, global_max_lines, permitted_tools, config)
+        self.lookup: dict[str, Callable[[dict[str, Any]], Any]] = {
+            &#34;report_bool&#34;: self.report_bool,
+            &#34;report_dict&#34;: self.report_dict,
+            &#34;report_float&#34;: self.report_float,
+            &#34;report_int&#34;: self.report_int,
+            &#34;report_json&#34;: self.report_json,
+            &#34;report_list&#34;: self.report_list,
+            &#34;report_set&#34;: self.report_set,
+            &#34;report_text&#34;: self.report_text,
+            &#34;report_toml&#34;: self.report_toml,
+            &#34;report_tuple&#34;: self.report_tuple,
+            &#34;report_xml&#34;: self.report_xml,
+            &#34;cat&#34;: self.cat,
+            &#34;cat_markdown&#34;: self.cat_markdown,
+            &#34;cut_characters&#34;: self.cut_characters,
+            &#34;cut_fields&#34;: self.cut_fields,
+            &#34;cut_fields_by_name&#34;: self.cut_fields_by_name,
+            &#34;ed&#34;: self.ed,
+            &#34;edlin&#34;: self.edlin,
+            &#34;find_files&#34;: self.find_files,
+            &#34;find_files_markdown&#34;: self.find_files_markdown,
+            &#34;get_current_branch&#34;: self.get_current_branch,
+            &#34;get_recent_commits&#34;: self.get_recent_commits,
+            &#34;git_diff&#34;: self.git_diff,
+            &#34;git_diff_commit&#34;: self.git_diff_commit,
+            &#34;git_log_file&#34;: self.git_log_file,
+            &#34;git_log_search&#34;: self.git_log_search,
+            &#34;git_show&#34;: self.git_show,
+            &#34;git_status&#34;: self.git_status,
+            &#34;is_ignored_by_gitignore&#34;: self.is_ignored_by_gitignore,
+            &#34;grep&#34;: self.grep,
+            &#34;grep_markdown&#34;: self.grep_markdown,
+            &#34;head&#34;: self.head,
+            &#34;head_markdown&#34;: self.head_markdown,
+            &#34;head_tail&#34;: self.head_tail,
+            &#34;tail&#34;: self.tail,
+            &#34;tail_markdown&#34;: self.tail_markdown,
+            &#34;insert_text_after_context&#34;: self.insert_text_after_context,
+            &#34;insert_text_after_multiline_context&#34;: self.insert_text_after_multiline_context,
+            &#34;insert_text_at_start_or_end&#34;: self.insert_text_at_start_or_end,
+            &#34;ls&#34;: self.ls,
+            &#34;ls_markdown&#34;: self.ls_markdown,
+            &#34;apply_git_patch&#34;: self.apply_git_patch,
+            &#34;format_code_as_markdown&#34;: self.format_code_as_markdown,
+            &#34;pytest&#34;: self.pytest,
+            &#34;replace_all&#34;: self.replace_all,
+            &#34;replace_line_by_line&#34;: self.replace_line_by_line,
+            &#34;replace_with_regex&#34;: self.replace_with_regex,
+            &#34;save_if_changed&#34;: self.save_if_changed,
+            &#34;revert_to_latest_backup&#34;: self.revert_to_latest_backup,
+            &#34;rewrite_file&#34;: self.rewrite_file,
+            &#34;write_new_file&#34;: self.write_new_file,
+            &#34;sed&#34;: self.sed,
+            &#34;add_todo&#34;: self.add_todo,
+            &#34;query_todos_by_assignee&#34;: self.query_todos_by_assignee,
+            &#34;query_todos_by_regex&#34;: self.query_todos_by_regex,
+            &#34;remove_todo&#34;: self.remove_todo,
+            &#34;count_tokens&#34;: self.count_tokens,
+        }
+        # Stateful tool support
+        self.tool_answer_collector = None
+
+    def report_bool(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            bool,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_bool(answer=answer, comment=comment)
+
+    def report_dict(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            Any,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_dict(answer=answer, comment=comment)
+
+    def report_float(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            float,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_float(answer=answer, comment=comment)
+
+    def report_int(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            int,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_int(answer=answer, comment=comment)
+
+    def report_json(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            str,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_json(answer=answer, comment=comment)
+
+    def report_list(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            str,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_list(answer=answer, comment=comment)
+
+    def report_set(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            list[Any],
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_set(answer=answer, comment=comment)
+
+    def report_text(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            str,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_text(answer=answer, comment=comment)
+
+    def report_toml(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            str,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_toml(answer=answer, comment=comment)
+
+    def report_tuple(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            list[Any],
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_tuple(answer=answer, comment=comment)
+
+    def report_xml(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            str,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_xml(answer=answer, comment=comment)
+
+    def cat(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = CatTool(self.root_folder, self.config)
+
+        file_paths = cast(
+            str,
+            arguments.get(
+                &#34;file_paths&#34;,
+            ),
+        )
+        number_lines = cast(bool, arguments.get(&#34;number_lines&#34;, True))
+        squeeze_blank = cast(bool, arguments.get(&#34;squeeze_blank&#34;, False))
+        return tool.cat(file_paths=file_paths, number_lines=number_lines, squeeze_blank=squeeze_blank)
+
+    def cat_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = CatTool(self.root_folder, self.config)
+
+        file_paths = cast(
+            str,
+            arguments.get(
+                &#34;file_paths&#34;,
+            ),
+        )
+        number_lines = cast(bool, arguments.get(&#34;number_lines&#34;, True))
+        squeeze_blank = cast(bool, arguments.get(&#34;squeeze_blank&#34;, False))
+        return tool.cat_markdown(file_paths=file_paths, number_lines=number_lines, squeeze_blank=squeeze_blank)
+
+    def cut_characters(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = CutTool(self.root_folder, self.config)
+
+        character_ranges = cast(
+            str,
+            arguments.get(
+                &#34;character_ranges&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        return tool.cut_characters(character_ranges=character_ranges, file_path=file_path)
+
+    def cut_fields(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = CutTool(self.root_folder, self.config)
+
+        delimiter = cast(str, arguments.get(&#34;delimiter&#34;, &#34;,&#34;))
+        field_ranges = cast(
+            str,
+            arguments.get(
+                &#34;field_ranges&#34;,
+            ),
+        )
+        filename = cast(
+            str,
+            arguments.get(
+                &#34;filename&#34;,
+            ),
+        )
+        return tool.cut_fields(delimiter=delimiter, field_ranges=field_ranges, filename=filename)
+
+    def cut_fields_by_name(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = CutTool(self.root_folder, self.config)
+
+        delimiter = cast(str, arguments.get(&#34;delimiter&#34;, &#34;,&#34;))
+        field_names = cast(
+            str,
+            arguments.get(
+                &#34;field_names&#34;,
+            ),
+        )
+        filename = cast(
+            str,
+            arguments.get(
+                &#34;filename&#34;,
+            ),
+        )
+        return tool.cut_fields_by_name(delimiter=delimiter, field_names=field_names, filename=filename)
+
+    def ed(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = EdTool(self.root_folder, self.config)
+
+        file_name = cast(
+            str,
+            arguments.get(
+                &#34;file_name&#34;,
+            ),
+        )
+        script = cast(
+            str,
+            arguments.get(
+                &#34;script&#34;,
+            ),
+        )
+        return tool.ed(file_name=file_name, script=script)
+
+    def edlin(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = EdlinTool(self.root_folder, self.config)
+
+        file_name = cast(
+            str,
+            arguments.get(
+                &#34;file_name&#34;,
+            ),
+        )
+        script = cast(
+            str,
+            arguments.get(
+                &#34;script&#34;,
+            ),
+        )
+        return tool.edlin(file_name=file_name, script=script)
+
+    def find_files(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = FindTool(self.root_folder, self.config)
+
+        file_type = cast(
+            Optional[str],
+            arguments.get(
+                &#34;file_type&#34;,
+            ),
+        )
+        name = cast(
+            Optional[str],
+            arguments.get(
+                &#34;name&#34;,
+            ),
+        )
+        regex = cast(
+            Optional[str],
+            arguments.get(
+                &#34;regex&#34;,
+            ),
+        )
+        size = cast(
+            Optional[str],
+            arguments.get(
+                &#34;size&#34;,
+            ),
+        )
+        return tool.find_files(file_type=file_type, name=name, regex=regex, size=size)
+
+    def find_files_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = FindTool(self.root_folder, self.config)
+
+        file_type = cast(
+            Optional[str],
+            arguments.get(
+                &#34;file_type&#34;,
+            ),
+        )
+        name = cast(
+            Optional[str],
+            arguments.get(
+                &#34;name&#34;,
+            ),
+        )
+        regex = cast(
+            Optional[str],
+            arguments.get(
+                &#34;regex&#34;,
+            ),
+        )
+        size = cast(
+            Optional[str],
+            arguments.get(
+                &#34;size&#34;,
+            ),
+        )
+        return tool.find_files_markdown(file_type=file_type, name=name, regex=regex, size=size)
+
+    def get_current_branch(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        return tool.get_current_branch()
+
+    def get_recent_commits(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        n = cast(int, arguments.get(&#34;n&#34;, 10))
+        short_hash = cast(bool, arguments.get(&#34;short_hash&#34;, False))
+        return tool.get_recent_commits(n=n, short_hash=short_hash)
+
+    def git_diff(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        return tool.git_diff()
+
+    def git_diff_commit(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        commit1 = cast(
+            str,
+            arguments.get(
+                &#34;commit1&#34;,
+            ),
+        )
+        commit2 = cast(
+            str,
+            arguments.get(
+                &#34;commit2&#34;,
+            ),
+        )
+        return tool.git_diff_commit(commit1=commit1, commit2=commit2)
+
+    def git_log_file(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        filename = cast(
+            str,
+            arguments.get(
+                &#34;filename&#34;,
+            ),
+        )
+        return tool.git_log_file(filename=filename)
+
+    def git_log_search(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        search_string = cast(
+            str,
+            arguments.get(
+                &#34;search_string&#34;,
+            ),
+        )
+        return tool.git_log_search(search_string=search_string)
+
+    def git_show(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        return tool.git_show()
+
+    def git_status(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        return tool.git_status()
+
+    def is_ignored_by_gitignore(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        gitignore_path = cast(str, arguments.get(&#34;gitignore_path&#34;, &#34;.gitignore&#34;))
+        return tool.is_ignored_by_gitignore(file_path=file_path, gitignore_path=gitignore_path)
+
+    def grep(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GrepTool(self.root_folder, self.config)
+
+        glob_pattern = cast(
+            str,
+            arguments.get(
+                &#34;glob_pattern&#34;,
+            ),
+        )
+        maximum_matches_per_file = cast(int, arguments.get(&#34;maximum_matches_per_file&#34;, -1))
+        maximum_matches_total = cast(int, arguments.get(&#34;maximum_matches_total&#34;, -1))
+        regex = cast(
+            str,
+            arguments.get(
+                &#34;regex&#34;,
+            ),
+        )
+        skip_first_matches = cast(int, arguments.get(&#34;skip_first_matches&#34;, -1))
+        return tool.grep(
+            glob_pattern=glob_pattern,
+            maximum_matches_per_file=maximum_matches_per_file,
+            maximum_matches_total=maximum_matches_total,
+            regex=regex,
+            skip_first_matches=skip_first_matches,
+        )
+
+    def grep_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GrepTool(self.root_folder, self.config)
+
+        glob_pattern = cast(
+            str,
+            arguments.get(
+                &#34;glob_pattern&#34;,
+            ),
+        )
+        maximum_matches = cast(int, arguments.get(&#34;maximum_matches&#34;, -1))
+        regex = cast(
+            str,
+            arguments.get(
+                &#34;regex&#34;,
+            ),
+        )
+        skip_first_matches = cast(int, arguments.get(&#34;skip_first_matches&#34;, -1))
+        return tool.grep_markdown(
+            glob_pattern=glob_pattern,
+            maximum_matches=maximum_matches,
+            regex=regex,
+            skip_first_matches=skip_first_matches,
+        )
+
+    def head(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = HeadTailTool(self.root_folder, self.config)
+
+        byte_count = cast(
+            Optional[int],
+            arguments.get(
+                &#34;byte_count&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+        return tool.head(byte_count=byte_count, file_path=file_path, lines=lines)
+
+    def head_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = HeadTailTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+        return tool.head_markdown(file_path=file_path, lines=lines)
+
+    def head_tail(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = HeadTailTool(self.root_folder, self.config)
+
+        byte_count = cast(
+            Optional[int],
+            arguments.get(
+                &#34;byte_count&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+        mode = cast(str, arguments.get(&#34;mode&#34;, &#34;head&#34;))
+        return tool.head_tail(byte_count=byte_count, file_path=file_path, lines=lines, mode=mode)
+
+    def tail(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = HeadTailTool(self.root_folder, self.config)
+
+        byte_count = cast(
+            Optional[int],
+            arguments.get(
+                &#34;byte_count&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+        return tool.tail(byte_count=byte_count, file_path=file_path, lines=lines)
+
+    def tail_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = HeadTailTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+        return tool.tail_markdown(file_path=file_path, lines=lines)
+
+    def insert_text_after_context(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = InsertTool(self.root_folder, self.config)
+
+        context = cast(
+            str,
+            arguments.get(
+                &#34;context&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        text_to_insert = cast(
+            str,
+            arguments.get(
+                &#34;text_to_insert&#34;,
+            ),
+        )
+        return tool.insert_text_after_context(context=context, file_path=file_path, text_to_insert=text_to_insert)
+
+    def insert_text_after_multiline_context(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = InsertTool(self.root_folder, self.config)
+
+        context_lines = cast(
+            str,
+            arguments.get(
+                &#34;context_lines&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        text_to_insert = cast(
+            str,
+            arguments.get(
+                &#34;text_to_insert&#34;,
+            ),
+        )
+        return tool.insert_text_after_multiline_context(
+            context_lines=context_lines, file_path=file_path, text_to_insert=text_to_insert
+        )
+
+    def insert_text_at_start_or_end(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = InsertTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        position = cast(str, arguments.get(&#34;position&#34;, &#34;end&#34;))
+        text_to_insert = cast(
+            str,
+            arguments.get(
+                &#34;text_to_insert&#34;,
+            ),
+        )
+        return tool.insert_text_at_start_or_end(file_path=file_path, position=position, text_to_insert=text_to_insert)
+
+    def ls(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = LsTool(self.root_folder, self.config)
+
+        all_files = cast(bool, arguments.get(&#34;all_files&#34;, False))
+        long = cast(bool, arguments.get(&#34;long&#34;, False))
+        path = cast(
+            Optional[str],
+            arguments.get(
+                &#34;path&#34;,
+            ),
+        )
+        return tool.ls(all_files=all_files, long=long, path=path)
+
+    def ls_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = LsTool(self.root_folder, self.config)
+
+        all_files = cast(bool, arguments.get(&#34;all_files&#34;, False))
+        long = cast(bool, arguments.get(&#34;long&#34;, False))
+        path = cast(Optional[str], arguments.get(&#34;path&#34;, &#34;.&#34;))
+        return tool.ls_markdown(all_files=all_files, long=long, path=path)
+
+    def apply_git_patch(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = PatchTool(self.root_folder, self.config)
+
+        patch_content = cast(
+            str,
+            arguments.get(
+                &#34;patch_content&#34;,
+            ),
+        )
+        return tool.apply_git_patch(patch_content=patch_content)
+
+    def format_code_as_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = PyCatTool(self.root_folder, self.config)
+
+        base_path = cast(
+            str,
+            arguments.get(
+                &#34;base_path&#34;,
+            ),
+        )
+        header = cast(
+            str,
+            arguments.get(
+                &#34;header&#34;,
+            ),
+        )
+        no_comments = cast(bool, arguments.get(&#34;no_comments&#34;, False))
+        no_docs = cast(bool, arguments.get(&#34;no_docs&#34;, False))
+        return tool.format_code_as_markdown(
+            base_path=base_path, header=header, no_comments=no_comments, no_docs=no_docs
+        )
+
+    def pytest(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = PytestTool(self.root_folder, self.config)
+
+        return tool.pytest()
+
+    def replace_all(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = ReplaceTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        new_text = cast(
+            str,
+            arguments.get(
+                &#34;new_text&#34;,
+            ),
+        )
+        old_text = cast(
+            str,
+            arguments.get(
+                &#34;old_text&#34;,
+            ),
+        )
+        return tool.replace_all(file_path=file_path, new_text=new_text, old_text=old_text)
+
+    def replace_line_by_line(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = ReplaceTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        line_end = cast(int, arguments.get(&#34;line_end&#34;, -1))
+        line_start = cast(int, arguments.get(&#34;line_start&#34;, 0))
+        new_text = cast(
+            str,
+            arguments.get(
+                &#34;new_text&#34;,
+            ),
+        )
+        old_text = cast(
+            str,
+            arguments.get(
+                &#34;old_text&#34;,
+            ),
+        )
+        return tool.replace_line_by_line(
+            file_path=file_path, line_end=line_end, line_start=line_start, new_text=new_text, old_text=old_text
+        )
+
+    def replace_with_regex(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = ReplaceTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        regex_match_expression = cast(
+            str,
+            arguments.get(
+                &#34;regex_match_expression&#34;,
+            ),
+        )
+        replacement = cast(
+            str,
+            arguments.get(
+                &#34;replacement&#34;,
+            ),
+        )
+        return tool.replace_with_regex(
+            file_path=file_path, regex_match_expression=regex_match_expression, replacement=replacement
+        )
+
+    def save_if_changed(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = ReplaceTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        final = cast(
+            str,
+            arguments.get(
+                &#34;final&#34;,
+            ),
+        )
+        input_text = cast(
+            str,
+            arguments.get(
+                &#34;input_text&#34;,
+            ),
+        )
+        return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)
+
+    def revert_to_latest_backup(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = RewriteTool(self.root_folder, self.config)
+
+        file_name = cast(
+            str,
+            arguments.get(
+                &#34;file_name&#34;,
+            ),
+        )
+        return tool.revert_to_latest_backup(file_name=file_name)
+
+    def rewrite_file(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = RewriteTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        text = cast(
+            str,
+            arguments.get(
+                &#34;text&#34;,
+            ),
+        )
+        return tool.rewrite_file(file_path=file_path, text=text)
+
+    def write_new_file(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = RewriteTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        text = cast(
+            str,
+            arguments.get(
+                &#34;text&#34;,
+            ),
+        )
+        return tool.write_new_file(file_path=file_path, text=text)
+
+    def sed(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = SedTool(self.root_folder, self.config)
+
+        commands = cast(
+            str,
+            arguments.get(
+                &#34;commands&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        return tool.sed(commands=commands, file_path=file_path)
+
+    def add_todo(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        assignee = cast(
+            Optional[str],
+            arguments.get(
+                &#34;assignee&#34;,
+            ),
+        )
+        category = cast(
+            str,
+            arguments.get(
+                &#34;category&#34;,
+            ),
+        )
+        description = cast(
+            str,
+            arguments.get(
+                &#34;description&#34;,
+            ),
+        )
+        source_code_ref = cast(
+            str,
+            arguments.get(
+                &#34;source_code_ref&#34;,
+            ),
+        )
+        title = cast(
+            str,
+            arguments.get(
+                &#34;title&#34;,
+            ),
+        )
+        return tool.add_todo(
+            assignee=assignee, category=category, description=description, source_code_ref=source_code_ref, title=title
+        )
+
+    def query_todos_by_assignee(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        return tool.query_todos_by_assignee()
+
+    def query_todos_by_regex(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        regex_pattern = cast(str, arguments.get(&#34;regex_pattern&#34;, r&#34;[\s\S]+&#34;))
+        return tool.query_todos_by_regex(regex_pattern=regex_pattern)
+
+    def remove_todo(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        title = cast(
+            str,
+            arguments.get(
+                &#34;title&#34;,
+            ),
+        )
+        return tool.remove_todo(title=title)
+
+    def count_tokens(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TokenCounterTool(self.root_folder, self.config)
+
+        text = cast(
+            str,
+            arguments.get(
+                &#34;text&#34;,
+            ),
+        )
+        return tool.count_tokens(text=text)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="ai_shell.openai_toolkit.ToolKit"><code class="flex name class">
+<span>class <span class="ident">ToolKit</span></span>
+<span>(</span><span>root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config: <a title="ai_shell.utils.config_manager.Config" href="utils/config_manager.html#ai_shell.utils.config_manager.Config">Config</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>AI Shell Toolkit</p>
+<p>Initialize the ToolKitBase class.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>root_folder</code></strong> :&ensp;<code>str</code></dt>
+<dd>The root folder path for file operations.</dd>
+<dt><strong><code>token_model</code></strong> :&ensp;<code>str</code></dt>
+<dd>The token model to use for the toolkit</dd>
+<dt><strong><code>global_max_lines</code></strong> :&ensp;<code>int</code></dt>
+<dd>The global max lines to use for the toolkit</dd>
+<dt><strong><code>permitted_tools</code></strong> :&ensp;<code>list[str]</code></dt>
+<dd>The permitted tools for the toolkit</dd>
+<dt><strong><code>config</code></strong> :&ensp;<code>Config</code></dt>
+<dd>The developer input that bot shouldn't set.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ToolKit(ToolKitBase):
+    &#34;&#34;&#34;AI Shell Toolkit&#34;&#34;&#34;
+
+    def __init__(
+        self, root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config: Config
+    ) -&gt; None:
+        super().__init__(root_folder, token_model, global_max_lines, permitted_tools, config)
+        self.lookup: dict[str, Callable[[dict[str, Any]], Any]] = {
+            &#34;report_bool&#34;: self.report_bool,
+            &#34;report_dict&#34;: self.report_dict,
+            &#34;report_float&#34;: self.report_float,
+            &#34;report_int&#34;: self.report_int,
+            &#34;report_json&#34;: self.report_json,
+            &#34;report_list&#34;: self.report_list,
+            &#34;report_set&#34;: self.report_set,
+            &#34;report_text&#34;: self.report_text,
+            &#34;report_toml&#34;: self.report_toml,
+            &#34;report_tuple&#34;: self.report_tuple,
+            &#34;report_xml&#34;: self.report_xml,
+            &#34;cat&#34;: self.cat,
+            &#34;cat_markdown&#34;: self.cat_markdown,
+            &#34;cut_characters&#34;: self.cut_characters,
+            &#34;cut_fields&#34;: self.cut_fields,
+            &#34;cut_fields_by_name&#34;: self.cut_fields_by_name,
+            &#34;ed&#34;: self.ed,
+            &#34;edlin&#34;: self.edlin,
+            &#34;find_files&#34;: self.find_files,
+            &#34;find_files_markdown&#34;: self.find_files_markdown,
+            &#34;get_current_branch&#34;: self.get_current_branch,
+            &#34;get_recent_commits&#34;: self.get_recent_commits,
+            &#34;git_diff&#34;: self.git_diff,
+            &#34;git_diff_commit&#34;: self.git_diff_commit,
+            &#34;git_log_file&#34;: self.git_log_file,
+            &#34;git_log_search&#34;: self.git_log_search,
+            &#34;git_show&#34;: self.git_show,
+            &#34;git_status&#34;: self.git_status,
+            &#34;is_ignored_by_gitignore&#34;: self.is_ignored_by_gitignore,
+            &#34;grep&#34;: self.grep,
+            &#34;grep_markdown&#34;: self.grep_markdown,
+            &#34;head&#34;: self.head,
+            &#34;head_markdown&#34;: self.head_markdown,
+            &#34;head_tail&#34;: self.head_tail,
+            &#34;tail&#34;: self.tail,
+            &#34;tail_markdown&#34;: self.tail_markdown,
+            &#34;insert_text_after_context&#34;: self.insert_text_after_context,
+            &#34;insert_text_after_multiline_context&#34;: self.insert_text_after_multiline_context,
+            &#34;insert_text_at_start_or_end&#34;: self.insert_text_at_start_or_end,
+            &#34;ls&#34;: self.ls,
+            &#34;ls_markdown&#34;: self.ls_markdown,
+            &#34;apply_git_patch&#34;: self.apply_git_patch,
+            &#34;format_code_as_markdown&#34;: self.format_code_as_markdown,
+            &#34;pytest&#34;: self.pytest,
+            &#34;replace_all&#34;: self.replace_all,
+            &#34;replace_line_by_line&#34;: self.replace_line_by_line,
+            &#34;replace_with_regex&#34;: self.replace_with_regex,
+            &#34;save_if_changed&#34;: self.save_if_changed,
+            &#34;revert_to_latest_backup&#34;: self.revert_to_latest_backup,
+            &#34;rewrite_file&#34;: self.rewrite_file,
+            &#34;write_new_file&#34;: self.write_new_file,
+            &#34;sed&#34;: self.sed,
+            &#34;add_todo&#34;: self.add_todo,
+            &#34;query_todos_by_assignee&#34;: self.query_todos_by_assignee,
+            &#34;query_todos_by_regex&#34;: self.query_todos_by_regex,
+            &#34;remove_todo&#34;: self.remove_todo,
+            &#34;count_tokens&#34;: self.count_tokens,
+        }
+        # Stateful tool support
+        self.tool_answer_collector = None
+
+    def report_bool(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            bool,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_bool(answer=answer, comment=comment)
+
+    def report_dict(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            Any,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_dict(answer=answer, comment=comment)
+
+    def report_float(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            float,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_float(answer=answer, comment=comment)
+
+    def report_int(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            int,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_int(answer=answer, comment=comment)
+
+    def report_json(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            str,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_json(answer=answer, comment=comment)
+
+    def report_list(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            str,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_list(answer=answer, comment=comment)
+
+    def report_set(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            list[Any],
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_set(answer=answer, comment=comment)
+
+    def report_text(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            str,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_text(answer=answer, comment=comment)
+
+    def report_toml(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            str,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_toml(answer=answer, comment=comment)
+
+    def report_tuple(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            list[Any],
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_tuple(answer=answer, comment=comment)
+
+    def report_xml(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        if not self.tool_answer_collector:
+            raise TypeError(&#34;tool cannot be None here&#34;)
+
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+        answer = cast(
+            str,
+            arguments.get(
+                &#34;answer&#34;,
+            ),
+        )
+        comment = cast(
+            str,
+            arguments.get(
+                &#34;comment&#34;,
+            ),
+        )
+        return self.tool_answer_collector.report_xml(answer=answer, comment=comment)
+
+    def cat(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = CatTool(self.root_folder, self.config)
+
+        file_paths = cast(
+            str,
+            arguments.get(
+                &#34;file_paths&#34;,
+            ),
+        )
+        number_lines = cast(bool, arguments.get(&#34;number_lines&#34;, True))
+        squeeze_blank = cast(bool, arguments.get(&#34;squeeze_blank&#34;, False))
+        return tool.cat(file_paths=file_paths, number_lines=number_lines, squeeze_blank=squeeze_blank)
+
+    def cat_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = CatTool(self.root_folder, self.config)
+
+        file_paths = cast(
+            str,
+            arguments.get(
+                &#34;file_paths&#34;,
+            ),
+        )
+        number_lines = cast(bool, arguments.get(&#34;number_lines&#34;, True))
+        squeeze_blank = cast(bool, arguments.get(&#34;squeeze_blank&#34;, False))
+        return tool.cat_markdown(file_paths=file_paths, number_lines=number_lines, squeeze_blank=squeeze_blank)
+
+    def cut_characters(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = CutTool(self.root_folder, self.config)
+
+        character_ranges = cast(
+            str,
+            arguments.get(
+                &#34;character_ranges&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        return tool.cut_characters(character_ranges=character_ranges, file_path=file_path)
+
+    def cut_fields(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = CutTool(self.root_folder, self.config)
+
+        delimiter = cast(str, arguments.get(&#34;delimiter&#34;, &#34;,&#34;))
+        field_ranges = cast(
+            str,
+            arguments.get(
+                &#34;field_ranges&#34;,
+            ),
+        )
+        filename = cast(
+            str,
+            arguments.get(
+                &#34;filename&#34;,
+            ),
+        )
+        return tool.cut_fields(delimiter=delimiter, field_ranges=field_ranges, filename=filename)
+
+    def cut_fields_by_name(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = CutTool(self.root_folder, self.config)
+
+        delimiter = cast(str, arguments.get(&#34;delimiter&#34;, &#34;,&#34;))
+        field_names = cast(
+            str,
+            arguments.get(
+                &#34;field_names&#34;,
+            ),
+        )
+        filename = cast(
+            str,
+            arguments.get(
+                &#34;filename&#34;,
+            ),
+        )
+        return tool.cut_fields_by_name(delimiter=delimiter, field_names=field_names, filename=filename)
+
+    def ed(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = EdTool(self.root_folder, self.config)
+
+        file_name = cast(
+            str,
+            arguments.get(
+                &#34;file_name&#34;,
+            ),
+        )
+        script = cast(
+            str,
+            arguments.get(
+                &#34;script&#34;,
+            ),
+        )
+        return tool.ed(file_name=file_name, script=script)
+
+    def edlin(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = EdlinTool(self.root_folder, self.config)
+
+        file_name = cast(
+            str,
+            arguments.get(
+                &#34;file_name&#34;,
+            ),
+        )
+        script = cast(
+            str,
+            arguments.get(
+                &#34;script&#34;,
+            ),
+        )
+        return tool.edlin(file_name=file_name, script=script)
+
+    def find_files(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = FindTool(self.root_folder, self.config)
+
+        file_type = cast(
+            Optional[str],
+            arguments.get(
+                &#34;file_type&#34;,
+            ),
+        )
+        name = cast(
+            Optional[str],
+            arguments.get(
+                &#34;name&#34;,
+            ),
+        )
+        regex = cast(
+            Optional[str],
+            arguments.get(
+                &#34;regex&#34;,
+            ),
+        )
+        size = cast(
+            Optional[str],
+            arguments.get(
+                &#34;size&#34;,
+            ),
+        )
+        return tool.find_files(file_type=file_type, name=name, regex=regex, size=size)
+
+    def find_files_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = FindTool(self.root_folder, self.config)
+
+        file_type = cast(
+            Optional[str],
+            arguments.get(
+                &#34;file_type&#34;,
+            ),
+        )
+        name = cast(
+            Optional[str],
+            arguments.get(
+                &#34;name&#34;,
+            ),
+        )
+        regex = cast(
+            Optional[str],
+            arguments.get(
+                &#34;regex&#34;,
+            ),
+        )
+        size = cast(
+            Optional[str],
+            arguments.get(
+                &#34;size&#34;,
+            ),
+        )
+        return tool.find_files_markdown(file_type=file_type, name=name, regex=regex, size=size)
+
+    def get_current_branch(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        return tool.get_current_branch()
+
+    def get_recent_commits(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        n = cast(int, arguments.get(&#34;n&#34;, 10))
+        short_hash = cast(bool, arguments.get(&#34;short_hash&#34;, False))
+        return tool.get_recent_commits(n=n, short_hash=short_hash)
+
+    def git_diff(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        return tool.git_diff()
+
+    def git_diff_commit(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        commit1 = cast(
+            str,
+            arguments.get(
+                &#34;commit1&#34;,
+            ),
+        )
+        commit2 = cast(
+            str,
+            arguments.get(
+                &#34;commit2&#34;,
+            ),
+        )
+        return tool.git_diff_commit(commit1=commit1, commit2=commit2)
+
+    def git_log_file(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        filename = cast(
+            str,
+            arguments.get(
+                &#34;filename&#34;,
+            ),
+        )
+        return tool.git_log_file(filename=filename)
+
+    def git_log_search(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        search_string = cast(
+            str,
+            arguments.get(
+                &#34;search_string&#34;,
+            ),
+        )
+        return tool.git_log_search(search_string=search_string)
+
+    def git_show(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        return tool.git_show()
+
+    def git_status(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        return tool.git_status()
+
+    def is_ignored_by_gitignore(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GitTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        gitignore_path = cast(str, arguments.get(&#34;gitignore_path&#34;, &#34;.gitignore&#34;))
+        return tool.is_ignored_by_gitignore(file_path=file_path, gitignore_path=gitignore_path)
+
+    def grep(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GrepTool(self.root_folder, self.config)
+
+        glob_pattern = cast(
+            str,
+            arguments.get(
+                &#34;glob_pattern&#34;,
+            ),
+        )
+        maximum_matches_per_file = cast(int, arguments.get(&#34;maximum_matches_per_file&#34;, -1))
+        maximum_matches_total = cast(int, arguments.get(&#34;maximum_matches_total&#34;, -1))
+        regex = cast(
+            str,
+            arguments.get(
+                &#34;regex&#34;,
+            ),
+        )
+        skip_first_matches = cast(int, arguments.get(&#34;skip_first_matches&#34;, -1))
+        return tool.grep(
+            glob_pattern=glob_pattern,
+            maximum_matches_per_file=maximum_matches_per_file,
+            maximum_matches_total=maximum_matches_total,
+            regex=regex,
+            skip_first_matches=skip_first_matches,
+        )
+
+    def grep_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = GrepTool(self.root_folder, self.config)
+
+        glob_pattern = cast(
+            str,
+            arguments.get(
+                &#34;glob_pattern&#34;,
+            ),
+        )
+        maximum_matches = cast(int, arguments.get(&#34;maximum_matches&#34;, -1))
+        regex = cast(
+            str,
+            arguments.get(
+                &#34;regex&#34;,
+            ),
+        )
+        skip_first_matches = cast(int, arguments.get(&#34;skip_first_matches&#34;, -1))
+        return tool.grep_markdown(
+            glob_pattern=glob_pattern,
+            maximum_matches=maximum_matches,
+            regex=regex,
+            skip_first_matches=skip_first_matches,
+        )
+
+    def head(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = HeadTailTool(self.root_folder, self.config)
+
+        byte_count = cast(
+            Optional[int],
+            arguments.get(
+                &#34;byte_count&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+        return tool.head(byte_count=byte_count, file_path=file_path, lines=lines)
+
+    def head_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = HeadTailTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+        return tool.head_markdown(file_path=file_path, lines=lines)
+
+    def head_tail(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = HeadTailTool(self.root_folder, self.config)
+
+        byte_count = cast(
+            Optional[int],
+            arguments.get(
+                &#34;byte_count&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+        mode = cast(str, arguments.get(&#34;mode&#34;, &#34;head&#34;))
+        return tool.head_tail(byte_count=byte_count, file_path=file_path, lines=lines, mode=mode)
+
+    def tail(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = HeadTailTool(self.root_folder, self.config)
+
+        byte_count = cast(
+            Optional[int],
+            arguments.get(
+                &#34;byte_count&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+        return tool.tail(byte_count=byte_count, file_path=file_path, lines=lines)
+
+    def tail_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = HeadTailTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+        return tool.tail_markdown(file_path=file_path, lines=lines)
+
+    def insert_text_after_context(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = InsertTool(self.root_folder, self.config)
+
+        context = cast(
+            str,
+            arguments.get(
+                &#34;context&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        text_to_insert = cast(
+            str,
+            arguments.get(
+                &#34;text_to_insert&#34;,
+            ),
+        )
+        return tool.insert_text_after_context(context=context, file_path=file_path, text_to_insert=text_to_insert)
+
+    def insert_text_after_multiline_context(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = InsertTool(self.root_folder, self.config)
+
+        context_lines = cast(
+            str,
+            arguments.get(
+                &#34;context_lines&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        text_to_insert = cast(
+            str,
+            arguments.get(
+                &#34;text_to_insert&#34;,
+            ),
+        )
+        return tool.insert_text_after_multiline_context(
+            context_lines=context_lines, file_path=file_path, text_to_insert=text_to_insert
+        )
+
+    def insert_text_at_start_or_end(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = InsertTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        position = cast(str, arguments.get(&#34;position&#34;, &#34;end&#34;))
+        text_to_insert = cast(
+            str,
+            arguments.get(
+                &#34;text_to_insert&#34;,
+            ),
+        )
+        return tool.insert_text_at_start_or_end(file_path=file_path, position=position, text_to_insert=text_to_insert)
+
+    def ls(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = LsTool(self.root_folder, self.config)
+
+        all_files = cast(bool, arguments.get(&#34;all_files&#34;, False))
+        long = cast(bool, arguments.get(&#34;long&#34;, False))
+        path = cast(
+            Optional[str],
+            arguments.get(
+                &#34;path&#34;,
+            ),
+        )
+        return tool.ls(all_files=all_files, long=long, path=path)
+
+    def ls_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = LsTool(self.root_folder, self.config)
+
+        all_files = cast(bool, arguments.get(&#34;all_files&#34;, False))
+        long = cast(bool, arguments.get(&#34;long&#34;, False))
+        path = cast(Optional[str], arguments.get(&#34;path&#34;, &#34;.&#34;))
+        return tool.ls_markdown(all_files=all_files, long=long, path=path)
+
+    def apply_git_patch(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = PatchTool(self.root_folder, self.config)
+
+        patch_content = cast(
+            str,
+            arguments.get(
+                &#34;patch_content&#34;,
+            ),
+        )
+        return tool.apply_git_patch(patch_content=patch_content)
+
+    def format_code_as_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = PyCatTool(self.root_folder, self.config)
+
+        base_path = cast(
+            str,
+            arguments.get(
+                &#34;base_path&#34;,
+            ),
+        )
+        header = cast(
+            str,
+            arguments.get(
+                &#34;header&#34;,
+            ),
+        )
+        no_comments = cast(bool, arguments.get(&#34;no_comments&#34;, False))
+        no_docs = cast(bool, arguments.get(&#34;no_docs&#34;, False))
+        return tool.format_code_as_markdown(
+            base_path=base_path, header=header, no_comments=no_comments, no_docs=no_docs
+        )
+
+    def pytest(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = PytestTool(self.root_folder, self.config)
+
+        return tool.pytest()
+
+    def replace_all(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = ReplaceTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        new_text = cast(
+            str,
+            arguments.get(
+                &#34;new_text&#34;,
+            ),
+        )
+        old_text = cast(
+            str,
+            arguments.get(
+                &#34;old_text&#34;,
+            ),
+        )
+        return tool.replace_all(file_path=file_path, new_text=new_text, old_text=old_text)
+
+    def replace_line_by_line(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = ReplaceTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        line_end = cast(int, arguments.get(&#34;line_end&#34;, -1))
+        line_start = cast(int, arguments.get(&#34;line_start&#34;, 0))
+        new_text = cast(
+            str,
+            arguments.get(
+                &#34;new_text&#34;,
+            ),
+        )
+        old_text = cast(
+            str,
+            arguments.get(
+                &#34;old_text&#34;,
+            ),
+        )
+        return tool.replace_line_by_line(
+            file_path=file_path, line_end=line_end, line_start=line_start, new_text=new_text, old_text=old_text
+        )
+
+    def replace_with_regex(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = ReplaceTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        regex_match_expression = cast(
+            str,
+            arguments.get(
+                &#34;regex_match_expression&#34;,
+            ),
+        )
+        replacement = cast(
+            str,
+            arguments.get(
+                &#34;replacement&#34;,
+            ),
+        )
+        return tool.replace_with_regex(
+            file_path=file_path, regex_match_expression=regex_match_expression, replacement=replacement
+        )
+
+    def save_if_changed(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = ReplaceTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        final = cast(
+            str,
+            arguments.get(
+                &#34;final&#34;,
+            ),
+        )
+        input_text = cast(
+            str,
+            arguments.get(
+                &#34;input_text&#34;,
+            ),
+        )
+        return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)
+
+    def revert_to_latest_backup(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = RewriteTool(self.root_folder, self.config)
+
+        file_name = cast(
+            str,
+            arguments.get(
+                &#34;file_name&#34;,
+            ),
+        )
+        return tool.revert_to_latest_backup(file_name=file_name)
+
+    def rewrite_file(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = RewriteTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        text = cast(
+            str,
+            arguments.get(
+                &#34;text&#34;,
+            ),
+        )
+        return tool.rewrite_file(file_path=file_path, text=text)
+
+    def write_new_file(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = RewriteTool(self.root_folder, self.config)
+
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        text = cast(
+            str,
+            arguments.get(
+                &#34;text&#34;,
+            ),
+        )
+        return tool.write_new_file(file_path=file_path, text=text)
+
+    def sed(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = SedTool(self.root_folder, self.config)
+
+        commands = cast(
+            str,
+            arguments.get(
+                &#34;commands&#34;,
+            ),
+        )
+        file_path = cast(
+            str,
+            arguments.get(
+                &#34;file_path&#34;,
+            ),
+        )
+        return tool.sed(commands=commands, file_path=file_path)
+
+    def add_todo(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        assignee = cast(
+            Optional[str],
+            arguments.get(
+                &#34;assignee&#34;,
+            ),
+        )
+        category = cast(
+            str,
+            arguments.get(
+                &#34;category&#34;,
+            ),
+        )
+        description = cast(
+            str,
+            arguments.get(
+                &#34;description&#34;,
+            ),
+        )
+        source_code_ref = cast(
+            str,
+            arguments.get(
+                &#34;source_code_ref&#34;,
+            ),
+        )
+        title = cast(
+            str,
+            arguments.get(
+                &#34;title&#34;,
+            ),
+        )
+        return tool.add_todo(
+            assignee=assignee, category=category, description=description, source_code_ref=source_code_ref, title=title
+        )
+
+    def query_todos_by_assignee(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        return tool.query_todos_by_assignee()
+
+    def query_todos_by_regex(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        regex_pattern = cast(str, arguments.get(&#34;regex_pattern&#34;, r&#34;[\s\S]+&#34;))
+        return tool.query_todos_by_regex(regex_pattern=regex_pattern)
+
+    def remove_todo(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        title = cast(
+            str,
+            arguments.get(
+                &#34;title&#34;,
+            ),
+        )
+        return tool.remove_todo(title=title)
+
+    def count_tokens(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TokenCounterTool(self.root_folder, self.config)
+
+        text = cast(
+            str,
+            arguments.get(
+                &#34;text&#34;,
+            ),
+        )
+        return tool.count_tokens(text=text)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="ai_shell.openai_support.ToolKitBase" href="openai_support.html#ai_shell.openai_support.ToolKitBase">ToolKitBase</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="ai_shell.openai_toolkit.ToolKit.add_todo"><code class="name flex">
+<span>def <span class="ident">add_todo</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_todo(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = TodoTool(self.root_folder, self.config)
+
+    assignee = cast(
+        Optional[str],
+        arguments.get(
+            &#34;assignee&#34;,
+        ),
+    )
+    category = cast(
+        str,
+        arguments.get(
+            &#34;category&#34;,
+        ),
+    )
+    description = cast(
+        str,
+        arguments.get(
+            &#34;description&#34;,
+        ),
+    )
+    source_code_ref = cast(
+        str,
+        arguments.get(
+            &#34;source_code_ref&#34;,
+        ),
+    )
+    title = cast(
+        str,
+        arguments.get(
+            &#34;title&#34;,
+        ),
+    )
+    return tool.add_todo(
+        assignee=assignee, category=category, description=description, source_code_ref=source_code_ref, title=title
+    )</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.apply_git_patch"><code class="name flex">
+<span>def <span class="ident">apply_git_patch</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_git_patch(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = PatchTool(self.root_folder, self.config)
+
+    patch_content = cast(
+        str,
+        arguments.get(
+            &#34;patch_content&#34;,
+        ),
+    )
+    return tool.apply_git_patch(patch_content=patch_content)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.cat"><code class="name flex">
+<span>def <span class="ident">cat</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cat(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = CatTool(self.root_folder, self.config)
+
+    file_paths = cast(
+        str,
+        arguments.get(
+            &#34;file_paths&#34;,
+        ),
+    )
+    number_lines = cast(bool, arguments.get(&#34;number_lines&#34;, True))
+    squeeze_blank = cast(bool, arguments.get(&#34;squeeze_blank&#34;, False))
+    return tool.cat(file_paths=file_paths, number_lines=number_lines, squeeze_blank=squeeze_blank)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.cat_markdown"><code class="name flex">
+<span>def <span class="ident">cat_markdown</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cat_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = CatTool(self.root_folder, self.config)
+
+    file_paths = cast(
+        str,
+        arguments.get(
+            &#34;file_paths&#34;,
+        ),
+    )
+    number_lines = cast(bool, arguments.get(&#34;number_lines&#34;, True))
+    squeeze_blank = cast(bool, arguments.get(&#34;squeeze_blank&#34;, False))
+    return tool.cat_markdown(file_paths=file_paths, number_lines=number_lines, squeeze_blank=squeeze_blank)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.count_tokens"><code class="name flex">
+<span>def <span class="ident">count_tokens</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def count_tokens(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = TokenCounterTool(self.root_folder, self.config)
+
+    text = cast(
+        str,
+        arguments.get(
+            &#34;text&#34;,
+        ),
+    )
+    return tool.count_tokens(text=text)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.cut_characters"><code class="name flex">
+<span>def <span class="ident">cut_characters</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cut_characters(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = CutTool(self.root_folder, self.config)
+
+    character_ranges = cast(
+        str,
+        arguments.get(
+            &#34;character_ranges&#34;,
+        ),
+    )
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    return tool.cut_characters(character_ranges=character_ranges, file_path=file_path)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.cut_fields"><code class="name flex">
+<span>def <span class="ident">cut_fields</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cut_fields(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = CutTool(self.root_folder, self.config)
+
+    delimiter = cast(str, arguments.get(&#34;delimiter&#34;, &#34;,&#34;))
+    field_ranges = cast(
+        str,
+        arguments.get(
+            &#34;field_ranges&#34;,
+        ),
+    )
+    filename = cast(
+        str,
+        arguments.get(
+            &#34;filename&#34;,
+        ),
+    )
+    return tool.cut_fields(delimiter=delimiter, field_ranges=field_ranges, filename=filename)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.cut_fields_by_name"><code class="name flex">
+<span>def <span class="ident">cut_fields_by_name</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def cut_fields_by_name(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = CutTool(self.root_folder, self.config)
+
+    delimiter = cast(str, arguments.get(&#34;delimiter&#34;, &#34;,&#34;))
+    field_names = cast(
+        str,
+        arguments.get(
+            &#34;field_names&#34;,
+        ),
+    )
+    filename = cast(
+        str,
+        arguments.get(
+            &#34;filename&#34;,
+        ),
+    )
+    return tool.cut_fields_by_name(delimiter=delimiter, field_names=field_names, filename=filename)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.ed"><code class="name flex">
+<span>def <span class="ident">ed</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ed(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = EdTool(self.root_folder, self.config)
+
+    file_name = cast(
+        str,
+        arguments.get(
+            &#34;file_name&#34;,
+        ),
+    )
+    script = cast(
+        str,
+        arguments.get(
+            &#34;script&#34;,
+        ),
+    )
+    return tool.ed(file_name=file_name, script=script)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.edlin"><code class="name flex">
+<span>def <span class="ident">edlin</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def edlin(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = EdlinTool(self.root_folder, self.config)
+
+    file_name = cast(
+        str,
+        arguments.get(
+            &#34;file_name&#34;,
+        ),
+    )
+    script = cast(
+        str,
+        arguments.get(
+            &#34;script&#34;,
+        ),
+    )
+    return tool.edlin(file_name=file_name, script=script)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.find_files"><code class="name flex">
+<span>def <span class="ident">find_files</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_files(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = FindTool(self.root_folder, self.config)
+
+    file_type = cast(
+        Optional[str],
+        arguments.get(
+            &#34;file_type&#34;,
+        ),
+    )
+    name = cast(
+        Optional[str],
+        arguments.get(
+            &#34;name&#34;,
+        ),
+    )
+    regex = cast(
+        Optional[str],
+        arguments.get(
+            &#34;regex&#34;,
+        ),
+    )
+    size = cast(
+        Optional[str],
+        arguments.get(
+            &#34;size&#34;,
+        ),
+    )
+    return tool.find_files(file_type=file_type, name=name, regex=regex, size=size)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.find_files_markdown"><code class="name flex">
+<span>def <span class="ident">find_files_markdown</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def find_files_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = FindTool(self.root_folder, self.config)
+
+    file_type = cast(
+        Optional[str],
+        arguments.get(
+            &#34;file_type&#34;,
+        ),
+    )
+    name = cast(
+        Optional[str],
+        arguments.get(
+            &#34;name&#34;,
+        ),
+    )
+    regex = cast(
+        Optional[str],
+        arguments.get(
+            &#34;regex&#34;,
+        ),
+    )
+    size = cast(
+        Optional[str],
+        arguments.get(
+            &#34;size&#34;,
+        ),
+    )
+    return tool.find_files_markdown(file_type=file_type, name=name, regex=regex, size=size)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.format_code_as_markdown"><code class="name flex">
+<span>def <span class="ident">format_code_as_markdown</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def format_code_as_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = PyCatTool(self.root_folder, self.config)
+
+    base_path = cast(
+        str,
+        arguments.get(
+            &#34;base_path&#34;,
+        ),
+    )
+    header = cast(
+        str,
+        arguments.get(
+            &#34;header&#34;,
+        ),
+    )
+    no_comments = cast(bool, arguments.get(&#34;no_comments&#34;, False))
+    no_docs = cast(bool, arguments.get(&#34;no_docs&#34;, False))
+    return tool.format_code_as_markdown(
+        base_path=base_path, header=header, no_comments=no_comments, no_docs=no_docs
+    )</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.get_current_branch"><code class="name flex">
+<span>def <span class="ident">get_current_branch</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_current_branch(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GitTool(self.root_folder, self.config)
+
+    return tool.get_current_branch()</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.get_recent_commits"><code class="name flex">
+<span>def <span class="ident">get_recent_commits</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_recent_commits(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GitTool(self.root_folder, self.config)
+
+    n = cast(int, arguments.get(&#34;n&#34;, 10))
+    short_hash = cast(bool, arguments.get(&#34;short_hash&#34;, False))
+    return tool.get_recent_commits(n=n, short_hash=short_hash)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.git_diff"><code class="name flex">
+<span>def <span class="ident">git_diff</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def git_diff(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GitTool(self.root_folder, self.config)
+
+    return tool.git_diff()</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.git_diff_commit"><code class="name flex">
+<span>def <span class="ident">git_diff_commit</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def git_diff_commit(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GitTool(self.root_folder, self.config)
+
+    commit1 = cast(
+        str,
+        arguments.get(
+            &#34;commit1&#34;,
+        ),
+    )
+    commit2 = cast(
+        str,
+        arguments.get(
+            &#34;commit2&#34;,
+        ),
+    )
+    return tool.git_diff_commit(commit1=commit1, commit2=commit2)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.git_log_file"><code class="name flex">
+<span>def <span class="ident">git_log_file</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def git_log_file(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GitTool(self.root_folder, self.config)
+
+    filename = cast(
+        str,
+        arguments.get(
+            &#34;filename&#34;,
+        ),
+    )
+    return tool.git_log_file(filename=filename)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.git_log_search"><code class="name flex">
+<span>def <span class="ident">git_log_search</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def git_log_search(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GitTool(self.root_folder, self.config)
+
+    search_string = cast(
+        str,
+        arguments.get(
+            &#34;search_string&#34;,
+        ),
+    )
+    return tool.git_log_search(search_string=search_string)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.git_show"><code class="name flex">
+<span>def <span class="ident">git_show</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def git_show(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GitTool(self.root_folder, self.config)
+
+    return tool.git_show()</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.git_status"><code class="name flex">
+<span>def <span class="ident">git_status</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def git_status(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GitTool(self.root_folder, self.config)
+
+    return tool.git_status()</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.grep"><code class="name flex">
+<span>def <span class="ident">grep</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def grep(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GrepTool(self.root_folder, self.config)
+
+    glob_pattern = cast(
+        str,
+        arguments.get(
+            &#34;glob_pattern&#34;,
+        ),
+    )
+    maximum_matches_per_file = cast(int, arguments.get(&#34;maximum_matches_per_file&#34;, -1))
+    maximum_matches_total = cast(int, arguments.get(&#34;maximum_matches_total&#34;, -1))
+    regex = cast(
+        str,
+        arguments.get(
+            &#34;regex&#34;,
+        ),
+    )
+    skip_first_matches = cast(int, arguments.get(&#34;skip_first_matches&#34;, -1))
+    return tool.grep(
+        glob_pattern=glob_pattern,
+        maximum_matches_per_file=maximum_matches_per_file,
+        maximum_matches_total=maximum_matches_total,
+        regex=regex,
+        skip_first_matches=skip_first_matches,
+    )</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.grep_markdown"><code class="name flex">
+<span>def <span class="ident">grep_markdown</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def grep_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GrepTool(self.root_folder, self.config)
+
+    glob_pattern = cast(
+        str,
+        arguments.get(
+            &#34;glob_pattern&#34;,
+        ),
+    )
+    maximum_matches = cast(int, arguments.get(&#34;maximum_matches&#34;, -1))
+    regex = cast(
+        str,
+        arguments.get(
+            &#34;regex&#34;,
+        ),
+    )
+    skip_first_matches = cast(int, arguments.get(&#34;skip_first_matches&#34;, -1))
+    return tool.grep_markdown(
+        glob_pattern=glob_pattern,
+        maximum_matches=maximum_matches,
+        regex=regex,
+        skip_first_matches=skip_first_matches,
+    )</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.head"><code class="name flex">
+<span>def <span class="ident">head</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def head(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = HeadTailTool(self.root_folder, self.config)
+
+    byte_count = cast(
+        Optional[int],
+        arguments.get(
+            &#34;byte_count&#34;,
+        ),
+    )
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+    return tool.head(byte_count=byte_count, file_path=file_path, lines=lines)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.head_markdown"><code class="name flex">
+<span>def <span class="ident">head_markdown</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def head_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = HeadTailTool(self.root_folder, self.config)
+
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+    return tool.head_markdown(file_path=file_path, lines=lines)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.head_tail"><code class="name flex">
+<span>def <span class="ident">head_tail</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def head_tail(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = HeadTailTool(self.root_folder, self.config)
+
+    byte_count = cast(
+        Optional[int],
+        arguments.get(
+            &#34;byte_count&#34;,
+        ),
+    )
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+    mode = cast(str, arguments.get(&#34;mode&#34;, &#34;head&#34;))
+    return tool.head_tail(byte_count=byte_count, file_path=file_path, lines=lines, mode=mode)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.insert_text_after_context"><code class="name flex">
+<span>def <span class="ident">insert_text_after_context</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def insert_text_after_context(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = InsertTool(self.root_folder, self.config)
+
+    context = cast(
+        str,
+        arguments.get(
+            &#34;context&#34;,
+        ),
+    )
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    text_to_insert = cast(
+        str,
+        arguments.get(
+            &#34;text_to_insert&#34;,
+        ),
+    )
+    return tool.insert_text_after_context(context=context, file_path=file_path, text_to_insert=text_to_insert)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.insert_text_after_multiline_context"><code class="name flex">
+<span>def <span class="ident">insert_text_after_multiline_context</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def insert_text_after_multiline_context(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = InsertTool(self.root_folder, self.config)
+
+    context_lines = cast(
+        str,
+        arguments.get(
+            &#34;context_lines&#34;,
+        ),
+    )
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    text_to_insert = cast(
+        str,
+        arguments.get(
+            &#34;text_to_insert&#34;,
+        ),
+    )
+    return tool.insert_text_after_multiline_context(
+        context_lines=context_lines, file_path=file_path, text_to_insert=text_to_insert
+    )</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.insert_text_at_start_or_end"><code class="name flex">
+<span>def <span class="ident">insert_text_at_start_or_end</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def insert_text_at_start_or_end(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = InsertTool(self.root_folder, self.config)
+
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    position = cast(str, arguments.get(&#34;position&#34;, &#34;end&#34;))
+    text_to_insert = cast(
+        str,
+        arguments.get(
+            &#34;text_to_insert&#34;,
+        ),
+    )
+    return tool.insert_text_at_start_or_end(file_path=file_path, position=position, text_to_insert=text_to_insert)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.is_ignored_by_gitignore"><code class="name flex">
+<span>def <span class="ident">is_ignored_by_gitignore</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_ignored_by_gitignore(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = GitTool(self.root_folder, self.config)
+
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    gitignore_path = cast(str, arguments.get(&#34;gitignore_path&#34;, &#34;.gitignore&#34;))
+    return tool.is_ignored_by_gitignore(file_path=file_path, gitignore_path=gitignore_path)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.ls"><code class="name flex">
+<span>def <span class="ident">ls</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ls(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = LsTool(self.root_folder, self.config)
+
+    all_files = cast(bool, arguments.get(&#34;all_files&#34;, False))
+    long = cast(bool, arguments.get(&#34;long&#34;, False))
+    path = cast(
+        Optional[str],
+        arguments.get(
+            &#34;path&#34;,
+        ),
+    )
+    return tool.ls(all_files=all_files, long=long, path=path)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.ls_markdown"><code class="name flex">
+<span>def <span class="ident">ls_markdown</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ls_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = LsTool(self.root_folder, self.config)
+
+    all_files = cast(bool, arguments.get(&#34;all_files&#34;, False))
+    long = cast(bool, arguments.get(&#34;long&#34;, False))
+    path = cast(Optional[str], arguments.get(&#34;path&#34;, &#34;.&#34;))
+    return tool.ls_markdown(all_files=all_files, long=long, path=path)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.pytest"><code class="name flex">
+<span>def <span class="ident">pytest</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def pytest(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = PytestTool(self.root_folder, self.config)
+
+    return tool.pytest()</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.query_todos_by_assignee"><code class="name flex">
+<span>def <span class="ident">query_todos_by_assignee</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def query_todos_by_assignee(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = TodoTool(self.root_folder, self.config)
+
+    return tool.query_todos_by_assignee()</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.query_todos_by_regex"><code class="name flex">
+<span>def <span class="ident">query_todos_by_regex</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def query_todos_by_regex(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = TodoTool(self.root_folder, self.config)
+
+    regex_pattern = cast(str, arguments.get(&#34;regex_pattern&#34;, r&#34;[\s\S]+&#34;))
+    return tool.query_todos_by_regex(regex_pattern=regex_pattern)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.remove_todo"><code class="name flex">
+<span>def <span class="ident">remove_todo</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_todo(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = TodoTool(self.root_folder, self.config)
+
+    title = cast(
+        str,
+        arguments.get(
+            &#34;title&#34;,
+        ),
+    )
+    return tool.remove_todo(title=title)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.replace_all"><code class="name flex">
+<span>def <span class="ident">replace_all</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def replace_all(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = ReplaceTool(self.root_folder, self.config)
+
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    new_text = cast(
+        str,
+        arguments.get(
+            &#34;new_text&#34;,
+        ),
+    )
+    old_text = cast(
+        str,
+        arguments.get(
+            &#34;old_text&#34;,
+        ),
+    )
+    return tool.replace_all(file_path=file_path, new_text=new_text, old_text=old_text)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.replace_line_by_line"><code class="name flex">
+<span>def <span class="ident">replace_line_by_line</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def replace_line_by_line(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = ReplaceTool(self.root_folder, self.config)
+
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    line_end = cast(int, arguments.get(&#34;line_end&#34;, -1))
+    line_start = cast(int, arguments.get(&#34;line_start&#34;, 0))
+    new_text = cast(
+        str,
+        arguments.get(
+            &#34;new_text&#34;,
+        ),
+    )
+    old_text = cast(
+        str,
+        arguments.get(
+            &#34;old_text&#34;,
+        ),
+    )
+    return tool.replace_line_by_line(
+        file_path=file_path, line_end=line_end, line_start=line_start, new_text=new_text, old_text=old_text
+    )</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.replace_with_regex"><code class="name flex">
+<span>def <span class="ident">replace_with_regex</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def replace_with_regex(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = ReplaceTool(self.root_folder, self.config)
+
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    regex_match_expression = cast(
+        str,
+        arguments.get(
+            &#34;regex_match_expression&#34;,
+        ),
+    )
+    replacement = cast(
+        str,
+        arguments.get(
+            &#34;replacement&#34;,
+        ),
+    )
+    return tool.replace_with_regex(
+        file_path=file_path, regex_match_expression=regex_match_expression, replacement=replacement
+    )</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_bool"><code class="name flex">
+<span>def <span class="ident">report_bool</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_bool(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        bool,
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_bool(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_dict"><code class="name flex">
+<span>def <span class="ident">report_dict</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_dict(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        Any,
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_dict(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_float"><code class="name flex">
+<span>def <span class="ident">report_float</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_float(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        float,
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_float(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_int"><code class="name flex">
+<span>def <span class="ident">report_int</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_int(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        int,
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_int(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_json"><code class="name flex">
+<span>def <span class="ident">report_json</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_json(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        str,
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_json(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_list"><code class="name flex">
+<span>def <span class="ident">report_list</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_list(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        str,
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_list(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_set"><code class="name flex">
+<span>def <span class="ident">report_set</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_set(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        list[Any],
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_set(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_text"><code class="name flex">
+<span>def <span class="ident">report_text</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_text(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        str,
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_text(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_toml"><code class="name flex">
+<span>def <span class="ident">report_toml</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_toml(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        str,
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_toml(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_tuple"><code class="name flex">
+<span>def <span class="ident">report_tuple</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_tuple(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        list[Any],
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_tuple(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.report_xml"><code class="name flex">
+<span>def <span class="ident">report_xml</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def report_xml(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    if not self.tool_answer_collector:
+        raise TypeError(&#34;tool cannot be None here&#34;)
+
+    self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
+
+    answer = cast(
+        str,
+        arguments.get(
+            &#34;answer&#34;,
+        ),
+    )
+    comment = cast(
+        str,
+        arguments.get(
+            &#34;comment&#34;,
+        ),
+    )
+    return self.tool_answer_collector.report_xml(answer=answer, comment=comment)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.revert_to_latest_backup"><code class="name flex">
+<span>def <span class="ident">revert_to_latest_backup</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def revert_to_latest_backup(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = RewriteTool(self.root_folder, self.config)
+
+    file_name = cast(
+        str,
+        arguments.get(
+            &#34;file_name&#34;,
+        ),
+    )
+    return tool.revert_to_latest_backup(file_name=file_name)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.rewrite_file"><code class="name flex">
+<span>def <span class="ident">rewrite_file</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rewrite_file(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = RewriteTool(self.root_folder, self.config)
+
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    text = cast(
+        str,
+        arguments.get(
+            &#34;text&#34;,
+        ),
+    )
+    return tool.rewrite_file(file_path=file_path, text=text)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.save_if_changed"><code class="name flex">
+<span>def <span class="ident">save_if_changed</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_if_changed(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = ReplaceTool(self.root_folder, self.config)
+
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    final = cast(
+        str,
+        arguments.get(
+            &#34;final&#34;,
+        ),
+    )
+    input_text = cast(
+        str,
+        arguments.get(
+            &#34;input_text&#34;,
+        ),
+    )
+    return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.sed"><code class="name flex">
+<span>def <span class="ident">sed</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sed(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = SedTool(self.root_folder, self.config)
+
+    commands = cast(
+        str,
+        arguments.get(
+            &#34;commands&#34;,
+        ),
+    )
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    return tool.sed(commands=commands, file_path=file_path)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.tail"><code class="name flex">
+<span>def <span class="ident">tail</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def tail(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = HeadTailTool(self.root_folder, self.config)
+
+    byte_count = cast(
+        Optional[int],
+        arguments.get(
+            &#34;byte_count&#34;,
+        ),
+    )
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+    return tool.tail(byte_count=byte_count, file_path=file_path, lines=lines)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.tail_markdown"><code class="name flex">
+<span>def <span class="ident">tail_markdown</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def tail_markdown(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = HeadTailTool(self.root_folder, self.config)
+
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    lines = cast(int, arguments.get(&#34;lines&#34;, 10))
+    return tool.tail_markdown(file_path=file_path, lines=lines)</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.write_new_file"><code class="name flex">
+<span>def <span class="ident">write_new_file</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def write_new_file(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = RewriteTool(self.root_folder, self.config)
+
+    file_path = cast(
+        str,
+        arguments.get(
+            &#34;file_path&#34;,
+        ),
+    )
+    text = cast(
+        str,
+        arguments.get(
+            &#34;text&#34;,
+        ),
+    )
+    return tool.write_new_file(file_path=file_path, text=text)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="ai_shell.openai_support.ToolKitBase" href="openai_support.html#ai_shell.openai_support.ToolKitBase">ToolKitBase</a></b></code>:
+<ul class="hlist">
+<li><code><a title="ai_shell.openai_support.ToolKitBase.get_tool_usage_for" href="openai_support.html#ai_shell.openai_support.ToolKitBase.get_tool_usage_for">get_tool_usage_for</a></code></li>
+<li><code><a title="ai_shell.openai_support.ToolKitBase.process_tool_calls" href="openai_support.html#ai_shell.openai_support.ToolKitBase.process_tool_calls">process_tool_calls</a></code></li>
+<li><code><a title="ai_shell.openai_support.ToolKitBase.tool_usage_stats" href="openai_support.html#ai_shell.openai_support.ToolKitBase.tool_usage_stats">tool_usage_stats</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="ai_shell" href="index.html">ai_shell</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="ai_shell.openai_toolkit.ToolKit" href="#ai_shell.openai_toolkit.ToolKit">ToolKit</a></code></h4>
+<ul class="">
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.add_todo" href="#ai_shell.openai_toolkit.ToolKit.add_todo">add_todo</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.apply_git_patch" href="#ai_shell.openai_toolkit.ToolKit.apply_git_patch">apply_git_patch</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.cat" href="#ai_shell.openai_toolkit.ToolKit.cat">cat</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.cat_markdown" href="#ai_shell.openai_toolkit.ToolKit.cat_markdown">cat_markdown</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.count_tokens" href="#ai_shell.openai_toolkit.ToolKit.count_tokens">count_tokens</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.cut_characters" href="#ai_shell.openai_toolkit.ToolKit.cut_characters">cut_characters</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.cut_fields" href="#ai_shell.openai_toolkit.ToolKit.cut_fields">cut_fields</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.cut_fields_by_name" href="#ai_shell.openai_toolkit.ToolKit.cut_fields_by_name">cut_fields_by_name</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.ed" href="#ai_shell.openai_toolkit.ToolKit.ed">ed</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.edlin" href="#ai_shell.openai_toolkit.ToolKit.edlin">edlin</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.find_files" href="#ai_shell.openai_toolkit.ToolKit.find_files">find_files</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.find_files_markdown" href="#ai_shell.openai_toolkit.ToolKit.find_files_markdown">find_files_markdown</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.format_code_as_markdown" href="#ai_shell.openai_toolkit.ToolKit.format_code_as_markdown">format_code_as_markdown</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.get_current_branch" href="#ai_shell.openai_toolkit.ToolKit.get_current_branch">get_current_branch</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.get_recent_commits" href="#ai_shell.openai_toolkit.ToolKit.get_recent_commits">get_recent_commits</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.git_diff" href="#ai_shell.openai_toolkit.ToolKit.git_diff">git_diff</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.git_diff_commit" href="#ai_shell.openai_toolkit.ToolKit.git_diff_commit">git_diff_commit</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.git_log_file" href="#ai_shell.openai_toolkit.ToolKit.git_log_file">git_log_file</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.git_log_search" href="#ai_shell.openai_toolkit.ToolKit.git_log_search">git_log_search</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.git_show" href="#ai_shell.openai_toolkit.ToolKit.git_show">git_show</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.git_status" href="#ai_shell.openai_toolkit.ToolKit.git_status">git_status</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.grep" href="#ai_shell.openai_toolkit.ToolKit.grep">grep</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.grep_markdown" href="#ai_shell.openai_toolkit.ToolKit.grep_markdown">grep_markdown</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.head" href="#ai_shell.openai_toolkit.ToolKit.head">head</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.head_markdown" href="#ai_shell.openai_toolkit.ToolKit.head_markdown">head_markdown</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.head_tail" href="#ai_shell.openai_toolkit.ToolKit.head_tail">head_tail</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.insert_text_after_context" href="#ai_shell.openai_toolkit.ToolKit.insert_text_after_context">insert_text_after_context</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.insert_text_after_multiline_context" href="#ai_shell.openai_toolkit.ToolKit.insert_text_after_multiline_context">insert_text_after_multiline_context</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.insert_text_at_start_or_end" href="#ai_shell.openai_toolkit.ToolKit.insert_text_at_start_or_end">insert_text_at_start_or_end</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.is_ignored_by_gitignore" href="#ai_shell.openai_toolkit.ToolKit.is_ignored_by_gitignore">is_ignored_by_gitignore</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.ls" href="#ai_shell.openai_toolkit.ToolKit.ls">ls</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.ls_markdown" href="#ai_shell.openai_toolkit.ToolKit.ls_markdown">ls_markdown</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.pytest" href="#ai_shell.openai_toolkit.ToolKit.pytest">pytest</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.query_todos_by_assignee" href="#ai_shell.openai_toolkit.ToolKit.query_todos_by_assignee">query_todos_by_assignee</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.query_todos_by_regex" href="#ai_shell.openai_toolkit.ToolKit.query_todos_by_regex">query_todos_by_regex</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.remove_todo" href="#ai_shell.openai_toolkit.ToolKit.remove_todo">remove_todo</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.replace_all" href="#ai_shell.openai_toolkit.ToolKit.replace_all">replace_all</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.replace_line_by_line" href="#ai_shell.openai_toolkit.ToolKit.replace_line_by_line">replace_line_by_line</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.replace_with_regex" href="#ai_shell.openai_toolkit.ToolKit.replace_with_regex">replace_with_regex</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_bool" href="#ai_shell.openai_toolkit.ToolKit.report_bool">report_bool</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_dict" href="#ai_shell.openai_toolkit.ToolKit.report_dict">report_dict</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_float" href="#ai_shell.openai_toolkit.ToolKit.report_float">report_float</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_int" href="#ai_shell.openai_toolkit.ToolKit.report_int">report_int</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_json" href="#ai_shell.openai_toolkit.ToolKit.report_json">report_json</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_list" href="#ai_shell.openai_toolkit.ToolKit.report_list">report_list</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_set" href="#ai_shell.openai_toolkit.ToolKit.report_set">report_set</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_text" href="#ai_shell.openai_toolkit.ToolKit.report_text">report_text</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_toml" href="#ai_shell.openai_toolkit.ToolKit.report_toml">report_toml</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_tuple" href="#ai_shell.openai_toolkit.ToolKit.report_tuple">report_tuple</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.report_xml" href="#ai_shell.openai_toolkit.ToolKit.report_xml">report_xml</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.revert_to_latest_backup" href="#ai_shell.openai_toolkit.ToolKit.revert_to_latest_backup">revert_to_latest_backup</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.rewrite_file" href="#ai_shell.openai_toolkit.ToolKit.rewrite_file">rewrite_file</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.save_if_changed" href="#ai_shell.openai_toolkit.ToolKit.save_if_changed">save_if_changed</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.sed" href="#ai_shell.openai_toolkit.ToolKit.sed">sed</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.tail" href="#ai_shell.openai_toolkit.ToolKit.tail">tail</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.tail_markdown" href="#ai_shell.openai_toolkit.ToolKit.tail_markdown">tail_markdown</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.write_new_file" href="#ai_shell.openai_toolkit.ToolKit.write_new_file">write_new_file</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

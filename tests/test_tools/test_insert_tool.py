@@ -1,6 +1,7 @@
 import pytest
 
 from ai_shell.insert_tool import InsertTool
+from tests.util import config_for_tests
 
 
 def create_sample_file(tmp_path, content):
@@ -11,7 +12,7 @@ def create_sample_file(tmp_path, content):
 
 
 def test_insert_text_after_context_positive(tmp_path):
-    tool = InsertTool(str(tmp_path))
+    tool = InsertTool(str(tmp_path), config=config_for_tests())
     file_path = create_sample_file(tmp_path, ["Line 1\n", "Context Line\n", "Line 3\n"])
     tool.insert_text_after_context(str(file_path), "Context Line", "Inserted Text")
 
@@ -23,7 +24,7 @@ def test_insert_text_after_context_positive(tmp_path):
 
 
 def test_insert_text_after_context_negative(tmp_path):
-    tool = InsertTool(str(tmp_path))
+    tool = InsertTool(str(tmp_path), config=config_for_tests())
     file_path = create_sample_file(tmp_path, ["Line 1\n", "Line 2\n", "Line 3\n"])
 
     with pytest.raises(ValueError):
@@ -32,7 +33,7 @@ def test_insert_text_after_context_negative(tmp_path):
 
 @pytest.mark.parametrize("position", ["start", "end"])
 def test_insert_text_at_position_positive(tmp_path, position):
-    tool = InsertTool(str(tmp_path))
+    tool = InsertTool(str(tmp_path), config=config_for_tests())
     file_path = create_sample_file(tmp_path, ["Line 1\n", "Line 2\n", "Line 3\n"])
     tool.insert_text_at_start_or_end(str(file_path), "Inserted Text", position)
 
@@ -46,7 +47,7 @@ def test_insert_text_at_position_positive(tmp_path, position):
 
 
 def test_insert_text_at_position_negative(tmp_path):
-    tool = InsertTool(str(tmp_path))
+    tool = InsertTool(str(tmp_path), config=config_for_tests())
     file_path = create_sample_file(tmp_path, ["Line 1\n", "Line 2\n", "Line 3\n"])
 
     with pytest.raises(ValueError):
@@ -54,7 +55,7 @@ def test_insert_text_at_position_negative(tmp_path):
 
 
 def test_insert_text_after_multiline_context_positive(tmp_path):
-    tool = InsertTool(str(tmp_path))
+    tool = InsertTool(str(tmp_path), config=config_for_tests())
     file_path = create_sample_file(tmp_path, ["Line 1\n", "Context Line 1\n", "Context Line 2\n", "Line 4\n"])
     context_lines = ["Context Line 1", "Context Line 2"]
     tool.insert_text_after_multiline_context(str(file_path), context_lines, "Inserted Text")
@@ -66,7 +67,7 @@ def test_insert_text_after_multiline_context_positive(tmp_path):
 
 
 def test_insert_text_after_multiline_context_negative(tmp_path):
-    tool = InsertTool(str(tmp_path))
+    tool = InsertTool(str(tmp_path), config=config_for_tests())
     file_path = create_sample_file(tmp_path, ["Line 1\n", "Line 2\n", "Line 3\n"])
     context_lines = ["Non-existent Context Line 1", "Non-existent Context Line 2"]
 

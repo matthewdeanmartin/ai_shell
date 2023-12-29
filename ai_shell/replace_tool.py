@@ -6,21 +6,23 @@ However, the bot keeps trying to use features of real sed that this tool doesn't
 import re
 
 from ai_shell.cat_tool import CatTool
-from ai_shell.pycat_tool import is_python_file, is_valid_python_source
+from ai_shell.pyutils.validate import is_python_file, is_valid_python_source
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 
 
 class ReplaceTool:
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the SedTool class.
 
         Args:
             root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder
-        self.auto_cat = True
-
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def replace_line_by_line(
@@ -44,6 +46,8 @@ class ReplaceTool:
         Returns:
             str: A message indicating the success of the operation.
 
+        Raises:
+            TypeError: If file_path or old_text is None, or if no lines are left after replacement.
         """
         if not file_path:
             raise TypeError("No file_path, please provide file_path for each request.")
@@ -79,6 +83,8 @@ class ReplaceTool:
         Returns:
             str: A message indicating the success of the operation.
 
+        Raises:
+            TypeError: If file_path or old_text is None.
         """
         if new_text is None:
             new_text = ""
@@ -107,6 +113,8 @@ class ReplaceTool:
         Returns:
             str: A message indicating the success of the operation.
 
+        Raises:
+            TypeError: If file_path or regex_match_expression is None.
         """
         if not file_path:
             raise TypeError("No file_path, please provide file_path for each request.")
@@ -132,6 +140,8 @@ class ReplaceTool:
         Returns:
             str: A message indicating whether changes were made or not.
 
+        Raises:
+            TypeError: If file_path is None.
         """
         if not final:
             raise TypeError("Something went wrong in replace and all text disappeared. Cancelling.")
@@ -148,7 +158,7 @@ class ReplaceTool:
                 output_file.write(final)
             if self.auto_cat:
                 feedback = "Changes applied without exception, please verify by other means.\n"
-                contents = CatTool(self.root_folder).cat_markdown([file_path])
+                contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
                 return f"Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}"
             return "Changes applied without exception, please verify by other means."
         return (

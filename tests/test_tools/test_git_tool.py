@@ -5,6 +5,7 @@ import pytest
 from git import Repo
 
 from ai_shell.git_tool import GitTool
+from tests.util import config_for_tests
 
 
 @pytest.fixture(scope="module")
@@ -30,19 +31,19 @@ def test_repo():
 
 
 def test_init(test_repo):
-    tool = GitTool(test_repo)
+    tool = GitTool(test_repo, config=config_for_tests())
     assert tool.repo_path == test_repo
     assert tool.repo is not None
 
 
 def test_is_ignored_by_gitignore(test_repo):
-    tool = GitTool(test_repo)
+    tool = GitTool(test_repo, config=config_for_tests())
     assert tool.is_ignored_by_gitignore(os.path.join(test_repo, "ignored.log")) is True
     assert tool.is_ignored_by_gitignore(os.path.join(test_repo, "test.txt")) is False
 
 
 def test_git_status(test_repo):
-    tool = GitTool(test_repo)
+    tool = GitTool(test_repo, config=config_for_tests())
 
     # Create a changed file and add it to the staging area
     changed_file = os.path.join(test_repo, "changed.txt")
@@ -70,7 +71,7 @@ def test_git_status(test_repo):
 
 
 def test_git_diff(test_repo):
-    tool = GitTool(test_repo)
+    tool = GitTool(test_repo, config=config_for_tests())
 
     # Modify a file
     modified_file = os.path.join(test_repo, "modified.txt")
@@ -82,7 +83,7 @@ def test_git_diff(test_repo):
 
 
 def test_git_log_file(test_repo):
-    tool = GitTool(test_repo)
+    tool = GitTool(test_repo, config=config_for_tests())
     file_path = os.path.join(test_repo, "log.txt")
     with open(file_path, "w") as f:
         f.write("initial content")
@@ -94,7 +95,7 @@ def test_git_log_file(test_repo):
 
 
 def test_git_log_search(test_repo):
-    tool = GitTool(test_repo)
+    tool = GitTool(test_repo, config=config_for_tests())
     unique_message = "Unique commit message for search"
     file_path = os.path.join(test_repo, "search.txt")
     with open(file_path, "w") as f:
@@ -107,14 +108,14 @@ def test_git_log_search(test_repo):
 
 
 def test_git_show(test_repo):
-    tool = GitTool(test_repo)
+    tool = GitTool(test_repo, config=config_for_tests())
 
     # Call git_show and check for no errors
     assert tool.git_show() is not None
 
 
 def test_get_current_branch(test_repo):
-    tool = GitTool(test_repo)
+    tool = GitTool(test_repo, config=config_for_tests())
     branch_name = "test-branch"
     tool.repo.git.checkout("-b", branch_name)
 
@@ -123,7 +124,7 @@ def test_get_current_branch(test_repo):
 
 
 def test_get_recent_commits(test_repo):
-    tool = GitTool(test_repo)
+    tool = GitTool(test_repo, config=config_for_tests())
     # Create some commits
     for i in range(5):
         file_path = os.path.join(test_repo, f"file{i}.txt")
@@ -138,7 +139,7 @@ def test_get_recent_commits(test_repo):
 
 
 def test_git_diff_commit(test_repo):
-    tool = GitTool(test_repo)
+    tool = GitTool(test_repo, config=config_for_tests())
 
     # First commit
     file_path1 = os.path.join(test_repo, "file1.txt")

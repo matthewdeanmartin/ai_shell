@@ -4,6 +4,7 @@ AI optimized head/tail tool
 import logging
 from typing import Optional
 
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder
 
@@ -11,13 +12,16 @@ logger = logging.getLogger(__name__)
 
 
 class HeadTailTool:
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """Initialize the HeadTailTool with a root folder.
 
         Args:
             root_folder (str): The root folder where files will be checked.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def head_markdown(self, file_path: str, lines: int = 10) -> str:
@@ -39,7 +43,7 @@ class HeadTailTool:
         Args:
             file_path (str): Path to the file.
             lines (int): Number of lines to return. Ignored if byte_count is specified. Defaults to 10.
-            byte_count (int): Number of bytes to return. If specified, overrides lines.
+            byte_count (Optional[int]): Number of bytes to return. If specified, overrides lines.
 
         Returns:
             list[str]: Lines or byte_count of bytes from the start of the file.
@@ -66,7 +70,7 @@ class HeadTailTool:
         Args:
             file_path (str): Path to the file.
             lines (int): Number of lines to return. Ignored if byte_count is specified. Defaults to 10.
-            byte_count (int): Number of bytes to return. If specified, overrides lines.
+            byte_count (Optional[int]): Number of bytes to return. If specified, overrides lines.
 
         Returns:
             list[str]: Lines or bytes from the end of the file.
@@ -82,10 +86,14 @@ class HeadTailTool:
             file_path (str): Path to the file.
             lines (int): Number of lines to read. Ignored if byte_count is specified. Defaults to 10.
             mode (str): Operation mode, either 'head' or 'tail'. Defaults to 'head'.
-            byte_count (int): Number of bytes to read. If specified, overrides lines.
+            byte_count (Optional[int]): Number of bytes to read. If specified, overrides lines.
 
         Returns:
             list[str]: Requested lines or bytes from the file.
+
+        Raises:
+            ValueError: If mode is not 'head' or 'tail'.
+            FileNotFoundError: If the file is not found in the root folder.
         """
         if mode == "head":
             logger.info(f"head --file_path {file_path} --lines {lines}")

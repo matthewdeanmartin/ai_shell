@@ -15,14 +15,14 @@ from ai_shell.utils.cwd_utils import change_directory
 #     pylint --load-plugins pylint_unittest"""
 
 
-def count_pytest_results(module: str, test_folder: str, min_coverage: int) -> tuple[int, int, float, CommandResult]:
+def count_pytest_results(module: str, test_folder: str, min_coverage: float) -> tuple[int, int, float, CommandResult]:
     """
     Run pytest and count the number of passed and failed tests.
 
     Args:
-        module: The module to run pytest on.
-        test_folder: The folder containing the tests.
-        min_coverage: The minimum coverage percentage.
+        module (str): The module to run pytest on.
+        test_folder (str): The folder containing the tests.
+        min_coverage (float): The minimum coverage percentage.
 
     Returns:
         A tuple of the number of passed and failed tests.
@@ -57,6 +57,23 @@ def count_pytest_results(module: str, test_folder: str, min_coverage: int) -> tu
     if coverage_match:
         coverage = float(coverage_match.group(1))
     return passed_tests, failed_tests, coverage, pytest_output
+
+
+def invoke_pytest(tests_path: str) -> CommandResult:
+    """
+    Runs pytest.
+
+    Args:
+        tests_path (str): The path to the tests.
+
+    Returns:
+        CommandResult: The result of the command.
+    """
+    command_name = "pytest"
+    arg_string = f"'{tests_path}'"
+
+    # generic response.
+    return safe_subprocess(command_name, arg_string)
 
 
 if __name__ == "__main__":

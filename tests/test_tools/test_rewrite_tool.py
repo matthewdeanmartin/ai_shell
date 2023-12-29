@@ -1,10 +1,11 @@
 import pytest
 
 from ai_shell.rewrite_tool import RewriteTool
+from tests.util import config_for_tests
 
 
 def test_write_new_file_success(tmp_path):
-    tool = RewriteTool(str(tmp_path))
+    tool = RewriteTool(str(tmp_path), config=config_for_tests())
     tool.auto_cat = False
     file_path = "test_file.txt"
     content = "Hello, world!"
@@ -16,7 +17,7 @@ def test_write_new_file_success(tmp_path):
 
 
 def test_write_new_file_failure_file_exists(tmp_path):
-    tool = RewriteTool(str(tmp_path))
+    tool = RewriteTool(str(tmp_path), config=config_for_tests())
     file_path = "test_file.txt"
     content = "Hello, world!"
     (tmp_path / file_path).write_text(content)
@@ -28,7 +29,7 @@ def test_write_new_file_failure_file_exists(tmp_path):
 
 
 def test_write_new_file_failure_outside_root(tmp_path):
-    tool = RewriteTool(str(tmp_path))
+    tool = RewriteTool(str(tmp_path), config=config_for_tests())
     file_path = "/outside_test_file.txt"
 
     with pytest.raises(ValueError) as excinfo:
@@ -38,7 +39,7 @@ def test_write_new_file_failure_outside_root(tmp_path):
 
 
 def test_rewrite_file_success(tmp_path):
-    tool = RewriteTool(str(tmp_path))
+    tool = RewriteTool(str(tmp_path), config=config_for_tests())
     tool.auto_cat = False
     file_path = "test_file.txt"
     original_content = "Original content"
@@ -53,7 +54,7 @@ def test_rewrite_file_success(tmp_path):
 
 
 def test_rewrite_file_failure_file_not_exists(tmp_path):
-    tool = RewriteTool(str(tmp_path))
+    tool = RewriteTool(str(tmp_path), config=config_for_tests())
     file_path = "nonexistent_file.txt"
 
     with pytest.raises(FileNotFoundError) as excinfo:
@@ -63,7 +64,7 @@ def test_rewrite_file_failure_file_not_exists(tmp_path):
 
 
 def test_rewrite_file_failure_outside_root(tmp_path):
-    tool = RewriteTool(str(tmp_path))
+    tool = RewriteTool(str(tmp_path), config=config_for_tests())
     file_path = "/outside_test_file.txt"
 
     with pytest.raises(ValueError) as excinfo:

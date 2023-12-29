@@ -49,7 +49,8 @@ def try_everything(args_text: str) -> Any:
                 args_text = args_text.replace("\\", "\\\\")
                 attempted.add("double escape")
             current_error = error
-    raise current_error
+    if current_error:
+        raise current_error
 
 
 def exception_to_rfc7807_dict(exception: Exception) -> dict[str, Any]:

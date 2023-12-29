@@ -10,7 +10,8 @@ from collections.abc import Collection
 from typing import Optional, Union
 
 from ai_shell.ls_tool import LsTool
-from ai_shell.openai_schemas import SCHEMAS
+from ai_shell.openai_schemas import _SCHEMAS
+from ai_shell.utils.config_manager import Config
 
 logger = logging.getLogger(__name__)
 
@@ -18,16 +19,25 @@ ALL_TOOLS = []
 
 
 def just_tool_names() -> list[str]:
-    """Return a list of tool names"""
+    """Return a list of tool names
+
+    Returns:
+        list[str]: A list of tool names
+    """
     names = []
-    for _ns, tools in SCHEMAS.items():
+    for _ns, tools in _SCHEMAS.items():
         for name, _schema in tools.items():
             names.append(name)
     return names
 
 
 def initialize_all_tools(skips: Optional[list[str]] = None, keeps: Optional[list[str]] = None) -> None:
-    """Initialize all tools"""
+    """Initialize all tools
+
+    Args:
+        skips (Optional[list[str]], optional): Tools to skip. Defaults to None.
+        keeps (Optional[list[str]], optional): Tools to keep. Defaults to None.
+    """
     if keeps is not None:
         keep = keeps
     elif skips is None:
@@ -35,7 +45,7 @@ def initialize_all_tools(skips: Optional[list[str]] = None, keeps: Optional[list
     else:
         keep = [name for name in just_tool_names() if name not in skips]
 
-    for _ns, tools in SCHEMAS.items():
+    for _ns, tools in _SCHEMAS.items():
         for name, schema in tools.items():
             function_style: dict[str, Union[str, Collection[str]]] = {"name": name}
             parameters = {"type": "object", "properties": schema["properties"], "required": schema["required"]}
@@ -46,24 +56,45 @@ def initialize_all_tools(skips: Optional[list[str]] = None, keeps: Optional[list
     logger.info(f"Active tools {ALL_TOOLS}")
 
 
-def recommendations(root_folder: str):
-    """Recommend tools based on the root folder."""
-    tool = LsTool(root_folder)
+def recommendations(root_folder: str, config: Config) -> list[str]:
+    """Recommend tools based on the root folder.
+
+    Args:
+        root_folder (str): The root folder to recommend tools for.
+        config (Config): The developer input that bot shouldn't set.
+
+    Returns:
+        list[str]: A list of recommended tools.
+    """
+    tool = LsTool(root_folder, config)
     files = tool.ls("**/*")
     tool_set = set()
     all_of_em = just_tool_names()
+
     # Only need for csv and the like
     all_of_em.remove("cut")
+
     # Only need for python
     all_of_em.remove("pycat")
+    all_of_em.remove("pytest")
+    # Other python themed tools.
+
+    # TODO: detect git repo & if not git, remove git.
+    # all_of_em.remove("git")
 
     for _file, file_type in files:
         if file_type == ".csv":
             tool_set.add("cut")
         elif file_type == ".py":
             tool_set.add("pycat")
+    return list(tool_set)
 
 
-def initialize_recommended_tools(root_folder: str) -> None:
-    """Initialize recommended tools"""
-    initialize_all_tools(keeps=recommendations(root_folder))
+def initialize_recommended_tools(root_folder: str, config: Config) -> None:
+    """Initialize recommended tools
+
+    Args:
+        root_folder (str): The root folder to recommend tools for.
+        config (Config): The developer input that bot shouldn't set.
+    """
+    initialize_all_tools(keeps=recommendations(root_folder, config))

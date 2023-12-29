@@ -1,13 +1,14 @@
 import pytest
 
 from ai_shell.ed_tool import EdTool
+from tests.util import config_for_tests
 
 
 # Test fixture to set up and tear down for each test
 @pytest.fixture
 def ed_tool(tmpdir):
     # Create an instance of EdTool with a temporary directory
-    tool = EdTool(str(tmpdir))
+    tool = EdTool(str(tmpdir), config=config_for_tests())
     yield tool
     # Clean up (if needed) after test runs
 

@@ -7,6 +7,7 @@ from collections.abc import Generator
 from io import StringIO
 from typing import IO
 
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder, safe_glob
 from ai_shell.utils.type_repair import convert_to_list
@@ -19,14 +20,16 @@ class CatTool:
     Simulates `cat` cli tool.
     """
 
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the CatTool class.
 
         Args:
             root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder
+        self.config = config
 
     @log()
     def cat_markdown(
@@ -67,6 +70,9 @@ class CatTool:
             file_paths (list[str]): A list of file paths to concatenate.
             number_lines (bool): If True, number all output lines.
             squeeze_blank (bool): If True, consecutive blank lines are squeezed to one.
+
+        Returns:
+            Generator[str, None, None]
 
         Yields:
             str: Each line of the concatenated files.
@@ -110,13 +116,16 @@ class CatTool:
             number_lines (bool): If True, number all output lines.
             squeeze_blank (bool): If True, consecutive blank lines are squeezed to one.
 
+        Returns:
+            Generator[str, None, None]: A generator of processed lines.
+
         Yields:
             str: Each processed line of the file.
         """
         was_blank = False
-        for line in file:
-            if isinstance(line, bytes):
-                line = line.decode("utf-8")  # Decode bytes to string
+        for byte_lines in file:
+            # if isinstance(byte_lines, bytes):
+            line = byte_lines.decode("utf-8")  # Decode bytes to string
 
             # Use StringIO for memory-efficient line processing
             with StringIO() as line_buffer:
@@ -140,7 +149,7 @@ class CatTool:
 
 
 if __name__ == "__main__":
-    tool = CatTool(root_folder="./..")
+    tool = CatTool(root_folder="./..", config=Config(".."))
 
     for thing in tool.cat(file_paths=["*.py"]):
         print(thing, end="")

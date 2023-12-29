@@ -9,6 +9,7 @@ import re
 from dataclasses import dataclass, field
 from io import StringIO
 
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder, remove_root_folder
 
@@ -43,14 +44,17 @@ logger = logging.getLogger(__name__)
 class GrepTool:
     """A tool for searching files using regular expressions."""
 
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the GrepTool with a root folder.
 
         Args:
             root_folder (str): The root folder to search within.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder: str = root_folder
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def grep_markdown(
@@ -153,5 +157,5 @@ class GrepTool:
 
 
 if __name__ == "__main__":
-    tool = GrepTool("e:/code/ai_shell/ai_shell")
+    tool = GrepTool(".", config=Config(".."))
     print(tool.grep(glob_pattern="*.py", regex="print\\(|logging", maximum_matches_per_file=1))

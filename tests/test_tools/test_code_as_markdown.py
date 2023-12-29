@@ -1,6 +1,7 @@
 import pytest
 
 from ai_shell.pycat_tool import PyCatTool, format_path_as_header, is_python_file, read_file_contents
+from tests.util import config_for_tests
 
 
 def test_is_python_file():
@@ -36,7 +37,7 @@ def python_files(tmp_path):
 def test_format_code_with_python_files(python_files, tmp_path):
     base_path, files_content = python_files
 
-    tool = PyCatTool(str(base_path))
+    tool = PyCatTool(str(base_path), config=config_for_tests())
     content = tool.format_code_as_markdown(str(base_path), header="Test Header")
 
     # Check for header
@@ -49,7 +50,7 @@ def test_format_code_with_python_files(python_files, tmp_path):
 
 def test_format_code_empty_directory(python_files, tmp_path):
     base_path, files_content = python_files
-    tool = PyCatTool(str(base_path))
+    tool = PyCatTool(str(base_path), config=config_for_tests())
     content = tool.format_code_as_markdown(str(tmp_path), header="Empty Dir Header")
 
     assert "# Empty Dir Header Source Code\n\n" in content
@@ -58,7 +59,7 @@ def test_format_code_empty_directory(python_files, tmp_path):
 
 def test_format_code_with_tree_header(python_files, tmp_path):
     base_path, _ = python_files
-    tool = PyCatTool(str(base_path))
+    tool = PyCatTool(str(base_path), config=config_for_tests())
     content = tool.format_code_as_markdown(str(base_path), header="tree")
 
     assert "# Source Code Filesystem Tree\n\n" in content

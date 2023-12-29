@@ -5,19 +5,20 @@ from openai.types.beta.threads.runs.function_tool_call import Function
 
 from ai_shell.openai_toolkit import ToolKit
 from ai_shell.openai_tools import just_tool_names
+from tests.util import config_for_tests
 
 pytestmark = pytest.mark.anyio
 
 
 def test_grep():
-    kit = ToolKit(".", "gpt-3.5-turbo", 500, just_tool_names())
+    kit = ToolKit(".", "gpt-3.5-turbo", 500, just_tool_names(), config=config_for_tests())
     result = kit.grep({"glob_pattern": "**/*.py", "regex": "test_grep", "maximum_matches": 1})
     assert result.data
 
 
 async def test_tk():
     names = just_tool_names()
-    kit = ToolKit("tests", "gpt-3.5-turbo", 500, names)
+    kit = ToolKit("tests", "gpt-3.5-turbo", 500, names, config=config_for_tests())
     run = Run(
         id="123",
         assistant_id="123",

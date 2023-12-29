@@ -88,26 +88,34 @@ def convert_to_json_schema(cls) -> dict[str, Any]:
         method = getattr(cls, method_name)
         docstring = parse(method.__doc__) if method.__doc__ else None
 
-        schema = {"type": "object", "properties": {}, "required": []}
+        schema = {
+            "type": "object",
+            "properties": {
+                "mime_type": {
+                    "type": "string",
+                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                }
+            },
+            "required": [],
+        }
 
+        description = ""
         # Add short description if available
         if docstring and docstring.short_description:
-            schema["description"] = docstring.short_description
+            description = docstring.short_description
         else:
             raise TypeError(f"Missing docstring! {method_name}")
 
         if docstring and docstring.examples:
             for example in docstring.examples:
-                schema["description"] += "\n\nExample:\n\n" + example.description
+                if example.description:
+                    description += "\n\nExample:\n\n" + example.description
 
-        if require_descriptions and not schema.get("description"):
+        if require_descriptions and not description:
             raise TypeError(f"Missing description : {method_name}")
+        else:
+            schema["description"] = description
 
-        # Everything thing gets a mime_type!
-        schema["properties"]["mime_type"] = {
-            "type": "string",
-            "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
-        }
         for arg_name, arg_type, default in details["args"]:
             # Skipping 'self' argument
             if arg_name == "self":
@@ -134,11 +142,13 @@ def convert_to_json_schema(cls) -> dict[str, Any]:
             if require_descriptions and not prop.get("description"):
                 raise TypeError(f"Missing description {method_name}.{arg_name}")
 
-            schema["properties"][arg_name] = prop
+            # need strongly typed dicts, I guess.
+            typing.cast(dict[str, dict[str, typing.Sequence]], schema["properties"])[arg_name] = prop
 
             # Adding to required list if there's no default value
             if default is None:
-                schema["required"].append(arg_name)
+                # need strongly typed dicts, I guess.
+                typing.cast(list[str], schema["required"]).append(arg_name)
 
         json_schemas[method_name] = schema
 

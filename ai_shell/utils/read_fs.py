@@ -6,6 +6,7 @@ import logging
 import math
 import os
 import re
+from collections.abc import Generator
 from contextlib import contextmanager
 from itertools import islice
 from pathlib import Path
@@ -130,7 +131,7 @@ def tree(dir_path: Union[str, Path], level: int = -1, limit_to_directories: bool
 
 
 @contextmanager
-def temporary_change_dir(new_dir: str) -> None:
+def temporary_change_dir(new_dir: str) -> Generator[None, None, None]:
     """Context manager to temporarily change the current working directory.
 
     Args:
@@ -216,8 +217,7 @@ def human_readable_size(size_in_bytes: int) -> str:
     if size_in_bytes > 0:
         readable_size = round(size_in_bytes / (power**unit), 2)
         return f"{readable_size} {units[unit]}"
-    else:
-        return "0 Bytes"
+    return "0 Bytes"
 
 
 if __name__ == "__main__":

@@ -13,11 +13,14 @@ Also, the edlin clone as of early 2024 still has bugs.
 import logging
 import logging.config
 import traceback
+from collections.abc import Generator
 
 import dedlin
 from ai_shell.cat_tool import CatTool
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import sanitize_path
+from dedlin.basic_types import StringGeneratorProtocol
 from dedlin.command_sources import StringCommandGenerator
 
 logger = logging.getLogger(__name__)
@@ -25,16 +28,33 @@ logger = logging.getLogger(__name__)
 VERBOSE = True
 
 
+class EmptyStringGenerator(StringGeneratorProtocol):
+    prompt: str
+    default: str
+
+    def generate(
+        self,
+    ) -> Generator[str, None, None]:
+        """Useless stub to avoid None value.
+
+        Raises:
+            NotImplementedError: This should not be called
+        """
+        raise NotImplementedError("This should not be called")
+
+
 class EdlinTool:
-    def __init__(self, root_folder: str):
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the EdlinTool class.
 
         Args:
             root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder if root_folder.endswith("/") else root_folder + "/"
-        self.auto_cat = True
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def edlin(self, script: str, file_name: str) -> list[str]:
@@ -48,26 +68,6 @@ class EdlinTool:
             list[str]: The output of the script.
         """
         file_name = sanitize_path(file_name)
-        # arguments["<file>"],
-        # # echo=bool(arguments["--echo"]),
-        # halt_on_error=bool(arguments["--halt_on_error"]),
-        # macro_file_name=arguments["--macro"],
-        # quit_safety=not arguments["--promptless_quit"],
-        # # vim_mode=bool(arguments["--vim_mode"]),
-        # verbose=bool(arguments["--verbose"]),
-        # # blind_mode=bool(arguments["--blind_mode"]),
-
-        #
-        # def run(
-        #         file_name: Optional[str] = None,
-        #         macro_file_name: Optional[str] = None,
-        #         echo: bool = False,
-        #         halt_on_error: bool = False,
-        #         quit_safety: bool = False,
-        #         vim_mode: bool = False,
-        #         verbose: bool = False,
-        #         blind_mode: bool = False,
-        # ) -> Dedlin:
 
         if VERBOSE:
             config = dedlin.configure_logging()
@@ -82,8 +82,8 @@ class EdlinTool:
         editor = dedlin.Dedlin(
             inputter=the_command_generator,
             # These should be blank, insert and edit only from the commands.
-            insert_document_inputter=None,
-            edit_document_inputter=None,
+            insert_document_inputter=EmptyStringGenerator(),
+            edit_document_inputter=EmptyStringGenerator(),
             outputter=lambda text, end=None: output.append(text),
             headless=True,
             untrusted_user=True,
@@ -110,7 +110,7 @@ class EdlinTool:
             editor.save_document_safe()
             # must have quit.
         except Exception as the_exception:
-            editor.save_on_crash(the_exception, None, None)
+            editor.save_on_crash(type(the_exception), the_exception, None)
 
             logger.error(traceback.format_exc())
             # output.append(traceback.format_exc())
@@ -120,8 +120,8 @@ class EdlinTool:
         editor.final_report()
         if self.auto_cat:
             feedback = "\n".join(output)
-            contents = CatTool(self.root_folder).cat_markdown([file_name])
-            return f"Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}"
+            contents = CatTool(self.root_folder, self.config).cat_markdown([file_name])
+            return [f"Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}"]
         return output
 
 
@@ -133,7 +133,7 @@ if __name__ == "__main__":
 1 INSERT "Well what of it"
 EXIT
 """
-        tool = EdlinTool(".")
+        tool = EdlinTool(".", Config(".."))
         result = tool.edlin(script, "test.md")
         print(result)
 

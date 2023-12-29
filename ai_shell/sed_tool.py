@@ -4,25 +4,26 @@ Optimized for AI version of sed. For file editing.
 However, the bot keeps trying to use features of real sed that this tool doesn't support.
 """
 import re
-from collections.abc import Sequence
-from typing import Optional
 
 from ai_shell.cat_tool import CatTool
-from ai_shell.pycat_tool import is_python_file, is_valid_python_source
+from ai_shell.pyutils.validate import is_python_file, is_valid_python_source
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder
 
 
 class SedTool:
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the SedTool class.
 
         Args:
             root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder
-        self.auto_cat = True
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def sed(self, file_path: str, commands: list[str]) -> str:
@@ -54,7 +55,7 @@ class SedTool:
         output_text = SedTool._process_sed(input_text, commands)
         if is_python_file(file_path):
             is_valid, error = is_valid_python_source(output_text)
-            if not is_valid:
+            if not is_valid and error is not None:
                 return f"Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}"
 
         if input_text != output_text:
@@ -63,7 +64,7 @@ class SedTool:
 
             if self.auto_cat:
                 feedback = "Changes without exception, please verify by other means.\n"
-                contents = CatTool(self.root_folder).cat_markdown([file_path])
+                contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
                 return f"Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}"
             return "Changes without exception, please verify by other means."
         return "No changes made."
@@ -96,7 +97,8 @@ class SedTool:
         if isinstance(commands, str):
             commands = [commands]
 
-        lines: Sequence[Optional[str]] = input_text.split("\n")
+        # don't know how to fix the covariant/invariant typing issue here
+        lines: list[str] = input_text.split("\n")
 
         for i in range(len(lines)):
             for command in commands:
@@ -128,7 +130,8 @@ class SedTool:
                     # Delete specific line: [number]d
                     delete_line = int(command[:-1])
                     if i + 1 == delete_line:
-                        lines[i] = None  # Mark for deletion
+                        # None was a better deletion marker, but messes with mypy.
+                        lines[i] = "None  # Mark for deletion"
                 elif command == "p":
                     # print? No action?
                     pass

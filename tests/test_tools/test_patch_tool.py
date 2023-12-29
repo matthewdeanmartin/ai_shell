@@ -4,6 +4,7 @@ from unittest.mock import patch
 import pytest
 
 from ai_shell.patch_tool import PatchTool
+from tests.util import config_for_tests
 
 
 def test_apply_git_patch_success(tmp_path):
@@ -11,7 +12,7 @@ def test_apply_git_patch_success(tmp_path):
     patch_content = "diff --git a/file.txt b/file.txt\nnew file mode 100644\nindex 0000000..e69de29"
 
     # Initialize PatchTool with the temporary directory
-    tool = PatchTool(str(tmp_path))
+    tool = PatchTool(str(tmp_path), config=config_for_tests())
 
     # Mock subprocess.run to simulate successful git apply
     with patch("subprocess.run") as mock_run:
@@ -29,7 +30,7 @@ def test_apply_git_patch_failure(tmp_path):
     patch_content = "invalid patch format"
 
     # Initialize PatchTool with the temporary directory
-    tool = PatchTool(str(tmp_path))
+    tool = PatchTool(str(tmp_path), config=config_for_tests())
 
     # Mock subprocess.run to simulate a failed git apply
     with patch("subprocess.run") as mock_run:
@@ -42,7 +43,7 @@ def test_apply_git_patch_failure(tmp_path):
 
 
 def test_extract_files_from_patch():
-    tool = PatchTool("dummy_root_folder")
+    tool = PatchTool("dummy_root_folder", config=config_for_tests())
 
     # Example patch content
     patch_content = """

@@ -3,11 +3,10 @@
 import os
 from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Never
 
 
 @contextmanager
-def change_directory(new_path: str) -> Iterator[Never]:
+def change_directory(new_path: str) -> Iterator[None]:
     """Change the current working directory to a new path.
 
     Args:
@@ -16,6 +15,6 @@ def change_directory(new_path: str) -> Iterator[Never]:
     original_directory = os.getcwd()
     try:
         os.chdir(new_path)
-        yield
+        yield None
     finally:
         os.chdir(original_directory)

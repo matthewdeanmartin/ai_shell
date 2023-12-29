@@ -72,20 +72,20 @@ repos:
       - id: python-no-eval
       - id: python-no-log-warn
       - id: text-unicode-replacement-char
-  - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.38.0
-    hooks:
-      - id: markdownlint
-        # '--fix'
-        args: [ 'content/**/*.md', '--config', '.markdownlintrc' ]
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.17  # Use the ref you want to point at
-    hooks:
-      - id: mdformat
-        # Optionally add plugins
-        additional_dependencies:
-          - mdformat-gfm
-          - mdformat-black
+#  - repo: https://github.com/igorshubovych/markdownlint-cli
+#    rev: v0.38.0
+#    hooks:
+#      - id: markdownlint
+#        # '--fix'
+#        args: [ 'content/**/*.md', '--config', '.markdownlintrc' ]
+#  - repo: https://github.com/executablebooks/mdformat
+#    rev: 0.7.17  # Use the ref you want to point at
+#    hooks:
+#      - id: mdformat
+#        # Optionally add plugins
+#        additional_dependencies:
+#          - mdformat-gfm
+#          - mdformat-black
   - repo: https://github.com/adamchainz/blacken-docs
     rev: 1.16.0
     hooks:

@@ -3,6 +3,7 @@ import os
 import pytest
 
 from ai_shell.cut_tool import CutTool, is_in_ranges, parse_ranges
+from tests.util import config_for_tests
 
 
 @pytest.mark.parametrize(
@@ -48,7 +49,7 @@ def test_cut_fields_by_name(tmp_path):
     absolute_file_path = os.path.abspath(path)
     # Call the function with the temporary file and assert its output
     expected_output = "B\nE\n"
-    tool = CutTool(root_folder=str(absolute_file_path))
+    tool = CutTool(root_folder=str(absolute_file_path), config=config_for_tests())
     actual_output = tool.cut_fields_by_name(str(absolute_file_path), ["Field2"])
     assert actual_output == expected_output
 
@@ -58,7 +59,7 @@ def test_cut_fields_by_index(tmp_path):
     absolute_file_path = os.path.abspath(path)
     # Call the function with the temporary file and assert its output
     expected_output = "Field1,Field2\nA,B\nD,E\n"
-    tool = CutTool(root_folder=str(absolute_file_path))
+    tool = CutTool(root_folder=str(absolute_file_path), config=config_for_tests())
     actual_output = tool.cut_fields(str(absolute_file_path), "1,2")
     assert actual_output == expected_output
 
@@ -68,6 +69,6 @@ def test_cut_chars_by_range(tmp_path):
     absolute_file_path = os.path.abspath(path)
     # Call the function with the temporary file and assert its output
     expected_output = "Fed\nABC\nDEF\n"
-    tool = CutTool(root_folder=str(absolute_file_path))
+    tool = CutTool(root_folder=str(absolute_file_path), config=config_for_tests())
     actual_output = tool.cut_characters(str(absolute_file_path), "1-1,3-3,5-5")
     assert actual_output == expected_output

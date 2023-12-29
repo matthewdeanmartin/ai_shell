@@ -62,7 +62,7 @@ def generate_method_code(schema: dict, prologue: str, namespace: str):
             python_type = type_mapping[str(arg_type)]
             method_code += f"        {arg_name} = cast({python_type}, arguments.get('{arg_name}',{default_clause}))\n"
 
-        if prologue.startswith("self."):
+        if "self.tool" in prologue:
             method_code += f"        return self.tool_{namespace}.{method_name}(\n"
         else:
             method_code += f"        return tool.{method_name}(\n"
@@ -82,72 +82,78 @@ def generate_the_toolkit(target_file: str) -> None:
         target_file (str): Target file to write the generated code.
     """
     tools = ""
-    for _ns, json_schema in schemas.SCHEMAS.items():
+    for _ns, json_schema in schemas._SCHEMAS.items():
         for tool, _ in json_schema.items():
             tools += f'            "{tool}" : self.{tool},\n'
 
     header = f"""\"\"\"
-    Generate code, do not edit.
-    \"\"\"
-    from ai_shell.openai_support import ToolKitBase
-    from typing import Any, cast, Callable, Optional
-    
-    from ai_shell.cat_tool import CatTool
-    from ai_shell.find_tool import FindTool
-    from ai_shell.git_tool import GitTool
-    from ai_shell.grep_tool import GrepTool
-    from ai_shell.ls_tool import LsTool
-    from ai_shell.token_tool import TokenCounterTool
-    from ai_shell.edlin_tool import EdlinTool
-    from ai_shell.pycat_tool import PyCatTool
-    from ai_shell.ed_tool import EdTool
-    from ai_shell.cut_tool import CutTool
-    from ai_shell.head_tail_tool import HeadTailTool
-    from ai_shell.patch_tool import PatchTool
-    from ai_shell.sed_tool import SedTool
-    from ai_shell.insert_tool import InsertTool
-    from ai_shell.replace_tool import ReplaceTool
-    from ai_shell.todo_tool import TodoTool
-    from ai_shell.answer_tool import AnswerCollectorTool
-    from ai_shell.rewrite_tool import RewriteTool
-    from ai_shell.pytest_tool import PytestTool
-    
-    # pylint: disable=unused-argument
-    
-    class ToolKit(ToolKitBase):
-        \"\"\"AI Shell Toolkit\"\"\"\n\n
-        def __init__(self, root_folder: str, token_model: str, global_max_lines: int):
-            super().__init__(root_folder, token_model, global_max_lines)
-            self.lookup: dict[str, Callable[[dict[str, Any]], Any]] = {{
-                {tools}
-            }}
-    """
+Generate code, do not edit.
+\"\"\"
+from ai_shell.openai_support import ToolKitBase
+from typing import Any, cast, Callable, Optional
+
+from ai_shell.cat_tool import CatTool
+from ai_shell.find_tool import FindTool
+from ai_shell.git_tool import GitTool
+from ai_shell.grep_tool import GrepTool
+from ai_shell.ls_tool import LsTool
+from ai_shell.token_tool import TokenCounterTool
+from ai_shell.edlin_tool import EdlinTool
+from ai_shell.pycat_tool import PyCatTool
+from ai_shell.ed_tool import EdTool
+from ai_shell.cut_tool import CutTool
+from ai_shell.head_tail_tool import HeadTailTool
+from ai_shell.patch_tool import PatchTool
+from ai_shell.sed_tool import SedTool
+from ai_shell.insert_tool import InsertTool
+from ai_shell.replace_tool import ReplaceTool
+from ai_shell.todo_tool import TodoTool
+from ai_shell.answer_tool import AnswerCollectorTool
+from ai_shell.rewrite_tool import RewriteTool
+from ai_shell.pytest_tool import PytestTool
+
+# pylint: disable=unused-argument
+
+class ToolKit(ToolKitBase):
+    \"\"\"AI Shell Toolkit\"\"\"\n\n
+    def __init__(self, root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config:Config) -> None:
+        super().__init__(root_folder, token_model, global_max_lines, permitted_tools, config)
+        self._lookup: dict[str, Callable[[dict[str, Any]], Any]] = {{
+            {tools}
+        }}
+        # Stateful tool support
+        self.tool_answer_collector = None
+"""
 
     prologue = {}
-    prologue["cat"] = "tool = CatTool(self.root_folder)"
-    prologue["headtail"] = "tool = HeadTailTool(self.root_folder)"
-    prologue["cut"] = "tool = CutTool(self.root_folder)"
-    prologue["pycat"] = "tool = PyCatTool(self.root_folder)"
-    prologue["ed"] = "tool = EdTool(self.root_folder)"
-    prologue["sed"] = "tool = SedTool(self.root_folder)"
-    prologue["insert"] = "tool = InsertTool(self.root_folder)"
-    prologue["replace"] = "tool = ReplaceTool(self.root_folder)"
-    prologue["edlin"] = "tool = EdlinTool(self.root_folder)"
-    prologue["find"] = "tool = FindTool(self.root_folder)"
-    prologue["git"] = "tool = GitTool(self.root_folder)"
-    prologue["patch"] = "tool = PatchTool(self.root_folder)"
-    prologue["ls"] = "tool = LsTool(self.root_folder)"
-    prologue["grep"] = "tool = GrepTool(self.root_folder)"
-    prologue["token_counter"] = "tool = TokenCounterTool(self.root_folder)"  # nosec
-    prologue["todo"] = "tool = TodoTool(self.root_folder)"
-    prologue["answer_collector"] = "self.tool_answer_collector = AnswerCollectorTool(self.root_folder)"
-    prologue["rewrite"] = "tool = RewriteTool(self.root_folder)"
-    prologue["pytest"] = "tool = PytestTool(self.root_folder)"
+    prologue["cat"] = "tool = CatTool(self.root_folder, self.config)"
+    prologue["headtail"] = "tool = HeadTailTool(self.root_folder, self.config)"
+    prologue["cut"] = "tool = CutTool(self.root_folder, self.config)"
+    prologue["pycat"] = "tool = PyCatTool(self.root_folder, self.config)"
+    prologue["ed"] = "tool = EdTool(self.root_folder, self.config)"
+    prologue["sed"] = "tool = SedTool(self.root_folder, self.config)"
+    prologue["insert"] = "tool = InsertTool(self.root_folder, self.config)"
+    prologue["replace"] = "tool = ReplaceTool(self.root_folder, self.config)"
+    prologue["edlin"] = "tool = EdlinTool(self.root_folder, self.config)"
+    prologue["find"] = "tool = FindTool(self.root_folder, self.config)"
+    prologue["git"] = "tool = GitTool(self.root_folder, self.config)"
+    prologue["patch"] = "tool = PatchTool(self.root_folder, self.config)"
+    prologue["ls"] = "tool = LsTool(self.root_folder, self.config)"
+    prologue["grep"] = "tool = GrepTool(self.root_folder, self.config)"
+    prologue["token_counter"] = "tool = TokenCounterTool(self.root_folder, self.config)"  # nosec
+    prologue["todo"] = "tool = TodoTool(self.root_folder, self.config)"
+    prologue["answer_collector"] = (
+        "if not self.tool_answer_collector:\n"
+        "            raise TypeError('tool cannot be None here')\n\n"
+        "        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)"
+    )
+    prologue["rewrite"] = "tool = RewriteTool(self.root_folder, self.config)"
+    prologue["pytest"] = "tool = PytestTool(self.root_folder, self.config)"
 
     # Generate method code
     with open(target_file, "w", encoding="utf-8") as code:
         code.write(header)
-        for ns, json_schema in schemas.SCHEMAS.items():
+        for ns, json_schema in schemas._SCHEMAS.items():
             pro = prologue[ns]
             method_code = generate_method_code(json_schema, pro, ns)
             code.write(method_code)

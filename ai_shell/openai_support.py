@@ -12,7 +12,9 @@ from typing import Any
 
 from openai.types.beta.threads import Run
 
+from ai_shell.import_plugins import convert_to_toolkit, handle_tool
 from ai_shell.utils import medias
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.json_utils import LoosyGoosyEncoder, exception_to_rfc7807_dict, try_everything
 from ai_shell.utils.read_fs import temporary_change_dir
 
@@ -22,7 +24,9 @@ logger = logging.getLogger(__name__)
 class ToolKitBase:
     """Non generated base class for generated toolkit"""
 
-    def __init__(self, root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str]) -> None:
+    def __init__(
+        self, root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config: Config
+    ) -> None:
         """
         Initialize the ToolKitBase class.
 
@@ -31,11 +35,18 @@ class ToolKitBase:
             token_model (str): The token model to use for the toolkit
             global_max_lines (int): The global max lines to use for the toolkit
             permitted_tools (list[str]): The permitted tools for the toolkit
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder
         self.token_model = token_model
         self.global_max_lines = global_max_lines
-        self.lookup: dict[str, Callable[[Any], Any]] = {}
+        self._lookup: dict[str, Callable[[Any], Any]] = {}
+        self.config = config
+        self.plugin_folder = config.get_value("plugin_folder")
+        self.plugin_tools: dict[str, Any] = (
+            convert_to_toolkit(self.plugin_folder, root_folder) if self.plugin_folder else {}
+        )
+
         self.permitted_tools: list[str] = permitted_tools
         self.tool_usage_stats: dict[str, dict[str, int]] = {}
         """Name: {count, success, failure}"""
@@ -62,7 +73,7 @@ class ToolKitBase:
         Returns:
             list[Any]: The results of the tool calls
         """
-        if not self.lookup:
+        if not self._lookup:
             raise TypeError("Missing lookup table")
         results: list[dict[str, Any]] = []
 
@@ -86,7 +97,7 @@ class ToolKitBase:
                     f"please explain how it works and why you need it and the administrator will "
                     f"consider granting permissions."
                 )
-            if name in self.lookup:
+            if name in self._lookup:
                 self.tool_usage_stats[name]["count"] += 1
                 with temporary_change_dir(self.root_folder):
                     try:
@@ -95,7 +106,7 @@ class ToolKitBase:
                             del arguments["media_type"]
                         else:
                             media_type = None
-                        result = self.lookup[name](arguments)
+                        result = self._lookup[name](arguments)
                         self.tool_usage_stats[name]["success"] += 1
                         if media_type:
                             result = medias.convert_to_media_type(result, media_type)
@@ -106,6 +117,15 @@ class ToolKitBase:
                         traceback.print_exc()
                         result = exception_to_rfc7807_dict(exception)
                         logger.warning(f"Error in {name}: {result}")
+            elif name in self.plugin_tools:
+                # Refactor so plugin_tools are handled more like regular tools?
+                # TODO: change folder, mimetypes, error handling, call stats, etc.
+                tool_info = self.plugin_tools[name]
+                method_name = name
+                instance = tool_info[0]
+                tool_info[1]
+                bots_kwargs = arguments
+                result = handle_tool(method_name, bots_kwargs, instance)
             else:
                 self.tool_usage_stats[name]["failure"] += 1
                 raise TypeError(f"Unknown function name {name}")

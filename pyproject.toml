@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ai_shell"
-version = "0.1.3"
+version = "1.0.0"
 description = "Filesystem Shell interface that an OpenAI Assitant can use as a tool."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["openai", "chatgpt", ]
@@ -27,6 +27,7 @@ include = [
     "ai_todo/**/*.jinja",
     "ai_todo/**/*.md.j2",
     "ai_todo/py.typed",
+    "ai_shell/fish_tank.zip"
 ]
 exclude = [
 ]
@@ -77,7 +78,7 @@ astor = ">=0.8.1"
 
 # editors
 ed = ">=0.1.0"
-dedlin = ">=1.18.0"
+dedlin = ">=1.19.0"
 # check if editor removed code
 pygount = ">=1.6.1"
 
@@ -96,6 +97,9 @@ pytest-cov = ">=4.1.0"
 pylint = ">=3.0.2"
 ruff = ">=0.1.9"
 
+## Demo support
+#importlib_resources = ">=6.1.1"
+
 [tool.poetry.dev-dependencies]
 python-dotenv = ">=1.0.0"
 # various attempts to auto generate the jsonschema from toolkit_factory' metadata
@@ -105,12 +109,12 @@ python-dotenv = ">=1.0.0"
 #pytojsonschema=">=1.11.1"
 
 # types
-mypy = ">=1.7.0"
+mypy = ">=1.8.0"
 types-jsonschema = "*"
 types-PyYAML = "*"
 types-toml = "*"
 
-# build toolkit_factory
+# build tools
 black = ">=23.11.0"
 
 # more testing
@@ -125,6 +129,10 @@ scriv = ">=1.5.0"
 # docs
 interrogate = ">=1.5.0"
 pydoctest = ">=0.1.22"
+pdoc3 = ">=0.10.0"
+
+# contract
+griffe = ">=0.38.1"
 
 [tool.black]
 line-length = 120
@@ -236,3 +244,16 @@ main_branches = "master, main, develop, dev"
 warn_return_any = true
 warn_unused_configs = true
 strict = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+strict_optional = true
+warn_redundant_casts = true
+warn_no_return = true
+
+[mypy.pygount]
+ignore_missing_imports = true
+
+[mypy.astor]
+ignore_missing_imports = true

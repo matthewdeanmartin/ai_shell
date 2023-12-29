@@ -1,4 +1,4 @@
-from ai_shell.minify_it import strip_comments_docstrings, strip_docstrings_with_regex
+from ai_shell.pyutils.minify_it import strip_comments_docstrings, strip_docstrings_with_regex
 
 
 def test_strip_comments_docstrings():

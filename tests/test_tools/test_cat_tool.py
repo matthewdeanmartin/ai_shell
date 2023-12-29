@@ -3,6 +3,7 @@ import os
 import pytest
 
 from ai_shell.cat_tool import CatTool
+from tests.util import config_for_tests
 
 
 @pytest.fixture
@@ -20,7 +21,7 @@ def setup_test_file(tmp_path):
 
 def test_number_lines(setup_test_file):
     absolute_file_path = os.path.abspath(setup_test_file)
-    cat_tool = CatTool(root_folder=absolute_file_path)
+    cat_tool = CatTool(root_folder=absolute_file_path, config=config_for_tests())
     expected_output = "1\tbread\n2\t\n3\t\n4\tcookies\n"
     actual_output = cat_tool.cat_markdown([setup_test_file], squeeze_blank=False, number_lines=True)
     assert actual_output == expected_output
@@ -28,7 +29,7 @@ def test_number_lines(setup_test_file):
 
 def test_squeeze_blank(setup_test_file):
     absolute_file_path = os.path.abspath(setup_test_file)
-    cat_tool = CatTool(root_folder=absolute_file_path)
+    cat_tool = CatTool(root_folder=absolute_file_path, config=config_for_tests())
     expected_output = "bread\n\ncookies\n"
     actual_output = cat_tool.cat_markdown([setup_test_file], squeeze_blank=True, number_lines=False)
     assert actual_output == expected_output

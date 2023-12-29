@@ -25,7 +25,7 @@ def almost_json_to_json(data_str: str) -> str:
 
         # Convert the dictionary into a JSON string with indentation
         json_str = json.dumps(data_dict, indent=4)
-    except:
+    except BaseException:
         return data_str
 
     return json_str

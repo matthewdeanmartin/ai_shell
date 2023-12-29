@@ -10,6 +10,7 @@ import re
 from io import StringIO
 from typing import Optional
 
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder, remove_root_folder
 
@@ -17,14 +18,17 @@ logger = logging.getLogger(__name__)
 
 
 class FindTool:
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the FindTool class.
 
         Args:
             root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def find_files(
@@ -38,10 +42,10 @@ class FindTool:
         Recursively search for files or directories matching given criteria in a directory and its subdirectories.
 
         Args:
-            name (str): The exact name to match filenames against.
-            regex (str): The regex pattern to match filenames against.
-            file_type (str): The type to filter ('file' or 'directory').
-            size (str): The size to filter files by, e.g., '+100' for files larger than 100 bytes.
+            name (Optional[str]): The exact name to match filenames against.
+            regex (Optional[str]): The regex pattern to match filenames against.
+            file_type (Optional[str]): The type to filter ('file' or 'directory').
+            size (Optional[str]): The size to filter files by, e.g., '+100' for files larger than 100 bytes.
 
         Returns:
             list[str]: A list of paths to files or directories that match the criteria.
@@ -76,8 +80,8 @@ class FindTool:
 
         Args:
             path (str): The path to the file/directory.
-            file_type (str): The type to filter ('file' or 'directory').
-            size (str): The size to filter files by.
+            file_type (Optional[str]): The type to filter ('file' or 'directory').
+            size (Optional[str]): The size to filter files by.
 
         Returns:
             bool: True if the file/directory matches the criteria, False otherwise.
@@ -111,10 +115,10 @@ class FindTool:
         Recursively search for files or directories matching given criteria in a directory and its subdirectories.
 
         Args:
-            name (str): The exact name to match filenames against.
-            regex (str): The regex pattern to match filenames against.
-            file_type (str): The type to filter ('file' or 'directory').
-            size (str): The size to filter files by, e.g., '+100' for files larger than 100 bytes.
+            name (Optional[str]): The exact name to match filenames against.
+            regex (Optional[str]): The regex pattern to match filenames against.
+            file_type (Optional[str]): The type to filter ('file' or 'directory').
+            size (Optional[str]): The size to filter files by, e.g., '+100' for files larger than 100 bytes.
 
         Returns:
             str: Markdown of paths to files or directories that match the criteria.

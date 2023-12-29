@@ -1,8 +1,26 @@
 # TODO
 
+## Pain points
+- no more log folder by convention
+- put API log on hold (replace with ordinary file?)
+
+## Demo Bots
+
+- python -m ai_shell.demo_bots.(bot_name)
+- Make "fish tank" a resource?
+- Start up check
+  - Needs a place for logs (api, dialog, cli)
+  - Needs a place for config
+  - Needs an API key
+  - Needs permission from user to write to /src/
+
+## MORE
+
 - check for repetition in replies, e.g "I'm sorry I can't do that", can mean it is stuck.
-- DEMO BOTs: ais demo -bot botname
 - can't use certain tools until they're unlocked (e.g no edit w/o looking at file)
+
+## Plugin Architecture
+- First, allow for dynamic tools (dynamic schema and dynamic toolkit code)
 
 ## Uncategorized
 

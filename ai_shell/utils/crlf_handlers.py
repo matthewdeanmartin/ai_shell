@@ -12,12 +12,15 @@ class LineEndingConverter:
             file_path (str): The path of the file to convert.
         """
         self.file_path = file_path
-        self.lines = None
-        self.line_endings_type = None
+        self.lines: list[bytes] = []
+        self.line_endings_type = ""
 
-    def check_line_endings(self):
+    def check_line_endings(self) -> str:
         """
         Check and store the type of line endings (CRLF, LF, or Mixed).
+
+        Returns:
+            str: The type of line endings
         """
         has_crlf = False
         has_lf = False
@@ -47,7 +50,7 @@ class LineEndingConverter:
 
         return self.line_endings_type
 
-    def dos2unix(self):
+    def dos2unix(self) -> None:
         """
         Convert to Unix line endings (LF), using the stored file data.
         """
@@ -61,7 +64,7 @@ class LineEndingConverter:
                     file.write(line)
         self.line_endings_type = "LF"
 
-    def unix2dos(self):
+    def unix2dos(self) -> None:
         """
         Convert to DOS line endings (CRLF), using the stored file data.
         """

@@ -18,14 +18,18 @@ from ai_shell.replace_tool import ReplaceTool
 from ai_shell.rewrite_tool import RewriteTool
 from ai_shell.todo_tool import TodoTool
 from ai_shell.token_tool import TokenCounterTool
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.console_utils import pretty_console
 
 # pylint: disable=unused-argument
 
 
+CONFIG = Config()
+
+
 def head_command(args):
     """Invoke head"""
-    tool = HeadTailTool(".")
+    tool = HeadTailTool(".", CONFIG)
     pretty_console(
         tool.head(
             byte_count=args.byte_count,
@@ -37,7 +41,7 @@ def head_command(args):
 
 def head_markdown_command(args):
     """Invoke head_markdown"""
-    tool = HeadTailTool(".")
+    tool = HeadTailTool(".", CONFIG)
     pretty_console(
         tool.head_markdown(
             file_path=args.file_path,
@@ -48,7 +52,7 @@ def head_markdown_command(args):
 
 def head_tail_command(args):
     """Invoke head_tail"""
-    tool = HeadTailTool(".")
+    tool = HeadTailTool(".", CONFIG)
     pretty_console(
         tool.head_tail(
             byte_count=args.byte_count,
@@ -61,7 +65,7 @@ def head_tail_command(args):
 
 def tail_command(args):
     """Invoke tail"""
-    tool = HeadTailTool(".")
+    tool = HeadTailTool(".", CONFIG)
     pretty_console(
         tool.tail(
             byte_count=args.byte_count,
@@ -73,7 +77,7 @@ def tail_command(args):
 
 def tail_markdown_command(args):
     """Invoke tail_markdown"""
-    tool = HeadTailTool(".")
+    tool = HeadTailTool(".", CONFIG)
     pretty_console(
         tool.tail_markdown(
             file_path=args.file_path,
@@ -84,7 +88,7 @@ def tail_markdown_command(args):
 
 def cat_command(args):
     """Invoke cat"""
-    tool = CatTool(".")
+    tool = CatTool(".", CONFIG)
     pretty_console(
         tool.cat(
             file_paths=args.file_paths,
@@ -96,7 +100,7 @@ def cat_command(args):
 
 def cat_markdown_command(args):
     """Invoke cat_markdown"""
-    tool = CatTool(".")
+    tool = CatTool(".", CONFIG)
     pretty_console(
         tool.cat_markdown(
             file_paths=args.file_paths,
@@ -108,7 +112,7 @@ def cat_markdown_command(args):
 
 def cut_characters_command(args):
     """Invoke cut_characters"""
-    tool = CutTool(".")
+    tool = CutTool(".", CONFIG)
     pretty_console(
         tool.cut_characters(
             character_ranges=args.character_ranges,
@@ -119,7 +123,7 @@ def cut_characters_command(args):
 
 def cut_fields_command(args):
     """Invoke cut_fields"""
-    tool = CutTool(".")
+    tool = CutTool(".", CONFIG)
     pretty_console(
         tool.cut_fields(
             delimiter=args.delimiter,
@@ -131,7 +135,7 @@ def cut_fields_command(args):
 
 def cut_fields_by_name_command(args):
     """Invoke cut_fields_by_name"""
-    tool = CutTool(".")
+    tool = CutTool(".", CONFIG)
     pretty_console(
         tool.cut_fields_by_name(
             delimiter=args.delimiter,
@@ -143,7 +147,7 @@ def cut_fields_by_name_command(args):
 
 def find_files_command(args):
     """Invoke find_files"""
-    tool = FindTool(".")
+    tool = FindTool(".", CONFIG)
     pretty_console(
         tool.find_files(
             file_type=args.file_type,
@@ -156,7 +160,7 @@ def find_files_command(args):
 
 def find_files_markdown_command(args):
     """Invoke find_files_markdown"""
-    tool = FindTool(".")
+    tool = FindTool(".", CONFIG)
     pretty_console(
         tool.find_files_markdown(
             file_type=args.file_type,
@@ -169,13 +173,13 @@ def find_files_markdown_command(args):
 
 def get_current_branch_command(args):
     """Invoke get_current_branch"""
-    tool = GitTool(".")
+    tool = GitTool(".", CONFIG)
     pretty_console(tool.get_current_branch())
 
 
 def get_recent_commits_command(args):
     """Invoke get_recent_commits"""
-    tool = GitTool(".")
+    tool = GitTool(".", CONFIG)
     pretty_console(
         tool.get_recent_commits(
             n=args.n,
@@ -186,13 +190,13 @@ def get_recent_commits_command(args):
 
 def git_diff_command(args):
     """Invoke git_diff"""
-    tool = GitTool(".")
+    tool = GitTool(".", CONFIG)
     pretty_console(tool.git_diff())
 
 
 def git_diff_commit_command(args):
     """Invoke git_diff_commit"""
-    tool = GitTool(".")
+    tool = GitTool(".", CONFIG)
     pretty_console(
         tool.git_diff_commit(
             commit1=args.commit1,
@@ -203,7 +207,7 @@ def git_diff_commit_command(args):
 
 def git_log_file_command(args):
     """Invoke git_log_file"""
-    tool = GitTool(".")
+    tool = GitTool(".", CONFIG)
     pretty_console(
         tool.git_log_file(
             filename=args.filename,
@@ -213,7 +217,7 @@ def git_log_file_command(args):
 
 def git_log_search_command(args):
     """Invoke git_log_search"""
-    tool = GitTool(".")
+    tool = GitTool(".", CONFIG)
     pretty_console(
         tool.git_log_search(
             search_string=args.search_string,
@@ -223,19 +227,19 @@ def git_log_search_command(args):
 
 def git_show_command(args):
     """Invoke git_show"""
-    tool = GitTool(".")
+    tool = GitTool(".", CONFIG)
     pretty_console(tool.git_show())
 
 
 def git_status_command(args):
     """Invoke git_status"""
-    tool = GitTool(".")
+    tool = GitTool(".", CONFIG)
     pretty_console(tool.git_status())
 
 
 def is_ignored_by_gitignore_command(args):
     """Invoke is_ignored_by_gitignore"""
-    tool = GitTool(".")
+    tool = GitTool(".", CONFIG)
     pretty_console(
         tool.is_ignored_by_gitignore(
             file_path=args.file_path,
@@ -246,7 +250,7 @@ def is_ignored_by_gitignore_command(args):
 
 def apply_git_patch_command(args):
     """Invoke apply_git_patch"""
-    tool = PatchTool(".")
+    tool = PatchTool(".", CONFIG)
     pretty_console(
         tool.apply_git_patch(
             patch_content=args.patch_content,
@@ -256,10 +260,10 @@ def apply_git_patch_command(args):
 
 def ls_command(args):
     """Invoke ls"""
-    tool = LsTool(".")
+    tool = LsTool(".", CONFIG)
     pretty_console(
         tool.ls(
-            all=args.all,
+            all_files=args.all_files,
             long=args.long,
             path=args.path,
         )
@@ -268,10 +272,10 @@ def ls_command(args):
 
 def ls_markdown_command(args):
     """Invoke ls_markdown"""
-    tool = LsTool(".")
+    tool = LsTool(".", CONFIG)
     pretty_console(
         tool.ls_markdown(
-            all=args.all,
+            all_files=args.all_files,
             long=args.long,
             path=args.path,
         )
@@ -280,7 +284,7 @@ def ls_markdown_command(args):
 
 def grep_command(args):
     """Invoke grep"""
-    tool = GrepTool(".")
+    tool = GrepTool(".", CONFIG)
     pretty_console(
         tool.grep(
             glob_pattern=args.glob_pattern,
@@ -294,7 +298,7 @@ def grep_command(args):
 
 def grep_markdown_command(args):
     """Invoke grep_markdown"""
-    tool = GrepTool(".")
+    tool = GrepTool(".", CONFIG)
     pretty_console(
         tool.grep_markdown(
             glob_pattern=args.glob_pattern,
@@ -307,7 +311,7 @@ def grep_markdown_command(args):
 
 def count_tokens_command(args):
     """Invoke count_tokens"""
-    tool = TokenCounterTool(".")
+    tool = TokenCounterTool(".", CONFIG)
     pretty_console(
         tool.count_tokens(
             text=args.text,
@@ -317,7 +321,7 @@ def count_tokens_command(args):
 
 def add_todo_command(args):
     """Invoke add_todo"""
-    tool = TodoTool(".")
+    tool = TodoTool(".", CONFIG)
     pretty_console(
         tool.add_todo(
             assignee=args.assignee,
@@ -331,13 +335,13 @@ def add_todo_command(args):
 
 def query_todos_by_assignee_command(args):
     """Invoke query_todos_by_assignee"""
-    tool = TodoTool(".")
+    tool = TodoTool(".", CONFIG)
     pretty_console(tool.query_todos_by_assignee())
 
 
 def query_todos_by_regex_command(args):
     """Invoke query_todos_by_regex"""
-    tool = TodoTool(".")
+    tool = TodoTool(".", CONFIG)
     pretty_console(
         tool.query_todos_by_regex(
             regex_pattern=args.regex_pattern,
@@ -347,7 +351,7 @@ def query_todos_by_regex_command(args):
 
 def remove_todo_command(args):
     """Invoke remove_todo"""
-    tool = TodoTool(".")
+    tool = TodoTool(".", CONFIG)
     pretty_console(
         tool.remove_todo(
             title=args.title,
@@ -357,7 +361,7 @@ def remove_todo_command(args):
 
 def insert_text_after_context_command(args):
     """Invoke insert_text_after_context"""
-    tool = InsertTool(".")
+    tool = InsertTool(".", CONFIG)
     pretty_console(
         tool.insert_text_after_context(
             context=args.context,
@@ -369,7 +373,7 @@ def insert_text_after_context_command(args):
 
 def insert_text_after_multiline_context_command(args):
     """Invoke insert_text_after_multiline_context"""
-    tool = InsertTool(".")
+    tool = InsertTool(".", CONFIG)
     pretty_console(
         tool.insert_text_after_multiline_context(
             context_lines=args.context_lines,
@@ -381,7 +385,7 @@ def insert_text_after_multiline_context_command(args):
 
 def insert_text_at_start_or_end_command(args):
     """Invoke insert_text_at_start_or_end"""
-    tool = InsertTool(".")
+    tool = InsertTool(".", CONFIG)
     pretty_console(
         tool.insert_text_at_start_or_end(
             file_path=args.file_path,
@@ -393,7 +397,7 @@ def insert_text_at_start_or_end_command(args):
 
 def replace_all_command(args):
     """Invoke replace_all"""
-    tool = ReplaceTool(".")
+    tool = ReplaceTool(".", CONFIG)
     pretty_console(
         tool.replace_all(
             file_path=args.file_path,
@@ -405,7 +409,7 @@ def replace_all_command(args):
 
 def replace_line_by_line_command(args):
     """Invoke replace_line_by_line"""
-    tool = ReplaceTool(".")
+    tool = ReplaceTool(".", CONFIG)
     pretty_console(
         tool.replace_line_by_line(
             file_path=args.file_path,
@@ -419,7 +423,7 @@ def replace_line_by_line_command(args):
 
 def replace_with_regex_command(args):
     """Invoke replace_with_regex"""
-    tool = ReplaceTool(".")
+    tool = ReplaceTool(".", CONFIG)
     pretty_console(
         tool.replace_with_regex(
             file_path=args.file_path,
@@ -431,7 +435,7 @@ def replace_with_regex_command(args):
 
 def save_if_changed_command(args):
     """Invoke save_if_changed"""
-    tool = ReplaceTool(".")
+    tool = ReplaceTool(".", CONFIG)
     pretty_console(
         tool.save_if_changed(
             file_path=args.file_path,
@@ -441,9 +445,19 @@ def save_if_changed_command(args):
     )
 
 
+def revert_to_latest_backup_command(args):
+    """Invoke revert_to_latest_backup"""
+    tool = RewriteTool(".", CONFIG)
+    pretty_console(
+        tool.revert_to_latest_backup(
+            file_name=args.file_name,
+        )
+    )
+
+
 def rewrite_file_command(args):
     """Invoke rewrite_file"""
-    tool = RewriteTool(".")
+    tool = RewriteTool(".", CONFIG)
     pretty_console(
         tool.rewrite_file(
             file_path=args.file_path,
@@ -454,7 +468,7 @@ def rewrite_file_command(args):
 
 def write_new_file_command(args):
     """Invoke write_new_file"""
-    tool = RewriteTool(".")
+    tool = RewriteTool(".", CONFIG)
     pretty_console(
         tool.write_new_file(
             file_path=args.file_path,
@@ -465,7 +479,7 @@ def write_new_file_command(args):
 
 def report_bool_command(args):
     """Invoke report_bool"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_bool(
             answer=args.answer,
@@ -476,7 +490,7 @@ def report_bool_command(args):
 
 def report_dict_command(args):
     """Invoke report_dict"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_dict(
             answer=args.answer,
@@ -487,7 +501,7 @@ def report_dict_command(args):
 
 def report_float_command(args):
     """Invoke report_float"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_float(
             answer=args.answer,
@@ -498,7 +512,7 @@ def report_float_command(args):
 
 def report_int_command(args):
     """Invoke report_int"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_int(
             answer=args.answer,
@@ -509,7 +523,7 @@ def report_int_command(args):
 
 def report_json_command(args):
     """Invoke report_json"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_json(
             answer=args.answer,
@@ -520,7 +534,7 @@ def report_json_command(args):
 
 def report_list_command(args):
     """Invoke report_list"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_list(
             answer=args.answer,
@@ -531,7 +545,7 @@ def report_list_command(args):
 
 def report_set_command(args):
     """Invoke report_set"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_set(
             answer=args.answer,
@@ -542,7 +556,7 @@ def report_set_command(args):
 
 def report_text_command(args):
     """Invoke report_text"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_text(
             answer=args.answer,
@@ -553,7 +567,7 @@ def report_text_command(args):
 
 def report_toml_command(args):
     """Invoke report_toml"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_toml(
             answer=args.answer,
@@ -564,7 +578,7 @@ def report_toml_command(args):
 
 def report_tuple_command(args):
     """Invoke report_tuple"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_tuple(
             answer=args.answer,
@@ -575,7 +589,7 @@ def report_tuple_command(args):
 
 def report_xml_command(args):
     """Invoke report_xml"""
-    tool = AnswerCollectorTool(".")
+    tool = AnswerCollectorTool(".", CONFIG)
     pretty_console(
         tool.report_xml(
             answer=args.answer,
@@ -586,7 +600,7 @@ def report_xml_command(args):
 
 def pytest_command(args):
     """Invoke pytest"""
-    tool = PytestTool(".")
+    tool = PytestTool(".", CONFIG)
     pretty_console(tool.pytest())
 
 
@@ -1018,7 +1032,10 @@ def run():
     )
 
     ls_parser.add_argument(
-        "--all", dest="all", action="store_true", help="""If True, include hidden files. Defaults to False."""
+        "--all-files",
+        dest="all_files",
+        action="store_true",
+        help="""If True, include hidden files. Defaults to False.""",
     )
 
     ls_parser.add_argument(
@@ -1045,7 +1062,10 @@ def run():
     )
 
     ls_markdown_parser.add_argument(
-        "--all", dest="all", action="store_true", help="""If True, include hidden files. Defaults to False."""
+        "--all-files",
+        dest="all_files",
+        action="store_true",
+        help="""If True, include hidden files. Defaults to False.""",
     )
 
     ls_markdown_parser.add_argument(
@@ -1379,9 +1399,25 @@ Defaults to 0.""",
     )
     save_if_changed_parser.set_defaults(func=save_if_changed_command)
 
+    # Create a parser for the "revert_to_latest_backup" command
+    revert_to_latest_backup_parser = subparsers.add_parser(
+        "revert_to_latest_backup", help="""Revert the file to the most recent backup.."""
+    )
+
+    revert_to_latest_backup_parser.add_argument(
+        "--file-name", dest="file_name", help="""The name of the file to revert."""
+    )
+
+    revert_to_latest_backup_parser.add_argument(
+        "--mime-type",
+        dest="mime_type",
+        help="""Return value as text/csv, text/markdown, or text/yaml inside the JSON.""",
+    )
+    revert_to_latest_backup_parser.set_defaults(func=revert_to_latest_backup_command)
+
     # Create a parser for the "rewrite_file" command
     rewrite_file_parser = subparsers.add_parser(
-        "rewrite_file", help="""Rewrite an existing file at file_path within the root_folder.."""
+        "rewrite_file", help="""Backup and rewrite an existing file at file_path within the root_folder.."""
     )
 
     rewrite_file_parser.add_argument(

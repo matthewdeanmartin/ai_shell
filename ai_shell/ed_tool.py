@@ -8,6 +8,7 @@ from typing import Any
 
 from ed.buffer import Buffer
 
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import sanitize_path
 
@@ -15,16 +16,18 @@ from ai_shell.utils.read_fs import sanitize_path
 class EdTool:
     """A python version of ed."""
 
-    def __init__(self, root_folder: str):
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the EdTool class.
 
         Args:
             root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder if root_folder.endswith("/") else root_folder + "/"
         self.buffer = Buffer()
-        self.auto_cat = True
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def ed(self, script: str, file_name: str) -> list[str]:
@@ -101,7 +104,12 @@ class EdTool:
 
         return self.buffer.lines
 
-    def _run_commands(self, command_lines):
+    def _run_commands(self, command_lines: (list[tuple[Any, list[str]]])) -> None:
+        """Run the commands.
+
+        Args:
+            command_lines (list[tuple[Any, list[str]]]): The commands to run.
+        """
         for command_now, lines_now in command_lines:
             print(command_now, "\n".join(lines_now))
             self.buffer.run(command_now, lines_now)
@@ -139,7 +147,7 @@ if __name__ == "__main__":
     1d
     w
     q"""
-        tool = EdTool(".")
+        tool = EdTool(".", Config(".."))
         tool.ed(groceries, "groceries.txt")
 
     run()

@@ -4,20 +4,23 @@ Text editor for simple text insertion at line or context.
 from typing import Union
 
 from ai_shell.cat_tool import CatTool
-from ai_shell.pycat_tool import is_python_file, is_valid_python_source
+from ai_shell.pyutils.validate import is_python_file, is_valid_python_source
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 
 
 class InsertTool:
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the InsertTool class.
 
         Args:
             root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn't set.
         """
-        self.auto_cat = True
         self.root_folder = root_folder
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def insert_text_after_context(self, file_path: str, context: str, text_to_insert: str) -> str:
@@ -33,9 +36,11 @@ class InsertTool:
                            inserted after the line containing this context.
             text_to_insert (str): The text to insert into the file.
 
+        Returns:
+            str: A message for the bot with the result of the insert.
+
         Raises:
             ValueError: If the provided context matches multiple lines in the file.
-
         """
         if not file_path:
             raise TypeError("No file_path, please provide file_path for each request.")
@@ -199,6 +204,6 @@ class InsertTool:
                 file.writelines(new_file_string)
         if self.auto_cat:
             feedback = "Insert completed and no exceptions thrown."
-            contents = CatTool(self.root_folder).cat_markdown([file_path])
+            contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
             return f"Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}"
         return "Insert completed and no exceptions thrown. Please verify by other means."

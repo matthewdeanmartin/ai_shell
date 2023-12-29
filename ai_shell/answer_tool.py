@@ -14,17 +14,21 @@ How is this different from a tool call?
 """
 from typing import Any, Optional
 
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 
 
 class AnswerCollectorTool:
-    def __init__(self, root_folder: str):
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the PytestTool class.
 
         Args:
             root_folder (str): The root folder path for file operations. (Not used yet)
+            config (Config): The developer input that bot shouldn't set.
         """
+        self.root_folder = root_folder
+        self.config = config
         self.comment: Optional[str] = None
         self.bool_answer: Optional[bool] = None
         self.json_answer: Optional[str] = None
@@ -40,7 +44,11 @@ class AnswerCollectorTool:
         self.response_received = "Response received."
 
     def _answered(self) -> None:
-        """Check if this tool has been used."""
+        """Check if this tool has been used.
+
+        Raises:
+            TypeError: If the tool has been used. Recreate a new one after each usage.
+        """
         if any(
             [
                 self.comment,

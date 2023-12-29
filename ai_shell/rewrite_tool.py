@@ -4,9 +4,12 @@ For short files with lots of edits, just let the bot rewrite the file.
 TODO: set maximum file size for re-write, because it costs tokens to rewrite a large file.
 """
 import difflib
+import glob
 import os
+import shutil
 
 from ai_shell.cat_tool import CatTool
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder, sanitize_path
 
@@ -57,15 +60,17 @@ def file_similarity(file1_path: str, file2_lines: list[str]) -> tuple[float, int
 
 
 class RewriteTool:
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the RewriteTool class.
 
         Args:
             root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder
-        self.auto_cat = True
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def write_new_file(self, file_path: str, text: str) -> str:
@@ -101,7 +106,8 @@ class RewriteTool:
     @log()
     def rewrite_file(self, file_path: str, text: str) -> str:
         """
-        Rewrite an existing file at file_path within the root_folder.
+        Backup and rewrite an existing file at file_path within the root_folder.
+        This will completely replace the contents of the file with the new text.
 
         Args:
             file_path (str): The relative path to the file to be rewritten.
@@ -141,15 +147,75 @@ class RewriteTool:
             if not os.path.exists(full_path):
                 raise FileNotFoundError("File does not exist, use ls tool to see what files there are.")
 
+            self._backup_file(file_path)
+
             with open(full_path, "w", encoding="utf-8") as file:
                 file.write(text)
             feedback = f"File rewritten to {full_path}"
             if self.auto_cat:
                 feedback = "Changes without exception, please verify by other means.\n"
-                contents = CatTool(self.root_folder).cat_markdown([file_path])
+                contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
                 return f"Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}"
             return feedback + ", please view to verify contents."
         except FileNotFoundError as e:
             raise FileNotFoundError(
                 str(e) + " Consider using write_new_file method if you want to create a new file."
             ) from e
+
+    def _backup_file(self, file_name: str) -> str:
+        """
+        Create a backup of the file before overwriting it.
+
+        Args:
+            file_name (str): The name of the file to backup.
+
+        Returns:
+            str: A success message with the backup file path.
+
+        Raises:
+            ValueError: If the file does not exist or other errors occur.
+        """
+        file_path = os.path.join(self.root_folder, file_name)
+        if not os.path.exists(file_path):
+            raise ValueError(f"The file {file_name} does not exist.")
+
+        # Find existing backups
+        backup_files = sorted(glob.glob(f"{file_path}.*.bak"))
+        backup_number = len(backup_files) + 1
+        backup_file_path = f"{file_path}.{backup_number}.bak"
+
+        try:
+            shutil.copyfile(file_path, backup_file_path)
+            return f"Backup created successfully at {backup_file_path}"
+        except Exception as e:
+            raise ValueError(f"An error occurred during backup: {e}") from e
+
+    @log()
+    def revert_to_latest_backup(self, file_name: str) -> str:
+        """
+        Revert the file to the most recent backup.
+
+        Args:
+            file_name (str): The name of the file to revert.
+
+        Returns:
+            str: A success message indicating the revert operation.
+
+        Raises:
+            ValueError: If no backup is found or other errors occur.
+        """
+        file_path = os.path.join(self.root_folder, file_name)
+        backup_files = sorted(glob.glob(f"{file_path}.*.bak"), reverse=True)
+        if not backup_files:
+            raise ValueError(f"No backups found for {file_name}.")
+
+        latest_backup = backup_files[0]
+        bad_file_path = f"{file_path}.bad"
+
+        try:
+            if os.path.exists(file_path):
+                os.rename(file_path, bad_file_path)
+            os.rename(latest_backup, file_path)
+            return f"Reverted {file_name} to latest backup."
+        except Exception as e:
+            raise ValueError(f"An error occurred during revert: {e}") from e

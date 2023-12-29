@@ -1,12 +1,20 @@
 """
 Simple bot that doesn't need any tools
 """
+from openai.types.beta.threads.run_create_params import (
+    ToolAssistantToolsCode,
+    ToolAssistantToolsFunction,
+    ToolAssistantToolsRetrieval,
+)
+from openai.types.shared_params import FunctionDefinition
+
+# pylint: disable=wrong-import-position, using-constant-test
 if True:
     import openai_multi_tool_use_parallel_patch
 
 import logging.config
 from collections.abc import Awaitable, Callable
-from typing import Any, Optional
+from typing import Any, Optional, cast
 
 import openai
 from openai.types.beta import Assistant, Thread
@@ -105,10 +113,13 @@ class TaskBot:
 
     def toolkit_factory(
         self, root_folder: str, model: str, tool_names: list[str]
-    ) -> tuple[ToolKit, list[dict[str, Any]]]:
-        self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names)
+    ) -> tuple[ToolKit, list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction]]:
+        self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names, config=self.config)
         initialize_all_tools(keeps=tool_names)
-        tools_schema = [{"function": schema, "type": "function"} for schema in ALL_TOOLS]
+        tools_schema: list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction] = [
+            ToolAssistantToolsFunction(**{"function": cast(FunctionDefinition, schema), "type": "function"})
+            for schema in ALL_TOOLS
+        ]
         if not tools_schema:
             raise Exception("Not enough tools!")
         return self.toolkit, tools_schema
@@ -151,6 +162,7 @@ class TaskBot:
                 role="user",
                 content=the_ask,
             )
+            # pydantic_tools =[run_create_params.Tool(_) for _ in tool_schemas]
             run = await self.client.beta.threads.runs.create(
                 thread_id=thread.id, assistant_id=self.assistant.id, tools=tool_schemas
             )

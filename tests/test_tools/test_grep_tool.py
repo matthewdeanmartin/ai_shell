@@ -4,6 +4,7 @@ import tempfile
 import pytest
 
 from ai_shell.grep_tool import GrepTool  # Make sure to import your GrepTool class correctly
+from tests.util import config_for_tests
 
 
 @pytest.fixture
@@ -18,7 +19,7 @@ def temp_file_with_content():
 
 def test_grep_comment_lines(temp_file_with_content):
     absolute_file_path = os.path.abspath(temp_file_with_content)
-    grep_tool = GrepTool(root_folder=absolute_file_path)
+    grep_tool = GrepTool(root_folder=absolute_file_path, config=config_for_tests())
     regex = "^#.*"  # Regex pattern for lines starting with '#'
     glob_pattern = temp_file_with_content  # Use the path of the temporary file
     results = grep_tool.grep(regex, glob_pattern)
@@ -29,7 +30,7 @@ def test_grep_comment_lines(temp_file_with_content):
 
 def test_grep_print_lines(temp_file_with_content):
     absolute_file_path = os.path.abspath(temp_file_with_content)
-    grep_tool = GrepTool(root_folder=absolute_file_path)
+    grep_tool = GrepTool(root_folder=absolute_file_path, config=config_for_tests())
     regex = r"print\(.*\)"  # Regex pattern for lines with 'print'
     glob_pattern = temp_file_with_content  # Use the path of the temporary file
     results = grep_tool.grep(regex, glob_pattern)
@@ -40,7 +41,7 @@ def test_grep_print_lines(temp_file_with_content):
 
 def test_grep_print_lines_markdown(temp_file_with_content):
     absolute_file_path = os.path.abspath(temp_file_with_content)
-    grep_tool = GrepTool(root_folder=absolute_file_path)
+    grep_tool = GrepTool(root_folder=absolute_file_path, config=config_for_tests())
     regex = r"print\(.*\)"  # Regex pattern for lines with 'print'
     glob_pattern = temp_file_with_content  # Use the path of the temporary file
     results = grep_tool.grep_markdown(regex, glob_pattern).split("\n")

@@ -2,7 +2,7 @@ import json
 import os
 from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Any, Never, Optional
+from typing import Any, Optional
 
 import markpickle
 
@@ -26,7 +26,7 @@ def try_markpickle(value: Any) -> str:
     """
     try:
         return markpickle.dumps(value, config=pickle_config)
-    except:
+    except BaseException:
         return str(value)
 
 
@@ -51,21 +51,27 @@ class DialogLoggerWithMarkdown:
         ensure_log: Context manager to ensure the log file is closed properly.
     """
 
-    def __init__(self, base_directory: str = "") -> None:
+    def __init__(self, base_directory: str) -> None:
         """
         Initializes the DialogLoggerWithMarkdown object.
 
         Args:
             base_directory (str, optional): Base directory for storing log files. Defaults to LOG_FOLDER if not provided.
         """
+        if not base_directory:
+            raise ValueError("base_directory must be provided.")
+        os.makedirs(base_directory, exist_ok=True)
         self.bot_name: Optional[str] = None
         self.model: Optional[str] = None
         self.bot_instructions: Optional[str] = None
-        self.base_directory = base_directory or LOG_FOLDER
+        self.base_directory = base_directory
         log_files = [f for f in os.listdir(self.base_directory) if f.endswith(".md")]
         log_number = len(log_files) + 1
         self.log_file_path = os.path.join(self.base_directory, f"dialog_{log_number}.md")
         os.makedirs(os.path.dirname(self.log_file_path), exist_ok=True)
+
+        # Context manger handles this, I think.
+        # pylint: disable=consider-using-with
         self.log_file = open(self.log_file_path, "a", buffering=1, encoding="utf-8")
 
     def write_header(self, bot_name: str, model: str, bot_instructions: str) -> None:
@@ -122,7 +128,7 @@ class DialogLoggerWithMarkdown:
         self.log_file.write(f"**Tool**: `{tool_name}`, **Args**: {tool_args}\n")
         try:
             json_bits = json.loads(tool_args)
-        except:
+        except BaseException:
             self.log_file.write(f"Bad JSON: {tool_args}")
             return
         for name, value in json_bits.items():
@@ -154,7 +160,7 @@ class DialogLoggerWithMarkdown:
         self.log_file.write(f"**Error**: {error}\n\n")
 
     @contextmanager
-    def ensure_log(self) -> Iterator[Never]:
+    def ensure_log(self) -> Iterator[None]:
         """
         A context manager to ensure that the log file is closed properly.
 
@@ -177,7 +183,7 @@ if __name__ == "__main__":
         model = "blah"
         bot_instructions = "Let's do the thing."
         # Example of using the updated class with Markdown formatting
-        dialog_logger_md = DialogLoggerWithMarkdown()
+        dialog_logger_md = DialogLoggerWithMarkdown(".")
         dialog_logger_md.write_header(bot_name, model, bot_instructions)
 
         # Using the context manager to ensure proper logging

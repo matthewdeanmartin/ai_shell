@@ -1,6 +1,6 @@
 """jsonschema for functions"""
 
-SCHEMAS = {
+_SCHEMAS = {
     "answer_collector": {
         "report_bool": {
             "description": "Report answer in bool " "format.",
@@ -495,20 +495,7 @@ SCHEMAS = {
     },
     "edlin": {
         "edlin": {
-            "description": "An improved version of the edlin.\n"
-            "\n"
-            "Example:\n"
-            "\n"
-            '>>> tool = EdlinTool(".")\n'
-            '>>> result = tool.edlin("INSERT '
-            'cat\\nINSERT dog\\nQUIT", "test.md")\n'
-            "['cat', 'dog']\n"
-            "\n"
-            '>>> tool = EdlinTool(".")\n'
-            '>>> result = tool.edlin("1,10 '
-            'LIST\\nQUIT", "test.md")\n'
-            ">>> print(result)\n"
-            "['cat', 'dog']",
+            "description": "An improved version of the edlin.",
             "properties": {
                 "file_name": {"description": "Script " "creates " "or " "edits " "this " "file.", "type": "string"},
                 "mime_type": {
@@ -1331,9 +1318,9 @@ SCHEMAS = {
         "ls": {
             "description": "List directory contents, with options to " "include all files and detailed view.",
             "properties": {
-                "all": {
+                "all_files": {
                     "default": False,
-                    "description": "If True, include " "hidden files. " "Defaults to False.",
+                    "description": "If True, " "include " "hidden files. " "Defaults to " "False.",
                     "type": "boolean",
                 },
                 "long": {
@@ -1366,9 +1353,9 @@ SCHEMAS = {
         "ls_markdown": {
             "description": "List directory contents, with " "options to include all files and " "detailed view.",
             "properties": {
-                "all": {
+                "all_files": {
                     "default": False,
-                    "description": "If True, " "include " "hidden " "files. " "Defaults " "to False.",
+                    "description": "If " "True, " "include " "hidden " "files. " "Defaults " "to " "False.",
                     "type": "boolean",
                 },
                 "long": {
@@ -1683,8 +1670,29 @@ SCHEMAS = {
         },
     },
     "rewrite": {
+        "revert_to_latest_backup": {
+            "description": "Revert the file to " "the most recent " "backup.",
+            "properties": {
+                "file_name": {"description": "The " "name " "of " "the " "file " "to " "revert.", "type": "string"},
+                "mime_type": {
+                    "description": "Return "
+                    "value "
+                    "as "
+                    "text/csv, "
+                    "text/markdown, "
+                    "or "
+                    "text/yaml "
+                    "inside "
+                    "the "
+                    "JSON.",
+                    "type": "string",
+                },
+            },
+            "required": ["file_name"],
+            "type": "object",
+        },
         "rewrite_file": {
-            "description": "Rewrite an existing file at " "file_path within the " "root_folder.",
+            "description": "Backup and rewrite an " "existing file at file_path " "within the root_folder.",
             "properties": {
                 "file_path": {
                     "description": "The " "relative " "path " "to " "the " "file " "to " "be " "rewritten.",
@@ -1770,7 +1778,7 @@ SCHEMAS = {
             "properties": {
                 "assignee": {
                     "description": "The " "name " "of the " "assignee. " "Defaults " "to " "None.",
-                    "type": "string",
+                    "type": ["string", "null"],
                 },
                 "category": {
                     "description": "The " "category " "of the " "task " "(e.g., " "'bug', " "'feature').",

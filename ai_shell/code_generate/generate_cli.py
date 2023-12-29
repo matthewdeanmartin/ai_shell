@@ -71,7 +71,7 @@ def generate_the_cli(target_file: str) -> None:
         target_file (str): The target file path for the generated code.
     """
     tools = ""
-    for _ns, json_schema in schemas.SCHEMAS.items():
+    for _ns, json_schema in schemas._SCHEMAS.items():
         for tool, _ in json_schema.items():
             tools += f'            "{tool}" : self.{tool},\n'
 
@@ -138,13 +138,15 @@ def generate_the_cli(target_file: str) -> None:
     }
 
     header = """\"\"\"
-    Generated code, do not edit.
-    \"\"\"
-    import argparse
-    from ai_shell.utils.console_utils import pretty_console
-    
-    # pylint: disable=unused-argument
-    """
+Generated code, do not edit.
+\"\"\"
+import argparse
+from ai_shell.utils.console_utils import pretty_console
+from ai_shell.utils.config_manager import Config
+
+CONFIG = Config()
+# pylint: disable=unused-argument
+"""
 
     for _key, value in meta.items():
         header += f"\nfrom {value['module']} import {value['class']}"
@@ -153,11 +155,11 @@ def generate_the_cli(target_file: str) -> None:
     middle = ""
     for ns, data in meta.items():
         middle += "\n"
-        for method, method_data in schemas.SCHEMAS[ns].items():
+        for method, method_data in schemas._SCHEMAS[ns].items():
             middle += "\n"
             middle += f"def {method}_command(args):\n"
             middle += f'    """Invoke {method}"""\n'
-            middle += f"    tool = {data['class']}('.')\n"
+            middle += f"    tool = {data['class']}('.', CONFIG)\n"
             middle += f"    pretty_console(tool.{method}("
             for arg_name, _arg_details in cast(dict[str, Any], method_data["properties"]).items():
                 if arg_name != "mime_type":
@@ -171,7 +173,7 @@ def generate_the_cli(target_file: str) -> None:
         subparsers = parser.add_subparsers(dest='subcommand', help='sub-command help')
     """
     for ns, _data in meta.items():
-        for method, method_data in schemas.SCHEMAS[ns].items():
+        for method, method_data in schemas._SCHEMAS[ns].items():
             escaped_method_description = (
                 cast(str, method_data.get("description", "")).replace("'", "\\'").replace("\n", "\\n")
             )
@@ -204,15 +206,15 @@ def generate_the_cli(target_file: str) -> None:
     """
 
     footer = """
-        # Execute the appropriate command
-        if hasattr(args, 'func'):
-            args.func(args)
-        else:
-            parser.print_help()
-    
-    if __name__ == '__main__':
-        run()
-    """
+    # Execute the appropriate command
+    if hasattr(args, 'func'):
+        args.func(args)
+    else:
+        parser.print_help()
+
+if __name__ == '__main__':
+    run()
+"""
 
     # Generate method code
     with open(target_file, "w", encoding="utf-8") as code:

@@ -7,15 +7,16 @@ import csv
 import dataclasses
 import io
 import logging
-from typing import Union
+from typing import Optional, Union
 
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder
 
 logger = logging.getLogger(__name__)
 
 
-def parse_ranges(range_str: str) -> list[Union[int, tuple[int, int]]]:
+def parse_ranges(range_str: str) -> list[Union[int, tuple[int, Optional[int]]]]:
     """Parses a range string into a list of integers and integer tuples.
 
     Args:
@@ -24,19 +25,19 @@ def parse_ranges(range_str: str) -> list[Union[int, tuple[int, int]]]:
     Returns:
         A list where each element is either an integer or a tuple of two integers.
     """
-    ranges: list[Union[int, tuple[int, int]]] = []
+    ranges: list[Union[int, tuple[int, Optional[int]]]] = []
     for part in range_str.split(","):
         if "-" in part:
-            start, end = part.split("-")
-            start = int(start) if start else 1  # Handle incomplete ranges like '-5'
-            end = int(end) if end else None  # Handle incomplete ranges like '5-'
+            start_string, end_string = part.split("-")
+            start = int(start_string) if start_string else 1  # Handle incomplete ranges like '-5'
+            end = int(end_string) if end_string else None  # Handle incomplete ranges like '5-'
             ranges.append((start, end))
         else:
             ranges.append(int(part))
     return ranges
 
 
-def is_in_ranges(index: int, ranges: list[Union[int, tuple[int, int]]]) -> bool:
+def is_in_ranges(index: int, ranges: list[Union[int, tuple[int, Optional[int]]]]) -> bool:
     """Checks if a given index is within the specified ranges.
 
     Args:
@@ -65,14 +66,16 @@ class CutTool:
     Simulates `cut` cli tool.
     """
 
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the CatTool class.
 
         Args:
             root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder
+        self.config = config
 
     @log()
     def cut_characters(self, file_path: str, character_ranges: str) -> str:

@@ -1,15 +1,15 @@
 """
 Cat, except optimized for python files.
 """
-import ast
 import logging
 import os
 from io import StringIO
 from pathlib import Path
-from typing import Optional
 
 import python_minifier
 
+from ai_shell.pyutils.validate import is_python_file
+from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder, tree
 
@@ -17,14 +17,17 @@ logger = logging.getLogger(__name__)
 
 
 class PyCatTool:
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the PyCatTool with a root folder.
 
         Args:
             root_folder (str): The root folder path to start the file traversal from.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder
+        self.config = config
+        self.auto_cat = config.get_flag("auto_cat")
 
     @log()
     def format_code_as_markdown(
@@ -70,54 +73,6 @@ class PyCatTool:
                     markdown_content += "\n```\n\n"
         output_file.write(markdown_content)
         return output_file.getvalue()
-
-
-def is_valid_python_file(file_name: str) -> bool:
-    """
-    Check if a given file is a valid Python file.
-
-    Args:
-        file_name (str): The file name or path to check.
-
-    Returns:
-        bool: True if the file is a valid Python file, False otherwise.
-    """
-    with open(file_name, encoding="utf-8") as file:
-        contents = file.read()
-    is_valid, error = is_valid_python_source(contents)
-    return is_valid
-
-
-def is_valid_python_source(text: str) -> tuple[bool, Optional[SyntaxError]]:
-    """
-    Check if a given string is valid Python source code.
-
-    Args:
-        text (str): The Python source code to check.
-
-    Returns:
-        bool: True if the source code is valid, False otherwise.
-        SyntaxError: The SyntaxError that was raised, if any.
-    """
-    try:
-        ast.parse(text)
-        # or compile(contents, fname, 'exec', ast.PyCF_ONLY_AST)
-        return True, None
-    except SyntaxError as exception:
-        return False, exception
-
-
-def is_python_file(file: str) -> bool:
-    """
-    Check if a given file is a Python file.
-
-    Args:
-        file (str): The file name or path to check.
-
-    Returns:
-        bool: True if the file extension is .py, False otherwise.
-    """
-    return file.endswith(".py")
 
 
 def format_path_as_header(path: str) -> str:

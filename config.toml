@@ -13,6 +13,11 @@ assistant_id = "asst_mtbDzpfvbRtvatXiwIsOftwj"
 name = "Docstring writer bot"
 threads = []
 
+[[bots]]
+assistant_id = "asst_FsizGTcJbaYldKsaCF8deJWX"
+name = "cat_markdown, insert, replace tool user."
+threads = []
+
 [flags]
 enable_tool_selector_bot = false
 enable_regex_tester_bot = false

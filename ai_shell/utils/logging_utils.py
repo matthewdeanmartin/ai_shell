@@ -24,13 +24,13 @@ def configure_logging() -> dict[str, Any]:
                 "class": "logging.StreamHandler",
                 "stream": "ext://sys.stdout",  # Default is stderr
             },
-            "json": {
-                # "()": "json_file_handler_factory",
-                "level": "DEBUG",
-                "class": "ai_shell.utils.json_log_handler.JSONFileHandler",
-                "directory": "api_logs",
-                "module_name": "openai",
-            },
+            # "json": {
+            #     # "()": "json_file_handler_factory",
+            #     "level": "DEBUG",
+            #     "class": "ai_shell.utils.json_log_handler.JSONFileHandler",
+            #     "directory": "api_logs",
+            #     "module_name": "openai",
+            # },
         },
         "loggers": {
             # root logger can capture too much
@@ -50,7 +50,7 @@ def configure_logging() -> dict[str, Any]:
     # json handler
     for name in ["openai"]:
         logging_config["loggers"][name] = {
-            "handlers": ["json"],
+            "handlers": [],  # ["json"],
             "level": "DEBUG",
             "propagate": False,
         }
@@ -177,7 +177,7 @@ def enable_logging(flag: bool) -> None:
 
 def method_to_command_subcommand(method_name: str) -> tuple[str, str]:
     """Convert a method name to a command and subcommand"""
-    schema = schemas.SCHEMAS
+    schema = schemas._SCHEMAS
     for ns, tools in schema.items():
         for name, _ in tools.items():
             if name == method_name:
@@ -214,7 +214,7 @@ def log():
 if __name__ == "__main__":
 
     @log()
-    def example(path: Optional[str] = ".", all: bool = False, long: bool = False) -> str:
+    def example(path: Optional[str] = ".", _some: bool = False, _long: bool = False) -> str:
         """Example"""
         # Function implementation goes here
         return f"Listing markdown files at {path}"
@@ -222,4 +222,4 @@ if __name__ == "__main__":
     # Set log folder and enable logging
     set_log_folder("custom_logs")
     enable_logging(True)
-    example("~/Documents", all=True, long=True)
+    example("~/Documents", _some=True, _long=True)

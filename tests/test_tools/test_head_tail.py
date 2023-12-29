@@ -1,6 +1,7 @@
 import pytest
 
 from ai_shell import HeadTailTool
+from tests.util import config_for_tests
 
 
 def create_test_file(tmp_path, content, binary=False):
@@ -17,7 +18,7 @@ def create_test_file(tmp_path, content, binary=False):
 @pytest.fixture
 def tool(tmp_path):
     # Set up HeadTailTool with the temporary path
-    return HeadTailTool(root_folder=str(tmp_path))
+    return HeadTailTool(root_folder=str(tmp_path), config=config_for_tests())
 
 
 def test_head(tool, tmp_path):

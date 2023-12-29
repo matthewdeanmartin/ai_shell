@@ -17,12 +17,24 @@ shell code locally.
 
 See these full examples. As long as the OPENAI_API_KEY environment variable is set, you can run these examples.
 
-- [Pylint bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/example_pylint_bot.py) will attempt to fix python
+- [Pylint bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/ai_shell/demo_bots/pylint_bot.py) will
+  attempt to
+  fix python
   code lint issues.
-- [Test writer bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/example_test_writer_bot.py) will attempt to
+- [Test writer bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/ai_shell/demo_bots/test_writer_bot.py) will attempt to
   write unit tests for python code.
-- [Tool tester bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/example_tool_tester_bot.py) tries out tools
+- [Tool tester bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/ai_shell/demo_bots/tool_tester_bot.py) tries out tools
   to see if they basically work.
+
+To execute demo bots, run these commands and follow initialization instructions if needed. They all expect to
+manipulate python code in an /src/ folder.
+
+```shell
+python -m ai_shell.demo_bots.docs_writer_bot
+python -m ai_shell.demo_bots.pylint_bot
+python -m ai_shell.demo_bots.test_writer_bot
+python -m ai_shell.demo_bots.tool_tester_bot
+```
 
 This is the python interface to the tools, how you're expected to wire up the tool to your bot.
 
@@ -127,3 +139,4 @@ for AI-assisted file system interactions, keeping in mind both usability and saf
 - [Design](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Design.md)
 - [Use Cases](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Usecases.md)
 - [TODO](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/TODO.md)
+- [API docs, pdoc3 style](https://matthewdeanmartin.github.io/ai_shell/)

@@ -6,19 +6,26 @@ TODO: Maybe this shouldn't be a bot tool. It should be a utility function.
 
 import tiktoken
 
+from ai_shell.utils.config_manager import Config
+
 
 class TokenCounterTool:
     """Count the number of tokens in a string."""
 
-    def __init__(self, root_folder: str) -> None:
+    def __init__(self, root_folder: str, config: Config) -> None:
         """
         Initialize the FindTool class.
 
         Args:
             root_folder (str): The root folder path for file operations.
+            config (Config): The developer input that bot shouldn't set.
         """
         self.root_folder = root_folder
-        self.token_model = "gpt-3.5-turbo"  # nosec: This is not a password.
+        self.config = config
+        model = config.get_value("token_model")
+        if not model:
+            raise ValueError("token_model must be set in the config")
+        self.token_model = model
 
     def count_tokens(self, text: str) -> int:
         """Count the number of tokens in a string.

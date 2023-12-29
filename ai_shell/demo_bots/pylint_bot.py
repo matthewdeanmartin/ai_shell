@@ -100,11 +100,11 @@ files. As you can see, pylint says they're missing. After each round of edits, y
         raise ValueError("The demo requires that there be a src folder with some python code in it.")
 
     async def pylint_goal_checker(_toolkit: ai_shell.ToolKit):
-        with ai_shell.change_directory("src"):
-            result = ai_shell.invoke_pylint("fish_tank", 8)
-            if result.return_code == 0:
-                return "DONE"
-            return result.to_markdown() + "\n\nThe pylint score is too low. Please try again. You can do it!"
+        # already in src!
+        result = ai_shell.invoke_pylint("fish_tank", 8)
+        if result.return_code == 0:
+            return "DONE"
+        return result.to_markdown() + "\n\nThe pylint score is too low. Please try again. You can do it!"
 
     config = ai_shell.Config()
     bot = ai_shell.TaskBot(

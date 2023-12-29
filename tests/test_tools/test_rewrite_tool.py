@@ -1,8 +1,8 @@
 import pytest
 
+import ai_shell
 from ai_shell.rewrite_tool import RewriteTool
 from tests.util import config_for_tests
-import ai_shell
 
 
 def test_write_new_file_success(tmp_path):

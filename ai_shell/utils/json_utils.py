@@ -12,7 +12,10 @@ import untruncate_json
 
 # TODO: Use orjson because it is faster.
 
+class FatalConfigurationError(Exception):
+    """A fatal configuration error."""
 
+    pass
 class LoosyGoosyEncoder(json.JSONEncoder):
     """Encode what json will not.
     # https://stackoverflow.com/a/8230505/33264
@@ -66,6 +69,10 @@ def exception_to_rfc7807_dict(exception: Exception) -> dict[str, Any]:
     The function maps common Python standard library exceptions to HTTP status codes.
     If an exception is not in the predefined mapping, the status code defaults to 500 (Internal Server Error).
     """
+    if isinstance(exception, FatalConfigurationError):
+        print("FatalConfigurationError: " + str(exception))
+        exit(1)
+
     # Mapping of standard exceptions to HTTP status codes and documentation URLs
     exception_mapping = {
         ValueError: (http.HTTPStatus.BAD_REQUEST, "https://docs.python.org/3/library/exceptions.html#ValueError"),

@@ -52,7 +52,8 @@ class Config:
             self.config_file = os.path.join(config_path, "ai_shell.toml")
         else:
             self.config_file = os.getenv("CONFIG_PATH", "ai_shell.toml")
-
+        # freeze the location of the config file
+        self.config_file = os.path.abspath(self.config_file)
         self._list_data: dict[str, list[str]] = {}
         self._values_data: dict[str, str] = {}
         self._flags_data: dict[str, bool] = {
@@ -82,6 +83,8 @@ class Config:
 
     def save_config(self):
         """Save the config to the config file."""
+        if not os.path.isabs(self.config_file):
+            raise ValueError("Config file path must be absolute.")
         with open(self.config_file, "w", encoding="utf-8") as f:
             toml.dump(
                 {

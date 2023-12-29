@@ -1,5 +1,12 @@
 # TODO
 
+## Fig leaf security (Yes, it isn't for preventing real malice)
+- Prohibited file types
+- Prohibited modules/methods, e.g. subprocess/os.system
+- Test writer bot- disable writing to fish_tank
+- Test writer bot- no editing without 1st viewing, cat unlocks edit!
+- Is cat folder/* failing?
+
 ## Pain points
 - no more log folder by convention
 - put API log on hold (replace with ordinary file?)

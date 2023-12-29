@@ -92,6 +92,7 @@ Generate code, do not edit.
 from ai_shell.openai_support import ToolKitBase
 from typing import Any, cast, Callable, Optional
 
+from ai_shell.utils.config_manager import Config
 from ai_shell.cat_tool import CatTool
 from ai_shell.find_tool import FindTool
 from ai_shell.git_tool import GitTool
@@ -121,8 +122,8 @@ class ToolKit(ToolKitBase):
         self._lookup: dict[str, Callable[[dict[str, Any]], Any]] = {{
             {tools}
         }}
-        # Stateful tool support
-        self.tool_answer_collector = None
+        # Stateful tool support. Useless assignment to make mypy happy
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 """
 
     prologue = {}
@@ -143,9 +144,7 @@ class ToolKit(ToolKitBase):
     prologue["token_counter"] = "tool = TokenCounterTool(self.root_folder, self.config)"  # nosec
     prologue["todo"] = "tool = TodoTool(self.root_folder, self.config)"
     prologue["answer_collector"] = (
-        "if not self.tool_answer_collector:\n"
-        "            raise TypeError('tool cannot be None here')\n\n"
-        "        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)"
+        "self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)"
     )
     prologue["rewrite"] = "tool = RewriteTool(self.root_folder, self.config)"
     prologue["pytest"] = "tool = PytestTool(self.root_folder, self.config)"

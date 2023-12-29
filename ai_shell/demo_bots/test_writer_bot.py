@@ -57,10 +57,10 @@ async def pytest_goal_checker(toolkit: ai_shell.ToolKit):
             " Remember: read the code with cat_markdown, write tests with write_new_file, run tests with pytest."
         )
 
-    with ai_shell.change_directory("src"):
-        passed_tests, failed_tests, coverage, pytest_output = ai_shell.externals.pytest_call.count_pytest_results(
-            "fish_tank", "tests", 80
-        )
+    # host script must set pwd.
+    passed_tests, failed_tests, coverage, pytest_output = ai_shell.externals.pytest_call.count_pytest_results(
+        "fish_tank", "tests", 80
+    )
     if coverage >= 80:
         return "DONE"
     if passed_tests > initial_passed_tests and initial_coverage == coverage:
@@ -132,7 +132,7 @@ async def main():
     ]
     bot_name = "Unit test writer."
 
-    dialog_logger_md = ai_shell.DialogLoggerWithMarkdown("./logs/dialogs/")
+    dialog_logger_md = ai_shell.DialogLoggerWithMarkdown("./tmp")
     request = """We have an important task. You are the best unit test writer we have. We are counting
 on you to get this right.
 

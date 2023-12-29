@@ -10,6 +10,7 @@ import asyncio
 import logging
 import logging.config
 import os
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -53,7 +54,7 @@ async def main():
     root_folder = "src"
     if not os.path.exists(root_folder):
         raise ValueError("The demo requires that there be a src folder with some python code in it.")
-    dialog_logger_md = ai_shell.DialogLoggerWithMarkdown(root_folder)
+    dialog_logger_md = ai_shell.DialogLoggerWithMarkdown("./tmp")
     request = """You are in the './' folder. The base folder is './'. You do not need to guess the pwd, it is './'.
 
 Now that is out of the way, use the tools available to you to make edits to files. Then check using tools to see if 

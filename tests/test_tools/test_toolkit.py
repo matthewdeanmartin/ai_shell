@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from openai.types.beta.threads import RequiredActionFunctionToolCall, Run
 from openai.types.beta.threads.run import RequiredAction, RequiredActionSubmitToolOutputs
@@ -7,8 +9,6 @@ from ai_shell.openai_toolkit import ToolKit
 from ai_shell.openai_tools import just_tool_names
 from ai_shell.utils.read_fs import temporary_change_dir
 from tests.util import config_for_tests
-
-import os
 
 pytestmark = pytest.mark.anyio
 

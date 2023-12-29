@@ -130,6 +130,10 @@ def tree(dir_path: Union[str, Path], level: int = -1, limit_to_directories: bool
     return result
 
 
+# Flag to indicate if the context manager is currently active
+_is_in_context = False
+
+
 @contextmanager
 def temporary_change_dir(new_dir: str) -> Generator[None, None, None]:
     """Context manager to temporarily change the current working directory.
@@ -137,17 +141,59 @@ def temporary_change_dir(new_dir: str) -> Generator[None, None, None]:
     Args:
         new_dir (str): The new directory path.
     """
+    global _is_in_context
+
+    # Check if the context manager is already active
+    if _is_in_context:
+        raise RuntimeError("temporary_change_dir is already in use")
+
+    if ".." in new_dir:
+        raise ValueError("Cannot use .. in new_dir")
+
+    _is_in_context = True
     original_dir = os.getcwd()
-    if original_dir == new_dir:
-        yield
-        return
+    new_dir = os.path.abspath(new_dir)
+
     if os.path.isfile(new_dir):
         new_dir = os.path.dirname(new_dir)
-    os.chdir(new_dir)
-    try:
+
+    # Check if the absolute paths are the same
+    if original_dir != new_dir:
+        os.chdir(new_dir)
+        try:
+            yield
+        finally:
+            os.chdir(original_dir)
+            _is_in_context = False
+    else:
+        _is_in_context = False
         yield
-    finally:
-        os.chdir(original_dir)
+
+
+def is_in_root_now(root_folder: str) -> bool:
+    """
+    Check if the provided path is an absolute path and if it's the same as the current working directory.
+
+    Args:
+    root_folder (str): The directory path to check.
+
+    Returns:
+    bool: True if `root_folder` is an absolute path and is the same as the current working directory, False otherwise.
+    """
+    # Check if the path is absolute
+    if os.path.isfile(root_folder):
+        root_folder = os.path.dirname(root_folder)
+
+    is_absolute = os.path.isabs(root_folder)
+
+    # Get the absolute path of the root_folder and the current working directory
+    absolute_root_folder = os.path.abspath(root_folder)
+    current_working_dir = os.getcwd()
+
+    # Check if the absolute path of root_folder is the same as the current working directory
+    is_same_as_pwd = absolute_root_folder == current_working_dir
+
+    return is_absolute and is_same_as_pwd
 
 
 def remove_root_folder(file_path: str, root_folder: str) -> str:
@@ -160,21 +206,23 @@ def remove_root_folder(file_path: str, root_folder: str) -> str:
     Returns:
         str: The relative path of the file.
     """
-    with temporary_change_dir(root_folder):
-        root = Path(".").resolve()
-        file = Path(file_path)
+    if not is_in_root_now(root_folder):
+        raise ValueError(f"Root folder must be the current working directory, current {os.getcwd()}")
+    # with temporary_change_dir(root_folder):
+    root = Path(".").resolve()
+    file = Path(file_path)
 
-        # Handling the case where file_path is the same as root_folder
-        if file.resolve() == root:
-            return "."
+    # Handling the case where file_path is the same as root_folder
+    if file.resolve() == root:
+        return "."
 
-        # Handling relative paths
-        file = root / file if not file.is_absolute() else file
-        file = file.resolve()
+    # Handling relative paths
+    file = root / file if not file.is_absolute() else file
+    file = file.resolve()
 
-        if root in file.parents:
-            return str(file.relative_to(root)).replace("\\", "/")
-        raise ValueError("File path is not under the root folder")
+    if root in file.parents:
+        return str(file.relative_to(root)).replace("\\", "/")
+    raise ValueError("File path is not under the root folder")
 
 
 def human_readable_size(size_in_bytes: int) -> str:
@@ -224,4 +272,7 @@ def human_readable_size(size_in_bytes: int) -> str:
 
 
 if __name__ == "__main__":
-    print(tree("../"))
+    # print(tree("../"))
+    with temporary_change_dir("src"):
+        with temporary_change_dir("src"):
+            print("ok")

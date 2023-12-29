@@ -120,21 +120,20 @@ files. If you use rewrite, don't omit original code!
         Returns:
             str: Continuation prompt for bot.
         """
-        with ai_shell.change_directory("src"):
-            lines_of_code = ai_shell.count_lines_of_code("fish_tank/__main__.py")
-            if initial_lines_of_code is None:
-                # Make mypy happy
-                raise TypeError("Shouldn't be none by this point.")
-            if lines_of_code.documentation_count > 25 and lines_of_code.code_count >= initial_lines_of_code.code_count:
-                return "DONE"
-            if initial_lines_of_code.code_count < lines_of_code.code_count:
-                return (
-                    pretty_loc(lines_of_code) + f"\n\n Code disappeared! There used to be {initial_lines_of_code}"
-                    f"lines of code, now there are only {lines_of_code.code_count}! You're supposed to document not delete."
-                )
+        lines_of_code = ai_shell.count_lines_of_code("fish_tank/__main__.py")
+        if initial_lines_of_code is None:
+            # Make mypy happy
+            raise TypeError("Shouldn't be none by this point.")
+        if lines_of_code.documentation_count > 25 and lines_of_code.code_count >= initial_lines_of_code.code_count:
+            return "DONE"
+        if initial_lines_of_code.code_count < lines_of_code.code_count:
             return (
-                pretty_loc(lines_of_code) + "\n\n and thats not enough documentation. Please try again. You can do it!"
+                pretty_loc(lines_of_code) + f"\n\n Code disappeared! There used to be {initial_lines_of_code}"
+                f"lines of code, now there are only {lines_of_code.code_count}! You're supposed to document not delete."
             )
+        return (
+            pretty_loc(lines_of_code) + "\n\n and thats not enough documentation. Please try again. You can do it!"
+        )
 
     config = ai_shell.Config()
     bot = ai_shell.TaskBot(

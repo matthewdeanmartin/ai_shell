@@ -183,7 +183,7 @@ if __name__ == "__main__":
         model = "blah"
         bot_instructions = "Let's do the thing."
         # Example of using the updated class with Markdown formatting
-        dialog_logger_md = DialogLoggerWithMarkdown(".")
+        dialog_logger_md = DialogLoggerWithMarkdown("./tmp")
         dialog_logger_md.write_header(bot_name, model, bot_instructions)
 
         # Using the context manager to ensure proper logging

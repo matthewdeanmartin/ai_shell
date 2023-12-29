@@ -168,3 +168,5 @@ tmp/
 ai_shell/logs/
 ai_shell/dialog_log/
 /api_logs/
+
+ai_shell.toml

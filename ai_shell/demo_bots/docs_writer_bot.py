@@ -11,6 +11,7 @@ You will need to reset the fish_tank folder to the original state after each run
 5 - Set config, initialize, do tool loop
 
 """
+
 import asyncio
 import logging
 import logging.config
@@ -21,9 +22,14 @@ from dotenv import load_dotenv
 from pygount import SourceAnalysis
 
 import ai_shell
+import ai_shell.demo_bots.demo_setup as demo_setup
 
 ai_shell.utils.logging_utils.LOGGING_ENABLED = True
 initial_lines_of_code: Optional[SourceAnalysis] = None
+
+if __name__ == "__main__" and not os.path.exists("src"):
+    demo_setup.initialize()
+
 if __name__ == "__main__":
     with ai_shell.change_directory("src"):
         initial_lines_of_code = ai_shell.count_lines_of_code("fish_tank/__main__.py")
@@ -140,11 +146,12 @@ files. If you use rewrite, don't omit original code!
         persist_bots=True,
         persist_threads=True,
     )
-    # Initialize async things.
-    await bot.initialize()
-    # Run until goal checker is done
-    await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
-    logger.info("Run completed.")
+    with ai_shell.change_directory("src"):
+        # Initialize async things.
+        await bot.initialize()
+        # Run until goal checker is done
+        await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
+        logger.info("Run completed.")
 
 
 if __name__ == "__main__":

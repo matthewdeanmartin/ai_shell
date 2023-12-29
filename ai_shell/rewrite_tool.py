@@ -88,7 +88,8 @@ class RewriteTool:
             ValueError: If the file already exists or if the file_path is outside the root_folder.
         """
         file_path = sanitize_path(file_path)
-        full_path = os.path.join(self.root_folder, file_path)
+        # Don't prepend root folder, we will have already cd'd to it.
+        full_path = file_path
         if not is_file_in_root_folder(full_path, self.root_folder):
             raise ValueError("File path must be within the root folder.")
 
@@ -124,7 +125,8 @@ class RewriteTool:
 
         file_path = sanitize_path(file_path)
 
-        full_path = os.path.join(self.root_folder, file_path)
+        # Don't prepend root folder, we will have already cd'd to it.
+        full_path = file_path
         if not is_file_in_root_folder(full_path, self.root_folder):
             raise ValueError("File path must be within the root folder.")
 
@@ -175,8 +177,8 @@ class RewriteTool:
         Raises:
             ValueError: If the file does not exist or other errors occur.
         """
-        file_path = os.path.join(self.root_folder, file_name)
-        if not os.path.exists(file_path):
+        file_path = file_name
+        if not os.path.exists(file_name):
             raise ValueError(f"The file {file_name} does not exist.")
 
         # Find existing backups
@@ -204,7 +206,7 @@ class RewriteTool:
         Raises:
             ValueError: If no backup is found or other errors occur.
         """
-        file_path = os.path.join(self.root_folder, file_name)
+        file_path = file_name
         backup_files = sorted(glob.glob(f"{file_path}.*.bak"), reverse=True)
         if not backup_files:
             raise ValueError(f"No backups found for {file_name}.")
@@ -219,3 +221,7 @@ class RewriteTool:
             return f"Reverted {file_name} to latest backup."
         except Exception as e:
             raise ValueError(f"An error occurred during revert: {e}") from e
+
+
+if __name__ == "__main__":
+    RewriteTool("./", Config()).write_new_file("src\\\\dialog_2.md", "print('hello world')")

@@ -7,7 +7,7 @@ the openai python client.
 
 import logging
 from collections.abc import Collection
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from ai_shell.ls_tool import LsTool
 from ai_shell.openai_schemas import _SCHEMAS
@@ -15,7 +15,7 @@ from ai_shell.utils.config_manager import Config
 
 logger = logging.getLogger(__name__)
 
-ALL_TOOLS = []
+ALL_TOOLS: list[dict[str, Any]] = []
 
 
 def just_tool_names() -> list[str]:
@@ -53,7 +53,8 @@ def initialize_all_tools(skips: Optional[list[str]] = None, keeps: Optional[list
             function_style["description"] = schema["description"]
             if name in keep:
                 ALL_TOOLS.append(function_style)
-    logger.info(f"Active tools {ALL_TOOLS}")
+    active_tools_string = ", ".join(tool["name"] for tool in ALL_TOOLS)
+    logger.info(f"Active tools {active_tools_string}")
 
 
 def recommendations(root_folder: str, config: Config) -> list[str]:

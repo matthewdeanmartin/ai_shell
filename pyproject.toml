@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ai_shell"
-version = "1.0.0"
+version = "1.0.1"
 description = "Filesystem Shell interface that an OpenAI Assitant can use as a tool."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["openai", "chatgpt", ]

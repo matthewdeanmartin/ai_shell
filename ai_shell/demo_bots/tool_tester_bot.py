@@ -5,6 +5,7 @@ The goal checker will check if the user has used tools that need testing.
 
 (To be clear, this isn't the unit testing bot, that's example_test_writer_bot.py)
 """
+
 import asyncio
 import logging
 import logging.config
@@ -13,8 +14,12 @@ import os
 from dotenv import load_dotenv
 
 import ai_shell
+import ai_shell.demo_bots.demo_setup as demo_setup
 
 ai_shell.utils.logging_utils.LOGGING_ENABLED = True
+
+if __name__ == "__main__" and not os.path.exists("src"):
+    demo_setup.initialize()
 
 
 async def main():
@@ -71,9 +76,10 @@ Report results using report_text. Then you are done.
         persist_bots=True,
         persist_threads=True,
     )
-    await bot.initialize()
-    await bot.basic_tool_loop(request, root_folder, tool_names, static_keep_going)
-    logger.info("Run completed.")
+    with ai_shell.change_directory("src"):
+        await bot.initialize()
+        await bot.basic_tool_loop(request, root_folder, tool_names, static_keep_going)
+        logger.info("Run completed.")
 
 
 if __name__ == "__main__":

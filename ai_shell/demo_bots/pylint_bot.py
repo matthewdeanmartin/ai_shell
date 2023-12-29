@@ -3,6 +3,7 @@ This bot will attempt to lint the issues in the `fish_tank` example.
 
 You will need to reset the fish_tank folder to the original state after each run.
 """
+
 import asyncio
 import logging
 import logging.config
@@ -11,8 +12,13 @@ import os
 from dotenv import load_dotenv
 
 import ai_shell
+import ai_shell.demo_bots.demo_setup as demo_setup
 
 ai_shell.utils.logging_utils.LOGGING_ENABLED = True
+
+if __name__ == "__main__" and not os.path.exists("src"):
+    demo_setup.initialize()
+
 
 initial_pylint = None
 if __name__ == "__main__":
@@ -110,9 +116,10 @@ files. As you can see, pylint says they're missing. After each round of edits, y
         persist_bots=True,
         persist_threads=True,
     )
-    await bot.initialize()
-    await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
-    logger.info("Run completed.")
+    with ai_shell.change_directory("src"):
+        await bot.initialize()
+        await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
+        logger.info("Run completed.")
 
 
 if __name__ == "__main__":

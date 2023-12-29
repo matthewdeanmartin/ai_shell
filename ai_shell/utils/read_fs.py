@@ -138,6 +138,9 @@ def temporary_change_dir(new_dir: str) -> Generator[None, None, None]:
         new_dir (str): The new directory path.
     """
     original_dir = os.getcwd()
+    if original_dir == new_dir:
+        yield
+        return
     if os.path.isfile(new_dir):
         new_dir = os.path.dirname(new_dir)
     os.chdir(new_dir)

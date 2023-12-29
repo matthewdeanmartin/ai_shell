@@ -2,6 +2,7 @@
 An example bot that will write unit tests. The goal checker will check if pytests
 are good, pass and have coverage.
 """
+
 import asyncio
 import logging
 import logging.config
@@ -10,9 +11,13 @@ import os
 from dotenv import load_dotenv
 
 import ai_shell
+import ai_shell.demo_bots.demo_setup as demo_setup
 import ai_shell.externals.pytest_call
 
 ai_shell.utils.logging_utils.LOGGING_ENABLED = True
+
+if __name__ == "__main__" and not os.path.exists("src"):
+    demo_setup.initialize()
 
 initial_passed_tests = -1
 initial_failed_tests = -1
@@ -174,9 +179,10 @@ Write tests, run tests. You are done when the coverage is 80% or more.
         persist_bots=True,
         persist_threads=True,
     )
-    await bot.initialize()
-    await bot.basic_tool_loop(request, root_folder, tool_names, pytest_goal_checker)
-    print("Run completed.")
+    with ai_shell.change_directory("src"):
+        await bot.initialize()
+        await bot.basic_tool_loop(request, root_folder, tool_names, pytest_goal_checker)
+        print("Run completed.")
 
 
 if __name__ == "__main__":

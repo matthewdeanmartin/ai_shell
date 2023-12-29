@@ -74,8 +74,9 @@ def initialize() -> None:
     else:
         print("Creating .env file.")
         with open(".env", "w", encoding="utf-8") as f:
-            f.write("OPENAI_KEY=OPENAI_KEY\n")
+            f.write("OPENAI_API_KEY=OPENAI_API_KEY\n")
         print("Created .env file. You will need to edit it with a valid OPENAI_KEY.")
+        print("See more here: https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key")
 
 
 if __name__ == "__main__":

@@ -34,6 +34,7 @@ python -m ai_shell.demo_bots.docs_writer_bot
 python -m ai_shell.demo_bots.pylint_bot
 python -m ai_shell.demo_bots.test_writer_bot
 python -m ai_shell.demo_bots.tool_tester_bot
+python -m ai_shell.demo_bots.todo_bot
 ```
 
 This is the python interface to the tools, how you're expected to wire up the tool to your bot.
@@ -126,6 +127,8 @@ ais cat_markdown --file-paths pyproject.toml
 **Other**: pycat, token counter, git
 
 **Tasking**: todo
+
+n.b. Every file is read and written as utf-8 strings.
 
 ## Prior Art
 

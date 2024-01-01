@@ -4,8 +4,9 @@ AI optimized head/tail tool
 import logging
 from typing import Optional
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
+from ai_shell.utils.cwd_utils import change_directory
 from ai_shell.utils.read_fs import is_file_in_root_folder
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ class HeadTailTool:
         """
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
 
     @log()
     def head_markdown(self, file_path: str, lines: int = 10) -> str:
@@ -115,6 +116,34 @@ class HeadTailTool:
 
             # Read by lines if byte_count is not specified
             if mode == "head":
-                return [next(file).decode("utf-8").rstrip("\r\n") for _ in range(lines)]
+                head_lines = []
+                for _ in range(lines):
+                    try:
+                        line = next(file).decode("utf-8")
+                        head_lines.append(line.rstrip("\r\n"))
+                    except StopIteration:
+                        break
+                return head_lines
+                # return [next(file).decode("utf-8").rstrip("\r\n") for _ in range(lines)]
             # mode == 'tail'
             return [line.decode("utf-8").rstrip("\r\n") for line in list(file)[-lines:]]
+
+
+if __name__ == "__main__":
+    # head --file_path example.txt --lines 10
+
+    def run() -> None:
+        """Example"""
+        with change_directory("src"):
+            tool = HeadTailTool(".", config=Config(".."))
+            # glob_pattern": "fish_tank/*", "regex": "TODO|todo"
+            # import orjson
+            # print(orjson.dumps(tool.grep(glob_pattern="fish_tank/*", regex="TODO|todo")).decode("utf-8"))
+            #
+            # print(orjson.dumps(tool.grep(glob_pattern="./fish_tank/*", regex="TODO|todo")).decode("utf-8"))
+            #
+            # print(tool.grep_markdown(glob_pattern="./**", regex="TODO"))
+            # print(tool.grep(glob_pattern="*.py", regex="print\\(|logging", maximum_matches_per_file=1))
+            print(tool.head(file_path="README.md", lines=10))
+
+    run()

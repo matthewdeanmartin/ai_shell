@@ -11,8 +11,8 @@ import tempfile
 
 from unidiff import PatchSet
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ class PatchTool:
         """
         self.root_folder: str = root_folder
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
 
     @log()
     def apply_git_patch(self, patch_content: str) -> str:

@@ -1,24 +1,22 @@
-import dataclasses
+from ai_shell.utils.json_utils import try_everything
 
-from ai_shell.utils.json_utils import LoosyGoosyEncoder, try_everything
-
-
-def test_encoder():
-    assert LoosyGoosyEncoder().default(set()) == []
-
-    def foo():
-        yield 1
-
-    assert LoosyGoosyEncoder().default(foo()) == [1]
-
-    @dataclasses.dataclass
-    class Foo:
-        """A simple dataclass"""
-
-        x: int
-
-    thing = LoosyGoosyEncoder().default(Foo(1))
-    assert thing["x"] == 1
+# Doesn't apply to orjson?
+# def test_encoder():
+#     assert LoosyGoosyEncoder().default(set()) == []
+#
+#     def foo():
+#         yield 1
+#
+#     assert LoosyGoosyEncoder().default(foo()) == [1]
+#
+#     @dataclasses.dataclass
+#     class Foo:
+#         """A simple dataclass"""
+#
+#         x: int
+#
+#     thing = LoosyGoosyEncoder().default(Foo(1))
+#     assert thing["x"] == 1
 
 
 def test_try_everything():

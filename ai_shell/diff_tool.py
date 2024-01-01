@@ -3,8 +3,8 @@ Apply patch with unidiff instead of Git
 """
 import unidiff
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 
 
 class DiffTool:
@@ -20,7 +20,8 @@ class DiffTool:
         """
         self.root_folder: str = root_folder
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
+        self.utf8_errors = config.get_value("utf8_errors", "surrogateescape")
 
     @log()
     def apply_git_patch(self, diff_string: str, target_file: str) -> str:
@@ -56,7 +57,7 @@ class DiffTool:
             file.writelines(patched_file)
 
         if self.auto_cat:
-            with open(target_file, encoding="utf-8") as file:
+            with open(target_file, encoding="utf-8", errors=self.utf8_errors) as file:
                 return "File after patching: \n\n" + file.read()
         return "No errors raised during application of patch"
 

@@ -5,6 +5,8 @@ import os
 from datetime import datetime
 from typing import Optional
 
+from ai_shell.utils.json_utils import FatalConfigurationError
+
 if True:
     import openai_multi_tool_use_parallel_patch
 
@@ -78,8 +80,10 @@ class Config:
             self._list_data = data["lists"]
         else:
             self.save_config()
-        if len(self._bots_data) > 5:
-            raise ValueError("You have too many bots. Bot persistence must be failing somewhere.")
+        if len(self._bots_data) > 100:
+            raise ValueError(
+                f"You have too many bots. Bot persistence must be failing somewhere, see {self.config_file}"
+            )
 
     def save_config(self):
         """Save the config to the config file."""
@@ -112,9 +116,8 @@ class Config:
             flag_name (str): The name of the flag.
             value (str): The value of the flag.
         """
-        if flag_name in self._flags_data:
-            self._flags_data[flag_name] = value
-            self.save_config()
+        self._flags_data[flag_name] = value
+        self.save_config()
 
     def cleanup(self) -> None:
         """Remove bots that have been deleted on OpenAI's side."""
@@ -143,28 +146,62 @@ class Config:
                 return Bot(**bot)
         return None
 
-    def get_flag(self, flag_name: str) -> Optional[bool]:
+    def get_flag(self, flag_name: str, default_value: Optional[bool] = None) -> Optional[bool]:
         """Return the value of the given flag.
         Args:
             flag_name (str): The name of the flag.
+            default_value (Optional[bool], optional): The default value to return if the flag does not exist.
+                                                      Defaults to None.
 
         Returns:
             Optional[bool]: The value of the flag, or None if the flag does not exist.
         """
-        return self._flags_data.get(flag_name, None)
+        return self._flags_data.get(flag_name, default_value)
 
-    def get_value(self, name: str) -> Optional[str]:
-        """Return the value of the given flag.
+    def get_value(self, name: str, default: Optional[str] = None) -> Optional[str]:
+        """Return the value of the given named value.
+
+        Args:
+            name (str): The name of the config value.
+            default (Optional[str], optional): The default value to return if the value does not exist.
+                                               Defaults to None.
+
+        Returns:
+            Optional[str]: The value of the named value, or None if the name does not exist.
+        """
+        return self._values_data.get(name, default)
+
+    def set_list(self, list_name: str, value: list[str]) -> None:
+        """Set the value of the given list of values.
+
+        Args:
+            list_name (str): The name of the config value.
+            value (list[str]): The value of the list.
+        """
+        self._list_data[list_name] = value
+        self.save_config()
+
+    def get_required_value(self, name: str) -> str:
+        """Return the value of the given named value.
+
         Args:
             name (str): The name of the config value.
 
         Returns:
-            Optional[str]: The value of the flag, or None if the flag does not exist.
+            str: The value.
+
+        Raises:
+            FatalConfigurationError: If the value does not exist.
         """
-        return self._values_data.get(name, None)
+        value = self._values_data.get(name, None)
+
+        if value is None:
+            raise FatalConfigurationError(f"Need {name} in config file")
+        return value
 
     def get_list(self, list_name: str) -> list[str]:
-        """Return the value of the given flag.
+        """Return the value of the given list of values.
+
         Args:
             list_name (str): The name of the config value.
 

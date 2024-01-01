@@ -13,8 +13,9 @@ from dotenv import load_dotenv
 
 import ai_shell
 import ai_shell.demo_bots.demo_setup as demo_setup
+import ai_todo
 
-ai_shell.utils.logging_utils.LOGGING_ENABLED = True
+ai_shell.ai_logs.log_to_bash.LOGGING_ENABLED = True
 
 if __name__ == "__main__" and not os.path.exists("src"):
     demo_setup.initialize()
@@ -99,11 +100,11 @@ files. As you can see, pylint says they're missing. After each round of edits, y
     if not os.path.exists(root_folder):
         raise ValueError("The demo requires that there be a src folder with some python code in it.")
 
-    async def pylint_goal_checker(_toolkit: ai_shell.ToolKit):
+    async def pylint_goal_checker(toolkit: ai_shell.ToolKit):
         # already in src!
         result = ai_shell.invoke_pylint("fish_tank", 8)
         if result.return_code == 0:
-            return "DONE"
+            return toolkit.conversation_over_marker
         return result.to_markdown() + "\n\nThe pylint score is too low. Please try again. You can do it!"
 
     config = ai_shell.Config()
@@ -116,9 +117,14 @@ files. As you can see, pylint says they're missing. After each round of edits, y
         persist_bots=True,
         persist_threads=True,
     )
+    if not config.get_list("todo_roles"):
+        config.set_list("todo_roles", ["Developer", "Tester"])
+    ai_todo.TaskManager("src", config.get_list("todo_roles"))
     with ai_shell.change_directory("src"):
         await bot.initialize()
-        await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
+        await bot.basic_tool_loop(
+            request, ".", tool_names, pylint_goal_checker, stop_on_no_tool_use=True  # root_folder,
+        )
         logger.info("Run completed.")
 
 

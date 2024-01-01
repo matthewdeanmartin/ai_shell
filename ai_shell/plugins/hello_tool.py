@@ -2,7 +2,7 @@
 Plugin Example
 """
 
-from ai_shell.utils.logging_utils import log
+from ai_shell.ai_logs.log_to_bash import log
 
 
 class HelloTool:

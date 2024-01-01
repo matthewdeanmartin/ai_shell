@@ -8,8 +8,9 @@ from io import StringIO
 from pathlib import Path
 from typing import Optional, Union
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
+from ai_shell.utils.cwd_utils import change_directory
 from ai_shell.utils.read_fs import human_readable_size, is_file_in_root_folder, safe_glob, tree
 
 logger = logging.getLogger(__name__)
@@ -26,7 +27,7 @@ class LsTool:
         """
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
 
     @log()
     def ls_markdown(self, path: Optional[str] = ".", all_files: bool = False, long: bool = False) -> str:
@@ -43,7 +44,7 @@ class LsTool:
         try:
             entries_info = self.ls(path, all_files, long)
         except (FileNotFoundError, NotADirectoryError):
-            tree_text = tree(Path(self.root_folder))
+            tree_text = tree(Path(os.getcwd()))
             markdown_content = f"# Bad `ls` command. Here are all the files you can see\n\n{tree_text}"
             return markdown_content
 
@@ -74,11 +75,10 @@ class LsTool:
         """
         logger.info(f"ls --path {path} --all_files {all_files} --long  {long}")
 
-        if not path or path in (".", "/"):
-            # don't support cwd/pwd logic yet.
-            path = self.root_folder
+        if path is None:
+            path = ""
 
-        if "?" in path or "*" in path or "[" in path or "]" in path:
+        if path is not None and ("?" in path or "*" in path or "[" in path or "]" in path):
             # Globs behave very different from non-globs. :(
             #  or "{" in path or "}"  <-- is this a glob pattern?
             entries = safe_glob(path, self.root_folder)
@@ -92,13 +92,14 @@ class LsTool:
                 )
             except (FileNotFoundError, NotADirectoryError):
                 # if not, just tell the bot everything.
-                tree_text = tree(Path(self.root_folder))
+                tree_text = tree(Path(os.getcwd()))
                 markdown_content = f"# Bad `ls` command. Here are all the files you can see\n\n{tree_text}"
                 return markdown_content
         entries_info = []
 
         for entry in entries:
-            full_path = os.path.join(path, entry)
+            # is this None-safety here correct?
+            full_path = entry if path is None else os.path.join(path, entry)
             if not is_file_in_root_folder(full_path, self.root_folder):
                 continue
             if os.path.isdir(full_path) and entry.endswith("__pycache__"):
@@ -117,9 +118,17 @@ class LsTool:
         return entries_info
 
 
-# if __name__ == "__main__":
-#     a = LsTool("E:/github/ai_shell/fish_tank")
-#     results = a.ls("E:/github/ai_shell/fish_tank/")
-#     for row in results:
-#         if "__pycache__" in row:
-#             assert False, row
+if __name__ == "__main__":
+
+    def run() -> None:
+        """Example"""
+        with change_directory("src"):
+            a = LsTool("src", config=Config(".."))
+            results = a.ls(".")
+            for row in results:
+                print(row)
+                if "__pycache__" in row:
+                    raise TypeError(row)
+            print(a.ls_markdown("."))
+
+    run()

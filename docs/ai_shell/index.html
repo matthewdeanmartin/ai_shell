@@ -109,6 +109,10 @@ __all__ = [
 <dd>
 <div class="desc"><p>Call a tool, but actually the tool is just a way to get a structured response …</p></div>
 </dd>
+<dt><code class="name"><a title="ai_shell.backup_restore" href="backup_restore.html">ai_shell.backup_restore</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt><code class="name"><a title="ai_shell.bot_glue" href="bot_glue/index.html">ai_shell.bot_glue</a></code></dt>
 <dd>
 <div class="desc"><p>Just enough bot code to exercise the tools. Bots are not the focus of this project, but without a bot
@@ -421,7 +425,7 @@ def change_directory(new_path: str) -&gt; Iterator[None]:
     else:
         keep = [name for name in just_tool_names() if name not in skips]
 
-    for _ns, tools in SCHEMAS.items():
+    for _ns, tools in _SCHEMAS.items():
         for name, schema in tools.items():
             function_style: dict[str, Union[str, Collection[str]]] = {&#34;name&#34;: name}
             parameters = {&#34;type&#34;: &#34;object&#34;, &#34;properties&#34;: schema[&#34;properties&#34;], &#34;required&#34;: schema[&#34;required&#34;]}
@@ -429,7 +433,8 @@ def change_directory(new_path: str) -&gt; Iterator[None]:
             function_style[&#34;description&#34;] = schema[&#34;description&#34;]
             if name in keep:
                 ALL_TOOLS.append(function_style)
-    logger.info(f&#34;Active tools {ALL_TOOLS}&#34;)</code></pre>
+    active_tools_string = &#34;, &#34;.join(tool[&#34;name&#34;] for tool in ALL_TOOLS)
+    logger.info(f&#34;Active tools {active_tools_string}&#34;)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.initialize_recommended_tools"><code class="name flex">
@@ -1494,15 +1499,17 @@ def cat_markdown(
 
     def __init__(self, config_path: str = &#34;&#34;) -&gt; None:
         &#34;&#34;&#34;Initialize the Config class.&#34;&#34;&#34;
-        self.list_data: dict[str, list[str]] = {}
         if config_path and config_path.endswith(&#34;.toml&#34;):
             self.config_file = config_path
         elif config_path:
             self.config_file = os.path.join(config_path, &#34;ai_shell.toml&#34;)
         else:
             self.config_file = os.getenv(&#34;CONFIG_PATH&#34;, &#34;ai_shell.toml&#34;)
-        self.values_data: dict[str, str] = {}
-        self.flags_data: dict[str, bool] = {
+        # freeze the location of the config file
+        self.config_file = os.path.abspath(self.config_file)
+        self._list_data: dict[str, list[str]] = {}
+        self._values_data: dict[str, str] = {}
+        self._flags_data: dict[str, bool] = {
             &#34;enable_tool_selector_bot&#34;: False,
             &#34;enable_regex_tester_bot&#34;: False,
             &#34;enable_prompt_improver_bot&#34;: False,
@@ -1511,27 +1518,34 @@ def cat_markdown(
             &#34;enable_api_log&#34;: False,
             &#34;enable_autocat&#34;: True,
         }
-        self.bots_data: list = []
+        self._bots_data: list = []
         self.load_config()
 
     def load_config(self) -&gt; None:
         &#34;&#34;&#34;Load the config from the config file.&#34;&#34;&#34;
         if os.path.isfile(self.config_file):
             data = toml.load(self.config_file)
-            self.flags_data = data[&#34;flags&#34;]
-            self.bots_data = data[&#34;bots&#34;]
-            self.values_data = data[&#34;values&#34;]
-            self.list_data = data[&#34;lists&#34;]
+            self._flags_data = data[&#34;flags&#34;]
+            self._bots_data = data[&#34;bots&#34;]
+            self._values_data = data[&#34;values&#34;]
+            self._list_data = data[&#34;lists&#34;]
         else:
             self.save_config()
-        if len(self.bots_data) &gt; 5:
+        if len(self._bots_data) &gt; 5:
             raise ValueError(&#34;You have too many bots. Bot persistence must be failing somewhere.&#34;)
 
     def save_config(self):
         &#34;&#34;&#34;Save the config to the config file.&#34;&#34;&#34;
+        if not os.path.isabs(self.config_file):
+            raise ValueError(&#34;Config file path must be absolute.&#34;)
         with open(self.config_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
             toml.dump(
-                {&#34;flags&#34;: self.flags_data, &#34;bots&#34;: self.bots_data, &#34;values&#34;: self.values_data, &#34;lists&#34;: self.list_data},
+                {
+                    &#34;flags&#34;: self._flags_data,
+                    &#34;bots&#34;: self._bots_data,
+                    &#34;values&#34;: self._values_data,
+                    &#34;lists&#34;: self._list_data,
+                },
                 f,
             )
 
@@ -1542,7 +1556,7 @@ def cat_markdown(
             name (str): The name of the bot.
         &#34;&#34;&#34;
         bot = Bot(assistant_id, name)
-        self.bots_data.append(dataclasses.asdict(bot))
+        self._bots_data.append(dataclasses.asdict(bot))
         self.save_config()
 
     def set_flag(self, flag_name: str, value: bool) -&gt; None:
@@ -1551,9 +1565,8 @@ def cat_markdown(
             flag_name (str): The name of the flag.
             value (str): The value of the flag.
         &#34;&#34;&#34;
-        if flag_name in self.flags_data:
-            self.flags_data[flag_name] = value
-            self.save_config()
+        self._flags_data[flag_name] = value
+        self.save_config()
 
     def cleanup(self) -&gt; None:
         &#34;&#34;&#34;Remove bots that have been deleted on OpenAI&#39;s side.&#34;&#34;&#34;
@@ -1562,12 +1575,12 @@ def cat_markdown(
         assistant_ids = [bot.id for bot in existing_bots.data]
 
         # Remove bots that no longer exist in OpenAI
-        self.bots_data = [bot for bot in self.bots_data if bot[&#34;assistant_id&#34;] in assistant_ids]
+        self._bots_data = [bot for bot in self._bots_data if bot[&#34;assistant_id&#34;] in assistant_ids]
         self.save_config()
 
     def get_bots(self) -&gt; list[Bot]:
         &#34;&#34;&#34;Return a list of Bot objects.&#34;&#34;&#34;
-        return [Bot(**bot) for bot in self.bots_data]
+        return [Bot(**bot) for bot in self._bots_data]
 
     def get_bot(self, name: str) -&gt; Optional[Bot]:
         &#34;&#34;&#34;Return a Bot object with the given name.
@@ -1577,20 +1590,22 @@ def cat_markdown(
         Returns:
             Optional[Bot]: The bot with the given name, or None if no bot with that name exists.
         &#34;&#34;&#34;
-        for bot in self.bots_data:
+        for bot in self._bots_data:
             if bot[&#34;name&#34;] == name:
                 return Bot(**bot)
         return None
 
-    def get_flag(self, flag_name: str) -&gt; Optional[bool]:
+    def get_flag(self, flag_name: str, default_value: Optional[bool] = None) -&gt; Optional[bool]:
         &#34;&#34;&#34;Return the value of the given flag.
         Args:
             flag_name (str): The name of the flag.
+            default_value (Optional[bool], optional): The default value to return if the flag does not exist.
+                                                      Defaults to None.
 
         Returns:
             Optional[bool]: The value of the flag, or None if the flag does not exist.
         &#34;&#34;&#34;
-        return self.flags_data.get(flag_name, None)
+        return self._flags_data.get(flag_name, default_value)
 
     def get_value(self, name: str) -&gt; Optional[str]:
         &#34;&#34;&#34;Return the value of the given flag.
@@ -1600,7 +1615,24 @@ def cat_markdown(
         Returns:
             Optional[str]: The value of the flag, or None if the flag does not exist.
         &#34;&#34;&#34;
-        return self.values_data.get(name, None)
+        return self._values_data.get(name, None)
+
+    def get_required_value(self, name: str) -&gt; str:
+        &#34;&#34;&#34;Return the value of the given flag.
+        Args:
+            name (str): The name of the config value.
+
+        Returns:
+            str: The value.
+
+        Raises:
+            FatalConfigurationError: If the value does not exist.
+        &#34;&#34;&#34;
+        value = self._values_data.get(name, None)
+
+        if value is None:
+            raise FatalConfigurationError(f&#34;Need {name} in config file&#34;)
+        return value
 
     def get_list(self, list_name: str) -&gt; list[str]:
         &#34;&#34;&#34;Return the value of the given flag.
@@ -1610,7 +1642,7 @@ def cat_markdown(
         Returns:
             list[str]: The list from the config file.
         &#34;&#34;&#34;
-        return self.list_data.get(list_name, [])</code></pre>
+        return self._list_data.get(list_name, [])</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -1637,7 +1669,7 @@ def cat_markdown(
         name (str): The name of the bot.
     &#34;&#34;&#34;
     bot = Bot(assistant_id, name)
-    self.bots_data.append(dataclasses.asdict(bot))
+    self._bots_data.append(dataclasses.asdict(bot))
     self.save_config()</code></pre>
 </details>
 </dd>
@@ -1657,7 +1689,7 @@ def cat_markdown(
     assistant_ids = [bot.id for bot in existing_bots.data]
 
     # Remove bots that no longer exist in OpenAI
-    self.bots_data = [bot for bot in self.bots_data if bot[&#34;assistant_id&#34;] in assistant_ids]
+    self._bots_data = [bot for bot in self._bots_data if bot[&#34;assistant_id&#34;] in assistant_ids]
     self.save_config()</code></pre>
 </details>
 </dd>
@@ -1688,7 +1720,7 @@ def cat_markdown(
     Returns:
         Optional[Bot]: The bot with the given name, or None if no bot with that name exists.
     &#34;&#34;&#34;
-    for bot in self.bots_data:
+    for bot in self._bots_data:
         if bot[&#34;name&#34;] == name:
             return Bot(**bot)
     return None</code></pre>
@@ -1705,11 +1737,11 @@ def cat_markdown(
 </summary>
 <pre><code class="python">def get_bots(self) -&gt; list[Bot]:
     &#34;&#34;&#34;Return a list of Bot objects.&#34;&#34;&#34;
-    return [Bot(**bot) for bot in self.bots_data]</code></pre>
+    return [Bot(**bot) for bot in self._bots_data]</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.Config.get_flag"><code class="name flex">
-<span>def <span class="ident">get_flag</span></span>(<span>self, flag_name: str) ‑> Optional[bool]</span>
+<span>def <span class="ident">get_flag</span></span>(<span>self, flag_name: str, default_value: Optional[bool] = None) ‑> Optional[bool]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return the value of the given flag.</p>
@@ -1717,6 +1749,9 @@ def cat_markdown(
 <dl>
 <dt><strong><code>flag_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the flag.</dd>
+<dt><strong><code>default_value</code></strong> :&ensp;<code>Optional[bool]</code>, optional</dt>
+<dd>The default value to return if the flag does not exist.
+Defaults to None.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -1727,15 +1762,17 @@ def cat_markdown(
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_flag(self, flag_name: str) -&gt; Optional[bool]:
+<pre><code class="python">def get_flag(self, flag_name: str, default_value: Optional[bool] = None) -&gt; Optional[bool]:
     &#34;&#34;&#34;Return the value of the given flag.
     Args:
         flag_name (str): The name of the flag.
+        default_value (Optional[bool], optional): The default value to return if the flag does not exist.
+                                                  Defaults to None.
 
     Returns:
         Optional[bool]: The value of the flag, or None if the flag does not exist.
     &#34;&#34;&#34;
-    return self.flags_data.get(flag_name, None)</code></pre>
+    return self._flags_data.get(flag_name, default_value)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.Config.get_list"><code class="name flex">
@@ -1765,7 +1802,49 @@ def cat_markdown(
     Returns:
         list[str]: The list from the config file.
     &#34;&#34;&#34;
-    return self.list_data.get(list_name, [])</code></pre>
+    return self._list_data.get(list_name, [])</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.Config.get_required_value"><code class="name flex">
+<span>def <span class="ident">get_required_value</span></span>(<span>self, name: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the value of the given flag.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the config value.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The value.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>FatalConfigurationError</code></dt>
+<dd>If the value does not exist.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_required_value(self, name: str) -&gt; str:
+    &#34;&#34;&#34;Return the value of the given flag.
+    Args:
+        name (str): The name of the config value.
+
+    Returns:
+        str: The value.
+
+    Raises:
+        FatalConfigurationError: If the value does not exist.
+    &#34;&#34;&#34;
+    value = self._values_data.get(name, None)
+
+    if value is None:
+        raise FatalConfigurationError(f&#34;Need {name} in config file&#34;)
+    return value</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.Config.get_value"><code class="name flex">
@@ -1795,7 +1874,7 @@ def cat_markdown(
     Returns:
         Optional[str]: The value of the flag, or None if the flag does not exist.
     &#34;&#34;&#34;
-    return self.values_data.get(name, None)</code></pre>
+    return self._values_data.get(name, None)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.Config.load_config"><code class="name flex">
@@ -1811,13 +1890,13 @@ def cat_markdown(
     &#34;&#34;&#34;Load the config from the config file.&#34;&#34;&#34;
     if os.path.isfile(self.config_file):
         data = toml.load(self.config_file)
-        self.flags_data = data[&#34;flags&#34;]
-        self.bots_data = data[&#34;bots&#34;]
-        self.values_data = data[&#34;values&#34;]
-        self.list_data = data[&#34;lists&#34;]
+        self._flags_data = data[&#34;flags&#34;]
+        self._bots_data = data[&#34;bots&#34;]
+        self._values_data = data[&#34;values&#34;]
+        self._list_data = data[&#34;lists&#34;]
     else:
         self.save_config()
-    if len(self.bots_data) &gt; 5:
+    if len(self._bots_data) &gt; 5:
         raise ValueError(&#34;You have too many bots. Bot persistence must be failing somewhere.&#34;)</code></pre>
 </details>
 </dd>
@@ -1832,9 +1911,16 @@ def cat_markdown(
 </summary>
 <pre><code class="python">def save_config(self):
     &#34;&#34;&#34;Save the config to the config file.&#34;&#34;&#34;
+    if not os.path.isabs(self.config_file):
+        raise ValueError(&#34;Config file path must be absolute.&#34;)
     with open(self.config_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
         toml.dump(
-            {&#34;flags&#34;: self.flags_data, &#34;bots&#34;: self.bots_data, &#34;values&#34;: self.values_data, &#34;lists&#34;: self.list_data},
+            {
+                &#34;flags&#34;: self._flags_data,
+                &#34;bots&#34;: self._bots_data,
+                &#34;values&#34;: self._values_data,
+                &#34;lists&#34;: self._list_data,
+            },
             f,
         )</code></pre>
 </details>
@@ -1861,9 +1947,8 @@ def cat_markdown(
         flag_name (str): The name of the flag.
         value (str): The value of the flag.
     &#34;&#34;&#34;
-    if flag_name in self.flags_data:
-        self.flags_data[flag_name] = value
-        self.save_config()</code></pre>
+    self._flags_data[flag_name] = value
+    self.save_config()</code></pre>
 </details>
 </dd>
 </dl>
@@ -2572,7 +2657,7 @@ def ensure_log(self) -&gt; Iterator[None]:
         self.root_folder = root_folder if root_folder.endswith(&#34;/&#34;) else root_folder + &#34;/&#34;
         self.buffer = Buffer()
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def ed(self, script: str, file_name: str) -&gt; list[str]:
@@ -2788,7 +2873,7 @@ def ed(self, script: str, file_name: str) -&gt; list[str]:
         &#34;&#34;&#34;
         self.root_folder = root_folder if root_folder.endswith(&#34;/&#34;) else root_folder + &#34;/&#34;
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def edlin(self, script: str, file_name: str) -&gt; list[str]:
@@ -2980,7 +3065,7 @@ def edlin(self, script: str, file_name: str) -&gt; list[str]:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def find_files(
@@ -3241,7 +3326,7 @@ def find_files_markdown(
         self.repo_path = root_folder
         self.repo = Repo(root_folder)
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     def is_ignored_by_gitignore(self, file_path: str, gitignore_path: str = &#34;.gitignore&#34;) -&gt; bool:
         &#34;&#34;&#34;
@@ -3746,7 +3831,7 @@ def git_status(self) -&gt; dict[str, Any]:
         &#34;&#34;&#34;
         self.root_folder: str = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def grep_markdown(
@@ -4031,7 +4116,7 @@ def grep_markdown(
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def head_markdown(self, file_path: str, lines: int = 10) -&gt; str:
@@ -4382,7 +4467,8 @@ def tail_markdown(self, file_path: str, lines: int = 10) -&gt; str:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.python_module = config.get_value(&#34;python_module&#34;)
 
     @log()
     def insert_text_after_context(self, file_path: str, context: str, text_to_insert: str) -&gt; str:
@@ -4537,10 +4623,7 @@ def tail_markdown(self, file_path: str, lines: int = 10) -&gt; str:
         &#34;&#34;&#34;
         if not new_file_string:
             raise TypeError(&#34;Something went wrong in insert and all text disappeared. Cancelling.&#34;)
-        if isinstance(new_file_string, list):
-            source = &#34;\n&#34;.join(new_file_string)
-        else:
-            source = new_file_string
+
         if isinstance(new_file_string, str) and &#34;\n&#34;.join(original_lines) == new_file_string:
             return (
                 &#34;File not changed this means the old file contents are the same as the new. This has nothing &#34;
@@ -4551,24 +4634,54 @@ def tail_markdown(self, file_path: str, lines: int = 10) -&gt; str:
                 &#34;File not changed, this means the old file contents are the same as the new. This has nothing &#34;
                 &#34;to do with file permissions.&#34;
             )
-        if is_python_file(file_path):
-            is_valid, error = is_valid_python_source(source)
-            if not is_valid and error:
-                return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
-            if not is_valid:
-                return f&#34;Invalid Python source code. No changes made. {error}.&#34;
+        # if is_python_file(file_path):
+        #     is_valid, error = is_valid_python_source(source)
+        #     if not is_valid and error:
+        #         return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
+        #     if not is_valid:
+        #         return f&#34;Invalid Python source code. No changes made. {error}.&#34;
 
         # Write back to the file
+        BackupRestore.backup_file(file_path)
         with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file:
             if isinstance(new_file_string, str):
                 file.write(new_file_string)
             else:
                 file.writelines(new_file_string)
+
+        validation = self._validate_code(file_path)
+
+        if validation:
+            BackupRestore.revert_to_latest_backup(file_path)
+            return f&#34;File not rewritten because of problems.\n{validation.message}&#34;
+
         if self.auto_cat:
             feedback = &#34;Insert completed and no exceptions thrown.&#34;
             contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
             return f&#34;Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}&#34;
-        return &#34;Insert completed and no exceptions thrown. Please verify by other means.&#34;</code></pre>
+        return &#34;Insert completed and no exceptions thrown. Please verify by other means.&#34;
+
+    def _validate_code(self, full_path: str) -&gt; Optional[ValidationMessageForBot]:
+        &#34;&#34;&#34;
+        Validate python
+
+        Args:
+            full_path (str): The path to the file to validate.
+
+        Returns:
+            Optional[ValidationMessageForBot]: A validation message if the file is invalid, otherwise None.
+        &#34;&#34;&#34;
+        if not is_python_file(full_path):
+            return None
+        if not self.python_module:
+            logger.warning(&#34;No python module set, skipping validation.&#34;)
+            return None
+        validator = ValidateModule(self.python_module)
+        results = validator.validate()
+        explanation = validator.explain_to_bot(results)
+        if explanation.is_valid:
+            return None
+        return explanation</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -4830,7 +4943,7 @@ def insert_text_at_start_or_end(self, file_path: str, text_to_insert: str, posit
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def ls_markdown(self, path: Optional[str] = &#34;.&#34;, all_files: bool = False, long: bool = False) -&gt; str:
@@ -5091,7 +5204,7 @@ def ls_markdown(self, path: Optional[str] = &#34;.&#34;, all_files: bool = False
         &#34;&#34;&#34;
         self.root_folder: str = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def apply_git_patch(self, patch_content: str) -&gt; str:
@@ -5267,7 +5380,7 @@ def apply_git_patch(self, patch_content: str) -&gt; str:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def format_code_as_markdown(
@@ -5438,25 +5551,22 @@ def format_code_as_markdown(
         Returns:
             str: Output from pytest.
         &#34;&#34;&#34;
-        with change_directory(self.root_folder):
-            # What is -rA
-            if not self.module:
-                return &#34;No module set for pytest, please set in ai_config.toml&#34;
-            if not self.tests_folder:
-                return &#34;No tests folder set for pytest, please set in ai_config.toml&#34;
-            if not self.min_coverage:
-                return &#34;No min coverage set for pytest, please set in ai_config.toml&#34;
-            _passed_tests, _failed_tests, _coverage, command_result = count_pytest_results(
-                self.module, self.tests_folder, self.min_coverage
-            )
-            markdown_output = f&#34;&#34;&#34;## Pytest Output
+        # Host script must set env vars, temp folder location and pwd!
+        # with change_directory(self.root_folder):
+        # What is -rA
+        if not self.module or not self.tests_folder or self.min_coverage:
+            raise FatalConfigurationError(&#34;Please set in ai_config module, test_folder and min_coverage&#34;)
+        _passed_tests, _failed_tests, _coverage, command_result = count_pytest_results(
+            self.module, self.tests_folder, self.min_coverage
+        )
+        markdown_output = f&#34;&#34;&#34;## Pytest Output
 ### Standard Output
 {command_result.stdout}
 ### Standard Error
 {command_result.stderr}
 ### Return Code
 `{command_result.return_code}`&#34;&#34;&#34;
-            return markdown_output</code></pre>
+        return markdown_output</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -5484,25 +5594,22 @@ def format_code_as_markdown(
         Returns:
             str: Output from pytest.
         &#34;&#34;&#34;
-        with change_directory(self.root_folder):
-            # What is -rA
-            if not self.module:
-                return &#34;No module set for pytest, please set in ai_config.toml&#34;
-            if not self.tests_folder:
-                return &#34;No tests folder set for pytest, please set in ai_config.toml&#34;
-            if not self.min_coverage:
-                return &#34;No min coverage set for pytest, please set in ai_config.toml&#34;
-            _passed_tests, _failed_tests, _coverage, command_result = count_pytest_results(
-                self.module, self.tests_folder, self.min_coverage
-            )
-            markdown_output = f&#34;&#34;&#34;## Pytest Output
+        # Host script must set env vars, temp folder location and pwd!
+        # with change_directory(self.root_folder):
+        # What is -rA
+        if not self.module or not self.tests_folder or self.min_coverage:
+            raise FatalConfigurationError(&#34;Please set in ai_config module, test_folder and min_coverage&#34;)
+        _passed_tests, _failed_tests, _coverage, command_result = count_pytest_results(
+            self.module, self.tests_folder, self.min_coverage
+        )
+        markdown_output = f&#34;&#34;&#34;## Pytest Output
 ### Standard Output
 {command_result.stdout}
 ### Standard Error
 {command_result.stderr}
 ### Return Code
 `{command_result.return_code}`&#34;&#34;&#34;
-            return markdown_output</code></pre>
+        return markdown_output</code></pre>
 </details>
 </dd>
 </dl>
@@ -5535,7 +5642,8 @@ def format_code_as_markdown(
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.python_module = config.get_value(&#34;python_module&#34;)
 
     @log()
     def replace_line_by_line(
@@ -5659,16 +5767,17 @@ def format_code_as_markdown(
         if not final:
             raise TypeError(&#34;Something went wrong in replace and all text disappeared. Cancelling.&#34;)
 
-        if is_python_file(file_path):
-            is_valid, error = is_valid_python_source(final)
-            if not is_valid and error:
-                return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
-            if not is_valid:
-                return f&#34;Invalid Python source code. No changes made. {error}.&#34;
-
         if input_text != final:
+            BackupRestore.backup_file(file_path)
             with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
                 output_file.write(final)
+
+            validation = self._validate_code(file_path)
+
+            if validation:
+                BackupRestore.revert_to_latest_backup(file_path)
+                return f&#34;File not written because of problems.\n{validation.message}&#34;
+
             if self.auto_cat:
                 feedback = &#34;Changes applied without exception, please verify by other means.\n&#34;
                 contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
@@ -5677,7 +5786,29 @@ def format_code_as_markdown(
         return (
             &#34;No changes made, this means the old file contents are the same as the new. This has nothing &#34;
             &#34;to do with file permissions. Try again with a different match pattern.&#34;
-        )</code></pre>
+        )
+
+    def _validate_code(self, full_path: str) -&gt; Optional[ValidationMessageForBot]:
+        &#34;&#34;&#34;
+        Validate python
+
+        Args:
+            full_path (str): The path to the file to validate.
+
+        Returns:
+            Optional[ValidationMessageForBot]: A validation message if the file is invalid, otherwise None.
+        &#34;&#34;&#34;
+        if not is_python_file(full_path):
+            return None
+        if not self.python_module:
+            logger.warning(&#34;No python module set, skipping validation.&#34;)
+            return None
+        validator = ValidateModule(self.python_module)
+        results = validator.validate()
+        explanation = validator.explain_to_bot(results)
+        if explanation.is_valid:
+            return None
+        return explanation</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -5935,16 +6066,17 @@ were made.</p>
     if not final:
         raise TypeError(&#34;Something went wrong in replace and all text disappeared. Cancelling.&#34;)
 
-    if is_python_file(file_path):
-        is_valid, error = is_valid_python_source(final)
-        if not is_valid and error:
-            return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
-        if not is_valid:
-            return f&#34;Invalid Python source code. No changes made. {error}.&#34;
-
     if input_text != final:
+        BackupRestore.backup_file(file_path)
         with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
             output_file.write(final)
+
+        validation = self._validate_code(file_path)
+
+        if validation:
+            BackupRestore.revert_to_latest_backup(file_path)
+            return f&#34;File not written because of problems.\n{validation.message}&#34;
+
         if self.auto_cat:
             feedback = &#34;Changes applied without exception, please verify by other means.\n&#34;
             contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
@@ -5986,7 +6118,9 @@ were made.</p>
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.python_module = config.get_value(&#34;python_module&#34;)
+        self.only_add_text = config.get_flag(&#34;only_add_text&#34;, False)
 
     @log()
     def write_new_file(self, file_path: str, text: str) -&gt; str:
@@ -6004,7 +6138,8 @@ were made.</p>
             ValueError: If the file already exists or if the file_path is outside the root_folder.
         &#34;&#34;&#34;
         file_path = sanitize_path(file_path)
-        full_path = os.path.join(self.root_folder, file_path)
+        # Don&#39;t prepend root folder, we will have already cd&#39;d to it.
+        full_path = file_path
         if not is_file_in_root_folder(full_path, self.root_folder):
             raise ValueError(&#34;File path must be within the root folder.&#34;)
 
@@ -6014,6 +6149,12 @@ were made.</p>
 
             with open(full_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file:
                 file.write(text)
+
+            validation = self._validate_code(full_path)
+
+            if validation:
+                os.remove(full_path)
+                return f&#34;File not written because of problems.\n{validation.message}&#34;
 
             return f&#34;File written to {full_path}&#34;
         except FileExistsError as e:
@@ -6040,12 +6181,17 @@ were made.</p>
 
         file_path = sanitize_path(file_path)
 
-        full_path = os.path.join(self.root_folder, file_path)
+        # Don&#39;t prepend root folder, we will have already cd&#39;d to it.
+        full_path = file_path
         if not is_file_in_root_folder(full_path, self.root_folder):
             raise ValueError(&#34;File path must be within the root folder.&#34;)
 
         # not sure this is working right.
-        # _unchanged_proportion, initial, unchanged, added, removed = file_similarity(full_path, text.split(&#34;\n&#34;))
+        _unchanged_proportion, initial, unchanged, added, removed = file_similarity(full_path, text.split(&#34;\n&#34;))
+        if self.only_add_text and removed &gt; 0:
+            raise TypeError(&#34;This would delete lines. Only add lines, do not remove them.&#34;)
+        if self.only_add_text and len(text.split(&#34;\n&#34;)) &lt; initial:
+            raise TypeError(&#34;Line count decreased. Only add text, do not remove it.&#34;)
         # if 5 &lt; initial &lt;= removed:
         #     # concern is taking a large file, and deleting everything (ie. confusing full rewrite for an insert or edit)
         #     raise TypeError(
@@ -6063,13 +6209,20 @@ were made.</p>
             if not os.path.exists(full_path):
                 raise FileNotFoundError(&#34;File does not exist, use ls tool to see what files there are.&#34;)
 
-            self._backup_file(file_path)
+            BackupRestore.backup_file(full_path)
 
             with open(full_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file:
                 file.write(text)
+
+            validation = self._validate_code(full_path)
+
+            if validation:
+                BackupRestore.revert_to_latest_backup(full_path)
+                return f&#34;File not rewritten because of problems.\n{validation.message}&#34;
+
             feedback = f&#34;File rewritten to {full_path}&#34;
             if self.auto_cat:
-                feedback = &#34;Changes without exception, please verify by other means.\n&#34;
+                feedback = &#34;Changes made without exception, please verify by other means.\n&#34;
                 contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
                 return f&#34;Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}&#34;
             return feedback + &#34;, please view to verify contents.&#34;
@@ -6078,121 +6231,30 @@ were made.</p>
                 str(e) + &#34; Consider using write_new_file method if you want to create a new file.&#34;
             ) from e
 
-    def _backup_file(self, file_name: str) -&gt; str:
+    def _validate_code(self, full_path: str) -&gt; Optional[ValidationMessageForBot]:
         &#34;&#34;&#34;
-        Create a backup of the file before overwriting it.
+        Validate python
 
         Args:
-            file_name (str): The name of the file to backup.
+            full_path (str): The path to the file to validate.
 
         Returns:
-            str: A success message with the backup file path.
-
-        Raises:
-            ValueError: If the file does not exist or other errors occur.
+            Optional[ValidationMessageForBot]: A validation message if the file is invalid, otherwise None.
         &#34;&#34;&#34;
-        file_path = os.path.join(self.root_folder, file_name)
-        if not os.path.exists(file_path):
-            raise ValueError(f&#34;The file {file_name} does not exist.&#34;)
-
-        # Find existing backups
-        backup_files = sorted(glob.glob(f&#34;{file_path}.*.bak&#34;))
-        backup_number = len(backup_files) + 1
-        backup_file_path = f&#34;{file_path}.{backup_number}.bak&#34;
-
-        try:
-            shutil.copyfile(file_path, backup_file_path)
-            return f&#34;Backup created successfully at {backup_file_path}&#34;
-        except Exception as e:
-            raise ValueError(f&#34;An error occurred during backup: {e}&#34;) from e
-
-    @log()
-    def revert_to_latest_backup(self, file_name: str) -&gt; str:
-        &#34;&#34;&#34;
-        Revert the file to the most recent backup.
-
-        Args:
-            file_name (str): The name of the file to revert.
-
-        Returns:
-            str: A success message indicating the revert operation.
-
-        Raises:
-            ValueError: If no backup is found or other errors occur.
-        &#34;&#34;&#34;
-        file_path = os.path.join(self.root_folder, file_name)
-        backup_files = sorted(glob.glob(f&#34;{file_path}.*.bak&#34;), reverse=True)
-        if not backup_files:
-            raise ValueError(f&#34;No backups found for {file_name}.&#34;)
-
-        latest_backup = backup_files[0]
-        bad_file_path = f&#34;{file_path}.bad&#34;
-
-        try:
-            if os.path.exists(file_path):
-                os.rename(file_path, bad_file_path)
-            os.rename(latest_backup, file_path)
-            return f&#34;Reverted {file_name} to latest backup.&#34;
-        except Exception as e:
-            raise ValueError(f&#34;An error occurred during revert: {e}&#34;) from e</code></pre>
+        if not is_python_file(full_path):
+            return None
+        if not self.python_module:
+            logger.warning(&#34;No python module set, skipping validation.&#34;)
+            return None
+        validator = ValidateModule(self.python_module)
+        results = validator.validate()
+        explanation = validator.explain_to_bot(results)
+        if explanation.is_valid:
+            return None
+        return explanation</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="ai_shell.RewriteTool.revert_to_latest_backup"><code class="name flex">
-<span>def <span class="ident">revert_to_latest_backup</span></span>(<span>self, file_name: str) ‑> str</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Revert the file to the most recent backup.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>file_name</code></strong> :&ensp;<code>str</code></dt>
-<dd>The name of the file to revert.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>str</code></dt>
-<dd>A success message indicating the revert operation.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>ValueError</code></dt>
-<dd>If no backup is found or other errors occur.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@log()
-def revert_to_latest_backup(self, file_name: str) -&gt; str:
-    &#34;&#34;&#34;
-    Revert the file to the most recent backup.
-
-    Args:
-        file_name (str): The name of the file to revert.
-
-    Returns:
-        str: A success message indicating the revert operation.
-
-    Raises:
-        ValueError: If no backup is found or other errors occur.
-    &#34;&#34;&#34;
-    file_path = os.path.join(self.root_folder, file_name)
-    backup_files = sorted(glob.glob(f&#34;{file_path}.*.bak&#34;), reverse=True)
-    if not backup_files:
-        raise ValueError(f&#34;No backups found for {file_name}.&#34;)
-
-    latest_backup = backup_files[0]
-    bad_file_path = f&#34;{file_path}.bad&#34;
-
-    try:
-        if os.path.exists(file_path):
-            os.rename(file_path, bad_file_path)
-        os.rename(latest_backup, file_path)
-        return f&#34;Reverted {file_name} to latest backup.&#34;
-    except Exception as e:
-        raise ValueError(f&#34;An error occurred during revert: {e}&#34;) from e</code></pre>
-</details>
-</dd>
 <dt id="ai_shell.RewriteTool.rewrite_file"><code class="name flex">
 <span>def <span class="ident">rewrite_file</span></span>(<span>self, file_path: str, text: str) ‑> str</span>
 </code></dt>
@@ -6241,12 +6303,17 @@ def rewrite_file(self, file_path: str, text: str) -&gt; str:
 
     file_path = sanitize_path(file_path)
 
-    full_path = os.path.join(self.root_folder, file_path)
+    # Don&#39;t prepend root folder, we will have already cd&#39;d to it.
+    full_path = file_path
     if not is_file_in_root_folder(full_path, self.root_folder):
         raise ValueError(&#34;File path must be within the root folder.&#34;)
 
     # not sure this is working right.
-    # _unchanged_proportion, initial, unchanged, added, removed = file_similarity(full_path, text.split(&#34;\n&#34;))
+    _unchanged_proportion, initial, unchanged, added, removed = file_similarity(full_path, text.split(&#34;\n&#34;))
+    if self.only_add_text and removed &gt; 0:
+        raise TypeError(&#34;This would delete lines. Only add lines, do not remove them.&#34;)
+    if self.only_add_text and len(text.split(&#34;\n&#34;)) &lt; initial:
+        raise TypeError(&#34;Line count decreased. Only add text, do not remove it.&#34;)
     # if 5 &lt; initial &lt;= removed:
     #     # concern is taking a large file, and deleting everything (ie. confusing full rewrite for an insert or edit)
     #     raise TypeError(
@@ -6264,13 +6331,20 @@ def rewrite_file(self, file_path: str, text: str) -&gt; str:
         if not os.path.exists(full_path):
             raise FileNotFoundError(&#34;File does not exist, use ls tool to see what files there are.&#34;)
 
-        self._backup_file(file_path)
+        BackupRestore.backup_file(full_path)
 
         with open(full_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file:
             file.write(text)
+
+        validation = self._validate_code(full_path)
+
+        if validation:
+            BackupRestore.revert_to_latest_backup(full_path)
+            return f&#34;File not rewritten because of problems.\n{validation.message}&#34;
+
         feedback = f&#34;File rewritten to {full_path}&#34;
         if self.auto_cat:
-            feedback = &#34;Changes without exception, please verify by other means.\n&#34;
+            feedback = &#34;Changes made without exception, please verify by other means.\n&#34;
             contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
             return f&#34;Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}&#34;
         return feedback + &#34;, please view to verify contents.&#34;
@@ -6322,7 +6396,8 @@ def write_new_file(self, file_path: str, text: str) -&gt; str:
         ValueError: If the file already exists or if the file_path is outside the root_folder.
     &#34;&#34;&#34;
     file_path = sanitize_path(file_path)
-    full_path = os.path.join(self.root_folder, file_path)
+    # Don&#39;t prepend root folder, we will have already cd&#39;d to it.
+    full_path = file_path
     if not is_file_in_root_folder(full_path, self.root_folder):
         raise ValueError(&#34;File path must be within the root folder.&#34;)
 
@@ -6332,6 +6407,12 @@ def write_new_file(self, file_path: str, text: str) -&gt; str:
 
         with open(full_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file:
             file.write(text)
+
+        validation = self._validate_code(full_path)
+
+        if validation:
+            os.remove(full_path)
+            return f&#34;File not written because of problems.\n{validation.message}&#34;
 
         return f&#34;File written to {full_path}&#34;
     except FileExistsError as e:
@@ -6368,7 +6449,7 @@ def write_new_file(self, file_path: str, text: str) -&gt; str:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def sed(self, file_path: str, commands: list[str]) -&gt; str:
@@ -7642,7 +7723,7 @@ def remove_todo(self, title: str) -&gt; str:
         self, root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config: Config
     ) -&gt; None:
         super().__init__(root_folder, token_model, global_max_lines, permitted_tools, config)
-        self.lookup: dict[str, Callable[[dict[str, Any]], Any]] = {
+        self._lookup: dict[str, Callable[[dict[str, Any]], Any]] = {
             &#34;report_bool&#34;: self.report_bool,
             &#34;report_dict&#34;: self.report_dict,
             &#34;report_float&#34;: self.report_float,
@@ -7691,7 +7772,6 @@ def remove_todo(self, title: str) -&gt; str:
             &#34;replace_line_by_line&#34;: self.replace_line_by_line,
             &#34;replace_with_regex&#34;: self.replace_with_regex,
             &#34;save_if_changed&#34;: self.save_if_changed,
-            &#34;revert_to_latest_backup&#34;: self.revert_to_latest_backup,
             &#34;rewrite_file&#34;: self.rewrite_file,
             &#34;write_new_file&#34;: self.write_new_file,
             &#34;sed&#34;: self.sed,
@@ -7701,14 +7781,11 @@ def remove_todo(self, title: str) -&gt; str:
             &#34;remove_todo&#34;: self.remove_todo,
             &#34;count_tokens&#34;: self.count_tokens,
         }
-        # Stateful tool support
-        self.tool_answer_collector = None
+        # Stateful tool support. Useless assignment to make mypy happy
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     def report_bool(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -7727,9 +7804,6 @@ def remove_todo(self, title: str) -&gt; str:
 
     def report_dict(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -7748,9 +7822,6 @@ def remove_todo(self, title: str) -&gt; str:
 
     def report_float(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -7769,9 +7840,6 @@ def remove_todo(self, title: str) -&gt; str:
 
     def report_int(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -7790,9 +7858,6 @@ def remove_todo(self, title: str) -&gt; str:
 
     def report_json(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -7811,9 +7876,6 @@ def remove_todo(self, title: str) -&gt; str:
 
     def report_list(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -7832,9 +7894,6 @@ def remove_todo(self, title: str) -&gt; str:
 
     def report_set(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -7853,9 +7912,6 @@ def remove_todo(self, title: str) -&gt; str:
 
     def report_text(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -7874,9 +7930,6 @@ def remove_todo(self, title: str) -&gt; str:
 
     def report_toml(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -7895,9 +7948,6 @@ def remove_todo(self, title: str) -&gt; str:
 
     def report_tuple(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -7916,9 +7966,6 @@ def remove_todo(self, title: str) -&gt; str:
 
     def report_xml(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -8571,18 +8618,6 @@ def remove_todo(self, title: str) -&gt; str:
             ),
         )
         return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)
-
-    def revert_to_latest_backup(self, arguments: dict[str, Any]) -&gt; Any:
-        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        tool = RewriteTool(self.root_folder, self.config)
-
-        file_name = cast(
-            str,
-            arguments.get(
-                &#34;file_name&#34;,
-            ),
-        )
-        return tool.revert_to_latest_backup(file_name=file_name)
 
     def rewrite_file(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
@@ -9776,9 +9811,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_bool(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -9807,9 +9839,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_dict(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -9838,9 +9867,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_float(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -9869,9 +9895,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_int(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -9900,9 +9923,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_json(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -9931,9 +9951,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_list(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -9962,9 +9979,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_set(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -9993,9 +10007,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_text(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -10024,9 +10035,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_toml(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -10055,9 +10063,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_tuple(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -10086,9 +10091,6 @@ def remove_todo(self, title: str) -&gt; str:
 </summary>
 <pre><code class="python">def report_xml(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -10104,28 +10106,6 @@ def remove_todo(self, title: str) -&gt; str:
         ),
     )
     return self.tool_answer_collector.report_xml(answer=answer, comment=comment)</code></pre>
-</details>
-</dd>
-<dt id="ai_shell.ToolKit.revert_to_latest_backup"><code class="name flex">
-<span>def <span class="ident">revert_to_latest_backup</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Generated Do Not Edit</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def revert_to_latest_backup(self, arguments: dict[str, Any]) -&gt; Any:
-    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    tool = RewriteTool(self.root_folder, self.config)
-
-    file_name = cast(
-        str,
-        arguments.get(
-            &#34;file_name&#34;,
-        ),
-    )
-    return tool.revert_to_latest_backup(file_name=file_name)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.ToolKit.rewrite_file"><code class="name flex">
@@ -10322,6 +10302,7 @@ def remove_todo(self, title: str) -&gt; str:
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="ai_shell.answer_tool" href="answer_tool.html">ai_shell.answer_tool</a></code></li>
+<li><code><a title="ai_shell.backup_restore" href="backup_restore.html">ai_shell.backup_restore</a></code></li>
 <li><code><a title="ai_shell.bot_glue" href="bot_glue/index.html">ai_shell.bot_glue</a></code></li>
 <li><code><a title="ai_shell.cat_tool" href="cat_tool.html">ai_shell.cat_tool</a></code></li>
 <li><code><a title="ai_shell.code_generate" href="code_generate/index.html">ai_shell.code_generate</a></code></li>
@@ -10403,6 +10384,7 @@ def remove_todo(self, title: str) -&gt; str:
 <li><code><a title="ai_shell.Config.get_bots" href="#ai_shell.Config.get_bots">get_bots</a></code></li>
 <li><code><a title="ai_shell.Config.get_flag" href="#ai_shell.Config.get_flag">get_flag</a></code></li>
 <li><code><a title="ai_shell.Config.get_list" href="#ai_shell.Config.get_list">get_list</a></code></li>
+<li><code><a title="ai_shell.Config.get_required_value" href="#ai_shell.Config.get_required_value">get_required_value</a></code></li>
 <li><code><a title="ai_shell.Config.get_value" href="#ai_shell.Config.get_value">get_value</a></code></li>
 <li><code><a title="ai_shell.Config.load_config" href="#ai_shell.Config.load_config">load_config</a></code></li>
 <li><code><a title="ai_shell.Config.save_config" href="#ai_shell.Config.save_config">save_config</a></code></li>
@@ -10525,7 +10507,6 @@ def remove_todo(self, title: str) -&gt; str:
 <li>
 <h4><code><a title="ai_shell.RewriteTool" href="#ai_shell.RewriteTool">RewriteTool</a></code></h4>
 <ul class="">
-<li><code><a title="ai_shell.RewriteTool.revert_to_latest_backup" href="#ai_shell.RewriteTool.revert_to_latest_backup">revert_to_latest_backup</a></code></li>
 <li><code><a title="ai_shell.RewriteTool.rewrite_file" href="#ai_shell.RewriteTool.rewrite_file">rewrite_file</a></code></li>
 <li><code><a title="ai_shell.RewriteTool.write_new_file" href="#ai_shell.RewriteTool.write_new_file">write_new_file</a></code></li>
 </ul>
@@ -10625,7 +10606,6 @@ def remove_todo(self, title: str) -&gt; str:
 <li><code><a title="ai_shell.ToolKit.report_toml" href="#ai_shell.ToolKit.report_toml">report_toml</a></code></li>
 <li><code><a title="ai_shell.ToolKit.report_tuple" href="#ai_shell.ToolKit.report_tuple">report_tuple</a></code></li>
 <li><code><a title="ai_shell.ToolKit.report_xml" href="#ai_shell.ToolKit.report_xml">report_xml</a></code></li>
-<li><code><a title="ai_shell.ToolKit.revert_to_latest_backup" href="#ai_shell.ToolKit.revert_to_latest_backup">revert_to_latest_backup</a></code></li>
 <li><code><a title="ai_shell.ToolKit.rewrite_file" href="#ai_shell.ToolKit.rewrite_file">rewrite_file</a></code></li>
 <li><code><a title="ai_shell.ToolKit.save_if_changed" href="#ai_shell.ToolKit.save_if_changed">save_if_changed</a></code></li>
 <li><code><a title="ai_shell.ToolKit.sed" href="#ai_shell.ToolKit.sed">sed</a></code></li>

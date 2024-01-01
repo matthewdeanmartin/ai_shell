@@ -54,8 +54,7 @@ def test_ls_empty_directory(tmp_path):
 
 def test_ls_invalid_directory():
     lstool = LsTool("/non/existent/directory", config=config_for_tests())
-    with pytest.raises(OSError):
-        lstool.ls("/non/existent/directory")
-
-
-# Additional tests can be added as needed
+    # Was better to return textual info instead of error object.
+    # with pytest.raises(OSError):
+    result = lstool.ls("/non/existent/directory")
+    assert result.startswith("# Bad")

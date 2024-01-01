@@ -57,7 +57,7 @@ class GitTool:
         self.repo_path = root_folder
         self.repo = Repo(root_folder)
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     def is_ignored_by_gitignore(self, file_path: str, gitignore_path: str = &#34;.gitignore&#34;) -&gt; bool:
         &#34;&#34;&#34;
@@ -266,7 +266,7 @@ if __name__ == &#34;__main__&#34;:
         self.repo_path = root_folder
         self.repo = Repo(root_folder)
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     def is_ignored_by_gitignore(self, file_path: str, gitignore_path: str = &#34;.gitignore&#34;) -&gt; bool:
         &#34;&#34;&#34;

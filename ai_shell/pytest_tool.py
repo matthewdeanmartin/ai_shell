@@ -1,10 +1,10 @@
 """
 Optimized for AI version of pytest.
 """
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.externals.pytest_call import count_pytest_results
 from ai_shell.utils.config_manager import Config
 from ai_shell.utils.json_utils import FatalConfigurationError
-from ai_shell.utils.logging_utils import log
 
 
 class PytestTool:

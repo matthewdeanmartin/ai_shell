@@ -100,7 +100,7 @@ def generate_the_cli(target_file: str) -&gt; None:
         target_file (str): The target file path for the generated code.
     &#34;&#34;&#34;
     tools = &#34;&#34;
-    for _ns, json_schema in schemas.SCHEMAS.items():
+    for _ns, json_schema in schemas._SCHEMAS.items():
         for tool, _ in json_schema.items():
             tools += f&#39;            &#34;{tool}&#34; : self.{tool},\n&#39;
 
@@ -184,7 +184,7 @@ CONFIG = Config()
     middle = &#34;&#34;
     for ns, data in meta.items():
         middle += &#34;\n&#34;
-        for method, method_data in schemas.SCHEMAS[ns].items():
+        for method, method_data in schemas._SCHEMAS[ns].items():
             middle += &#34;\n&#34;
             middle += f&#34;def {method}_command(args):\n&#34;
             middle += f&#39;    &#34;&#34;&#34;Invoke {method}&#34;&#34;&#34;\n&#39;
@@ -202,7 +202,7 @@ CONFIG = Config()
         subparsers = parser.add_subparsers(dest=&#39;subcommand&#39;, help=&#39;sub-command help&#39;)
     &#34;&#34;&#34;
     for ns, _data in meta.items():
-        for method, method_data in schemas.SCHEMAS[ns].items():
+        for method, method_data in schemas._SCHEMAS[ns].items():
             escaped_method_description = (
                 cast(str, method_data.get(&#34;description&#34;, &#34;&#34;)).replace(&#34;&#39;&#34;, &#34;\\&#39;&#34;).replace(&#34;\n&#34;, &#34;\\n&#34;)
             )
@@ -357,7 +357,7 @@ str: Generated Python method code.</p></div>
         target_file (str): The target file path for the generated code.
     &#34;&#34;&#34;
     tools = &#34;&#34;
-    for _ns, json_schema in schemas.SCHEMAS.items():
+    for _ns, json_schema in schemas._SCHEMAS.items():
         for tool, _ in json_schema.items():
             tools += f&#39;            &#34;{tool}&#34; : self.{tool},\n&#39;
 
@@ -441,7 +441,7 @@ CONFIG = Config()
     middle = &#34;&#34;
     for ns, data in meta.items():
         middle += &#34;\n&#34;
-        for method, method_data in schemas.SCHEMAS[ns].items():
+        for method, method_data in schemas._SCHEMAS[ns].items():
             middle += &#34;\n&#34;
             middle += f&#34;def {method}_command(args):\n&#34;
             middle += f&#39;    &#34;&#34;&#34;Invoke {method}&#34;&#34;&#34;\n&#39;
@@ -459,7 +459,7 @@ CONFIG = Config()
         subparsers = parser.add_subparsers(dest=&#39;subcommand&#39;, help=&#39;sub-command help&#39;)
     &#34;&#34;&#34;
     for ns, _data in meta.items():
-        for method, method_data in schemas.SCHEMAS[ns].items():
+        for method, method_data in schemas._SCHEMAS[ns].items():
             escaped_method_description = (
                 cast(str, method_data.get(&#34;description&#34;, &#34;&#34;)).replace(&#34;&#39;&#34;, &#34;\\&#39;&#34;).replace(&#34;\n&#34;, &#34;\\n&#34;)
             )

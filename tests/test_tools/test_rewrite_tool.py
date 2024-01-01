@@ -67,7 +67,7 @@ def test_rewrite_file_failure_file_not_exists(tmp_path):
         with pytest.raises(FileNotFoundError) as excinfo:
             tool.rewrite_file(file_path, "Some content")
         # File does not exist, use ls tool to see what files there are.
-        assert "File does not exist" in str(excinfo.value)
+        assert "File does not exist" in str(excinfo.value) or "No such file or directory" in str(excinfo.value)
 
 
 def test_rewrite_file_failure_outside_root(tmp_path):

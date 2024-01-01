@@ -29,7 +29,7 @@
 </summary>
 <pre><code class="python">&#34;&#34;&#34;jsonschema for functions&#34;&#34;&#34;
 
-SCHEMAS = {
+_SCHEMAS = {
     &#34;answer_collector&#34;: {
         &#34;report_bool&#34;: {
             &#34;description&#34;: &#34;Report answer in bool &#34; &#34;format.&#34;,
@@ -1699,27 +1699,6 @@ SCHEMAS = {
         },
     },
     &#34;rewrite&#34;: {
-        &#34;revert_to_latest_backup&#34;: {
-            &#34;description&#34;: &#34;Revert the file to &#34; &#34;the most recent &#34; &#34;backup.&#34;,
-            &#34;properties&#34;: {
-                &#34;file_name&#34;: {&#34;description&#34;: &#34;The &#34; &#34;name &#34; &#34;of &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;revert.&#34;, &#34;type&#34;: &#34;string&#34;},
-                &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
-            },
-            &#34;required&#34;: [&#34;file_name&#34;],
-            &#34;type&#34;: &#34;object&#34;,
-        },
         &#34;rewrite_file&#34;: {
             &#34;description&#34;: &#34;Backup and rewrite an &#34; &#34;existing file at file_path &#34; &#34;within the root_folder.&#34;,
             &#34;properties&#34;: {

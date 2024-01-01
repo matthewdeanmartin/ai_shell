@@ -1,16 +1,23 @@
-import json
+"""
+Log a conversation to a file in Markdown format.
+"""
+
+import logging
 import os
 from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any, Optional
 
 import markpickle
+import orjson as json
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 LOG_FOLDER = os.path.join(current_dir, "../dialog_log")
 
 
 pickle_config = markpickle.Config(serialize_child_dict_as_table=False, serialize_dict_as_table=False)
+
+logger = logging.getLogger(__name__)
 
 
 def try_markpickle(value: Any) -> str:
@@ -88,6 +95,7 @@ class DialogLoggerWithMarkdown:
         self.bot_instructions = bot_instructions
         header = f"# Bot Name: {self.bot_name}\n## Model: {self.model}\n### Instructions: {self.bot_instructions}\n\n"
         self.log_file.write(header)
+        logger.info(header)
 
     def add_user(self, text: str) -> None:
         """
@@ -96,7 +104,9 @@ class DialogLoggerWithMarkdown:
         Args:
             text (str): The text input by the user.
         """
-        self.log_file.write(f"**User**: {text}\n\n")
+        users_message = f"**User**: {text}"
+        self.log_file.write(f"{users_message}\n\n")
+        logger.info(users_message)
 
     def add_bot(self, text: str) -> None:
         """
@@ -105,7 +115,9 @@ class DialogLoggerWithMarkdown:
         Args:
             text (str): The text response from the bot.
         """
-        self.log_file.write(f"**Bot**: {text}\n\n")
+        bots_message = f"**Bot**: {text}"
+        self.log_file.write(f"{bots_message}\n\n")
+        logger.info(bots_message)
 
     def add_toolkit(self, tools: list[str]) -> None:
         """
@@ -115,7 +127,9 @@ class DialogLoggerWithMarkdown:
             tools (List[str]): A list of tool names used in the dialog.
         """
         toolkit_str = "\n- ".join([f"`{tool}`" for tool in tools])
-        self.log_file.write(f"**Toolkit**: \n\n- {toolkit_str}\n\n")
+        toolkit_message = f"**Toolkit**: \n\n- {toolkit_str}"
+        self.log_file.write(f"{toolkit_message}\n\n")
+        logger.info(toolkit_message.replace("\n", ""))
 
     def add_tool(self, tool_name: str, tool_args: str) -> None:
         """
@@ -125,14 +139,19 @@ class DialogLoggerWithMarkdown:
             tool_name (str): The name of the tool.
             tool_args (str): The arguments passed to the tool, in JSON string format.
         """
-        self.log_file.write(f"**Tool**: `{tool_name}`, **Args**: {tool_args}\n")
+        bot_wants = f"Bot wants to use **Tool**: `{tool_name}`, **Args**: {tool_args}"
+        self.log_file.write(f"{bot_wants}\n\n")
+        logger.info(bot_wants)
         try:
             json_bits = json.loads(tool_args)
         except BaseException:
             self.log_file.write(f"Bad JSON: {tool_args}")
             return
         for name, value in json_bits.items():
-            self.log_file.write(f"{name} : {value}")
+            if value is not None:
+                pair = f"{name} : {value}"
+                self.log_file.write(f"{pair}\n")
+                logger.info(pair)
 
     def add_tool_result(self, tool_results: list[dict[str, Any]]) -> None:
         """
@@ -143,12 +162,15 @@ class DialogLoggerWithMarkdown:
         """
         for result in tool_results:
             self.log_file.write("### Result\n\n")
-            for key, value in result.items():
-                if key == "output":
-                    # json.loads here should work, it isn't bot-json
-                    self.log_file.write(f" {try_markpickle(json.loads(value))}\n")
-                else:
-                    self.log_file.write(f"{key}: {value}\n")
+            if isinstance(result, dict):
+                for key, value in result.items():
+                    if key == "output":
+                        # json.loads here should work, it isn't bot-json
+                        self.log_file.write(f" {try_markpickle(json.loads(value))}\n")
+                    else:
+                        self.log_file.write(f"{key}: {value}\n")
+            else:
+                self.log_file.write(f"{result}\n")
 
     def add_error(self, error: Exception) -> None:
         """
@@ -157,7 +179,9 @@ class DialogLoggerWithMarkdown:
         Args:
             error (Exception): The exception that was raised.
         """
-        self.log_file.write(f"**Error**: {error}\n\n")
+        error_message = f"**Error**: {error}"
+        self.log_file.write(f"{error_message}\n\n")
+        logger.error(error_message)
 
     @contextmanager
     def ensure_log(self) -> Iterator[None]:

@@ -206,7 +206,7 @@ def enable_logging(flag: bool) -&gt; None:
 
 def method_to_command_subcommand(method_name: str) -&gt; tuple[str, str]:
     &#34;&#34;&#34;Convert a method name to a command and subcommand&#34;&#34;&#34;
-    schema = schemas.SCHEMAS
+    schema = schemas._SCHEMAS
     for ns, tools in schema.items():
         for name, _ in tools.items():
             if name == method_name:
@@ -492,7 +492,7 @@ if __name__ == &#34;__main__&#34;:
 </summary>
 <pre><code class="python">def method_to_command_subcommand(method_name: str) -&gt; tuple[str, str]:
     &#34;&#34;&#34;Convert a method name to a command and subcommand&#34;&#34;&#34;
-    schema = schemas.SCHEMAS
+    schema = schemas._SCHEMAS
     for ns, tools in schema.items():
         for name, _ in tools.items():
             if name == method_name:

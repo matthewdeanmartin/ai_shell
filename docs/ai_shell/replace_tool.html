@@ -33,12 +33,17 @@ Optimized for AI version of sed. For file editing.
 
 However, the bot keeps trying to use features of real sed that this tool doesn&#39;t support.
 &#34;&#34;&#34;
+import logging
 import re
+from typing import Optional
 
+from ai_shell.backup_restore import BackupRestore
 from ai_shell.cat_tool import CatTool
-from ai_shell.pyutils.validate import is_python_file, is_valid_python_source
+from ai_shell.pyutils.validate import ValidateModule, ValidationMessageForBot, is_python_file
 from ai_shell.utils.config_manager import Config
 from ai_shell.utils.logging_utils import log
+
+logger = logging.getLogger(__name__)
 
 
 class ReplaceTool:
@@ -52,7 +57,8 @@ class ReplaceTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.python_module = config.get_value(&#34;python_module&#34;)
 
     @log()
     def replace_line_by_line(
@@ -176,16 +182,17 @@ class ReplaceTool:
         if not final:
             raise TypeError(&#34;Something went wrong in replace and all text disappeared. Cancelling.&#34;)
 
-        if is_python_file(file_path):
-            is_valid, error = is_valid_python_source(final)
-            if not is_valid and error:
-                return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
-            if not is_valid:
-                return f&#34;Invalid Python source code. No changes made. {error}.&#34;
-
         if input_text != final:
+            BackupRestore.backup_file(file_path)
             with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
                 output_file.write(final)
+
+            validation = self._validate_code(file_path)
+
+            if validation:
+                BackupRestore.revert_to_latest_backup(file_path)
+                return f&#34;File not written because of problems.\n{validation.message}&#34;
+
             if self.auto_cat:
                 feedback = &#34;Changes applied without exception, please verify by other means.\n&#34;
                 contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
@@ -194,7 +201,29 @@ class ReplaceTool:
         return (
             &#34;No changes made, this means the old file contents are the same as the new. This has nothing &#34;
             &#34;to do with file permissions. Try again with a different match pattern.&#34;
-        )</code></pre>
+        )
+
+    def _validate_code(self, full_path: str) -&gt; Optional[ValidationMessageForBot]:
+        &#34;&#34;&#34;
+        Validate python
+
+        Args:
+            full_path (str): The path to the file to validate.
+
+        Returns:
+            Optional[ValidationMessageForBot]: A validation message if the file is invalid, otherwise None.
+        &#34;&#34;&#34;
+        if not is_python_file(full_path):
+            return None
+        if not self.python_module:
+            logger.warning(&#34;No python module set, skipping validation.&#34;)
+            return None
+        validator = ValidateModule(self.python_module)
+        results = validator.validate()
+        explanation = validator.explain_to_bot(results)
+        if explanation.is_valid:
+            return None
+        return explanation</code></pre>
 </details>
 </section>
 <section>
@@ -234,7 +263,8 @@ class ReplaceTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.python_module = config.get_value(&#34;python_module&#34;)
 
     @log()
     def replace_line_by_line(
@@ -358,16 +388,17 @@ class ReplaceTool:
         if not final:
             raise TypeError(&#34;Something went wrong in replace and all text disappeared. Cancelling.&#34;)
 
-        if is_python_file(file_path):
-            is_valid, error = is_valid_python_source(final)
-            if not is_valid and error:
-                return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
-            if not is_valid:
-                return f&#34;Invalid Python source code. No changes made. {error}.&#34;
-
         if input_text != final:
+            BackupRestore.backup_file(file_path)
             with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
                 output_file.write(final)
+
+            validation = self._validate_code(file_path)
+
+            if validation:
+                BackupRestore.revert_to_latest_backup(file_path)
+                return f&#34;File not written because of problems.\n{validation.message}&#34;
+
             if self.auto_cat:
                 feedback = &#34;Changes applied without exception, please verify by other means.\n&#34;
                 contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
@@ -376,7 +407,29 @@ class ReplaceTool:
         return (
             &#34;No changes made, this means the old file contents are the same as the new. This has nothing &#34;
             &#34;to do with file permissions. Try again with a different match pattern.&#34;
-        )</code></pre>
+        )
+
+    def _validate_code(self, full_path: str) -&gt; Optional[ValidationMessageForBot]:
+        &#34;&#34;&#34;
+        Validate python
+
+        Args:
+            full_path (str): The path to the file to validate.
+
+        Returns:
+            Optional[ValidationMessageForBot]: A validation message if the file is invalid, otherwise None.
+        &#34;&#34;&#34;
+        if not is_python_file(full_path):
+            return None
+        if not self.python_module:
+            logger.warning(&#34;No python module set, skipping validation.&#34;)
+            return None
+        validator = ValidateModule(self.python_module)
+        results = validator.validate()
+        explanation = validator.explain_to_bot(results)
+        if explanation.is_valid:
+            return None
+        return explanation</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -634,16 +687,17 @@ were made.</p>
     if not final:
         raise TypeError(&#34;Something went wrong in replace and all text disappeared. Cancelling.&#34;)
 
-    if is_python_file(file_path):
-        is_valid, error = is_valid_python_source(final)
-        if not is_valid and error:
-            return f&#34;Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}&#34;
-        if not is_valid:
-            return f&#34;Invalid Python source code. No changes made. {error}.&#34;
-
     if input_text != final:
+        BackupRestore.backup_file(file_path)
         with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
             output_file.write(final)
+
+        validation = self._validate_code(file_path)
+
+        if validation:
+            BackupRestore.revert_to_latest_backup(file_path)
+            return f&#34;File not written because of problems.\n{validation.message}&#34;
+
         if self.auto_cat:
             feedback = &#34;Changes applied without exception, please verify by other means.\n&#34;
             contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])

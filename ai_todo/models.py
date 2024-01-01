@@ -16,9 +16,6 @@ class Task:
     assignee: Optional[str] = None
 
 
-ASSIGNEES = ["Developer", "Tester", "Documenter", "Code Reviewer"]
-
-
 @dataclass
 class Todos:
     tasks: dict[str, Task]
@@ -53,6 +50,8 @@ class Todos:
             raise KeyError(f"No task found with the title '{title}'.")
 
     def query_tasks_by_assignee(self, assignee_name: str):
+        if assignee_name not in self.valid_assignees:
+            raise ValueError(f"Invalid assignee. These are valid {self.valid_assignees}")
         return [task for task in self.tasks.values() if task.assignee == assignee_name]
 
     def query_tasks(self, pattern: str):
@@ -73,6 +72,7 @@ class Work:
         self.incomplete = Todos({}, incomplete_file, valid_assignee)
         self.completed.load_tasks()
         self.incomplete.load_tasks()
+        self.valid_assignees = valid_assignee
 
     def archive_completed_tasks(self):
         titles_to_archive = [title for title, task in self.incomplete.tasks.items() if task.done_status]
@@ -85,12 +85,29 @@ class Work:
         self.completed.save_tasks()
         self.incomplete.save_tasks()
 
+    def get_stats(self) -> str:
+        """Summary of tasks"""
+        return (
+            f"Completed tasks: {len(self.completed.tasks)}\n"
+            f"Incomplete tasks: {len(self.incomplete.tasks)}\n"
+            f"Total tasks: {len(self.completed.tasks) + len(self.incomplete.tasks)}"
+        )
+
+    def get_stats_numeric(self) -> dict[str, int]:
+        """Summary of stats in dictionary form"""
+        return {
+            "Completed tasks": len(self.completed.tasks),
+            "Incomplete tasks": len(self.incomplete.tasks),
+            "Total tasks": len(self.completed.tasks) + len(self.incomplete.tasks),
+        }
+
 
 if __name__ == "__main__":
 
     def run() -> None:
         """Example"""
-        work = Work("completed_tasks.toml", "incomplete_tasks.toml", ASSIGNEES)
+        assginees = ["Developer", "Tester", "Documenter", "Code Reviewer"]
+        work = Work("completed_tasks.toml", "incomplete_tasks.toml", assginees)
 
         # Example of adding a new task
         new_task = Task("New Feature", "Implement XYZ", False, "feature", "feature.py:30-45")

@@ -1,6 +1,6 @@
 import pytest
 
-from ai_shell.pycat_tool import PyCatTool, format_path_as_header, is_python_file, read_file_contents
+from ai_shell.pycat_tool import PyCatTool, format_path_as_header, is_python_file
 from tests.util import config_for_tests
 
 
@@ -13,13 +13,6 @@ def test_is_python_file():
 def test_format_path_as_header():
     assert format_path_as_header("path/to/file.py") == "## path/to/file.py\n\n"
     assert format_path_as_header("") == "## \n\n"
-
-
-def test_read_file_contents(tmp_path):
-    file_path = tmp_path / "test.txt"
-    file_path.write_text("Sample content")
-    assert read_file_contents(str(file_path)) == "Sample content"
-    # Add more tests, including error handling
 
 
 def create_test_files(directory, files_content):

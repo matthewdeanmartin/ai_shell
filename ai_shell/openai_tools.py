@@ -99,3 +99,12 @@ def initialize_recommended_tools(root_folder: str, config: Config) -> None:
         config (Config): The developer input that bot shouldn't set.
     """
     initialize_all_tools(keeps=recommendations(root_folder, config))
+
+
+if __name__ == "__main__":
+
+    def run():
+        for tool in just_tool_names():
+            print(f"{tool},")
+
+    run()

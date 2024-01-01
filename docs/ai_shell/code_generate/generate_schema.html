@@ -75,7 +75,7 @@ def generate_the_schema(target_file: str) -&gt; None:
     with open(target_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as source:
         source.write(&#39;&#34;&#34;&#34;jsonschema for functions&#34;&#34;&#34;&#39;)
         source.write(&#34;\n\n&#34;)
-        source.write(f&#34;SCHEMAS = {pformat(schemas, indent=2)}&#34;)
+        source.write(f&#34;_SCHEMAS = {pformat(schemas, indent=2)}&#34;)
 
 
 if __name__ == &#34;__main__&#34;:
@@ -141,7 +141,7 @@ if __name__ == &#34;__main__&#34;:
     with open(target_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as source:
         source.write(&#39;&#34;&#34;&#34;jsonschema for functions&#34;&#34;&#34;&#39;)
         source.write(&#34;\n\n&#34;)
-        source.write(f&#34;SCHEMAS = {pformat(schemas, indent=2)}&#34;)</code></pre>
+        source.write(f&#34;_SCHEMAS = {pformat(schemas, indent=2)}&#34;)</code></pre>
 </details>
 </dd>
 </dl>

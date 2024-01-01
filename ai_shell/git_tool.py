@@ -8,8 +8,8 @@ from typing import Any
 
 from git import Repo
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,8 @@ class GitTool:
         self.repo_path = root_folder
         self.repo = Repo(root_folder)
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
+        self.utf8_errors = config.get_value("utf8_errors", "surrogateescape")
 
     def is_ignored_by_gitignore(self, file_path: str, gitignore_path: str = ".gitignore") -> bool:
         """
@@ -53,7 +54,7 @@ class GitTool:
         # Normalize file path
         file_path = os.path.abspath(file_path)
 
-        with open(full_gitignore_path, encoding="utf-8") as gitignore:
+        with open(full_gitignore_path, encoding="utf-8", errors=self.utf8_errors) as gitignore:
             for line in gitignore:
                 line = line.strip()
                 # Skip empty lines and comments

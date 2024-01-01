@@ -57,7 +57,7 @@ class EdTool:
         self.root_folder = root_folder if root_folder.endswith(&#34;/&#34;) else root_folder + &#34;/&#34;
         self.buffer = Buffer()
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def ed(self, script: str, file_name: str) -&gt; list[str]:
@@ -224,7 +224,7 @@ if __name__ == &#34;__main__&#34;:
         self.root_folder = root_folder if root_folder.endswith(&#34;/&#34;) else root_folder + &#34;/&#34;
         self.buffer = Buffer()
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def ed(self, script: str, file_name: str) -&gt; list[str]:

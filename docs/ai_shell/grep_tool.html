@@ -83,7 +83,7 @@ class GrepTool:
         &#34;&#34;&#34;
         self.root_folder: str = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def grep_markdown(
@@ -288,7 +288,7 @@ class GrepResults:
         &#34;&#34;&#34;
         self.root_folder: str = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def grep_markdown(

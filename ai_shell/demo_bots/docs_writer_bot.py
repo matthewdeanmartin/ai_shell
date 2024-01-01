@@ -23,8 +23,9 @@ from pygount import SourceAnalysis
 
 import ai_shell
 import ai_shell.demo_bots.demo_setup as demo_setup
+import ai_todo
 
-ai_shell.utils.logging_utils.LOGGING_ENABLED = True
+ai_shell.ai_logs.log_to_bash.LOGGING_ENABLED = True
 initial_lines_of_code: Optional[SourceAnalysis] = None
 
 if __name__ == "__main__" and not os.path.exists("src"):
@@ -55,11 +56,15 @@ async def main():
     )
     # Too many tools will confuse the bot.
     tool_names = [
+        # read only tools
         "ls",
         "cat_markdown",
-        "rewrite_file",
+        # write only
         "write_new_file",
-        # "report_text",
+        # Could effectively delete if Lines fall.
+        # So we enable "only_add_text" in the config.
+        "rewrite_file",
+        # Insert or Edit only (same number of lines of code if no \n in args)
         "insert_text_after_context",
         "insert_text_after_multiline_context",
         "insert_text_at_start_or_end",
@@ -125,7 +130,7 @@ files. If you use rewrite, don't omit original code!
             # Make mypy happy
             raise TypeError("Shouldn't be none by this point.")
         if lines_of_code.documentation_count > 25 and lines_of_code.code_count >= initial_lines_of_code.code_count:
-            return "DONE"
+            return _toolkit.conversation_over_marker
         if initial_lines_of_code.code_count < lines_of_code.code_count:
             return (
                 pretty_loc(lines_of_code) + f"\n\n Code disappeared! There used to be {initial_lines_of_code}"
@@ -134,6 +139,7 @@ files. If you use rewrite, don't omit original code!
         return pretty_loc(lines_of_code) + "\n\n and thats not enough documentation. Please try again. You can do it!"
 
     config = ai_shell.Config()
+    config.set_flag("only_add_text", True)
     bot = ai_shell.TaskBot(
         config,
         bot_name,
@@ -143,11 +149,16 @@ files. If you use rewrite, don't omit original code!
         persist_bots=True,
         persist_threads=True,
     )
+    if not config.get_list("todo_roles"):
+        config.set_list("todo_roles", ["Developer", "Tester"])
+    ai_todo.TaskManager("src", config.get_list("todo_roles"))
     with ai_shell.change_directory("src"):
         # Initialize async things.
         await bot.initialize()
         # Run until goal checker is done
-        await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
+        await bot.basic_tool_loop(
+            request, ".", tool_names, pylint_goal_checker, stop_on_no_tool_use=True  # root_folder,
+        )
         logger.info("Run completed.")
 
 

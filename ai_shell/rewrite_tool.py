@@ -4,14 +4,19 @@ For short files with lots of edits, just let the bot rewrite the file.
 TODO: set maximum file size for re-write, because it costs tokens to rewrite a large file.
 """
 import difflib
-import glob
+import logging
 import os
-import shutil
+from pathlib import Path
+from typing import Optional
 
+from ai_shell.ai_logs.log_to_bash import log
+from ai_shell.backup_restore import BackupRestore
 from ai_shell.cat_tool import CatTool
+from ai_shell.pyutils.validate import ValidateModule, ValidationMessageForBot, is_python_file
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
-from ai_shell.utils.read_fs import is_file_in_root_folder, sanitize_path
+from ai_shell.utils.read_fs import is_file_in_root_folder, sanitize_path, tree
+
+logger = logging.getLogger(__name__)
 
 
 def file_similarity(file1_path: str, file2_lines: list[str]) -> tuple[float, int, int, int, int]:
@@ -70,7 +75,9 @@ class RewriteTool:
         """
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
+        self.python_module = config.get_value("python_module")
+        self.only_add_text = config.get_flag("only_add_text", False)
 
     @log()
     def write_new_file(self, file_path: str, text: str) -> str:
@@ -100,9 +107,19 @@ class RewriteTool:
             with open(full_path, "w", encoding="utf-8") as file:
                 file.write(text)
 
+            validation = self._validate_code(full_path)
+
+            if validation:
+                os.remove(full_path)
+                return f"File not written because of problems.\n{validation.message}"
+
             return f"File written to {full_path}"
         except FileExistsError as e:
-            raise ValueError(str(e) + " Consider using rewrite_file method if you want to overwrite.") from e
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f"# File {full_path} already exists. Here are all the files you can see\n\n{tree_text}"
+            raise ValueError(
+                str(e) + f" {markdown_content}\n Consider using rewrite_file method if you want to overwrite."
+            ) from e
 
     @log()
     def rewrite_file(self, file_path: str, text: str) -> str:
@@ -131,7 +148,11 @@ class RewriteTool:
             raise ValueError("File path must be within the root folder.")
 
         # not sure this is working right.
-        # _unchanged_proportion, initial, unchanged, added, removed = file_similarity(full_path, text.split("\n"))
+        _unchanged_proportion, initial, unchanged, added, removed = file_similarity(full_path, text.split("\n"))
+        if self.only_add_text and removed > 0:
+            raise TypeError("This would delete lines. Only add lines, do not remove them.")
+        if self.only_add_text and len(text.split("\n")) < initial:
+            raise TypeError("Line count decreased. Only add text, do not remove it.")
         # if 5 < initial <= removed:
         #     # concern is taking a large file, and deleting everything (ie. confusing full rewrite for an insert or edit)
         #     raise TypeError(
@@ -149,13 +170,20 @@ class RewriteTool:
             if not os.path.exists(full_path):
                 raise FileNotFoundError("File does not exist, use ls tool to see what files there are.")
 
-            self._backup_file(file_path)
+            BackupRestore.backup_file(full_path)
 
             with open(full_path, "w", encoding="utf-8") as file:
                 file.write(text)
+
+            validation = self._validate_code(full_path)
+
+            if validation:
+                BackupRestore.revert_to_latest_backup(full_path)
+                return f"File not rewritten because of problems.\n{validation.message}"
+
             feedback = f"File rewritten to {full_path}"
             if self.auto_cat:
-                feedback = "Changes without exception, please verify by other means.\n"
+                feedback = "Changes made without exception, please verify by other means.\n"
                 contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
                 return f"Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}"
             return feedback + ", please view to verify contents."
@@ -164,63 +192,27 @@ class RewriteTool:
                 str(e) + " Consider using write_new_file method if you want to create a new file."
             ) from e
 
-    def _backup_file(self, file_name: str) -> str:
+    def _validate_code(self, full_path: str) -> Optional[ValidationMessageForBot]:
         """
-        Create a backup of the file before overwriting it.
+        Validate python
 
         Args:
-            file_name (str): The name of the file to backup.
+            full_path (str): The path to the file to validate.
 
         Returns:
-            str: A success message with the backup file path.
-
-        Raises:
-            ValueError: If the file does not exist or other errors occur.
+            Optional[ValidationMessageForBot]: A validation message if the file is invalid, otherwise None.
         """
-        file_path = file_name
-        if not os.path.exists(file_name):
-            raise ValueError(f"The file {file_name} does not exist.")
-
-        # Find existing backups
-        backup_files = sorted(glob.glob(f"{file_path}.*.bak"))
-        backup_number = len(backup_files) + 1
-        backup_file_path = f"{file_path}.{backup_number}.bak"
-
-        try:
-            shutil.copyfile(file_path, backup_file_path)
-            return f"Backup created successfully at {backup_file_path}"
-        except Exception as e:
-            raise ValueError(f"An error occurred during backup: {e}") from e
-
-    @log()
-    def revert_to_latest_backup(self, file_name: str) -> str:
-        """
-        Revert the file to the most recent backup.
-
-        Args:
-            file_name (str): The name of the file to revert.
-
-        Returns:
-            str: A success message indicating the revert operation.
-
-        Raises:
-            ValueError: If no backup is found or other errors occur.
-        """
-        file_path = file_name
-        backup_files = sorted(glob.glob(f"{file_path}.*.bak"), reverse=True)
-        if not backup_files:
-            raise ValueError(f"No backups found for {file_name}.")
-
-        latest_backup = backup_files[0]
-        bad_file_path = f"{file_path}.bad"
-
-        try:
-            if os.path.exists(file_path):
-                os.rename(file_path, bad_file_path)
-            os.rename(latest_backup, file_path)
-            return f"Reverted {file_name} to latest backup."
-        except Exception as e:
-            raise ValueError(f"An error occurred during revert: {e}") from e
+        if not is_python_file(full_path):
+            return None
+        if not self.python_module:
+            logger.warning("No python module set, skipping validation.")
+            return None
+        validator = ValidateModule(self.python_module)
+        results = validator.validate()
+        explanation = validator.explain_to_bot(results)
+        if explanation.is_valid:
+            return None
+        return explanation
 
 
 if __name__ == "__main__":

@@ -32,7 +32,7 @@ Optimized for AI version of pytest.
 &#34;&#34;&#34;
 from ai_shell.externals.pytest_call import count_pytest_results
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.cwd_utils import change_directory
+from ai_shell.utils.json_utils import FatalConfigurationError
 from ai_shell.utils.logging_utils import log
 
 
@@ -65,25 +65,22 @@ class PytestTool:
         Returns:
             str: Output from pytest.
         &#34;&#34;&#34;
-        with change_directory(self.root_folder):
-            # What is -rA
-            if not self.module:
-                return &#34;No module set for pytest, please set in ai_config.toml&#34;
-            if not self.tests_folder:
-                return &#34;No tests folder set for pytest, please set in ai_config.toml&#34;
-            if not self.min_coverage:
-                return &#34;No min coverage set for pytest, please set in ai_config.toml&#34;
-            _passed_tests, _failed_tests, _coverage, command_result = count_pytest_results(
-                self.module, self.tests_folder, self.min_coverage
-            )
-            markdown_output = f&#34;&#34;&#34;## Pytest Output
+        # Host script must set env vars, temp folder location and pwd!
+        # with change_directory(self.root_folder):
+        # What is -rA
+        if not self.module or not self.tests_folder or self.min_coverage:
+            raise FatalConfigurationError(&#34;Please set in ai_config module, test_folder and min_coverage&#34;)
+        _passed_tests, _failed_tests, _coverage, command_result = count_pytest_results(
+            self.module, self.tests_folder, self.min_coverage
+        )
+        markdown_output = f&#34;&#34;&#34;## Pytest Output
 ### Standard Output
 {command_result.stdout}
 ### Standard Error
 {command_result.stderr}
 ### Return Code
 `{command_result.return_code}`&#34;&#34;&#34;
-            return markdown_output
+        return markdown_output
 
 
 if __name__ == &#34;__main__&#34;:
@@ -146,25 +143,22 @@ if __name__ == &#34;__main__&#34;:
         Returns:
             str: Output from pytest.
         &#34;&#34;&#34;
-        with change_directory(self.root_folder):
-            # What is -rA
-            if not self.module:
-                return &#34;No module set for pytest, please set in ai_config.toml&#34;
-            if not self.tests_folder:
-                return &#34;No tests folder set for pytest, please set in ai_config.toml&#34;
-            if not self.min_coverage:
-                return &#34;No min coverage set for pytest, please set in ai_config.toml&#34;
-            _passed_tests, _failed_tests, _coverage, command_result = count_pytest_results(
-                self.module, self.tests_folder, self.min_coverage
-            )
-            markdown_output = f&#34;&#34;&#34;## Pytest Output
+        # Host script must set env vars, temp folder location and pwd!
+        # with change_directory(self.root_folder):
+        # What is -rA
+        if not self.module or not self.tests_folder or self.min_coverage:
+            raise FatalConfigurationError(&#34;Please set in ai_config module, test_folder and min_coverage&#34;)
+        _passed_tests, _failed_tests, _coverage, command_result = count_pytest_results(
+            self.module, self.tests_folder, self.min_coverage
+        )
+        markdown_output = f&#34;&#34;&#34;## Pytest Output
 ### Standard Output
 {command_result.stdout}
 ### Standard Error
 {command_result.stderr}
 ### Return Code
 `{command_result.return_code}`&#34;&#34;&#34;
-            return markdown_output</code></pre>
+        return markdown_output</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -192,25 +186,22 @@ if __name__ == &#34;__main__&#34;:
         Returns:
             str: Output from pytest.
         &#34;&#34;&#34;
-        with change_directory(self.root_folder):
-            # What is -rA
-            if not self.module:
-                return &#34;No module set for pytest, please set in ai_config.toml&#34;
-            if not self.tests_folder:
-                return &#34;No tests folder set for pytest, please set in ai_config.toml&#34;
-            if not self.min_coverage:
-                return &#34;No min coverage set for pytest, please set in ai_config.toml&#34;
-            _passed_tests, _failed_tests, _coverage, command_result = count_pytest_results(
-                self.module, self.tests_folder, self.min_coverage
-            )
-            markdown_output = f&#34;&#34;&#34;## Pytest Output
+        # Host script must set env vars, temp folder location and pwd!
+        # with change_directory(self.root_folder):
+        # What is -rA
+        if not self.module or not self.tests_folder or self.min_coverage:
+            raise FatalConfigurationError(&#34;Please set in ai_config module, test_folder and min_coverage&#34;)
+        _passed_tests, _failed_tests, _coverage, command_result = count_pytest_results(
+            self.module, self.tests_folder, self.min_coverage
+        )
+        markdown_output = f&#34;&#34;&#34;## Pytest Output
 ### Standard Output
 {command_result.stdout}
 ### Standard Error
 {command_result.stderr}
 ### Return Code
 `{command_result.return_code}`&#34;&#34;&#34;
-            return markdown_output</code></pre>
+        return markdown_output</code></pre>
 </details>
 </dd>
 </dl>

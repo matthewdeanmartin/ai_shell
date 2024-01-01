@@ -16,9 +16,9 @@ import traceback
 from collections.abc import Generator
 
 import dedlin
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.cat_tool import CatTool
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import sanitize_path
 from dedlin.basic_types import StringGeneratorProtocol
 from dedlin.command_sources import StringCommandGenerator
@@ -54,7 +54,7 @@ class EdlinTool:
         """
         self.root_folder = root_folder if root_folder.endswith("/") else root_folder + "/"
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
 
     @log()
     def edlin(self, script: str, file_name: str) -> list[str]:

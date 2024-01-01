@@ -103,8 +103,9 @@ def initialize() -&gt; None:
     else:
         print(&#34;Creating .env file.&#34;)
         with open(&#34;.env&#34;, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
-            f.write(&#34;OPENAI_KEY=OPENAI_KEY\n&#34;)
+            f.write(&#34;OPENAI_API_KEY=OPENAI_API_KEY\n&#34;)
         print(&#34;Created .env file. You will need to edit it with a valid OPENAI_KEY.&#34;)
+        print(&#34;See more here: https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key&#34;)
 
 
 if __name__ == &#34;__main__&#34;:
@@ -206,8 +207,9 @@ Check for openai key and .env file. If not found, explain how to get it and put 
     else:
         print(&#34;Creating .env file.&#34;)
         with open(&#34;.env&#34;, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
-            f.write(&#34;OPENAI_KEY=OPENAI_KEY\n&#34;)
-        print(&#34;Created .env file. You will need to edit it with a valid OPENAI_KEY.&#34;)</code></pre>
+            f.write(&#34;OPENAI_API_KEY=OPENAI_API_KEY\n&#34;)
+        print(&#34;Created .env file. You will need to edit it with a valid OPENAI_KEY.&#34;)
+        print(&#34;See more here: https://help.openai.com/en/articles/4936850-where-do-i-find-my-api-key&#34;)</code></pre>
 </details>
 </dd>
 </dl>

@@ -1,11 +1,9 @@
 """
 Utility code for testing app via console.
 """
-import json
-import sys
 from typing import Any
 
-from ai_shell.utils.json_utils import LoosyGoosyEncoder
+import orjson
 
 
 def pretty_console(result: Any) -> None:
@@ -17,4 +15,5 @@ def pretty_console(result: Any) -> None:
     if isinstance(result, str):
         print(result)
     else:
-        json.dump(result, sys.stdout, indent=4, cls=LoosyGoosyEncoder)
+        print(orjson.dumps(result, option=orjson.OPT_INDENT_2).decode())
+        # json.dump(result, sys.stdout, indent=4, cls=LoosyGoosyEncoderForSlowJson)

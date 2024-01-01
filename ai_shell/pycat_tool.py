@@ -8,9 +8,9 @@ from pathlib import Path
 
 import python_minifier
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.pyutils.validate import is_python_file
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder, tree
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,8 @@ class PyCatTool:
         """
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
+        self.utf8_errors = config.get_value("utf8_errors", "surrogateescape")
 
     @log()
     def format_code_as_markdown(
@@ -69,7 +70,9 @@ class PyCatTool:
                     relative_path = os.path.relpath(full_path, base_path)
                     markdown_content += format_path_as_header(relative_path)
                     markdown_content += "```python\n"
-                    markdown_content += read_file_contents(full_path)
+                    with open(full_path, encoding="utf-8", errors=self.utf8_errors) as handle:
+                        text = handle.read()
+                    markdown_content += text
                     markdown_content += "\n```\n\n"
         output_file.write(markdown_content)
         return output_file.getvalue()
@@ -86,20 +89,6 @@ def format_path_as_header(path: str) -> str:
         str: The formatted path as a Markdown header.
     """
     return f"## {path}\n\n"
-
-
-def read_file_contents(file_path: str) -> str:
-    """
-    Read the contents of a file and return as a string.
-
-    Args:
-        file_path (str): The path of the file to read.
-
-    Returns:
-        str: The contents of the file.
-    """
-    with open(file_path, encoding="utf-8") as file:
-        return file.read()
 
 
 def strip_docstrings(source_code: str) -> str:

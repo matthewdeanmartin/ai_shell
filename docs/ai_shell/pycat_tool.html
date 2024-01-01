@@ -30,12 +30,10 @@
 <pre><code class="python">&#34;&#34;&#34;
 Cat, except optimized for python files.
 &#34;&#34;&#34;
-import ast
 import logging
 import os
 from io import StringIO
 from pathlib import Path
-from typing import Optional
 
 import python_minifier
 
@@ -58,7 +56,7 @@ class PyCatTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def format_code_as_markdown(
@@ -104,8 +102,6 @@ class PyCatTool:
                     markdown_content += &#34;\n```\n\n&#34;
         output_file.write(markdown_content)
         return output_file.getvalue()
-
-
 
 
 def format_path_as_header(path: str) -&gt; str:
@@ -311,7 +307,7 @@ if __name__ == &#34;__main__&#34;:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def format_code_as_markdown(

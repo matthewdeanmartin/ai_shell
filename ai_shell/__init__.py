@@ -1,6 +1,8 @@
 """
 Filesystem shell tools for OpenAI Assistant
 """
+from ai_shell.ai_logs.log_to_markdown import DialogLoggerWithMarkdown
+from ai_shell.ai_logs.logging_utils import configure_logging
 from ai_shell.answer_tool import AnswerCollectorTool
 from ai_shell.bot_glue.bot import TaskBot
 from ai_shell.cat_tool import CatTool
@@ -29,8 +31,6 @@ from ai_shell.todo_tool import TodoTool
 from ai_shell.token_tool import TokenCounterTool
 from ai_shell.utils.config_manager import Config
 from ai_shell.utils.cwd_utils import change_directory
-from ai_shell.utils.log_conversation import DialogLoggerWithMarkdown
-from ai_shell.utils.logging_utils import configure_logging
 
 __all__ = [
     "CatTool",

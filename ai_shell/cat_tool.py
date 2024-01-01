@@ -7,8 +7,9 @@ from collections.abc import Generator
 from io import StringIO
 from typing import IO
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
+from ai_shell.utils.cwd_utils import change_directory
 from ai_shell.utils.read_fs import is_file_in_root_folder, safe_glob
 from ai_shell.utils.type_repair import convert_to_list
 
@@ -149,7 +150,16 @@ class CatTool:
 
 
 if __name__ == "__main__":
-    tool = CatTool(root_folder="./..", config=Config(".."))
 
-    for thing in tool.cat(file_paths=["*.py"]):
-        print(thing, end="")
+    def run() -> None:
+        """Example"""
+        with change_directory("src"):
+            tool = CatTool(root_folder=".", config=Config(".."))
+
+            for thing in tool.cat_markdown(
+                file_paths="./fish_tank/__main__.py"
+                # ["./fish_tank/*.py"]
+            ):
+                print(thing, end="")
+
+    run()

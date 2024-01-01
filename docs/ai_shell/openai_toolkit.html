@@ -65,7 +65,7 @@ class ToolKit(ToolKitBase):
         self, root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config: Config
     ) -&gt; None:
         super().__init__(root_folder, token_model, global_max_lines, permitted_tools, config)
-        self.lookup: dict[str, Callable[[dict[str, Any]], Any]] = {
+        self._lookup: dict[str, Callable[[dict[str, Any]], Any]] = {
             &#34;report_bool&#34;: self.report_bool,
             &#34;report_dict&#34;: self.report_dict,
             &#34;report_float&#34;: self.report_float,
@@ -114,7 +114,6 @@ class ToolKit(ToolKitBase):
             &#34;replace_line_by_line&#34;: self.replace_line_by_line,
             &#34;replace_with_regex&#34;: self.replace_with_regex,
             &#34;save_if_changed&#34;: self.save_if_changed,
-            &#34;revert_to_latest_backup&#34;: self.revert_to_latest_backup,
             &#34;rewrite_file&#34;: self.rewrite_file,
             &#34;write_new_file&#34;: self.write_new_file,
             &#34;sed&#34;: self.sed,
@@ -124,14 +123,11 @@ class ToolKit(ToolKitBase):
             &#34;remove_todo&#34;: self.remove_todo,
             &#34;count_tokens&#34;: self.count_tokens,
         }
-        # Stateful tool support
-        self.tool_answer_collector = None
+        # Stateful tool support. Useless assignment to make mypy happy
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     def report_bool(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -150,9 +146,6 @@ class ToolKit(ToolKitBase):
 
     def report_dict(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -171,9 +164,6 @@ class ToolKit(ToolKitBase):
 
     def report_float(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -192,9 +182,6 @@ class ToolKit(ToolKitBase):
 
     def report_int(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -213,9 +200,6 @@ class ToolKit(ToolKitBase):
 
     def report_json(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -234,9 +218,6 @@ class ToolKit(ToolKitBase):
 
     def report_list(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -255,9 +236,6 @@ class ToolKit(ToolKitBase):
 
     def report_set(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -276,9 +254,6 @@ class ToolKit(ToolKitBase):
 
     def report_text(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -297,9 +272,6 @@ class ToolKit(ToolKitBase):
 
     def report_toml(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -318,9 +290,6 @@ class ToolKit(ToolKitBase):
 
     def report_tuple(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -339,9 +308,6 @@ class ToolKit(ToolKitBase):
 
     def report_xml(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -994,18 +960,6 @@ class ToolKit(ToolKitBase):
             ),
         )
         return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)
-
-    def revert_to_latest_backup(self, arguments: dict[str, Any]) -&gt; Any:
-        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        tool = RewriteTool(self.root_folder, self.config)
-
-        file_name = cast(
-            str,
-            arguments.get(
-                &#34;file_name&#34;,
-            ),
-        )
-        return tool.revert_to_latest_backup(file_name=file_name)
 
     def rewrite_file(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
@@ -1177,7 +1131,7 @@ class ToolKit(ToolKitBase):
         self, root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config: Config
     ) -&gt; None:
         super().__init__(root_folder, token_model, global_max_lines, permitted_tools, config)
-        self.lookup: dict[str, Callable[[dict[str, Any]], Any]] = {
+        self._lookup: dict[str, Callable[[dict[str, Any]], Any]] = {
             &#34;report_bool&#34;: self.report_bool,
             &#34;report_dict&#34;: self.report_dict,
             &#34;report_float&#34;: self.report_float,
@@ -1226,7 +1180,6 @@ class ToolKit(ToolKitBase):
             &#34;replace_line_by_line&#34;: self.replace_line_by_line,
             &#34;replace_with_regex&#34;: self.replace_with_regex,
             &#34;save_if_changed&#34;: self.save_if_changed,
-            &#34;revert_to_latest_backup&#34;: self.revert_to_latest_backup,
             &#34;rewrite_file&#34;: self.rewrite_file,
             &#34;write_new_file&#34;: self.write_new_file,
             &#34;sed&#34;: self.sed,
@@ -1236,14 +1189,11 @@ class ToolKit(ToolKitBase):
             &#34;remove_todo&#34;: self.remove_todo,
             &#34;count_tokens&#34;: self.count_tokens,
         }
-        # Stateful tool support
-        self.tool_answer_collector = None
+        # Stateful tool support. Useless assignment to make mypy happy
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     def report_bool(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -1262,9 +1212,6 @@ class ToolKit(ToolKitBase):
 
     def report_dict(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -1283,9 +1230,6 @@ class ToolKit(ToolKitBase):
 
     def report_float(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -1304,9 +1248,6 @@ class ToolKit(ToolKitBase):
 
     def report_int(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -1325,9 +1266,6 @@ class ToolKit(ToolKitBase):
 
     def report_json(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -1346,9 +1284,6 @@ class ToolKit(ToolKitBase):
 
     def report_list(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -1367,9 +1302,6 @@ class ToolKit(ToolKitBase):
 
     def report_set(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -1388,9 +1320,6 @@ class ToolKit(ToolKitBase):
 
     def report_text(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -1409,9 +1338,6 @@ class ToolKit(ToolKitBase):
 
     def report_toml(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -1430,9 +1356,6 @@ class ToolKit(ToolKitBase):
 
     def report_tuple(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -1451,9 +1374,6 @@ class ToolKit(ToolKitBase):
 
     def report_xml(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        if not self.tool_answer_collector:
-            raise TypeError(&#34;tool cannot be None here&#34;)
-
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -2106,18 +2026,6 @@ class ToolKit(ToolKitBase):
             ),
         )
         return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)
-
-    def revert_to_latest_backup(self, arguments: dict[str, Any]) -&gt; Any:
-        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        tool = RewriteTool(self.root_folder, self.config)
-
-        file_name = cast(
-            str,
-            arguments.get(
-                &#34;file_name&#34;,
-            ),
-        )
-        return tool.revert_to_latest_backup(file_name=file_name)
 
     def rewrite_file(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
@@ -3311,9 +3219,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_bool(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3342,9 +3247,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_dict(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3373,9 +3275,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_float(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3404,9 +3303,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_int(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3435,9 +3331,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_json(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3466,9 +3359,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_list(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3497,9 +3387,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_set(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3528,9 +3415,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_text(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3559,9 +3443,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_toml(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3590,9 +3471,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_tuple(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3621,9 +3499,6 @@ class ToolKit(ToolKitBase):
 </summary>
 <pre><code class="python">def report_xml(self, arguments: dict[str, Any]) -&gt; Any:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    if not self.tool_answer_collector:
-        raise TypeError(&#34;tool cannot be None here&#34;)
-
     self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     answer = cast(
@@ -3639,28 +3514,6 @@ class ToolKit(ToolKitBase):
         ),
     )
     return self.tool_answer_collector.report_xml(answer=answer, comment=comment)</code></pre>
-</details>
-</dd>
-<dt id="ai_shell.openai_toolkit.ToolKit.revert_to_latest_backup"><code class="name flex">
-<span>def <span class="ident">revert_to_latest_backup</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Generated Do Not Edit</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def revert_to_latest_backup(self, arguments: dict[str, Any]) -&gt; Any:
-    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    tool = RewriteTool(self.root_folder, self.config)
-
-    file_name = cast(
-        str,
-        arguments.get(
-            &#34;file_name&#34;,
-        ),
-    )
-    return tool.revert_to_latest_backup(file_name=file_name)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.openai_toolkit.ToolKit.rewrite_file"><code class="name flex">
@@ -3914,7 +3767,6 @@ class ToolKit(ToolKitBase):
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.report_toml" href="#ai_shell.openai_toolkit.ToolKit.report_toml">report_toml</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.report_tuple" href="#ai_shell.openai_toolkit.ToolKit.report_tuple">report_tuple</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.report_xml" href="#ai_shell.openai_toolkit.ToolKit.report_xml">report_xml</a></code></li>
-<li><code><a title="ai_shell.openai_toolkit.ToolKit.revert_to_latest_backup" href="#ai_shell.openai_toolkit.ToolKit.revert_to_latest_backup">revert_to_latest_backup</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.rewrite_file" href="#ai_shell.openai_toolkit.ToolKit.rewrite_file">rewrite_file</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.save_if_changed" href="#ai_shell.openai_toolkit.ToolKit.save_if_changed">save_if_changed</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.sed" href="#ai_shell.openai_toolkit.ToolKit.sed">sed</a></code></li>

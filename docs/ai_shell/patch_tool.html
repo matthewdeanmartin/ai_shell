@@ -61,7 +61,7 @@ class PatchTool:
         &#34;&#34;&#34;
         self.root_folder: str = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def apply_git_patch(self, patch_content: str) -&gt; str:
@@ -228,7 +228,7 @@ class PatchTool:
         &#34;&#34;&#34;
         self.root_folder: str = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def apply_git_patch(self, patch_content: str) -&gt; str:

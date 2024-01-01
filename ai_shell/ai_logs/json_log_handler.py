@@ -1,10 +1,14 @@
 """
+Attempt to capture API traffic.
+
 This module contains a custom logging handler that writes JSON-formatted log messages to a folder.
 """
 import ast
-import json
 from logging import Handler
 from pathlib import Path
+
+import orjson
+import orjson as json
 
 
 def almost_json_to_json(data_str: str) -> str:
@@ -24,7 +28,7 @@ def almost_json_to_json(data_str: str) -> str:
         data_dict = ast.literal_eval(cleaned_data_str)
 
         # Convert the dictionary into a JSON string with indentation
-        json_str = json.dumps(data_dict, indent=4)
+        json_str: str = json.dumps(data_dict, option=orjson.OPT_INDENT_2).decode()
     except BaseException:
         return data_str
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ai_shell"
-version = "1.0.2"
+version = "1.0.3"
 description = "Filesystem Shell interface that an OpenAI Assitant can use as a tool."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["openai", "chatgpt", ]
@@ -90,6 +90,7 @@ jsonschema = ">=4.20.0"
 toml = ">=0.10.2"
 jinja2 = ">=3.1.2"
 pyyaml = ">=6.0.1"
+orjson = ">=3.9.10"
 
 # "external" tools to be used by goal checker
 pytest = ">=7.4.3"
@@ -257,3 +258,11 @@ ignore_missing_imports = true
 
 [mypy.astor]
 ignore_missing_imports = true
+
+[tool.cli-tools]
+pipx = { description = "Python package installer for applications", version = "^1.0.0", version_switch = "--version" }
+mypy = { description = "Python Type Checker", version = "^1.0.0", version_switch = "--version" }
+pylint = { description = "Python Linter", version = "^1.0.0", version_switch = "--version" }
+black = { description = "Python formatter", version = "^1.0.0", version_switch = "--version" }
+pygount = { description = "Python lines of code counter", version = "^1.0.0", version_switch = "--version" }
+ruff = { description = "Python linter and formatter", version = "^1.0.0", version_switch = "--version" }

@@ -21,10 +21,8 @@ from ai_shell.token_tool import TokenCounterTool
 from ai_shell.utils.config_manager import Config
 from ai_shell.utils.console_utils import pretty_console
 
-# pylint: disable=unused-argument
-
-
 CONFIG = Config()
+# pylint: disable=unused-argument
 
 
 def head_command(args):
@@ -333,10 +331,20 @@ def add_todo_command(args):
     )
 
 
+def list_valid_assignees_command(args):
+    """Invoke list_valid_assignees"""
+    tool = TodoTool(".", CONFIG)
+    pretty_console(tool.list_valid_assignees())
+
+
 def query_todos_by_assignee_command(args):
     """Invoke query_todos_by_assignee"""
     tool = TodoTool(".", CONFIG)
-    pretty_console(tool.query_todos_by_assignee())
+    pretty_console(
+        tool.query_todos_by_assignee(
+            assignee_name=args.assignee_name,
+        )
+    )
 
 
 def query_todos_by_regex_command(args):
@@ -429,28 +437,6 @@ def replace_with_regex_command(args):
             file_path=args.file_path,
             regex_match_expression=args.regex_match_expression,
             replacement=args.replacement,
-        )
-    )
-
-
-def save_if_changed_command(args):
-    """Invoke save_if_changed"""
-    tool = ReplaceTool(".", CONFIG)
-    pretty_console(
-        tool.save_if_changed(
-            file_path=args.file_path,
-            final=args.final,
-            input_text=args.input_text,
-        )
-    )
-
-
-def revert_to_latest_backup_command(args):
-    """Invoke revert_to_latest_backup"""
-    tool = RewriteTool(".", CONFIG)
-    pretty_console(
-        tool.revert_to_latest_backup(
-            file_name=args.file_name,
         )
     )
 
@@ -1179,10 +1165,26 @@ def run():
     add_todo_parser.add_argument("--title", dest="title", help="""The title of the task.""")
     add_todo_parser.set_defaults(func=add_todo_command)
 
+    # Create a parser for the "list_valid_assignees" command
+    list_valid_assignees_parser = subparsers.add_parser(
+        "list_valid_assignees", help="""Lists the valid assignees for tasks.."""
+    )
+
+    list_valid_assignees_parser.add_argument(
+        "--mime-type",
+        dest="mime_type",
+        help="""Return value as text/csv, text/markdown, or text/yaml inside the JSON.""",
+    )
+    list_valid_assignees_parser.set_defaults(func=list_valid_assignees_command)
+
     # Create a parser for the "query_todos_by_assignee" command
     query_todos_by_assignee_parser = subparsers.add_parser(
         "query_todos_by_assignee",
         help="""Queries tasks assigned to a specific assignee. Currently, the assignee is hard-coded as \'Developer\'..""",
+    )
+
+    query_todos_by_assignee_parser.add_argument(
+        "--assignee-name", dest="assignee_name", help="""The name of the assignee to query tasks for."""
     )
 
     query_todos_by_assignee_parser.add_argument(
@@ -1380,40 +1382,6 @@ Defaults to 0.""",
         "--replacement", dest="replacement", help="""The text to replace the matched pattern."""
     )
     replace_with_regex_parser.set_defaults(func=replace_with_regex_command)
-
-    # Create a parser for the "save_if_changed" command
-    save_if_changed_parser = subparsers.add_parser(
-        "save_if_changed", help="""Saves the modified text to the file if changes have been made.."""
-    )
-
-    save_if_changed_parser.add_argument("--file-path", dest="file_path", help="""The path to the file.""")
-
-    save_if_changed_parser.add_argument("--final", dest="final", help="""The modified text.""")
-
-    save_if_changed_parser.add_argument("--input-text", dest="input_text", help="""The original text.""")
-
-    save_if_changed_parser.add_argument(
-        "--mime-type",
-        dest="mime_type",
-        help="""Return value as text/csv, text/markdown, or text/yaml inside the JSON.""",
-    )
-    save_if_changed_parser.set_defaults(func=save_if_changed_command)
-
-    # Create a parser for the "revert_to_latest_backup" command
-    revert_to_latest_backup_parser = subparsers.add_parser(
-        "revert_to_latest_backup", help="""Revert the file to the most recent backup.."""
-    )
-
-    revert_to_latest_backup_parser.add_argument(
-        "--file-name", dest="file_name", help="""The name of the file to revert."""
-    )
-
-    revert_to_latest_backup_parser.add_argument(
-        "--mime-type",
-        dest="mime_type",
-        help="""Return value as text/csv, text/markdown, or text/yaml inside the JSON.""",
-    )
-    revert_to_latest_backup_parser.set_defaults(func=revert_to_latest_backup_command)
 
     # Create a parser for the "rewrite_file" command
     rewrite_file_parser = subparsers.add_parser(

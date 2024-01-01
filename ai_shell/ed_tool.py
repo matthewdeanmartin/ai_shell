@@ -8,8 +8,8 @@ from typing import Any
 
 from ed.buffer import Buffer
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import sanitize_path
 
 
@@ -27,7 +27,8 @@ class EdTool:
         self.root_folder = root_folder if root_folder.endswith("/") else root_folder + "/"
         self.buffer = Buffer()
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
+        self.utf8_errors = config.get_value("utf8_errors", "surrogateescape")
 
     @log()
     def ed(self, script: str, file_name: str) -> list[str]:
@@ -46,7 +47,7 @@ class EdTool:
 
         file_path = self.root_folder + file_name
         if os.path.isfile(file_path):
-            with open(file_path, encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8", errors=self.utf8_errors) as f:
                 self.buffer = Buffer(f.readlines())
 
         command_lines: list[tuple[Any, list[str]]] = []

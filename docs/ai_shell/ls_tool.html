@@ -55,7 +55,7 @@ class LsTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def ls_markdown(self, path: Optional[str] = &#34;.&#34;, all_files: bool = False, long: bool = False) -&gt; str:
@@ -191,7 +191,7 @@ class LsTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def ls_markdown(self, path: Optional[str] = &#34;.&#34;, all_files: bool = False, long: bool = False) -&gt; str:

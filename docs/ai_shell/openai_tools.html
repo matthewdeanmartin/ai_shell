@@ -38,15 +38,15 @@ the openai python client.
 
 import logging
 from collections.abc import Collection
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from ai_shell.ls_tool import LsTool
-from ai_shell.openai_schemas import SCHEMAS
+from ai_shell.openai_schemas import _SCHEMAS
 from ai_shell.utils.config_manager import Config
 
 logger = logging.getLogger(__name__)
 
-ALL_TOOLS = []
+ALL_TOOLS: list[dict[str, Any]] = []
 
 
 def just_tool_names() -&gt; list[str]:
@@ -56,7 +56,7 @@ def just_tool_names() -&gt; list[str]:
         list[str]: A list of tool names
     &#34;&#34;&#34;
     names = []
-    for _ns, tools in SCHEMAS.items():
+    for _ns, tools in _SCHEMAS.items():
         for name, _schema in tools.items():
             names.append(name)
     return names
@@ -76,7 +76,7 @@ def initialize_all_tools(skips: Optional[list[str]] = None, keeps: Optional[list
     else:
         keep = [name for name in just_tool_names() if name not in skips]
 
-    for _ns, tools in SCHEMAS.items():
+    for _ns, tools in _SCHEMAS.items():
         for name, schema in tools.items():
             function_style: dict[str, Union[str, Collection[str]]] = {&#34;name&#34;: name}
             parameters = {&#34;type&#34;: &#34;object&#34;, &#34;properties&#34;: schema[&#34;properties&#34;], &#34;required&#34;: schema[&#34;required&#34;]}
@@ -84,7 +84,8 @@ def initialize_all_tools(skips: Optional[list[str]] = None, keeps: Optional[list
             function_style[&#34;description&#34;] = schema[&#34;description&#34;]
             if name in keep:
                 ALL_TOOLS.append(function_style)
-    logger.info(f&#34;Active tools {ALL_TOOLS}&#34;)
+    active_tools_string = &#34;, &#34;.join(tool[&#34;name&#34;] for tool in ALL_TOOLS)
+    logger.info(f&#34;Active tools {active_tools_string}&#34;)
 
 
 def recommendations(root_folder: str, config: Config) -&gt; list[str]:
@@ -168,7 +169,7 @@ def initialize_recommended_tools(root_folder: str, config: Config) -&gt; None:
     else:
         keep = [name for name in just_tool_names() if name not in skips]
 
-    for _ns, tools in SCHEMAS.items():
+    for _ns, tools in _SCHEMAS.items():
         for name, schema in tools.items():
             function_style: dict[str, Union[str, Collection[str]]] = {&#34;name&#34;: name}
             parameters = {&#34;type&#34;: &#34;object&#34;, &#34;properties&#34;: schema[&#34;properties&#34;], &#34;required&#34;: schema[&#34;required&#34;]}
@@ -176,7 +177,8 @@ def initialize_recommended_tools(root_folder: str, config: Config) -&gt; None:
             function_style[&#34;description&#34;] = schema[&#34;description&#34;]
             if name in keep:
                 ALL_TOOLS.append(function_style)
-    logger.info(f&#34;Active tools {ALL_TOOLS}&#34;)</code></pre>
+    active_tools_string = &#34;, &#34;.join(tool[&#34;name&#34;] for tool in ALL_TOOLS)
+    logger.info(f&#34;Active tools {active_tools_string}&#34;)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.openai_tools.initialize_recommended_tools"><code class="name flex">
@@ -226,7 +228,7 @@ def initialize_recommended_tools(root_folder: str, config: Config) -&gt; None:
         list[str]: A list of tool names
     &#34;&#34;&#34;
     names = []
-    for _ns, tools in SCHEMAS.items():
+    for _ns, tools in _SCHEMAS.items():
         for name, _schema in tools.items():
             names.append(name)
     return names</code></pre>

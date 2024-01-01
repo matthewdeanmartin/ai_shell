@@ -1,8 +1,8 @@
 """
 Generate code, do not edit.
 """
-from typing import Any, Optional, cast
 from collections.abc import Callable
+from typing import Any, Optional, cast
 
 from ai_shell.answer_tool import AnswerCollectorTool
 from ai_shell.cat_tool import CatTool
@@ -84,12 +84,11 @@ class ToolKit(ToolKitBase):
             "replace_all": self.replace_all,
             "replace_line_by_line": self.replace_line_by_line,
             "replace_with_regex": self.replace_with_regex,
-            "save_if_changed": self.save_if_changed,
-            "revert_to_latest_backup": self.revert_to_latest_backup,
             "rewrite_file": self.rewrite_file,
             "write_new_file": self.write_new_file,
             "sed": self.sed,
             "add_todo": self.add_todo,
+            "list_valid_assignees": self.list_valid_assignees,
             "query_todos_by_assignee": self.query_todos_by_assignee,
             "query_todos_by_regex": self.query_todos_by_regex,
             "remove_todo": self.remove_todo,
@@ -909,42 +908,6 @@ class ToolKit(ToolKitBase):
             file_path=file_path, regex_match_expression=regex_match_expression, replacement=replacement
         )
 
-    def save_if_changed(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
-        tool = ReplaceTool(self.root_folder, self.config)
-
-        file_path = cast(
-            str,
-            arguments.get(
-                "file_path",
-            ),
-        )
-        final = cast(
-            str,
-            arguments.get(
-                "final",
-            ),
-        )
-        input_text = cast(
-            str,
-            arguments.get(
-                "input_text",
-            ),
-        )
-        return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)
-
-    def revert_to_latest_backup(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
-        tool = RewriteTool(self.root_folder, self.config)
-
-        file_name = cast(
-            str,
-            arguments.get(
-                "file_name",
-            ),
-        )
-        return tool.revert_to_latest_backup(file_name=file_name)
-
     def rewrite_file(self, arguments: dict[str, Any]) -> Any:
         """Generated Do Not Edit"""
         tool = RewriteTool(self.root_folder, self.config)
@@ -1037,11 +1000,23 @@ class ToolKit(ToolKitBase):
             assignee=assignee, category=category, description=description, source_code_ref=source_code_ref, title=title
         )
 
+    def list_valid_assignees(self, arguments: dict[str, Any]) -> Any:
+        """Generated Do Not Edit"""
+        tool = TodoTool(self.root_folder, self.config)
+
+        return tool.list_valid_assignees()
+
     def query_todos_by_assignee(self, arguments: dict[str, Any]) -> Any:
         """Generated Do Not Edit"""
         tool = TodoTool(self.root_folder, self.config)
 
-        return tool.query_todos_by_assignee()
+        assignee_name = cast(
+            str,
+            arguments.get(
+                "assignee_name",
+            ),
+        )
+        return tool.query_todos_by_assignee(assignee_name=assignee_name)
 
     def query_todos_by_regex(self, arguments: dict[str, Any]) -> Any:
         """Generated Do Not Edit"""

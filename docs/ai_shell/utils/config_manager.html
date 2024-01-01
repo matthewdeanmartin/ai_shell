@@ -34,6 +34,8 @@ import os
 from datetime import datetime
 from typing import Optional
 
+from ai_shell.utils.json_utils import FatalConfigurationError
+
 if True:
     import openai_multi_tool_use_parallel_patch
 
@@ -75,15 +77,17 @@ class Config:
 
     def __init__(self, config_path: str = &#34;&#34;) -&gt; None:
         &#34;&#34;&#34;Initialize the Config class.&#34;&#34;&#34;
-        self.list_data: dict[str, list[str]] = {}
         if config_path and config_path.endswith(&#34;.toml&#34;):
             self.config_file = config_path
         elif config_path:
             self.config_file = os.path.join(config_path, &#34;ai_shell.toml&#34;)
         else:
             self.config_file = os.getenv(&#34;CONFIG_PATH&#34;, &#34;ai_shell.toml&#34;)
-        self.values_data: dict[str, str] = {}
-        self.flags_data: dict[str, bool] = {
+        # freeze the location of the config file
+        self.config_file = os.path.abspath(self.config_file)
+        self._list_data: dict[str, list[str]] = {}
+        self._values_data: dict[str, str] = {}
+        self._flags_data: dict[str, bool] = {
             &#34;enable_tool_selector_bot&#34;: False,
             &#34;enable_regex_tester_bot&#34;: False,
             &#34;enable_prompt_improver_bot&#34;: False,
@@ -92,27 +96,34 @@ class Config:
             &#34;enable_api_log&#34;: False,
             &#34;enable_autocat&#34;: True,
         }
-        self.bots_data: list = []
+        self._bots_data: list = []
         self.load_config()
 
     def load_config(self) -&gt; None:
         &#34;&#34;&#34;Load the config from the config file.&#34;&#34;&#34;
         if os.path.isfile(self.config_file):
             data = toml.load(self.config_file)
-            self.flags_data = data[&#34;flags&#34;]
-            self.bots_data = data[&#34;bots&#34;]
-            self.values_data = data[&#34;values&#34;]
-            self.list_data = data[&#34;lists&#34;]
+            self._flags_data = data[&#34;flags&#34;]
+            self._bots_data = data[&#34;bots&#34;]
+            self._values_data = data[&#34;values&#34;]
+            self._list_data = data[&#34;lists&#34;]
         else:
             self.save_config()
-        if len(self.bots_data) &gt; 5:
+        if len(self._bots_data) &gt; 5:
             raise ValueError(&#34;You have too many bots. Bot persistence must be failing somewhere.&#34;)
 
     def save_config(self):
         &#34;&#34;&#34;Save the config to the config file.&#34;&#34;&#34;
+        if not os.path.isabs(self.config_file):
+            raise ValueError(&#34;Config file path must be absolute.&#34;)
         with open(self.config_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
             toml.dump(
-                {&#34;flags&#34;: self.flags_data, &#34;bots&#34;: self.bots_data, &#34;values&#34;: self.values_data, &#34;lists&#34;: self.list_data},
+                {
+                    &#34;flags&#34;: self._flags_data,
+                    &#34;bots&#34;: self._bots_data,
+                    &#34;values&#34;: self._values_data,
+                    &#34;lists&#34;: self._list_data,
+                },
                 f,
             )
 
@@ -123,7 +134,7 @@ class Config:
             name (str): The name of the bot.
         &#34;&#34;&#34;
         bot = Bot(assistant_id, name)
-        self.bots_data.append(dataclasses.asdict(bot))
+        self._bots_data.append(dataclasses.asdict(bot))
         self.save_config()
 
     def set_flag(self, flag_name: str, value: bool) -&gt; None:
@@ -132,9 +143,8 @@ class Config:
             flag_name (str): The name of the flag.
             value (str): The value of the flag.
         &#34;&#34;&#34;
-        if flag_name in self.flags_data:
-            self.flags_data[flag_name] = value
-            self.save_config()
+        self._flags_data[flag_name] = value
+        self.save_config()
 
     def cleanup(self) -&gt; None:
         &#34;&#34;&#34;Remove bots that have been deleted on OpenAI&#39;s side.&#34;&#34;&#34;
@@ -143,12 +153,12 @@ class Config:
         assistant_ids = [bot.id for bot in existing_bots.data]
 
         # Remove bots that no longer exist in OpenAI
-        self.bots_data = [bot for bot in self.bots_data if bot[&#34;assistant_id&#34;] in assistant_ids]
+        self._bots_data = [bot for bot in self._bots_data if bot[&#34;assistant_id&#34;] in assistant_ids]
         self.save_config()
 
     def get_bots(self) -&gt; list[Bot]:
         &#34;&#34;&#34;Return a list of Bot objects.&#34;&#34;&#34;
-        return [Bot(**bot) for bot in self.bots_data]
+        return [Bot(**bot) for bot in self._bots_data]
 
     def get_bot(self, name: str) -&gt; Optional[Bot]:
         &#34;&#34;&#34;Return a Bot object with the given name.
@@ -158,20 +168,22 @@ class Config:
         Returns:
             Optional[Bot]: The bot with the given name, or None if no bot with that name exists.
         &#34;&#34;&#34;
-        for bot in self.bots_data:
+        for bot in self._bots_data:
             if bot[&#34;name&#34;] == name:
                 return Bot(**bot)
         return None
 
-    def get_flag(self, flag_name: str) -&gt; Optional[bool]:
+    def get_flag(self, flag_name: str, default_value: Optional[bool] = None) -&gt; Optional[bool]:
         &#34;&#34;&#34;Return the value of the given flag.
         Args:
             flag_name (str): The name of the flag.
+            default_value (Optional[bool], optional): The default value to return if the flag does not exist.
+                                                      Defaults to None.
 
         Returns:
             Optional[bool]: The value of the flag, or None if the flag does not exist.
         &#34;&#34;&#34;
-        return self.flags_data.get(flag_name, None)
+        return self._flags_data.get(flag_name, default_value)
 
     def get_value(self, name: str) -&gt; Optional[str]:
         &#34;&#34;&#34;Return the value of the given flag.
@@ -181,7 +193,24 @@ class Config:
         Returns:
             Optional[str]: The value of the flag, or None if the flag does not exist.
         &#34;&#34;&#34;
-        return self.values_data.get(name, None)
+        return self._values_data.get(name, None)
+
+    def get_required_value(self, name: str) -&gt; str:
+        &#34;&#34;&#34;Return the value of the given flag.
+        Args:
+            name (str): The name of the config value.
+
+        Returns:
+            str: The value.
+
+        Raises:
+            FatalConfigurationError: If the value does not exist.
+        &#34;&#34;&#34;
+        value = self._values_data.get(name, None)
+
+        if value is None:
+            raise FatalConfigurationError(f&#34;Need {name} in config file&#34;)
+        return value
 
     def get_list(self, list_name: str) -&gt; list[str]:
         &#34;&#34;&#34;Return the value of the given flag.
@@ -191,7 +220,7 @@ class Config:
         Returns:
             list[str]: The list from the config file.
         &#34;&#34;&#34;
-        return self.list_data.get(list_name, [])
+        return self._list_data.get(list_name, [])
 
 
 if __name__ == &#34;__main__&#34;:
@@ -303,15 +332,17 @@ class Bot:
 
     def __init__(self, config_path: str = &#34;&#34;) -&gt; None:
         &#34;&#34;&#34;Initialize the Config class.&#34;&#34;&#34;
-        self.list_data: dict[str, list[str]] = {}
         if config_path and config_path.endswith(&#34;.toml&#34;):
             self.config_file = config_path
         elif config_path:
             self.config_file = os.path.join(config_path, &#34;ai_shell.toml&#34;)
         else:
             self.config_file = os.getenv(&#34;CONFIG_PATH&#34;, &#34;ai_shell.toml&#34;)
-        self.values_data: dict[str, str] = {}
-        self.flags_data: dict[str, bool] = {
+        # freeze the location of the config file
+        self.config_file = os.path.abspath(self.config_file)
+        self._list_data: dict[str, list[str]] = {}
+        self._values_data: dict[str, str] = {}
+        self._flags_data: dict[str, bool] = {
             &#34;enable_tool_selector_bot&#34;: False,
             &#34;enable_regex_tester_bot&#34;: False,
             &#34;enable_prompt_improver_bot&#34;: False,
@@ -320,27 +351,34 @@ class Bot:
             &#34;enable_api_log&#34;: False,
             &#34;enable_autocat&#34;: True,
         }
-        self.bots_data: list = []
+        self._bots_data: list = []
         self.load_config()
 
     def load_config(self) -&gt; None:
         &#34;&#34;&#34;Load the config from the config file.&#34;&#34;&#34;
         if os.path.isfile(self.config_file):
             data = toml.load(self.config_file)
-            self.flags_data = data[&#34;flags&#34;]
-            self.bots_data = data[&#34;bots&#34;]
-            self.values_data = data[&#34;values&#34;]
-            self.list_data = data[&#34;lists&#34;]
+            self._flags_data = data[&#34;flags&#34;]
+            self._bots_data = data[&#34;bots&#34;]
+            self._values_data = data[&#34;values&#34;]
+            self._list_data = data[&#34;lists&#34;]
         else:
             self.save_config()
-        if len(self.bots_data) &gt; 5:
+        if len(self._bots_data) &gt; 5:
             raise ValueError(&#34;You have too many bots. Bot persistence must be failing somewhere.&#34;)
 
     def save_config(self):
         &#34;&#34;&#34;Save the config to the config file.&#34;&#34;&#34;
+        if not os.path.isabs(self.config_file):
+            raise ValueError(&#34;Config file path must be absolute.&#34;)
         with open(self.config_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
             toml.dump(
-                {&#34;flags&#34;: self.flags_data, &#34;bots&#34;: self.bots_data, &#34;values&#34;: self.values_data, &#34;lists&#34;: self.list_data},
+                {
+                    &#34;flags&#34;: self._flags_data,
+                    &#34;bots&#34;: self._bots_data,
+                    &#34;values&#34;: self._values_data,
+                    &#34;lists&#34;: self._list_data,
+                },
                 f,
             )
 
@@ -351,7 +389,7 @@ class Bot:
             name (str): The name of the bot.
         &#34;&#34;&#34;
         bot = Bot(assistant_id, name)
-        self.bots_data.append(dataclasses.asdict(bot))
+        self._bots_data.append(dataclasses.asdict(bot))
         self.save_config()
 
     def set_flag(self, flag_name: str, value: bool) -&gt; None:
@@ -360,9 +398,8 @@ class Bot:
             flag_name (str): The name of the flag.
             value (str): The value of the flag.
         &#34;&#34;&#34;
-        if flag_name in self.flags_data:
-            self.flags_data[flag_name] = value
-            self.save_config()
+        self._flags_data[flag_name] = value
+        self.save_config()
 
     def cleanup(self) -&gt; None:
         &#34;&#34;&#34;Remove bots that have been deleted on OpenAI&#39;s side.&#34;&#34;&#34;
@@ -371,12 +408,12 @@ class Bot:
         assistant_ids = [bot.id for bot in existing_bots.data]
 
         # Remove bots that no longer exist in OpenAI
-        self.bots_data = [bot for bot in self.bots_data if bot[&#34;assistant_id&#34;] in assistant_ids]
+        self._bots_data = [bot for bot in self._bots_data if bot[&#34;assistant_id&#34;] in assistant_ids]
         self.save_config()
 
     def get_bots(self) -&gt; list[Bot]:
         &#34;&#34;&#34;Return a list of Bot objects.&#34;&#34;&#34;
-        return [Bot(**bot) for bot in self.bots_data]
+        return [Bot(**bot) for bot in self._bots_data]
 
     def get_bot(self, name: str) -&gt; Optional[Bot]:
         &#34;&#34;&#34;Return a Bot object with the given name.
@@ -386,20 +423,22 @@ class Bot:
         Returns:
             Optional[Bot]: The bot with the given name, or None if no bot with that name exists.
         &#34;&#34;&#34;
-        for bot in self.bots_data:
+        for bot in self._bots_data:
             if bot[&#34;name&#34;] == name:
                 return Bot(**bot)
         return None
 
-    def get_flag(self, flag_name: str) -&gt; Optional[bool]:
+    def get_flag(self, flag_name: str, default_value: Optional[bool] = None) -&gt; Optional[bool]:
         &#34;&#34;&#34;Return the value of the given flag.
         Args:
             flag_name (str): The name of the flag.
+            default_value (Optional[bool], optional): The default value to return if the flag does not exist.
+                                                      Defaults to None.
 
         Returns:
             Optional[bool]: The value of the flag, or None if the flag does not exist.
         &#34;&#34;&#34;
-        return self.flags_data.get(flag_name, None)
+        return self._flags_data.get(flag_name, default_value)
 
     def get_value(self, name: str) -&gt; Optional[str]:
         &#34;&#34;&#34;Return the value of the given flag.
@@ -409,7 +448,24 @@ class Bot:
         Returns:
             Optional[str]: The value of the flag, or None if the flag does not exist.
         &#34;&#34;&#34;
-        return self.values_data.get(name, None)
+        return self._values_data.get(name, None)
+
+    def get_required_value(self, name: str) -&gt; str:
+        &#34;&#34;&#34;Return the value of the given flag.
+        Args:
+            name (str): The name of the config value.
+
+        Returns:
+            str: The value.
+
+        Raises:
+            FatalConfigurationError: If the value does not exist.
+        &#34;&#34;&#34;
+        value = self._values_data.get(name, None)
+
+        if value is None:
+            raise FatalConfigurationError(f&#34;Need {name} in config file&#34;)
+        return value
 
     def get_list(self, list_name: str) -&gt; list[str]:
         &#34;&#34;&#34;Return the value of the given flag.
@@ -419,7 +475,7 @@ class Bot:
         Returns:
             list[str]: The list from the config file.
         &#34;&#34;&#34;
-        return self.list_data.get(list_name, [])</code></pre>
+        return self._list_data.get(list_name, [])</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -446,7 +502,7 @@ class Bot:
         name (str): The name of the bot.
     &#34;&#34;&#34;
     bot = Bot(assistant_id, name)
-    self.bots_data.append(dataclasses.asdict(bot))
+    self._bots_data.append(dataclasses.asdict(bot))
     self.save_config()</code></pre>
 </details>
 </dd>
@@ -466,7 +522,7 @@ class Bot:
     assistant_ids = [bot.id for bot in existing_bots.data]
 
     # Remove bots that no longer exist in OpenAI
-    self.bots_data = [bot for bot in self.bots_data if bot[&#34;assistant_id&#34;] in assistant_ids]
+    self._bots_data = [bot for bot in self._bots_data if bot[&#34;assistant_id&#34;] in assistant_ids]
     self.save_config()</code></pre>
 </details>
 </dd>
@@ -497,7 +553,7 @@ class Bot:
     Returns:
         Optional[Bot]: The bot with the given name, or None if no bot with that name exists.
     &#34;&#34;&#34;
-    for bot in self.bots_data:
+    for bot in self._bots_data:
         if bot[&#34;name&#34;] == name:
             return Bot(**bot)
     return None</code></pre>
@@ -514,11 +570,11 @@ class Bot:
 </summary>
 <pre><code class="python">def get_bots(self) -&gt; list[Bot]:
     &#34;&#34;&#34;Return a list of Bot objects.&#34;&#34;&#34;
-    return [Bot(**bot) for bot in self.bots_data]</code></pre>
+    return [Bot(**bot) for bot in self._bots_data]</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.utils.config_manager.Config.get_flag"><code class="name flex">
-<span>def <span class="ident">get_flag</span></span>(<span>self, flag_name: str) ‑> Optional[bool]</span>
+<span>def <span class="ident">get_flag</span></span>(<span>self, flag_name: str, default_value: Optional[bool] = None) ‑> Optional[bool]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return the value of the given flag.</p>
@@ -526,6 +582,9 @@ class Bot:
 <dl>
 <dt><strong><code>flag_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the flag.</dd>
+<dt><strong><code>default_value</code></strong> :&ensp;<code>Optional[bool]</code>, optional</dt>
+<dd>The default value to return if the flag does not exist.
+Defaults to None.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -536,15 +595,17 @@ class Bot:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_flag(self, flag_name: str) -&gt; Optional[bool]:
+<pre><code class="python">def get_flag(self, flag_name: str, default_value: Optional[bool] = None) -&gt; Optional[bool]:
     &#34;&#34;&#34;Return the value of the given flag.
     Args:
         flag_name (str): The name of the flag.
+        default_value (Optional[bool], optional): The default value to return if the flag does not exist.
+                                                  Defaults to None.
 
     Returns:
         Optional[bool]: The value of the flag, or None if the flag does not exist.
     &#34;&#34;&#34;
-    return self.flags_data.get(flag_name, None)</code></pre>
+    return self._flags_data.get(flag_name, default_value)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.utils.config_manager.Config.get_list"><code class="name flex">
@@ -574,7 +635,49 @@ class Bot:
     Returns:
         list[str]: The list from the config file.
     &#34;&#34;&#34;
-    return self.list_data.get(list_name, [])</code></pre>
+    return self._list_data.get(list_name, [])</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.config_manager.Config.get_required_value"><code class="name flex">
+<span>def <span class="ident">get_required_value</span></span>(<span>self, name: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return the value of the given flag.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the config value.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The value.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>FatalConfigurationError</code></dt>
+<dd>If the value does not exist.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_required_value(self, name: str) -&gt; str:
+    &#34;&#34;&#34;Return the value of the given flag.
+    Args:
+        name (str): The name of the config value.
+
+    Returns:
+        str: The value.
+
+    Raises:
+        FatalConfigurationError: If the value does not exist.
+    &#34;&#34;&#34;
+    value = self._values_data.get(name, None)
+
+    if value is None:
+        raise FatalConfigurationError(f&#34;Need {name} in config file&#34;)
+    return value</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.utils.config_manager.Config.get_value"><code class="name flex">
@@ -604,7 +707,7 @@ class Bot:
     Returns:
         Optional[str]: The value of the flag, or None if the flag does not exist.
     &#34;&#34;&#34;
-    return self.values_data.get(name, None)</code></pre>
+    return self._values_data.get(name, None)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.utils.config_manager.Config.load_config"><code class="name flex">
@@ -620,13 +723,13 @@ class Bot:
     &#34;&#34;&#34;Load the config from the config file.&#34;&#34;&#34;
     if os.path.isfile(self.config_file):
         data = toml.load(self.config_file)
-        self.flags_data = data[&#34;flags&#34;]
-        self.bots_data = data[&#34;bots&#34;]
-        self.values_data = data[&#34;values&#34;]
-        self.list_data = data[&#34;lists&#34;]
+        self._flags_data = data[&#34;flags&#34;]
+        self._bots_data = data[&#34;bots&#34;]
+        self._values_data = data[&#34;values&#34;]
+        self._list_data = data[&#34;lists&#34;]
     else:
         self.save_config()
-    if len(self.bots_data) &gt; 5:
+    if len(self._bots_data) &gt; 5:
         raise ValueError(&#34;You have too many bots. Bot persistence must be failing somewhere.&#34;)</code></pre>
 </details>
 </dd>
@@ -641,9 +744,16 @@ class Bot:
 </summary>
 <pre><code class="python">def save_config(self):
     &#34;&#34;&#34;Save the config to the config file.&#34;&#34;&#34;
+    if not os.path.isabs(self.config_file):
+        raise ValueError(&#34;Config file path must be absolute.&#34;)
     with open(self.config_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as f:
         toml.dump(
-            {&#34;flags&#34;: self.flags_data, &#34;bots&#34;: self.bots_data, &#34;values&#34;: self.values_data, &#34;lists&#34;: self.list_data},
+            {
+                &#34;flags&#34;: self._flags_data,
+                &#34;bots&#34;: self._bots_data,
+                &#34;values&#34;: self._values_data,
+                &#34;lists&#34;: self._list_data,
+            },
             f,
         )</code></pre>
 </details>
@@ -670,9 +780,8 @@ class Bot:
         flag_name (str): The name of the flag.
         value (str): The value of the flag.
     &#34;&#34;&#34;
-    if flag_name in self.flags_data:
-        self.flags_data[flag_name] = value
-        self.save_config()</code></pre>
+    self._flags_data[flag_name] = value
+    self.save_config()</code></pre>
 </details>
 </dd>
 </dl>
@@ -740,6 +849,7 @@ class Thread:
 <li><code><a title="ai_shell.utils.config_manager.Config.get_bots" href="#ai_shell.utils.config_manager.Config.get_bots">get_bots</a></code></li>
 <li><code><a title="ai_shell.utils.config_manager.Config.get_flag" href="#ai_shell.utils.config_manager.Config.get_flag">get_flag</a></code></li>
 <li><code><a title="ai_shell.utils.config_manager.Config.get_list" href="#ai_shell.utils.config_manager.Config.get_list">get_list</a></code></li>
+<li><code><a title="ai_shell.utils.config_manager.Config.get_required_value" href="#ai_shell.utils.config_manager.Config.get_required_value">get_required_value</a></code></li>
 <li><code><a title="ai_shell.utils.config_manager.Config.get_value" href="#ai_shell.utils.config_manager.Config.get_value">get_value</a></code></li>
 <li><code><a title="ai_shell.utils.config_manager.Config.load_config" href="#ai_shell.utils.config_manager.Config.load_config">load_config</a></code></li>
 <li><code><a title="ai_shell.utils.config_manager.Config.save_config" href="#ai_shell.utils.config_manager.Config.save_config">save_config</a></code></li>

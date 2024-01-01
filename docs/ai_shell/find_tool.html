@@ -58,7 +58,7 @@ class FindTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def find_files(
@@ -199,7 +199,7 @@ class FindTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def find_files(

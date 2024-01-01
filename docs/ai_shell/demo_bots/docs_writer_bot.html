@@ -46,6 +46,7 @@ You will need to reset the fish_tank folder to the original state after each run
 5 - Set config, initialize, do tool loop
 
 &#34;&#34;&#34;
+
 import asyncio
 import logging
 import logging.config
@@ -56,9 +57,14 @@ from dotenv import load_dotenv
 from pygount import SourceAnalysis
 
 import ai_shell
+import ai_shell.demo_bots.demo_setup as demo_setup
 
 ai_shell.utils.logging_utils.LOGGING_ENABLED = True
 initial_lines_of_code: Optional[SourceAnalysis] = None
+
+if __name__ == &#34;__main__&#34; and not os.path.exists(&#34;src&#34;):
+    demo_setup.initialize()
+
 if __name__ == &#34;__main__&#34;:
     with ai_shell.change_directory(&#34;src&#34;):
         initial_lines_of_code = ai_shell.count_lines_of_code(&#34;fish_tank/__main__.py&#34;)
@@ -75,8 +81,7 @@ async def main():
     load_dotenv()
 
     logger = logging.getLogger(__name__)
-    config = ai_shell.configure_logging()
-    logging.config.dictConfig(config)
+    logging.config.dictConfig(ai_shell.configure_logging())
     model = &#34;gpt-3.5-turbo-1106&#34;
 
     # The bot likes praise.
@@ -85,11 +90,18 @@ async def main():
     )
     # Too many tools will confuse the bot.
     tool_names = [
+        # read only tools
         &#34;ls&#34;,
         &#34;cat_markdown&#34;,
-        &#34;rewrite_file&#34;,
+
+        # write only
         &#34;write_new_file&#34;,
-        # &#34;report_text&#34;,
+
+        # Could effectively delete if Lines fall.
+        # So we enable &#34;only_add_text&#34; in the config.
+        &#34;rewrite_file&#34;,
+
+        # Insert or Edit only (same number of lines of code if no \n in args)
         &#34;insert_text_after_context&#34;,
         &#34;insert_text_after_multiline_context&#34;,
         &#34;insert_text_at_start_or_end&#34;,
@@ -150,24 +162,21 @@ files. If you use rewrite, don&#39;t omit original code!
         Returns:
             str: Continuation prompt for bot.
         &#34;&#34;&#34;
-        with ai_shell.change_directory(&#34;src&#34;):
-            lines_of_code = ai_shell.count_lines_of_code(&#34;fish_tank/__main__.py&#34;)
-            if initial_lines_of_code is None:
-                # Make mypy happy
-                raise TypeError(&#34;Shouldn&#39;t be none by this point.&#34;)
-            if lines_of_code.documentation_count &gt; 25 and lines_of_code.code_count &gt;= initial_lines_of_code.code_count:
-                return &#34;DONE&#34;
-            if initial_lines_of_code.code_count &lt; lines_of_code.code_count:
-                return (
-                        pretty_loc(lines_of_code) + f&#34;\n\n Code disappeared! There used to be {initial_lines_of_code}&#34;
-                                                    f&#34;lines of code, now there are only {lines_of_code.code_count}! You&#39;re supposed to document not delete.&#34;
-                )
+        lines_of_code = ai_shell.count_lines_of_code(&#34;fish_tank/__main__.py&#34;)
+        if initial_lines_of_code is None:
+            # Make mypy happy
+            raise TypeError(&#34;Shouldn&#39;t be none by this point.&#34;)
+        if lines_of_code.documentation_count &gt; 25 and lines_of_code.code_count &gt;= initial_lines_of_code.code_count:
+            return &#34;DONE&#34;
+        if initial_lines_of_code.code_count &lt; lines_of_code.code_count:
             return (
-                    pretty_loc(
-                        lines_of_code) + &#34;\n\n and thats not enough documentation. Please try again. You can do it!&#34;
+                pretty_loc(lines_of_code) + f&#34;\n\n Code disappeared! There used to be {initial_lines_of_code}&#34;
+                f&#34;lines of code, now there are only {lines_of_code.code_count}! You&#39;re supposed to document not delete.&#34;
             )
+        return pretty_loc(lines_of_code) + &#34;\n\n and thats not enough documentation. Please try again. You can do it!&#34;
 
     config = ai_shell.Config()
+    config.set_flag(&#34;only_add_text&#34;, True)
     bot = ai_shell.TaskBot(
         config,
         bot_name,
@@ -177,11 +186,12 @@ files. If you use rewrite, don&#39;t omit original code!
         persist_bots=True,
         persist_threads=True,
     )
-    # Initialize async things.
-    await bot.initialize()
-    # Run until goal checker is done
-    await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
-    logger.info(&#34;Run completed.&#34;)
+    with ai_shell.change_directory(&#34;src&#34;):
+        # Initialize async things.
+        await bot.initialize()
+        # Run until goal checker is done
+        await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
+        logger.info(&#34;Run completed.&#34;)
 
 
 if __name__ == &#34;__main__&#34;:
@@ -208,8 +218,7 @@ if __name__ == &#34;__main__&#34;:
     load_dotenv()
 
     logger = logging.getLogger(__name__)
-    config = ai_shell.configure_logging()
-    logging.config.dictConfig(config)
+    logging.config.dictConfig(ai_shell.configure_logging())
     model = &#34;gpt-3.5-turbo-1106&#34;
 
     # The bot likes praise.
@@ -218,11 +227,18 @@ if __name__ == &#34;__main__&#34;:
     )
     # Too many tools will confuse the bot.
     tool_names = [
+        # read only tools
         &#34;ls&#34;,
         &#34;cat_markdown&#34;,
-        &#34;rewrite_file&#34;,
+
+        # write only
         &#34;write_new_file&#34;,
-        # &#34;report_text&#34;,
+
+        # Could effectively delete if Lines fall.
+        # So we enable &#34;only_add_text&#34; in the config.
+        &#34;rewrite_file&#34;,
+
+        # Insert or Edit only (same number of lines of code if no \n in args)
         &#34;insert_text_after_context&#34;,
         &#34;insert_text_after_multiline_context&#34;,
         &#34;insert_text_at_start_or_end&#34;,
@@ -283,24 +299,21 @@ files. If you use rewrite, don&#39;t omit original code!
         Returns:
             str: Continuation prompt for bot.
         &#34;&#34;&#34;
-        with ai_shell.change_directory(&#34;src&#34;):
-            lines_of_code = ai_shell.count_lines_of_code(&#34;fish_tank/__main__.py&#34;)
-            if initial_lines_of_code is None:
-                # Make mypy happy
-                raise TypeError(&#34;Shouldn&#39;t be none by this point.&#34;)
-            if lines_of_code.documentation_count &gt; 25 and lines_of_code.code_count &gt;= initial_lines_of_code.code_count:
-                return &#34;DONE&#34;
-            if initial_lines_of_code.code_count &lt; lines_of_code.code_count:
-                return (
-                        pretty_loc(lines_of_code) + f&#34;\n\n Code disappeared! There used to be {initial_lines_of_code}&#34;
-                                                    f&#34;lines of code, now there are only {lines_of_code.code_count}! You&#39;re supposed to document not delete.&#34;
-                )
+        lines_of_code = ai_shell.count_lines_of_code(&#34;fish_tank/__main__.py&#34;)
+        if initial_lines_of_code is None:
+            # Make mypy happy
+            raise TypeError(&#34;Shouldn&#39;t be none by this point.&#34;)
+        if lines_of_code.documentation_count &gt; 25 and lines_of_code.code_count &gt;= initial_lines_of_code.code_count:
+            return &#34;DONE&#34;
+        if initial_lines_of_code.code_count &lt; lines_of_code.code_count:
             return (
-                    pretty_loc(
-                        lines_of_code) + &#34;\n\n and thats not enough documentation. Please try again. You can do it!&#34;
+                pretty_loc(lines_of_code) + f&#34;\n\n Code disappeared! There used to be {initial_lines_of_code}&#34;
+                f&#34;lines of code, now there are only {lines_of_code.code_count}! You&#39;re supposed to document not delete.&#34;
             )
+        return pretty_loc(lines_of_code) + &#34;\n\n and thats not enough documentation. Please try again. You can do it!&#34;
 
     config = ai_shell.Config()
+    config.set_flag(&#34;only_add_text&#34;, True)
     bot = ai_shell.TaskBot(
         config,
         bot_name,
@@ -310,11 +323,12 @@ files. If you use rewrite, don&#39;t omit original code!
         persist_bots=True,
         persist_threads=True,
     )
-    # Initialize async things.
-    await bot.initialize()
-    # Run until goal checker is done
-    await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
-    logger.info(&#34;Run completed.&#34;)</code></pre>
+    with ai_shell.change_directory(&#34;src&#34;):
+        # Initialize async things.
+        await bot.initialize()
+        # Run until goal checker is done
+        await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
+        logger.info(&#34;Run completed.&#34;)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.demo_bots.docs_writer_bot.pretty_loc"><code class="name flex">

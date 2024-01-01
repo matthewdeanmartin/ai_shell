@@ -29,12 +29,28 @@ def test_head(tool, tmp_path):
     assert tool.head(str(test_file), 3) == expected_output
 
 
+def test_head_too_many_lines(tool, tmp_path):
+    content = "Line 1\nLine 2\nLine 3\nLine 4\nLine 5"
+    test_file = create_test_file(tmp_path, content)
+
+    expected_output = ["Line 1", "Line 2", "Line 3", "Line 4", "Line 5"]
+    assert tool.head(str(test_file), 20) == expected_output
+
+
 def test_tail(tool, tmp_path):
     content = "Line 1\nLine 2\nLine 3\nLine 4\nLine 5"
     test_file = create_test_file(tmp_path, content)
 
     expected_output = ["Line 3", "Line 4", "Line 5"]
     assert tool.tail(str(test_file), 3) == expected_output
+
+
+def test_tail_too_many(tool, tmp_path):
+    content = "Line 1\nLine 2\nLine 3\nLine 4\nLine 5"
+    test_file = create_test_file(tmp_path, content)
+
+    expected_output = ["Line 1", "Line 2", "Line 3", "Line 4", "Line 5"]
+    assert tool.tail(str(test_file), 15) == expected_output
 
 
 def test_head_bytes(tool, tmp_path):

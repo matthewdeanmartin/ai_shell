@@ -28,8 +28,10 @@ def assigned_incomplete_tasks_to_markdown(assignee_name: str, tasks: list[Task])
 
 def search_results_to_markdown(search_keyword, tasks):
     # Filter tasks based on the search keyword
-    matching_tasks = [task for task in tasks if search_keyword in task.title or search_keyword in task.description]
-
+    if search_keyword:
+        matching_tasks = [task for task in tasks if search_keyword in task.title or search_keyword in task.description]
+    else:
+        matching_tasks = tasks
     # Load template
     template_dir = join(dirname(__file__), "templates")  # Adjust path as necessary
     env = Environment(loader=FileSystemLoader(template_dir))

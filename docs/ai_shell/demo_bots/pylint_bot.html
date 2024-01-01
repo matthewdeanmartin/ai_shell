@@ -33,6 +33,7 @@ This bot will attempt to lint the issues in the `fish_tank` example.
 
 You will need to reset the fish_tank folder to the original state after each run.
 &#34;&#34;&#34;
+
 import asyncio
 import logging
 import logging.config
@@ -41,8 +42,13 @@ import os
 from dotenv import load_dotenv
 
 import ai_shell
+import ai_shell.demo_bots.demo_setup as demo_setup
 
 ai_shell.utils.logging_utils.LOGGING_ENABLED = True
+
+if __name__ == &#34;__main__&#34; and not os.path.exists(&#34;src&#34;):
+    demo_setup.initialize()
+
 
 initial_pylint = None
 if __name__ == &#34;__main__&#34;:
@@ -57,8 +63,7 @@ async def main():
     load_dotenv()
 
     logger = logging.getLogger(__name__)
-    config = ai_shell.configure_logging()
-    logging.config.dictConfig(config)
+    logging.config.dictConfig(ai_shell.configure_logging())
     model = &#34;gpt-3.5-turbo-1106&#34;
 
     # The bot likes praise.
@@ -81,6 +86,8 @@ async def main():
     ]
     bot_name = &#34;Pylint fixer bot&#34;
     language = &#34;python&#34;  # hack so that blacken-docs doesn&#39;t try to reformat the string contents
+    if not initial_pylint:
+        raise ValueError(&#34;Pylint data must be initialized.&#34;)
     request = f&#34;&#34;&#34;You are in the &#39;./&#39; folder. The base folder is &#39;./&#39;. You do not need to guess the pwd, it is &#39;./&#39;.
 
 Here is a map.
@@ -123,11 +130,11 @@ files. As you can see, pylint says they&#39;re missing. After each round of edit
         raise ValueError(&#34;The demo requires that there be a src folder with some python code in it.&#34;)
 
     async def pylint_goal_checker(_toolkit: ai_shell.ToolKit):
-        with ai_shell.change_directory(&#34;src&#34;):
-            result = ai_shell.invoke_pylint(&#34;fish_tank&#34;, 8)
-            if result.return_code == 0:
-                return &#34;DONE&#34;
-            return result.to_markdown() + &#34;\n\nThe pylint score is too low. Please try again. You can do it!&#34;
+        # already in src!
+        result = ai_shell.invoke_pylint(&#34;fish_tank&#34;, 8)
+        if result.return_code == 0:
+            return &#34;DONE&#34;
+        return result.to_markdown() + &#34;\n\nThe pylint score is too low. Please try again. You can do it!&#34;
 
     config = ai_shell.Config()
     bot = ai_shell.TaskBot(
@@ -139,9 +146,10 @@ files. As you can see, pylint says they&#39;re missing. After each round of edit
         persist_bots=True,
         persist_threads=True,
     )
-    await bot.initialize()
-    await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
-    logger.info(&#34;Run completed.&#34;)
+    with ai_shell.change_directory(&#34;src&#34;):
+        await bot.initialize()
+        await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
+        logger.info(&#34;Run completed.&#34;)
 
 
 if __name__ == &#34;__main__&#34;:
@@ -168,8 +176,7 @@ if __name__ == &#34;__main__&#34;:
     load_dotenv()
 
     logger = logging.getLogger(__name__)
-    config = ai_shell.configure_logging()
-    logging.config.dictConfig(config)
+    logging.config.dictConfig(ai_shell.configure_logging())
     model = &#34;gpt-3.5-turbo-1106&#34;
 
     # The bot likes praise.
@@ -192,6 +199,8 @@ if __name__ == &#34;__main__&#34;:
     ]
     bot_name = &#34;Pylint fixer bot&#34;
     language = &#34;python&#34;  # hack so that blacken-docs doesn&#39;t try to reformat the string contents
+    if not initial_pylint:
+        raise ValueError(&#34;Pylint data must be initialized.&#34;)
     request = f&#34;&#34;&#34;You are in the &#39;./&#39; folder. The base folder is &#39;./&#39;. You do not need to guess the pwd, it is &#39;./&#39;.
 
 Here is a map.
@@ -234,11 +243,11 @@ files. As you can see, pylint says they&#39;re missing. After each round of edit
         raise ValueError(&#34;The demo requires that there be a src folder with some python code in it.&#34;)
 
     async def pylint_goal_checker(_toolkit: ai_shell.ToolKit):
-        with ai_shell.change_directory(&#34;src&#34;):
-            result = ai_shell.invoke_pylint(&#34;fish_tank&#34;, 8)
-            if result.return_code == 0:
-                return &#34;DONE&#34;
-            return result.to_markdown() + &#34;\n\nThe pylint score is too low. Please try again. You can do it!&#34;
+        # already in src!
+        result = ai_shell.invoke_pylint(&#34;fish_tank&#34;, 8)
+        if result.return_code == 0:
+            return &#34;DONE&#34;
+        return result.to_markdown() + &#34;\n\nThe pylint score is too low. Please try again. You can do it!&#34;
 
     config = ai_shell.Config()
     bot = ai_shell.TaskBot(
@@ -250,9 +259,10 @@ files. As you can see, pylint says they&#39;re missing. After each round of edit
         persist_bots=True,
         persist_threads=True,
     )
-    await bot.initialize()
-    await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
-    logger.info(&#34;Run completed.&#34;)</code></pre>
+    with ai_shell.change_directory(&#34;src&#34;):
+        await bot.initialize()
+        await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
+        logger.info(&#34;Run completed.&#34;)</code></pre>
 </details>
 </dd>
 </dl>

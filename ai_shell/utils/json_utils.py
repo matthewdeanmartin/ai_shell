@@ -4,10 +4,11 @@ Tools for handling AI's peculiar way of making json
 import dataclasses
 import datetime
 import http
-import json
+import json as slowjson
 import types
 from typing import Any
 
+import orjson
 import untruncate_json
 
 # TODO: Use orjson because it is faster.
@@ -17,7 +18,22 @@ class FatalConfigurationError(Exception):
     """A fatal configuration error."""
 
 
-class LoosyGoosyEncoder(json.JSONEncoder):
+def loosy_goosy_default_encoder(o: Any) -> Any:
+    """Tell json how to serialize basic things
+    # https://stackoverflow.com/a/8230505/33264
+    """
+    # if isinstance(o, set):
+    #     return list(o)
+    if isinstance(o, types.GeneratorType):
+        return list(o)
+    # if dataclasses.is_dataclass(o):
+    #     return dataclasses.asdict(o)
+    # if isinstance(o, datetime.datetime):
+    #     return o.isoformat()
+    raise TypeError("orjson can't handle this.")
+
+
+class LoosyGoosyEncoderForSlowJson(slowjson.JSONEncoder):
     """Encode what json will not.
     # https://stackoverflow.com/a/8230505/33264
     """
@@ -32,7 +48,7 @@ class LoosyGoosyEncoder(json.JSONEncoder):
             return dataclasses.asdict(o)
         if isinstance(o, datetime.datetime):
             return o.isoformat()
-        return json.JSONEncoder.default(self, o)
+        return slowjson.JSONEncoder.default(self, o)
 
 
 def try_everything(args_text: str) -> Any:
@@ -40,11 +56,14 @@ def try_everything(args_text: str) -> Any:
     success = False
     attempted: set[str] = set()
     current_error = None
-    while not success and len(attempted) < 3:
+    loop_count = 0
+    while not success and len(attempted) < 3 and loop_count < 10:
+        # looking for infinite loop
+        loop_count += 1
         try:
-            arguments = json.loads(args_text)
+            arguments = orjson.loads(args_text)
             return arguments
-        except json.decoder.JSONDecodeError as error:
+        except orjson.JSONDecodeError as error:
             if not attempted:
                 # first fall back
                 args_text = untruncate_json.complete(args_text)
@@ -52,7 +71,17 @@ def try_everything(args_text: str) -> Any:
             elif "\\" in args_text:
                 args_text = args_text.replace("\\", "\\\\")
                 attempted.add("double escape")
+            elif "Expecting property name enclosed in double quotes" in error.msg:
+                # json library (slow one)
+                args_text = args_text.replace("'", '"')
+                attempted.add("single to double quotes")
+            elif "unexpected character" in error.msg and "'" in args_text:
+                # orjson
+                args_text = args_text.replace("'", '"')
+                attempted.add("single to double quotes")
             current_error = error
+    if loop_count >= 10:
+        raise RuntimeError(f"Infinite loop detected: {args_text}, {current_error}")
     if current_error:
         raise current_error
 

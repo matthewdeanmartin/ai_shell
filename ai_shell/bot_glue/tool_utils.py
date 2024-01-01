@@ -16,8 +16,8 @@ import openai
 from openai.types.beta import Thread
 from openai.types.beta.threads import Run
 
+from ai_shell.ai_logs.log_to_markdown import DialogLoggerWithMarkdown
 from ai_shell.openai_toolkit import ToolKit
-from ai_shell.utils.log_conversation import DialogLoggerWithMarkdown
 
 logger = logging.getLogger(__name__)
 

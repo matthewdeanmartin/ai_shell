@@ -1,25 +1,36 @@
 # TODO
 
-## Fig leaf security (Yes, it isn't for preventing real malice)
-- Prohibited file types
-- Prohibited modules/methods, e.g. subprocess/os.system
-- Test writer bot- disable writing to fish_tank
-- Test writer bot- no editing without 1st viewing, cat unlocks edit!
-- Is cat folder/* failing?
-
 ## Pain points
 - no more log folder by convention
 - put API log on hold (replace with ordinary file?)
+- Stop on "Fatal Errors" that the bot can't fix.
+- Review all errors and see which are Fatal. (not bot fixable)
+- Mime types not fully working and it really confuses the bot.
+  - Not enough functions support markdown distinctly.
+  - Need tests for other mime types
+- junk free tree (hide .folders, hidden files, etc)
+- regular logging not showing bot responses in console, esp for demo
+- markdown log is a mess, especially for tool args
+- stop using python a format for jsonschema object, fixed formatter, but still slow?
+
+## Fig leaf security (Yes, it isn't for preventing real malice)
+- Prohibited file types 
+  - (e.g. bash)
+  - executable (i.e. not .txt, .md, .json, .yaml, .yml)
+- Config
+  - Read-only mode in config.
+  - Prohibited modules/methods, e.g. subprocess/os.system
+- Test writer bot
+  - disable writing to fish_tank
+  - no editing without 1st viewing, cat unlocks edit!
+- Is cat folder/* failing?
+- an exclude file similar to gitignore or dockerignore
 
 ## Demo Bots
 
 - python -m ai_shell.demo_bots.(bot_name)
-- Make "fish tank" a resource?
 - Start up check
-  - Needs a place for logs (api, dialog, cli)
-  - Needs a place for config
-  - Needs an API key
-  - Needs permission from user to write to /src/
+  - Needs a tmp folder different from logs
 
 ## MORE
 
@@ -28,6 +39,9 @@
 
 ## Plugin Architecture
 - First, allow for dynamic tools (dynamic schema and dynamic toolkit code)
+- File validator hooks
+- Tool hooks
+- Sub-bots
 
 ## Uncategorized
 

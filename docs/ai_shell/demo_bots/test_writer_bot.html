@@ -33,6 +33,7 @@ are good, pass and have coverage.</p>
 An example bot that will write unit tests. The goal checker will check if pytests
 are good, pass and have coverage.
 &#34;&#34;&#34;
+
 import asyncio
 import logging
 import logging.config
@@ -41,9 +42,13 @@ import os
 from dotenv import load_dotenv
 
 import ai_shell
+import ai_shell.demo_bots.demo_setup as demo_setup
 import ai_shell.externals.pytest_call
 
 ai_shell.utils.logging_utils.LOGGING_ENABLED = True
+
+if __name__ == &#34;__main__&#34; and not os.path.exists(&#34;src&#34;):
+    demo_setup.initialize()
 
 initial_passed_tests = -1
 initial_failed_tests = -1
@@ -83,10 +88,10 @@ async def pytest_goal_checker(toolkit: ai_shell.ToolKit):
             &#34; Remember: read the code with cat_markdown, write tests with write_new_file, run tests with pytest.&#34;
         )
 
-    with ai_shell.change_directory(&#34;src&#34;):
-        passed_tests, failed_tests, coverage, pytest_output = ai_shell.externals.pytest_call.count_pytest_results(
-            &#34;fish_tank&#34;, &#34;tests&#34;, 80
-        )
+    # host script must set pwd.
+    passed_tests, failed_tests, coverage, pytest_output = ai_shell.externals.pytest_call.count_pytest_results(
+        &#34;fish_tank&#34;, &#34;tests&#34;, 80
+    )
     if coverage &gt;= 80:
         return &#34;DONE&#34;
     if passed_tests &gt; initial_passed_tests and initial_coverage == coverage:
@@ -129,8 +134,8 @@ async def main():
     load_dotenv()
 
     logger = logging.getLogger(__name__)
-    config = ai_shell.configure_logging()
-    logging.config.dictConfig(config)
+
+    logging.config.dictConfig(ai_shell.configure_logging())
     logger.info(&#34;Verbose mode enabled&#34;)
 
     # model = &#34;gpt-4-1106-preview&#34; OMG this is expensive.
@@ -158,7 +163,7 @@ async def main():
     ]
     bot_name = &#34;Unit test writer.&#34;
 
-    dialog_logger_md = ai_shell.DialogLoggerWithMarkdown(&#34;./logs/dialogs/&#34;)
+    dialog_logger_md = ai_shell.DialogLoggerWithMarkdown(&#34;./tmp&#34;)
     request = &#34;&#34;&#34;We have an important task. You are the best unit test writer we have. We are counting
 on you to get this right.
 
@@ -179,15 +184,16 @@ Do not start writing tests until you use cat_markdown tool to read the fish_tank
 Now that is out of the way, use the tools available to write pytest unit tests for each .py file in `fish_tank`
  with code, e.g. ./fish_tank/__main__.py is a good place to start. Put test files into the tests folder.
 
-You have permission to write new files with write_new_file. 
+You have permission to write new files with write_new_file to the /test/ folder and nowhere else. 
 
-You have permission to rewrite entire files with the rewrite_file tool.
+You have permission to rewrite entire files with the rewrite_file tool in the /test/ folder and nowhere else.
 
 Tests should meaningfully exercise the code in the fish_tank folder and achieve 80% coverage.
 
 - Do not write unit tests with out assertions. 
 - Do not write unit tests with `pass` as the body.
 - Do not add new functions to fish_tank module just to test them, test only pre-existing functions.
+- Do not modify the fish_tank module, only the tests folder.
 
 Write tests, run tests. You are done when the coverage is 80% or more.
 &#34;&#34;&#34;
@@ -205,9 +211,10 @@ Write tests, run tests. You are done when the coverage is 80% or more.
         persist_bots=True,
         persist_threads=True,
     )
-    await bot.initialize()
-    await bot.basic_tool_loop(request, root_folder, tool_names, pytest_goal_checker)
-    print(&#34;Run completed.&#34;)
+    with ai_shell.change_directory(&#34;src&#34;):
+        await bot.initialize()
+        await bot.basic_tool_loop(request, root_folder, tool_names, pytest_goal_checker)
+        print(&#34;Run completed.&#34;)
 
 
 if __name__ == &#34;__main__&#34;:
@@ -234,8 +241,8 @@ if __name__ == &#34;__main__&#34;:
     load_dotenv()
 
     logger = logging.getLogger(__name__)
-    config = ai_shell.configure_logging()
-    logging.config.dictConfig(config)
+
+    logging.config.dictConfig(ai_shell.configure_logging())
     logger.info(&#34;Verbose mode enabled&#34;)
 
     # model = &#34;gpt-4-1106-preview&#34; OMG this is expensive.
@@ -263,7 +270,7 @@ if __name__ == &#34;__main__&#34;:
     ]
     bot_name = &#34;Unit test writer.&#34;
 
-    dialog_logger_md = ai_shell.DialogLoggerWithMarkdown(&#34;./logs/dialogs/&#34;)
+    dialog_logger_md = ai_shell.DialogLoggerWithMarkdown(&#34;./tmp&#34;)
     request = &#34;&#34;&#34;We have an important task. You are the best unit test writer we have. We are counting
 on you to get this right.
 
@@ -284,15 +291,16 @@ Do not start writing tests until you use cat_markdown tool to read the fish_tank
 Now that is out of the way, use the tools available to write pytest unit tests for each .py file in `fish_tank`
  with code, e.g. ./fish_tank/__main__.py is a good place to start. Put test files into the tests folder.
 
-You have permission to write new files with write_new_file. 
+You have permission to write new files with write_new_file to the /test/ folder and nowhere else. 
 
-You have permission to rewrite entire files with the rewrite_file tool.
+You have permission to rewrite entire files with the rewrite_file tool in the /test/ folder and nowhere else.
 
 Tests should meaningfully exercise the code in the fish_tank folder and achieve 80% coverage.
 
 - Do not write unit tests with out assertions. 
 - Do not write unit tests with `pass` as the body.
 - Do not add new functions to fish_tank module just to test them, test only pre-existing functions.
+- Do not modify the fish_tank module, only the tests folder.
 
 Write tests, run tests. You are done when the coverage is 80% or more.
 &#34;&#34;&#34;
@@ -310,9 +318,10 @@ Write tests, run tests. You are done when the coverage is 80% or more.
         persist_bots=True,
         persist_threads=True,
     )
-    await bot.initialize()
-    await bot.basic_tool_loop(request, root_folder, tool_names, pytest_goal_checker)
-    print(&#34;Run completed.&#34;)</code></pre>
+    with ai_shell.change_directory(&#34;src&#34;):
+        await bot.initialize()
+        await bot.basic_tool_loop(request, root_folder, tool_names, pytest_goal_checker)
+        print(&#34;Run completed.&#34;)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.demo_bots.test_writer_bot.pytest_goal_checker"><code class="name flex">
@@ -347,10 +356,10 @@ Write tests, run tests. You are done when the coverage is 80% or more.
             &#34; Remember: read the code with cat_markdown, write tests with write_new_file, run tests with pytest.&#34;
         )
 
-    with ai_shell.change_directory(&#34;src&#34;):
-        passed_tests, failed_tests, coverage, pytest_output = ai_shell.externals.pytest_call.count_pytest_results(
-            &#34;fish_tank&#34;, &#34;tests&#34;, 80
-        )
+    # host script must set pwd.
+    passed_tests, failed_tests, coverage, pytest_output = ai_shell.externals.pytest_call.count_pytest_results(
+        &#34;fish_tank&#34;, &#34;tests&#34;, 80
+    )
     if coverage &gt;= 80:
         return &#34;DONE&#34;
     if passed_tests &gt; initial_passed_tests and initial_coverage == coverage:

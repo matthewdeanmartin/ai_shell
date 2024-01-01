@@ -7,8 +7,8 @@ import logging
 from typing import Optional
 
 import ai_todo
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +47,8 @@ class TodoTool:
             str: A confirmation message indicating successful addition of the task.
         """
         self.task_manager.add_task(title, description, category, source_code_ref, assignee)
-        return "Successful"
+        summary = self.task_manager.get_stats()
+        return f"Successful added task {title}\n{summary}"
 
     @log()
     def remove_todo(self, title: str) -> str:
@@ -61,7 +62,8 @@ class TodoTool:
             str: A confirmation message indicating the task was successfully marked as finished.
         """
         self.task_manager.finish_task(title)
-        return "Successful"
+        summary = self.task_manager.get_stats()
+        return f"Successful removed task {title}\n{summary}"
 
     @log()
     def query_todos_by_regex(self, regex_pattern: str = r"[\s\S]+") -> str:
@@ -78,15 +80,29 @@ class TodoTool:
         return self.task_manager.query_by_title_keyword(regex_pattern)
 
     @log()
-    def query_todos_by_assignee(self) -> str:
+    def query_todos_by_assignee(self, assignee_name: str) -> str:
         """
         Queries tasks assigned to a specific assignee. Currently, the assignee is hard-coded as 'Developer'.
 
+        Args:
+            assignee_name (str): The name of the assignee to query tasks for.
+
         Returns:
-        str: The rendered Markdown string of tasks assigned to the specified assignee.
+            str: The rendered Markdown string of tasks assigned to the specified assignee.
         """
-        assignee_name = "Developer"
         return self.task_manager.query_by_assignee(assignee_name)
+
+    @log()
+    def list_valid_assignees(
+        self,
+    ) -> list[str]:
+        """
+        Lists the valid assignees for tasks.
+
+        Returns:
+            list[str]: The rendered Markdown string of valid assignees.
+        """
+        return self.task_manager.valid_assignees
 
 
 if __name__ == "__main__":

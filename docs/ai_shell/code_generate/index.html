@@ -93,7 +93,7 @@ __all__ = [&#34;generate_the_schema&#34;, &#34;generate_the_toolkit&#34;, &#34;g
         target_file (str): The target file path for the generated code.
     &#34;&#34;&#34;
     tools = &#34;&#34;
-    for _ns, json_schema in schemas.SCHEMAS.items():
+    for _ns, json_schema in schemas._SCHEMAS.items():
         for tool, _ in json_schema.items():
             tools += f&#39;            &#34;{tool}&#34; : self.{tool},\n&#39;
 
@@ -177,7 +177,7 @@ CONFIG = Config()
     middle = &#34;&#34;
     for ns, data in meta.items():
         middle += &#34;\n&#34;
-        for method, method_data in schemas.SCHEMAS[ns].items():
+        for method, method_data in schemas._SCHEMAS[ns].items():
             middle += &#34;\n&#34;
             middle += f&#34;def {method}_command(args):\n&#34;
             middle += f&#39;    &#34;&#34;&#34;Invoke {method}&#34;&#34;&#34;\n&#39;
@@ -195,7 +195,7 @@ CONFIG = Config()
         subparsers = parser.add_subparsers(dest=&#39;subcommand&#39;, help=&#39;sub-command help&#39;)
     &#34;&#34;&#34;
     for ns, _data in meta.items():
-        for method, method_data in schemas.SCHEMAS[ns].items():
+        for method, method_data in schemas._SCHEMAS[ns].items():
             escaped_method_description = (
                 cast(str, method_data.get(&#34;description&#34;, &#34;&#34;)).replace(&#34;&#39;&#34;, &#34;\\&#39;&#34;).replace(&#34;\n&#34;, &#34;\\n&#34;)
             )
@@ -298,7 +298,7 @@ if __name__ == &#39;__main__&#39;:
     with open(target_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as source:
         source.write(&#39;&#34;&#34;&#34;jsonschema for functions&#34;&#34;&#34;&#39;)
         source.write(&#34;\n\n&#34;)
-        source.write(f&#34;SCHEMAS = {pformat(schemas, indent=2)}&#34;)</code></pre>
+        source.write(f&#34;_SCHEMAS = {pformat(schemas, indent=2)}&#34;)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.code_generate.generate_the_toolkit"><code class="name flex">
@@ -321,7 +321,7 @@ if __name__ == &#39;__main__&#39;:
         target_file (str): Target file to write the generated code.
     &#34;&#34;&#34;
     tools = &#34;&#34;
-    for _ns, json_schema in schemas.SCHEMAS.items():
+    for _ns, json_schema in schemas._SCHEMAS.items():
         for tool, _ in json_schema.items():
             tools += f&#39;            &#34;{tool}&#34; : self.{tool},\n&#39;
 
@@ -331,6 +331,7 @@ Generate code, do not edit.
 from ai_shell.openai_support import ToolKitBase
 from typing import Any, cast, Callable, Optional
 
+from ai_shell.utils.config_manager import Config
 from ai_shell.cat_tool import CatTool
 from ai_shell.find_tool import FindTool
 from ai_shell.git_tool import GitTool
@@ -357,11 +358,11 @@ class ToolKit(ToolKitBase):
     \&#34;\&#34;\&#34;AI Shell Toolkit\&#34;\&#34;\&#34;\n\n
     def __init__(self, root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config:Config) -&gt; None:
         super().__init__(root_folder, token_model, global_max_lines, permitted_tools, config)
-        self.lookup: dict[str, Callable[[dict[str, Any]], Any]] = {{
+        self._lookup: dict[str, Callable[[dict[str, Any]], Any]] = {{
             {tools}
         }}
-        # Stateful tool support
-        self.tool_answer_collector = None
+        # Stateful tool support. Useless assignment to make mypy happy
+        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 &#34;&#34;&#34;
 
     prologue = {}
@@ -381,18 +382,14 @@ class ToolKit(ToolKitBase):
     prologue[&#34;grep&#34;] = &#34;tool = GrepTool(self.root_folder, self.config)&#34;
     prologue[&#34;token_counter&#34;] = &#34;tool = TokenCounterTool(self.root_folder, self.config)&#34;  # nosec
     prologue[&#34;todo&#34;] = &#34;tool = TodoTool(self.root_folder, self.config)&#34;
-    prologue[&#34;answer_collector&#34;] = (
-        &#34;if not self.tool_answer_collector:\n&#34;
-        &#34;            raise TypeError(&#39;tool cannot be None here&#39;)\n\n&#34;
-        &#34;        self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)&#34;
-    )
+    prologue[&#34;answer_collector&#34;] = &#34;self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)&#34;
     prologue[&#34;rewrite&#34;] = &#34;tool = RewriteTool(self.root_folder, self.config)&#34;
     prologue[&#34;pytest&#34;] = &#34;tool = PytestTool(self.root_folder, self.config)&#34;
 
     # Generate method code
     with open(target_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as code:
         code.write(header)
-        for ns, json_schema in schemas.SCHEMAS.items():
+        for ns, json_schema in schemas._SCHEMAS.items():
             pro = prologue[ns]
             method_code = generate_method_code(json_schema, pro, ns)
             code.write(method_code)</code></pre>

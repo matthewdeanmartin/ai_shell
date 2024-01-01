@@ -53,7 +53,7 @@ class SedTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def sed(self, file_path: str, commands: list[str]) -&gt; str:
@@ -238,7 +238,7 @@ if __name__ == &#34;__main__&#34;:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag(&#34;auto_cat&#34;)
+        self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
 
     @log()
     def sed(self, file_path: str, commands: list[str]) -&gt; str:

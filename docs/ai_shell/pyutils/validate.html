@@ -31,32 +31,35 @@
 Validate python by a variety of strategies.
 &#34;&#34;&#34;
 import ast
+import hashlib
+import os
 from dataclasses import dataclass
 from typing import Optional
+
 import ai_shell.externals as externals
 from ai_shell.externals.subprocess_utils import CommandResult
 
-import hashlib
-import os
 
-def hash_file(file_path:str)-&gt;str:
-    &#34;&#34;&#34; Compute the hash of a single file. &#34;&#34;&#34;
+def hash_file(file_path: str) -&gt; str:
+    &#34;&#34;&#34;Compute the hash of a single file.&#34;&#34;&#34;
     hasher = hashlib.sha256()
-    with open(file_path, &#39;rb&#39;) as file:
+    with open(file_path, &#34;rb&#34;) as file:
         buf = file.read(65536)  # Read the file in chunks
         while len(buf) &gt; 0:
             hasher.update(buf)
             buf = file.read(65536)
     return hasher.hexdigest()
 
-def hash_directory(directory_path:str)-&gt;dict[str, str]:
-    &#34;&#34;&#34; Recursively hash all files in a directory. &#34;&#34;&#34;
+
+def hash_directory(directory_path: str) -&gt; dict[str, str]:
+    &#34;&#34;&#34;Recursively hash all files in a directory.&#34;&#34;&#34;
     hashes = {}
-    for root, dirs, files in os.walk(directory_path):
+    for root, _dirs, files in os.walk(directory_path):
         for file in files:
             file_path = os.path.join(root, file)
             hashes[file_path] = hash_file(file_path)
     return hashes
+
 
 def is_valid_python_file(file_name: str) -&gt; bool:
     &#34;&#34;&#34;
@@ -105,10 +108,11 @@ def is_python_file(file: str) -&gt; bool:
     &#34;&#34;&#34;
     return file.endswith(&#34;.py&#34;)
 
+
 @dataclass
 class ValidationMessageForBot:
-    is_valid:bool
-    message:str
+    is_valid: bool
+    message: str
 
 
 class ValidateModule:
@@ -117,10 +121,9 @@ class ValidateModule:
         self.initial_errors = self.validate(early_exit=False)
         self.initial_hash = hash_directory(module_path)
 
-
-    def validate(self, early_exit:bool=True) -&gt; list[CommandResult]:
+    def validate(self, early_exit: bool = True) -&gt; list[CommandResult]:
         &#34;&#34;&#34;Validate with black, pylint, mypy. Looking for fatal errors&#34;&#34;&#34;
-        results_so_far:list[CommandResult] = []
+        results_so_far: list[CommandResult] = []
         ruff_result = externals.invoke_ruff(self.module_path)
         if ruff_result.return_code == 1:
             results_so_far.append(ruff_result)
@@ -145,7 +148,7 @@ class ValidateModule:
 
         return results_so_far
 
-    def explain_to_bot(self, current_errors:list[CommandResult])-&gt;ValidationMessageForBot:
+    def explain_to_bot(self, current_errors: list[CommandResult]) -&gt; ValidationMessageForBot:
         &#34;&#34;&#34;Explain to the bot what happened.&#34;&#34;&#34;
         current_hash = hash_directory(self.module_path)
         # Bot didn&#39;t do anything
@@ -154,39 +157,43 @@ class ValidateModule:
 
         # Bot didn&#39;t do anything but it&#39;s still broken
         if self.initial_hash == current_hash and current_errors:
-            message = f&#34;No changes made to the module, but it is still invalid python.\n\n&#34;
-            message += f&#34;Current state is:\n&#34;
+            message = &#34;No changes made to the module, but it is still invalid python.\n\n&#34;
+            message += &#34;Current state is:\n&#34;
             for result in current_errors:
                 message += f&#34;{result.to_markdown()}\n&#34;
             return ValidationMessageForBot(False, message)
 
         # Bot fixed it
         if self.initial_errors and not current_errors:
-            return ValidationMessageForBot(True, &#34;The module was invalid python before editing, but now it is valid python.&#34;)
+            return ValidationMessageForBot(
+                True, &#34;The module was invalid python before editing, but now it is valid python.&#34;
+            )
 
         # It was fine and bot broke it.
         if not self.initial_errors and current_errors:
-            message = f&#34;The module was valid python before editing, but now it is invalid python.\n\n&#34;
-            message += f&#34;Current state is:\n&#34;
+            message = &#34;The module was valid python before editing, but now it is invalid python.\n\n&#34;
+            message += &#34;Current state is:\n&#34;
             for result in current_errors:
                 message += f&#34;{result.to_markdown()}\n&#34;
             return ValidationMessageForBot(False, message)
 
         # The code was a mess and still is
         if self.initial_errors and current_errors:
-            message = f&#34;The module was invalid python before editing, and now it is still invalid python.\n\n&#34;
-            message += f&#34;Current state is:\n&#34;
+            message = &#34;The module was invalid python before editing, and now it is still invalid python.\n\n&#34;
+            message += &#34;Current state is:\n&#34;
             for result in current_errors:
                 message += f&#34;{result.to_markdown()}\n&#34;
             return ValidationMessageForBot(False, message)
 
         if not self.initial_errors and not current_errors:
-            return ValidationMessageForBot(True, &#34;The module was valid python before editing, and now it is still valid python.&#34;)
-
+            return ValidationMessageForBot(
+                True, &#34;The module was valid python before editing, and now it is still valid python.&#34;
+            )
 
         raise ValueError(&#34;This should be unreachable.&#34;)
 
-if __name__ == &#39;__main__&#39;:
+
+if __name__ == &#34;__main__&#34;:
     # check file on init.
     v = ValidateModule(&#34;../../src/fish_tank/__main__.py&#34;)
     # Check file now
@@ -211,10 +218,10 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def hash_directory(directory_path:str)-&gt;dict[str, str]:
-    &#34;&#34;&#34; Recursively hash all files in a directory. &#34;&#34;&#34;
+<pre><code class="python">def hash_directory(directory_path: str) -&gt; dict[str, str]:
+    &#34;&#34;&#34;Recursively hash all files in a directory.&#34;&#34;&#34;
     hashes = {}
-    for root, dirs, files in os.walk(directory_path):
+    for root, _dirs, files in os.walk(directory_path):
         for file in files:
             file_path = os.path.join(root, file)
             hashes[file_path] = hash_file(file_path)
@@ -230,10 +237,10 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def hash_file(file_path:str)-&gt;str:
-    &#34;&#34;&#34; Compute the hash of a single file. &#34;&#34;&#34;
+<pre><code class="python">def hash_file(file_path: str) -&gt; str:
+    &#34;&#34;&#34;Compute the hash of a single file.&#34;&#34;&#34;
     hasher = hashlib.sha256()
-    with open(file_path, &#39;rb&#39;) as file:
+    with open(file_path, &#34;rb&#34;) as file:
         buf = file.read(65536)  # Read the file in chunks
         while len(buf) &gt; 0:
             hasher.update(buf)
@@ -369,10 +376,9 @@ if __name__ == &#39;__main__&#39;:
         self.initial_errors = self.validate(early_exit=False)
         self.initial_hash = hash_directory(module_path)
 
-
-    def validate(self, early_exit:bool=True) -&gt; list[CommandResult]:
+    def validate(self, early_exit: bool = True) -&gt; list[CommandResult]:
         &#34;&#34;&#34;Validate with black, pylint, mypy. Looking for fatal errors&#34;&#34;&#34;
-        results_so_far:list[CommandResult] = []
+        results_so_far: list[CommandResult] = []
         ruff_result = externals.invoke_ruff(self.module_path)
         if ruff_result.return_code == 1:
             results_so_far.append(ruff_result)
@@ -397,7 +403,7 @@ if __name__ == &#39;__main__&#39;:
 
         return results_so_far
 
-    def explain_to_bot(self, current_errors:list[CommandResult])-&gt;ValidationMessageForBot:
+    def explain_to_bot(self, current_errors: list[CommandResult]) -&gt; ValidationMessageForBot:
         &#34;&#34;&#34;Explain to the bot what happened.&#34;&#34;&#34;
         current_hash = hash_directory(self.module_path)
         # Bot didn&#39;t do anything
@@ -406,35 +412,38 @@ if __name__ == &#39;__main__&#39;:
 
         # Bot didn&#39;t do anything but it&#39;s still broken
         if self.initial_hash == current_hash and current_errors:
-            message = f&#34;No changes made to the module, but it is still invalid python.\n\n&#34;
-            message += f&#34;Current state is:\n&#34;
+            message = &#34;No changes made to the module, but it is still invalid python.\n\n&#34;
+            message += &#34;Current state is:\n&#34;
             for result in current_errors:
                 message += f&#34;{result.to_markdown()}\n&#34;
             return ValidationMessageForBot(False, message)
 
         # Bot fixed it
         if self.initial_errors and not current_errors:
-            return ValidationMessageForBot(True, &#34;The module was invalid python before editing, but now it is valid python.&#34;)
+            return ValidationMessageForBot(
+                True, &#34;The module was invalid python before editing, but now it is valid python.&#34;
+            )
 
         # It was fine and bot broke it.
         if not self.initial_errors and current_errors:
-            message = f&#34;The module was valid python before editing, but now it is invalid python.\n\n&#34;
-            message += f&#34;Current state is:\n&#34;
+            message = &#34;The module was valid python before editing, but now it is invalid python.\n\n&#34;
+            message += &#34;Current state is:\n&#34;
             for result in current_errors:
                 message += f&#34;{result.to_markdown()}\n&#34;
             return ValidationMessageForBot(False, message)
 
         # The code was a mess and still is
         if self.initial_errors and current_errors:
-            message = f&#34;The module was invalid python before editing, and now it is still invalid python.\n\n&#34;
-            message += f&#34;Current state is:\n&#34;
+            message = &#34;The module was invalid python before editing, and now it is still invalid python.\n\n&#34;
+            message += &#34;Current state is:\n&#34;
             for result in current_errors:
                 message += f&#34;{result.to_markdown()}\n&#34;
             return ValidationMessageForBot(False, message)
 
         if not self.initial_errors and not current_errors:
-            return ValidationMessageForBot(True, &#34;The module was valid python before editing, and now it is still valid python.&#34;)
-
+            return ValidationMessageForBot(
+                True, &#34;The module was valid python before editing, and now it is still valid python.&#34;
+            )
 
         raise ValueError(&#34;This should be unreachable.&#34;)</code></pre>
 </details>
@@ -449,7 +458,7 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def explain_to_bot(self, current_errors:list[CommandResult])-&gt;ValidationMessageForBot:
+<pre><code class="python">def explain_to_bot(self, current_errors: list[CommandResult]) -&gt; ValidationMessageForBot:
     &#34;&#34;&#34;Explain to the bot what happened.&#34;&#34;&#34;
     current_hash = hash_directory(self.module_path)
     # Bot didn&#39;t do anything
@@ -458,35 +467,38 @@ if __name__ == &#39;__main__&#39;:
 
     # Bot didn&#39;t do anything but it&#39;s still broken
     if self.initial_hash == current_hash and current_errors:
-        message = f&#34;No changes made to the module, but it is still invalid python.\n\n&#34;
-        message += f&#34;Current state is:\n&#34;
+        message = &#34;No changes made to the module, but it is still invalid python.\n\n&#34;
+        message += &#34;Current state is:\n&#34;
         for result in current_errors:
             message += f&#34;{result.to_markdown()}\n&#34;
         return ValidationMessageForBot(False, message)
 
     # Bot fixed it
     if self.initial_errors and not current_errors:
-        return ValidationMessageForBot(True, &#34;The module was invalid python before editing, but now it is valid python.&#34;)
+        return ValidationMessageForBot(
+            True, &#34;The module was invalid python before editing, but now it is valid python.&#34;
+        )
 
     # It was fine and bot broke it.
     if not self.initial_errors and current_errors:
-        message = f&#34;The module was valid python before editing, but now it is invalid python.\n\n&#34;
-        message += f&#34;Current state is:\n&#34;
+        message = &#34;The module was valid python before editing, but now it is invalid python.\n\n&#34;
+        message += &#34;Current state is:\n&#34;
         for result in current_errors:
             message += f&#34;{result.to_markdown()}\n&#34;
         return ValidationMessageForBot(False, message)
 
     # The code was a mess and still is
     if self.initial_errors and current_errors:
-        message = f&#34;The module was invalid python before editing, and now it is still invalid python.\n\n&#34;
-        message += f&#34;Current state is:\n&#34;
+        message = &#34;The module was invalid python before editing, and now it is still invalid python.\n\n&#34;
+        message += &#34;Current state is:\n&#34;
         for result in current_errors:
             message += f&#34;{result.to_markdown()}\n&#34;
         return ValidationMessageForBot(False, message)
 
     if not self.initial_errors and not current_errors:
-        return ValidationMessageForBot(True, &#34;The module was valid python before editing, and now it is still valid python.&#34;)
-
+        return ValidationMessageForBot(
+            True, &#34;The module was valid python before editing, and now it is still valid python.&#34;
+        )
 
     raise ValueError(&#34;This should be unreachable.&#34;)</code></pre>
 </details>
@@ -500,9 +512,9 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def validate(self, early_exit:bool=True) -&gt; list[CommandResult]:
+<pre><code class="python">def validate(self, early_exit: bool = True) -&gt; list[CommandResult]:
     &#34;&#34;&#34;Validate with black, pylint, mypy. Looking for fatal errors&#34;&#34;&#34;
-    results_so_far:list[CommandResult] = []
+    results_so_far: list[CommandResult] = []
     ruff_result = externals.invoke_ruff(self.module_path)
     if ruff_result.return_code == 1:
         results_so_far.append(ruff_result)
@@ -542,8 +554,8 @@ if __name__ == &#39;__main__&#39;:
 </summary>
 <pre><code class="python">@dataclass
 class ValidationMessageForBot:
-    is_valid:bool
-    message:str</code></pre>
+    is_valid: bool
+    message: str</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>

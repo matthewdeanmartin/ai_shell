@@ -14,8 +14,8 @@ How is this different from a tool call?
 """
 from typing import Any, Optional
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 
 
 class AnswerCollectorTool:

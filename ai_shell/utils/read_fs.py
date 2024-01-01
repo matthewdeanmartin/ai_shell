@@ -74,12 +74,14 @@ def is_file_in_root_folder(file_path: str, root_folder: str) -> bool:
     if not os.path.isabs(file_path):
         file_path = root_folder + "/" + file_path
     absolute_file_path = os.path.abspath(file_path)
+
     absolute_root_folder = os.path.abspath(root_folder)
 
     # Use os.path.commonpath to check if the root folder is a prefix of the file path
     common_path = os.path.commonpath([absolute_file_path, absolute_root_folder])
     # This won't work on linux, but on Windows I'm getting e: and E:!
     is_same = common_path.lower() == absolute_root_folder.lower()
+
     if not is_same:
         logger.warning(f"File {absolute_file_path} is not in root folder {absolute_root_folder}")
     return is_same
@@ -180,6 +182,7 @@ def is_in_root_now(root_folder: str) -> bool:
     Returns:
     bool: True if `root_folder` is an absolute path and is the same as the current working directory, False otherwise.
     """
+    root_folder = str(Path(".").resolve())
     # Check if the path is absolute
     if os.path.isfile(root_folder):
         root_folder = os.path.dirname(root_folder)
@@ -207,7 +210,7 @@ def remove_root_folder(file_path: str, root_folder: str) -> str:
         str: The relative path of the file.
     """
     if not is_in_root_now(root_folder):
-        raise ValueError(f"Root folder must be the current working directory, current {os.getcwd()}")
+        raise ValueError(f"Root folder ({root_folder}) must be the current working directory, current {os.getcwd()}")
     # with temporary_change_dir(root_folder):
     root = Path(".").resolve()
     file = Path(file_path)

@@ -61,3 +61,58 @@ async def test_tk():
 
         result = await kit.process_tool_calls(run)
         assert result
+
+
+async def test_tk_markdown():
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Get the parent directory
+    parent_dir = os.path.dirname(script_dir)
+
+    parent_dir = os.path.dirname(parent_dir)
+
+    markdown_tools = []
+    all_names = just_tool_names()
+    for tool in all_names:
+        if tool.endswith("_markdown"):
+            match = tool[: -len("_markdown")]
+            if match in all_names:
+                markdown_tools.append(match)
+            else:
+                print(f"Markdown tool {tool} has no match!!")
+
+    # Change the current working directory to the parent directory
+    with temporary_change_dir(parent_dir):
+        names = markdown_tools
+        kit = ToolKit("tests", "gpt-3.5-turbo", 500, names, config=config_for_tests())
+        run = Run(
+            id="123",
+            assistant_id="123",
+            created_at="123",
+            expires_at="123",
+            file_ids=["123"],
+            instructions="123",
+            object="thread.run",
+            model="123",
+            status="queued",
+            thread_id="123",
+            tools=[],
+            required_action=RequiredAction(
+                type="submit_tool_outputs",
+                submit_tool_outputs=RequiredActionSubmitToolOutputs(
+                    tool_calls=[
+                        RequiredActionFunctionToolCall(
+                            id="123",
+                            type="function",
+                            function=Function(name=name, arguments="{'mime_type': 'text/markdown'}"),
+                        )
+                        for name in names
+                        if not name.startswith("pytest")
+                    ]
+                ),
+            ),
+        )
+
+        result = await kit.process_tool_calls(run)
+        assert result

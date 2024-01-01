@@ -3,12 +3,17 @@ Optimized for AI version of sed. For file editing.
 
 However, the bot keeps trying to use features of real sed that this tool doesn't support.
 """
+import logging
 import re
+from typing import Optional
 
+from ai_shell.ai_logs.log_to_bash import log
+from ai_shell.backup_restore import BackupRestore
 from ai_shell.cat_tool import CatTool
-from ai_shell.pyutils.validate import is_python_file, is_valid_python_source
+from ai_shell.pyutils.validate import ValidateModule, ValidationMessageForBot, is_python_file
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
+
+logger = logging.getLogger(__name__)
 
 
 class ReplaceTool:
@@ -22,7 +27,9 @@ class ReplaceTool:
         """
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
+        self.python_module = config.get_value("python_module")
+        self.utf8_errors = config.get_value("utf8_errors", "surrogateescape")
 
     @log()
     def replace_line_by_line(
@@ -53,7 +60,7 @@ class ReplaceTool:
             raise TypeError("No file_path, please provide file_path for each request.")
         if not old_text:
             raise TypeError("No old_text, please context so I can find the text to replace.")
-        with open(file_path, encoding="utf-8") as file:
+        with open(file_path, encoding="utf-8", errors=self.utf8_errors) as file:
             input_text = file.read()
         lines = []
         input_lines = input_text.splitlines()
@@ -66,7 +73,7 @@ class ReplaceTool:
         if not lines:
             raise TypeError("Nothing left after replace, something went wrong, cancelling.")
         final = "\n".join(lines)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
     @log()
     def replace_all(self, file_path: str, old_text: str, new_text: str) -> str:
@@ -92,10 +99,10 @@ class ReplaceTool:
             raise TypeError("No file_path, please provide file_path for each request.")
         if not old_text:
             raise TypeError("No old_text, please context so I can find the text to replace.")
-        with open(file_path, encoding="utf-8") as file:
+        with open(file_path, encoding="utf-8", errors=self.utf8_errors) as file:
             input_text = file.read()
         final = input_text.replace(old_text, new_text)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
     @log()
     def replace_with_regex(self, file_path: str, regex_match_expression: str, replacement: str) -> str:
@@ -120,12 +127,12 @@ class ReplaceTool:
             raise TypeError("No file_path, please provide file_path for each request.")
         if not regex_match_expression:
             raise TypeError("No regex_match_expression, please context so I can find the text to replace.")
-        with open(file_path, encoding="utf-8") as file:
+        with open(file_path, encoding="utf-8", errors=self.utf8_errors) as file:
             input_text = file.read()
         final = re.sub(regex_match_expression, replacement, input_text)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
-    def save_if_changed(self, file_path: str, final: str, input_text: str) -> str:
+    def _save_if_changed(self, file_path: str, final: str, input_text: str) -> str:
         """Saves the modified text to the file if changes have been made.
 
         Compares the original text with the modified text and writes the modified text
@@ -146,16 +153,17 @@ class ReplaceTool:
         if not final:
             raise TypeError("Something went wrong in replace and all text disappeared. Cancelling.")
 
-        if is_python_file(file_path):
-            is_valid, error = is_valid_python_source(final)
-            if not is_valid and error:
-                return f"Invalid Python source code. No changes made. {error.lineno} {error.msg} {error.text}"
-            if not is_valid:
-                return f"Invalid Python source code. No changes made. {error}."
-
         if input_text != final:
-            with open(file_path, "w", encoding="utf-8") as output_file:
+            BackupRestore.backup_file(file_path)
+            with open(file_path, "w", encoding="utf-8", errors=self.utf8_errors) as output_file:
                 output_file.write(final)
+
+            validation = self._validate_code(file_path)
+
+            if validation:
+                BackupRestore.revert_to_latest_backup(file_path)
+                return f"File not written because of problems.\n{validation.message}"
+
             if self.auto_cat:
                 feedback = "Changes applied without exception, please verify by other means.\n"
                 contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
@@ -165,3 +173,25 @@ class ReplaceTool:
             "No changes made, this means the old file contents are the same as the new. This has nothing "
             "to do with file permissions. Try again with a different match pattern."
         )
+
+    def _validate_code(self, full_path: str) -> Optional[ValidationMessageForBot]:
+        """
+        Validate python
+
+        Args:
+            full_path (str): The path to the file to validate.
+
+        Returns:
+            Optional[ValidationMessageForBot]: A validation message if the file is invalid, otherwise None.
+        """
+        if not is_python_file(full_path):
+            return None
+        if not self.python_module:
+            logger.warning("No python module set, skipping validation.")
+            return None
+        validator = ValidateModule(self.python_module)
+        results = validator.validate()
+        explanation = validator.explain_to_bot(results)
+        if explanation.is_valid:
+            return None
+        return explanation

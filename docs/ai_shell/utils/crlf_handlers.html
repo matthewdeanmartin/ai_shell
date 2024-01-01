@@ -41,12 +41,15 @@ class LineEndingConverter:
             file_path (str): The path of the file to convert.
         &#34;&#34;&#34;
         self.file_path = file_path
-        self.lines = None
-        self.line_endings_type = None
+        self.lines: list[bytes] = []
+        self.line_endings_type = &#34;&#34;
 
-    def check_line_endings(self):
+    def check_line_endings(self) -&gt; str:
         &#34;&#34;&#34;
         Check and store the type of line endings (CRLF, LF, or Mixed).
+
+        Returns:
+            str: The type of line endings
         &#34;&#34;&#34;
         has_crlf = False
         has_lf = False
@@ -76,7 +79,7 @@ class LineEndingConverter:
 
         return self.line_endings_type
 
-    def dos2unix(self):
+    def dos2unix(self) -&gt; None:
         &#34;&#34;&#34;
         Convert to Unix line endings (LF), using the stored file data.
         &#34;&#34;&#34;
@@ -90,7 +93,7 @@ class LineEndingConverter:
                     file.write(line)
         self.line_endings_type = &#34;LF&#34;
 
-    def unix2dos(self):
+    def unix2dos(self) -&gt; None:
         &#34;&#34;&#34;
         Convert to DOS line endings (CRLF), using the stored file data.
         &#34;&#34;&#34;
@@ -154,12 +157,15 @@ if __name__ == &#34;__main__&#34;:
             file_path (str): The path of the file to convert.
         &#34;&#34;&#34;
         self.file_path = file_path
-        self.lines = None
-        self.line_endings_type = None
+        self.lines: list[bytes] = []
+        self.line_endings_type = &#34;&#34;
 
-    def check_line_endings(self):
+    def check_line_endings(self) -&gt; str:
         &#34;&#34;&#34;
         Check and store the type of line endings (CRLF, LF, or Mixed).
+
+        Returns:
+            str: The type of line endings
         &#34;&#34;&#34;
         has_crlf = False
         has_lf = False
@@ -189,7 +195,7 @@ if __name__ == &#34;__main__&#34;:
 
         return self.line_endings_type
 
-    def dos2unix(self):
+    def dos2unix(self) -&gt; None:
         &#34;&#34;&#34;
         Convert to Unix line endings (LF), using the stored file data.
         &#34;&#34;&#34;
@@ -203,7 +209,7 @@ if __name__ == &#34;__main__&#34;:
                     file.write(line)
         self.line_endings_type = &#34;LF&#34;
 
-    def unix2dos(self):
+    def unix2dos(self) -&gt; None:
         &#34;&#34;&#34;
         Convert to DOS line endings (CRLF), using the stored file data.
         &#34;&#34;&#34;
@@ -221,17 +227,25 @@ if __name__ == &#34;__main__&#34;:
 <h3>Methods</h3>
 <dl>
 <dt id="ai_shell.utils.crlf_handlers.LineEndingConverter.check_line_endings"><code class="name flex">
-<span>def <span class="ident">check_line_endings</span></span>(<span>self)</span>
+<span>def <span class="ident">check_line_endings</span></span>(<span>self) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Check and store the type of line endings (CRLF, LF, or Mixed).</p></div>
+<div class="desc"><p>Check and store the type of line endings (CRLF, LF, or Mixed).</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The type of line endings</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def check_line_endings(self):
+<pre><code class="python">def check_line_endings(self) -&gt; str:
     &#34;&#34;&#34;
     Check and store the type of line endings (CRLF, LF, or Mixed).
+
+    Returns:
+        str: The type of line endings
     &#34;&#34;&#34;
     has_crlf = False
     has_lf = False
@@ -263,7 +277,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="ai_shell.utils.crlf_handlers.LineEndingConverter.dos2unix"><code class="name flex">
-<span>def <span class="ident">dos2unix</span></span>(<span>self)</span>
+<span>def <span class="ident">dos2unix</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Convert to Unix line endings (LF), using the stored file data.</p></div>
@@ -271,7 +285,7 @@ if __name__ == &#34;__main__&#34;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def dos2unix(self):
+<pre><code class="python">def dos2unix(self) -&gt; None:
     &#34;&#34;&#34;
     Convert to Unix line endings (LF), using the stored file data.
     &#34;&#34;&#34;
@@ -287,7 +301,7 @@ if __name__ == &#34;__main__&#34;:
 </details>
 </dd>
 <dt id="ai_shell.utils.crlf_handlers.LineEndingConverter.unix2dos"><code class="name flex">
-<span>def <span class="ident">unix2dos</span></span>(<span>self)</span>
+<span>def <span class="ident">unix2dos</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Convert to DOS line endings (CRLF), using the stored file data.</p></div>
@@ -295,7 +309,7 @@ if __name__ == &#34;__main__&#34;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def unix2dos(self):
+<pre><code class="python">def unix2dos(self) -&gt; None:
     &#34;&#34;&#34;
     Convert to DOS line endings (CRLF), using the stored file data.
     &#34;&#34;&#34;

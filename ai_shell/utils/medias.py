@@ -3,16 +3,19 @@ Support various media types without a function for each.
 """
 import csv
 import io
-from typing import Any
+import logging
+from typing import Any, Union
 
-import markpickle
 import toml
 import yaml
 
+logger = logging.getLogger(__name__)
 
-def convert_to_media_type(result: dict[str, Any], media_type: str) -> dict[str, str]:
+
+def convert_to_media_type(result: dict[str, Any], media_type: str) -> Union[str, dict[str, Any]]:
     """
-    Converts the given dictionary to a specified media type format.
+    Converts the given dictionary to a string that will be returned as a single great big
+    string. The bot always gets json, so a json encoded string goes across the wire.
 
     Args:
         result: The dictionary to be converted.
@@ -24,24 +27,25 @@ def convert_to_media_type(result: dict[str, Any], media_type: str) -> dict[str, 
     Raises:
         ValueError: If the specified media type is not supported.
     """
-    value = ""
     if media_type == "text/csv":
-        value = dict_to_csv(result)
-    elif media_type == "text/toml":
-        value = toml.dumps(result)
-    elif media_type == "text/yaml":
-        value = yaml.dump(result)
-    elif media_type == "text/markdown":
-        config = markpickle.Config()
-        config.serialize_dict_as_table = False
-        config.serialize_child_dict_as_table = False
-        value = markpickle.dumps(result, config=config)
-    else:
-        raise ValueError("Unsupported media type")
-    return {"media_type": media_type, "value": value}
+        logger.info("Converting to csv")
+        return dict_to_csv(result)
+    if media_type == "text/toml":
+        logger.info("Converting to toml")
+        return toml.dumps(result)
+    if media_type == "text/yaml":
+        logger.info("Converting to yaml")
+        return yaml.dump(result)
+    # elif media_type == "text/markdown":
+    #     config = markpickle.Config()
+    #     config.serialize_dict_as_table = False
+    #     config.serialize_child_dict_as_table = False
+    #     value = markpickle.dumps(result, config=config)
+    logger.warning(f"Unsupported media type: {media_type}")
+    return result
 
 
-def dict_to_csv(result: dict[str, Any]) -> str:
+def dict_to_csv(result: Union[dict[str, Any], list[str], str]) -> str:
     """
     Converts a dictionary to a CSV format string.
 
@@ -53,6 +57,12 @@ def dict_to_csv(result: dict[str, Any]) -> str:
     """
     output = io.StringIO()
     writer = csv.writer(output)
-    for key, value in result.items():
-        writer.writerow([key, value])
+    if isinstance(result, dict):
+        for key, value in result.items():
+            writer.writerow([key, value])
+    if isinstance(result, list):
+        for item in result:
+            writer.writerow([item])
+    if isinstance(result, str):
+        writer.writerow([result])
     return output.getvalue()

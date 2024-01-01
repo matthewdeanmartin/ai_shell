@@ -5,10 +5,10 @@ However, the bot keeps trying to use features of real sed that this tool doesn't
 """
 import re
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.cat_tool import CatTool
 from ai_shell.pyutils.validate import is_python_file, is_valid_python_source
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder
 
 
@@ -23,7 +23,8 @@ class SedTool:
         """
         self.root_folder = root_folder
         self.config = config
-        self.auto_cat = config.get_flag("auto_cat")
+        self.auto_cat = config.get_flag("auto_cat", True)
+        self.utf8_errors = config.get_value("utf8_errors", "surrogateescape")
 
     @log()
     def sed(self, file_path: str, commands: list[str]) -> str:
@@ -50,7 +51,7 @@ class SedTool:
         if not is_file_in_root_folder(file_path, self.root_folder):
             raise ValueError(f"File {file_path} is not in root folder {self.root_folder}.")
 
-        with open(file_path, encoding="utf-8") as file:
+        with open(file_path, encoding="utf-8", errors=self.utf8_errors) as file:
             input_text = file.read()
         output_text = SedTool._process_sed(input_text, commands)
         if is_python_file(file_path):

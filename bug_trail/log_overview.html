@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Logs Overview</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Error Logs Overview</h1>
+    <table>
+        <tr>
+            <!-- Table headers for each field -->
+            <th>Details</th>
+            <th>Timestamp</th>
+            <th>Level</th>
+            <th>Message</th>
+            <th>Filename</th>
+            <th>Function Name</th>
+            <th>Line No</th>
+            <th>Module</th>
+            <th>Process ID</th>
+            <th>Thread Name</th>
+            <!-- Add more headers as needed -->
+        </tr>
+        {% for log in logs %}
+        <tr>
+            <td><a href="{{ log.detailed_filename }}">View Details</a></td>
+            <!-- Table data for each log record -->
+            <td>{{ log.created }}</td>
+            <td>{{ log.levelname }}</td>
+            <td>{{ log.msg }}</td>
+            <td>{{ log.filename }}</td>
+            <td>{{ log.funcName }}</td>
+            <td>{{ log.lineno }}</td>
+            <td>{{ log.module }}</td>
+            <td>{{ log.process }}</td>
+            <td>{{ log.threadName }}</td>
+            <!-- Add more data fields as needed -->
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

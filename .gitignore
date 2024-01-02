@@ -170,3 +170,5 @@ ai_shell/dialog_log/
 /api_logs/
 
 ai_shell.toml
+/bug_trail/logs/
+/bug_trail/error_log.db

@@ -81,7 +81,7 @@ def render_main(db_path: str, log_folder: str) -> None:
     current = get_containing_folder_path(__file__)
     env = Environment(loader=FileSystemLoader(current))
     env.filters["pretty"] = pretty_column_name
-    template = env.get_template(f"{current}/log_overview.html")
+    template = env.get_template("log_overview.html")
 
     log_data = fetch_log_data(db_path)
 
@@ -113,7 +113,7 @@ def render_detail(db_path: str, log_folder: str) -> None:
     log_data = fetch_log_data_grouped(db_path)  # Your log records here
 
     # Render the template with the selected log data
-    template = env.get_template(f"{current}/log_detail.html")
+    template = env.get_template("log_detail.html")
 
     for log_entry in log_data:
         # Selected log record for display

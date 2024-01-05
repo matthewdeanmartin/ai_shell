@@ -98,6 +98,9 @@ pytest-cov = ">=4.1.0"
 pylint = ">=3.0.2"
 ruff = ">=0.1.9"
 
+# logging
+bug-trail-core = ">=2.0.0"
+
 ## Demo support
 #importlib_resources = ">=6.1.1"
 
@@ -266,3 +269,9 @@ pylint = { description = "Python Linter", version = "^1.0.0", version_switch = "
 black = { description = "Python formatter", version = "^1.0.0", version_switch = "--version" }
 pygount = { description = "Python lines of code counter", version = "^1.0.0", version_switch = "--version" }
 ruff = { description = "Python linter and formatter", version = "^1.0.0", version_switch = "--version" }
+
+[tool.bug_trail]
+app_name= "ai_shell"
+app_author= "matthewdeanmartin"
+source_folder = "ai_shell"
+#ctags_file = "fish_tank.tags"

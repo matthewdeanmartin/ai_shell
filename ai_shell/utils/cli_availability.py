@@ -4,11 +4,14 @@ Check if an external tool is expected and available on the PATH.
 Also, check version.
 """
 
+import logging
 import shutil
 import subprocess  # nosec
 from typing import Optional
 
 import toml
+
+logger = logging.getLogger(__name__)
 
 
 def read_cli_tools_from_pyproject(file_path: str) -> dict[str, dict[str, str]]:
@@ -26,6 +29,7 @@ def read_cli_tools_from_pyproject(file_path: str) -> dict[str, dict[str, str]]:
             pyproject_data = toml.load(file)
         return pyproject_data.get("tool", {}).get("cli-tools", {})
     except Exception as e:
+        logger.error(e)
         print(f"Error reading pyproject.toml: {e}")
         return {}
 
@@ -57,6 +61,7 @@ def check_tool_availability(tool_name: str, version_switch: Optional[str] = None
             else:
                 version = result.stdout.strip()
         except Exception as exception:
+            logger.error(exception)
             print(exception)
 
     return True, version

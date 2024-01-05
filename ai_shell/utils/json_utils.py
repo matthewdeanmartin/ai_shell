@@ -5,13 +5,14 @@ import dataclasses
 import datetime
 import http
 import json as slowjson
+import logging
 import types
 from typing import Any
 
 import orjson
 import untruncate_json
 
-# TODO: Use orjson because it is faster.
+logger = logging.getLogger(__name__)
 
 
 class FatalConfigurationError(Exception):
@@ -64,6 +65,7 @@ def try_everything(args_text: str) -> Any:
             arguments = orjson.loads(args_text)
             return arguments
         except orjson.JSONDecodeError as error:
+            logger.error(error)
             if not attempted:
                 # first fall back
                 args_text = untruncate_json.complete(args_text)
@@ -100,6 +102,7 @@ def exception_to_rfc7807_dict(exception: Exception) -> dict[str, Any]:
     If an exception is not in the predefined mapping, the status code defaults to 500 (Internal Server Error).
     """
     if isinstance(exception, FatalConfigurationError):
+        logger.error(exception)
         print("FatalConfigurationError: " + str(exception))
         exit(1)
 

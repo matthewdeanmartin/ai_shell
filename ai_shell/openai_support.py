@@ -130,13 +130,16 @@ class ToolKitBase:
                     if result == "" or result == '""':
                         logger.warning(f"Blank result from {name}. Why? {arguments}")
                         # raise FatalToolException("Blank result, why?.")
-                except FatalToolException:
+                except FatalToolException as fatal_tool_exception:
+                    logger.error(fatal_tool_exception)
                     # bot can't handle this, don't report, stop.
                     raise
-                except FatalConfigurationError:
+                except FatalConfigurationError as fatal_configuration_exception:
+                    logger.error(fatal_configuration_exception)
                     # bot can't handle this, don't report stop.
                     raise
                 except Exception as exception:
+                    logger.error(exception)
                     self.tool_usage_stats[name]["failure"] += 1
                     print(exception)
                     traceback.print_exc()
@@ -162,8 +165,9 @@ class ToolKitBase:
             try:
                 json_result = json.dumps(result, default=loosy_goosy_default_encoder).decode("utf-8")
             except TypeError as te:
+                logger.error(te)
                 logger.error(f"Error encoding result: {te}")
-                logger.error(f"result: {result}")
+                logger.error(f"Result that json can't handle: {result}")
                 raise
             tool_result = {"tool_call_id": tool_call.id, "output": json_result}
             write_json_to_logs(tool_call, f"tool_call_{name}")

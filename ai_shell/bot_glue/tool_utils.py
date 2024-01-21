@@ -62,7 +62,7 @@ async def loop_tools(
                 raise TypeError("Missing required_action")
             for tool_call in run.required_action.submit_tool_outputs.tool_calls:
                 tool_use_count += 1
-                dialog_logger_md.add_tool(tool_call.function.name, tool_call.function.arguments)
+                dialog_logger_md.add_tool(tool_call.id, tool_call.function.name, tool_call.function.arguments)
             results = await kit.process_tool_calls(run, print)
             dialog_logger_md.add_tool_result(results)
             # submit results

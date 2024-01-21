@@ -43,7 +43,7 @@
 I created this so I could create a swarm of bots to collaboratively work on a task. As it turns out, sub-bots or
 subbots, would be useful for tool usage.
 
-Subbots
+### Subbots
 
 - tool selection. Too many tools or extraneous tools confuse the bot.
 - prompt improvement. The bot can often write a better prompt.

@@ -113,11 +113,11 @@ class ToolKit(ToolKitBase):
             &#34;replace_all&#34;: self.replace_all,
             &#34;replace_line_by_line&#34;: self.replace_line_by_line,
             &#34;replace_with_regex&#34;: self.replace_with_regex,
-            &#34;save_if_changed&#34;: self.save_if_changed,
             &#34;rewrite_file&#34;: self.rewrite_file,
             &#34;write_new_file&#34;: self.write_new_file,
             &#34;sed&#34;: self.sed,
             &#34;add_todo&#34;: self.add_todo,
+            &#34;list_valid_assignees&#34;: self.list_valid_assignees,
             &#34;query_todos_by_assignee&#34;: self.query_todos_by_assignee,
             &#34;query_todos_by_regex&#34;: self.query_todos_by_regex,
             &#34;remove_todo&#34;: self.remove_todo,
@@ -937,30 +937,6 @@ class ToolKit(ToolKitBase):
             file_path=file_path, regex_match_expression=regex_match_expression, replacement=replacement
         )
 
-    def save_if_changed(self, arguments: dict[str, Any]) -&gt; Any:
-        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        tool = ReplaceTool(self.root_folder, self.config)
-
-        file_path = cast(
-            str,
-            arguments.get(
-                &#34;file_path&#34;,
-            ),
-        )
-        final = cast(
-            str,
-            arguments.get(
-                &#34;final&#34;,
-            ),
-        )
-        input_text = cast(
-            str,
-            arguments.get(
-                &#34;input_text&#34;,
-            ),
-        )
-        return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)
-
     def rewrite_file(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
         tool = RewriteTool(self.root_folder, self.config)
@@ -1053,11 +1029,23 @@ class ToolKit(ToolKitBase):
             assignee=assignee, category=category, description=description, source_code_ref=source_code_ref, title=title
         )
 
+    def list_valid_assignees(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        return tool.list_valid_assignees()
+
     def query_todos_by_assignee(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
         tool = TodoTool(self.root_folder, self.config)
 
-        return tool.query_todos_by_assignee()
+        assignee_name = cast(
+            str,
+            arguments.get(
+                &#34;assignee_name&#34;,
+            ),
+        )
+        return tool.query_todos_by_assignee(assignee_name=assignee_name)
 
     def query_todos_by_regex(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
@@ -1179,11 +1167,11 @@ class ToolKit(ToolKitBase):
             &#34;replace_all&#34;: self.replace_all,
             &#34;replace_line_by_line&#34;: self.replace_line_by_line,
             &#34;replace_with_regex&#34;: self.replace_with_regex,
-            &#34;save_if_changed&#34;: self.save_if_changed,
             &#34;rewrite_file&#34;: self.rewrite_file,
             &#34;write_new_file&#34;: self.write_new_file,
             &#34;sed&#34;: self.sed,
             &#34;add_todo&#34;: self.add_todo,
+            &#34;list_valid_assignees&#34;: self.list_valid_assignees,
             &#34;query_todos_by_assignee&#34;: self.query_todos_by_assignee,
             &#34;query_todos_by_regex&#34;: self.query_todos_by_regex,
             &#34;remove_todo&#34;: self.remove_todo,
@@ -2003,30 +1991,6 @@ class ToolKit(ToolKitBase):
             file_path=file_path, regex_match_expression=regex_match_expression, replacement=replacement
         )
 
-    def save_if_changed(self, arguments: dict[str, Any]) -&gt; Any:
-        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        tool = ReplaceTool(self.root_folder, self.config)
-
-        file_path = cast(
-            str,
-            arguments.get(
-                &#34;file_path&#34;,
-            ),
-        )
-        final = cast(
-            str,
-            arguments.get(
-                &#34;final&#34;,
-            ),
-        )
-        input_text = cast(
-            str,
-            arguments.get(
-                &#34;input_text&#34;,
-            ),
-        )
-        return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)
-
     def rewrite_file(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
         tool = RewriteTool(self.root_folder, self.config)
@@ -2119,11 +2083,23 @@ class ToolKit(ToolKitBase):
             assignee=assignee, category=category, description=description, source_code_ref=source_code_ref, title=title
         )
 
+    def list_valid_assignees(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        return tool.list_valid_assignees()
+
     def query_todos_by_assignee(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
         tool = TodoTool(self.root_folder, self.config)
 
-        return tool.query_todos_by_assignee()
+        assignee_name = cast(
+            str,
+            arguments.get(
+                &#34;assignee_name&#34;,
+            ),
+        )
+        return tool.query_todos_by_assignee(assignee_name=assignee_name)
 
     def query_todos_by_regex(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
@@ -2986,6 +2962,22 @@ class ToolKit(ToolKitBase):
     return tool.is_ignored_by_gitignore(file_path=file_path, gitignore_path=gitignore_path)</code></pre>
 </details>
 </dd>
+<dt id="ai_shell.openai_toolkit.ToolKit.list_valid_assignees"><code class="name flex">
+<span>def <span class="ident">list_valid_assignees</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def list_valid_assignees(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = TodoTool(self.root_folder, self.config)
+
+    return tool.list_valid_assignees()</code></pre>
+</details>
+</dd>
 <dt id="ai_shell.openai_toolkit.ToolKit.ls"><code class="name flex">
 <span>def <span class="ident">ls</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
 </code></dt>
@@ -3058,7 +3050,13 @@ class ToolKit(ToolKitBase):
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
     tool = TodoTool(self.root_folder, self.config)
 
-    return tool.query_todos_by_assignee()</code></pre>
+    assignee_name = cast(
+        str,
+        arguments.get(
+            &#34;assignee_name&#34;,
+        ),
+    )
+    return tool.query_todos_by_assignee(assignee_name=assignee_name)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.openai_toolkit.ToolKit.query_todos_by_regex"><code class="name flex">
@@ -3544,40 +3542,6 @@ class ToolKit(ToolKitBase):
     return tool.rewrite_file(file_path=file_path, text=text)</code></pre>
 </details>
 </dd>
-<dt id="ai_shell.openai_toolkit.ToolKit.save_if_changed"><code class="name flex">
-<span>def <span class="ident">save_if_changed</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Generated Do Not Edit</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save_if_changed(self, arguments: dict[str, Any]) -&gt; Any:
-    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    tool = ReplaceTool(self.root_folder, self.config)
-
-    file_path = cast(
-        str,
-        arguments.get(
-            &#34;file_path&#34;,
-        ),
-    )
-    final = cast(
-        str,
-        arguments.get(
-            &#34;final&#34;,
-        ),
-    )
-    input_text = cast(
-        str,
-        arguments.get(
-            &#34;input_text&#34;,
-        ),
-    )
-    return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)</code></pre>
-</details>
-</dd>
 <dt id="ai_shell.openai_toolkit.ToolKit.sed"><code class="name flex">
 <span>def <span class="ident">sed</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
 </code></dt>
@@ -3691,6 +3655,7 @@ class ToolKit(ToolKitBase):
 <ul class="hlist">
 <li><code><b><a title="ai_shell.openai_support.ToolKitBase" href="openai_support.html#ai_shell.openai_support.ToolKitBase">ToolKitBase</a></b></code>:
 <ul class="hlist">
+<li><code><a title="ai_shell.openai_support.ToolKitBase.convert_media_type_arg_to_method_name" href="openai_support.html#ai_shell.openai_support.ToolKitBase.convert_media_type_arg_to_method_name">convert_media_type_arg_to_method_name</a></code></li>
 <li><code><a title="ai_shell.openai_support.ToolKitBase.get_tool_usage_for" href="openai_support.html#ai_shell.openai_support.ToolKitBase.get_tool_usage_for">get_tool_usage_for</a></code></li>
 <li><code><a title="ai_shell.openai_support.ToolKitBase.process_tool_calls" href="openai_support.html#ai_shell.openai_support.ToolKitBase.process_tool_calls">process_tool_calls</a></code></li>
 <li><code><a title="ai_shell.openai_support.ToolKitBase.tool_usage_stats" href="openai_support.html#ai_shell.openai_support.ToolKitBase.tool_usage_stats">tool_usage_stats</a></code></li>
@@ -3747,6 +3712,7 @@ class ToolKit(ToolKitBase):
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.insert_text_after_multiline_context" href="#ai_shell.openai_toolkit.ToolKit.insert_text_after_multiline_context">insert_text_after_multiline_context</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.insert_text_at_start_or_end" href="#ai_shell.openai_toolkit.ToolKit.insert_text_at_start_or_end">insert_text_at_start_or_end</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.is_ignored_by_gitignore" href="#ai_shell.openai_toolkit.ToolKit.is_ignored_by_gitignore">is_ignored_by_gitignore</a></code></li>
+<li><code><a title="ai_shell.openai_toolkit.ToolKit.list_valid_assignees" href="#ai_shell.openai_toolkit.ToolKit.list_valid_assignees">list_valid_assignees</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.ls" href="#ai_shell.openai_toolkit.ToolKit.ls">ls</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.ls_markdown" href="#ai_shell.openai_toolkit.ToolKit.ls_markdown">ls_markdown</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.pytest" href="#ai_shell.openai_toolkit.ToolKit.pytest">pytest</a></code></li>
@@ -3768,7 +3734,6 @@ class ToolKit(ToolKitBase):
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.report_tuple" href="#ai_shell.openai_toolkit.ToolKit.report_tuple">report_tuple</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.report_xml" href="#ai_shell.openai_toolkit.ToolKit.report_xml">report_xml</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.rewrite_file" href="#ai_shell.openai_toolkit.ToolKit.rewrite_file">rewrite_file</a></code></li>
-<li><code><a title="ai_shell.openai_toolkit.ToolKit.save_if_changed" href="#ai_shell.openai_toolkit.ToolKit.save_if_changed">save_if_changed</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.sed" href="#ai_shell.openai_toolkit.ToolKit.sed">sed</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.tail" href="#ai_shell.openai_toolkit.ToolKit.tail">tail</a></code></li>
 <li><code><a title="ai_shell.openai_toolkit.ToolKit.tail_markdown" href="#ai_shell.openai_toolkit.ToolKit.tail_markdown">tail_markdown</a></code></li>

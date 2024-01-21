@@ -35,6 +35,7 @@ import zipfile
 from importlib.resources import as_file, files
 from pathlib import Path
 
+from ai_shell.demo_bots.check_tools import validate_environment
 from ai_shell.utils.config_manager import Config
 
 
@@ -78,6 +79,10 @@ def initialize() -&gt; None:
             return
     else:
         print(&#34;The src folder exists. You are good to go.&#34;)
+
+    if not validate_environment():
+        print(&#34;Environment not ready, exiting&#34;)
+        return
 
     print(&#34;Would you like to grant permission for the demo to modify the src folder? (y/n)&#34;)
     response = input()
@@ -182,6 +187,10 @@ Check for openai key and .env file. If not found, explain how to get it and put 
             return
     else:
         print(&#34;The src folder exists. You are good to go.&#34;)
+
+    if not validate_environment():
+        print(&#34;Environment not ready, exiting&#34;)
+        return
 
     print(&#34;Would you like to grant permission for the demo to modify the src folder? (y/n)&#34;)
     response = input()

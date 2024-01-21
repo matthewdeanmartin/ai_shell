@@ -136,7 +136,7 @@ files. If you use rewrite, don't omit original code!
                 pretty_loc(lines_of_code) + f"\n\n Code disappeared! There used to be {initial_lines_of_code}"
                 f"lines of code, now there are only {lines_of_code.code_count}! You're supposed to document not delete."
             )
-        return pretty_loc(lines_of_code) + "\n\n and thats not enough documentation. Please try again. You can do it!"
+        return pretty_loc(lines_of_code) + "\n\n and that's not enough documentation. Please try again. You can do it!"
 
     config = ai_shell.Config()
     config.set_flag("only_add_text", True)

@@ -30,11 +30,9 @@
 <pre><code class="python">&#34;&#34;&#34;
 Utility code for testing app via console.
 &#34;&#34;&#34;
-import json
-import sys
 from typing import Any
 
-from ai_shell.utils.json_utils import LoosyGoosyEncoder
+import orjson
 
 
 def pretty_console(result: Any) -&gt; None:
@@ -46,7 +44,8 @@ def pretty_console(result: Any) -&gt; None:
     if isinstance(result, str):
         print(result)
     else:
-        json.dump(result, sys.stdout, indent=4, cls=LoosyGoosyEncoder)</code></pre>
+        print(orjson.dumps(result, option=orjson.OPT_INDENT_2).decode())
+        # json.dump(result, sys.stdout, indent=4, cls=LoosyGoosyEncoderForSlowJson)</code></pre>
 </details>
 </section>
 <section>
@@ -79,7 +78,8 @@ def pretty_console(result: Any) -&gt; None:
     if isinstance(result, str):
         print(result)
     else:
-        json.dump(result, sys.stdout, indent=4, cls=LoosyGoosyEncoder)</code></pre>
+        print(orjson.dumps(result, option=orjson.OPT_INDENT_2).decode())
+        # json.dump(result, sys.stdout, indent=4, cls=LoosyGoosyEncoderForSlowJson)</code></pre>
 </details>
 </dd>
 </dl>

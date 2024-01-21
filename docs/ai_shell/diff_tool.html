@@ -32,8 +32,8 @@ Apply patch with unidiff instead of Git
 &#34;&#34;&#34;
 import unidiff
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 
 
 class DiffTool:
@@ -50,6 +50,7 @@ class DiffTool:
         self.root_folder: str = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def apply_git_patch(self, diff_string: str, target_file: str) -&gt; str:
@@ -85,7 +86,7 @@ class DiffTool:
             file.writelines(patched_file)
 
         if self.auto_cat:
-            with open(target_file, encoding=&#34;utf-8&#34;) as file:
+            with open(target_file, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
                 return &#34;File after patching: \n\n&#34; + file.read()
         return &#34;No errors raised during application of patch&#34;
 
@@ -144,6 +145,7 @@ if __name__ == &#34;__main__&#34;:
         self.root_folder: str = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def apply_git_patch(self, diff_string: str, target_file: str) -&gt; str:
@@ -179,7 +181,7 @@ if __name__ == &#34;__main__&#34;:
             file.writelines(patched_file)
 
         if self.auto_cat:
-            with open(target_file, encoding=&#34;utf-8&#34;) as file:
+            with open(target_file, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
                 return &#34;File after patching: \n\n&#34; + file.read()
         return &#34;No errors raised during application of patch&#34;</code></pre>
 </details>
@@ -240,7 +242,7 @@ def apply_git_patch(self, diff_string: str, target_file: str) -&gt; str:
         file.writelines(patched_file)
 
     if self.auto_cat:
-        with open(target_file, encoding=&#34;utf-8&#34;) as file:
+        with open(target_file, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             return &#34;File after patching: \n\n&#34; + file.read()
     return &#34;No errors raised during application of patch&#34;</code></pre>
 </details>

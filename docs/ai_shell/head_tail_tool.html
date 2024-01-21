@@ -33,8 +33,9 @@ AI optimized head/tail tool
 import logging
 from typing import Optional
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
+from ai_shell.utils.cwd_utils import change_directory
 from ai_shell.utils.read_fs import is_file_in_root_folder
 
 logger = logging.getLogger(__name__)
@@ -144,9 +145,37 @@ class HeadTailTool:
 
             # Read by lines if byte_count is not specified
             if mode == &#34;head&#34;:
-                return [next(file).decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for _ in range(lines)]
+                head_lines = []
+                for _ in range(lines):
+                    try:
+                        line = next(file).decode(&#34;utf-8&#34;)
+                        head_lines.append(line.rstrip(&#34;\r\n&#34;))
+                    except StopIteration:
+                        break
+                return head_lines
+                # return [next(file).decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for _ in range(lines)]
             # mode == &#39;tail&#39;
-            return [line.decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for line in list(file)[-lines:]]</code></pre>
+            return [line.decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for line in list(file)[-lines:]]
+
+
+if __name__ == &#34;__main__&#34;:
+    # head --file_path example.txt --lines 10
+
+    def run() -&gt; None:
+        &#34;&#34;&#34;Example&#34;&#34;&#34;
+        with change_directory(&#34;src&#34;):
+            tool = HeadTailTool(&#34;.&#34;, config=Config(&#34;..&#34;))
+            # glob_pattern&#34;: &#34;fish_tank/*&#34;, &#34;regex&#34;: &#34;TODO|todo&#34;
+            # import orjson
+            # print(orjson.dumps(tool.grep(glob_pattern=&#34;fish_tank/*&#34;, regex=&#34;TODO|todo&#34;)).decode(&#34;utf-8&#34;))
+            #
+            # print(orjson.dumps(tool.grep(glob_pattern=&#34;./fish_tank/*&#34;, regex=&#34;TODO|todo&#34;)).decode(&#34;utf-8&#34;))
+            #
+            # print(tool.grep_markdown(glob_pattern=&#34;./**&#34;, regex=&#34;TODO&#34;))
+            # print(tool.grep(glob_pattern=&#34;*.py&#34;, regex=&#34;print\\(|logging&#34;, maximum_matches_per_file=1))
+            print(tool.head(file_path=&#34;README.md&#34;, lines=10))
+
+    run()</code></pre>
 </details>
 </section>
 <section>
@@ -279,7 +308,15 @@ class HeadTailTool:
 
             # Read by lines if byte_count is not specified
             if mode == &#34;head&#34;:
-                return [next(file).decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for _ in range(lines)]
+                head_lines = []
+                for _ in range(lines):
+                    try:
+                        line = next(file).decode(&#34;utf-8&#34;)
+                        head_lines.append(line.rstrip(&#34;\r\n&#34;))
+                    except StopIteration:
+                        break
+                return head_lines
+                # return [next(file).decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for _ in range(lines)]
             # mode == &#39;tail&#39;
             return [line.decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for line in list(file)[-lines:]]</code></pre>
 </details>
@@ -428,7 +465,15 @@ def head_markdown(self, file_path: str, lines: int = 10) -&gt; str:
 
         # Read by lines if byte_count is not specified
         if mode == &#34;head&#34;:
-            return [next(file).decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for _ in range(lines)]
+            head_lines = []
+            for _ in range(lines):
+                try:
+                    line = next(file).decode(&#34;utf-8&#34;)
+                    head_lines.append(line.rstrip(&#34;\r\n&#34;))
+                except StopIteration:
+                    break
+            return head_lines
+            # return [next(file).decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for _ in range(lines)]
         # mode == &#39;tail&#39;
         return [line.decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for line in list(file)[-lines:]]</code></pre>
 </details>

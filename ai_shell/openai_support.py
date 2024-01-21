@@ -127,7 +127,7 @@ class ToolKitBase:
 
                     if result is None:
                         raise FatalToolException("Never return None from a tool.")
-                    if result == "" or result == '""':
+                    if result in ("", '""'):
                         logger.warning(f"Blank result from {name}. Why? {arguments}")
                         # raise FatalToolException("Blank result, why?.")
                 except FatalToolException as fatal_tool_exception:
@@ -138,6 +138,7 @@ class ToolKitBase:
                     logger.error(fatal_configuration_exception)
                     # bot can't handle this, don't report stop.
                     raise
+                # pylint: disable=broad-exception-caught
                 except Exception as exception:
                     logger.error(exception)
                     self.tool_usage_stats[name]["failure"] += 1
@@ -150,8 +151,8 @@ class ToolKitBase:
                 # TODO: change folder, mimetypes, error handling, call stats, etc.
                 tool_info = self.plugin_tools[name]
                 method_name = name
-                instance = tool_info[0]
-                tool_info[1]
+                # TODO: refactor away this cryptic tuple
+                instance = tool_info[0]  # (instance, schema)
                 bots_kwargs = arguments
                 result = handle_tool(method_name, bots_kwargs, instance)
             else:
@@ -164,9 +165,9 @@ class ToolKitBase:
 
             try:
                 json_result = json.dumps(result, default=loosy_goosy_default_encoder).decode("utf-8")
-            except TypeError as te:
-                logger.error(te)
-                logger.error(f"Error encoding result: {te}")
+            except TypeError as type_error:
+                logger.error(type_error)
+                logger.error(f"Error encoding result: {type_error}")
                 logger.error(f"Result that json can't handle: {result}")
                 raise
             tool_result = {"tool_call_id": tool_call.id, "output": json_result}

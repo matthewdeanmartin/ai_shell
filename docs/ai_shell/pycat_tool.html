@@ -37,9 +37,9 @@ from pathlib import Path
 
 import python_minifier
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.pyutils.validate import is_python_file
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder, tree
 
 logger = logging.getLogger(__name__)
@@ -57,6 +57,7 @@ class PyCatTool:
         self.root_folder = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def format_code_as_markdown(
@@ -98,7 +99,9 @@ class PyCatTool:
                     relative_path = os.path.relpath(full_path, base_path)
                     markdown_content += format_path_as_header(relative_path)
                     markdown_content += &#34;```python\n&#34;
-                    markdown_content += read_file_contents(full_path)
+                    with open(full_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as handle:
+                        text = handle.read()
+                    markdown_content += text
                     markdown_content += &#34;\n```\n\n&#34;
         output_file.write(markdown_content)
         return output_file.getvalue()
@@ -115,20 +118,6 @@ def format_path_as_header(path: str) -&gt; str:
         str: The formatted path as a Markdown header.
     &#34;&#34;&#34;
     return f&#34;## {path}\n\n&#34;
-
-
-def read_file_contents(file_path: str) -&gt; str:
-    &#34;&#34;&#34;
-    Read the contents of a file and return as a string.
-
-    Args:
-        file_path (str): The path of the file to read.
-
-    Returns:
-        str: The contents of the file.
-    &#34;&#34;&#34;
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
-        return file.read()
 
 
 def strip_docstrings(source_code: str) -&gt; str:
@@ -200,39 +189,6 @@ if __name__ == &#34;__main__&#34;:
         str: The formatted path as a Markdown header.
     &#34;&#34;&#34;
     return f&#34;## {path}\n\n&#34;</code></pre>
-</details>
-</dd>
-<dt id="ai_shell.pycat_tool.read_file_contents"><code class="name flex">
-<span>def <span class="ident">read_file_contents</span></span>(<span>file_path: str) ‑> str</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Read the contents of a file and return as a string.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
-<dd>The path of the file to read.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>str</code></dt>
-<dd>The contents of the file.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def read_file_contents(file_path: str) -&gt; str:
-    &#34;&#34;&#34;
-    Read the contents of a file and return as a string.
-
-    Args:
-        file_path (str): The path of the file to read.
-
-    Returns:
-        str: The contents of the file.
-    &#34;&#34;&#34;
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
-        return file.read()</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.pycat_tool.strip_docstrings"><code class="name flex">
@@ -308,6 +264,7 @@ if __name__ == &#34;__main__&#34;:
         self.root_folder = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def format_code_as_markdown(
@@ -349,7 +306,9 @@ if __name__ == &#34;__main__&#34;:
                     relative_path = os.path.relpath(full_path, base_path)
                     markdown_content += format_path_as_header(relative_path)
                     markdown_content += &#34;```python\n&#34;
-                    markdown_content += read_file_contents(full_path)
+                    with open(full_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as handle:
+                        text = handle.read()
+                    markdown_content += text
                     markdown_content += &#34;\n```\n\n&#34;
         output_file.write(markdown_content)
         return output_file.getvalue()</code></pre>
@@ -423,7 +382,9 @@ def format_code_as_markdown(
                 relative_path = os.path.relpath(full_path, base_path)
                 markdown_content += format_path_as_header(relative_path)
                 markdown_content += &#34;```python\n&#34;
-                markdown_content += read_file_contents(full_path)
+                with open(full_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as handle:
+                    text = handle.read()
+                markdown_content += text
                 markdown_content += &#34;\n```\n\n&#34;
     output_file.write(markdown_content)
     return output_file.getvalue()</code></pre>
@@ -448,7 +409,6 @@ def format_code_as_markdown(
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="ai_shell.pycat_tool.format_path_as_header" href="#ai_shell.pycat_tool.format_path_as_header">format_path_as_header</a></code></li>
-<li><code><a title="ai_shell.pycat_tool.read_file_contents" href="#ai_shell.pycat_tool.read_file_contents">read_file_contents</a></code></li>
 <li><code><a title="ai_shell.pycat_tool.strip_docstrings" href="#ai_shell.pycat_tool.strip_docstrings">strip_docstrings</a></code></li>
 </ul>
 </li>

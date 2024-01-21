@@ -2,8 +2,6 @@
 Code-as-config for logging.
 """
 import os
-
-import logging
 from typing import Any
 
 import bug_trail_core
@@ -33,13 +31,13 @@ def configure_logging() -> dict[str, Any]:
                 "class": "logging.StreamHandler",
                 "stream": "ext://sys.stdout",  # Default is stderr
             },
-            "bug_trail": {
-                "level": "DEBUG",
-                # "formatter": "standard",
-                "class": "bug_trail_core.BugTrailHandler",
-                "db_path": bug_trail_config.database_path,
-                "minimum_level": logging.DEBUG,
-            },
+            # "bug_trail": {
+            #     "level": "DEBUG",
+            #     # "formatter": "standard",
+            #     "class": "bug_trail_core.BugTrailHandler",
+            #     "db_path": bug_trail_config.database_path,
+            #     "minimum_level": logging.DEBUG,
+            # },
             # "json": {
             #     # "()": "json_file_handler_factory",
             #     "level": "DEBUG",
@@ -73,24 +71,31 @@ def configure_logging() -> dict[str, Any]:
 
     for name in debug_level_modules:
         logging_config["loggers"][name] = {
-            "handlers": ["default", "bug_trail"],
+            "handlers": [
+                "default",
+                # "bug_trail"
+            ],
             "level": "DEBUG",
             "propagate": False,
         }
 
     for name in info_level_modules:
         logging_config["loggers"][name] = {
-            "handlers": ["default", "bug_trail"],
+            "handlers": [
+                "default",
+                # "bug_trail"
+            ],
             "level": "INFO",
             "propagate": False,
         }
 
     for name in warn_level_modules:
         logging_config["loggers"][name] = {
-            "handlers": ["default", "bug_trail"],
+            "handlers": [
+                "default",
+                # "bug_trail"
+            ],
             "level": "WARNING",
             "propagate": False,
         }
     return logging_config
-
-print()

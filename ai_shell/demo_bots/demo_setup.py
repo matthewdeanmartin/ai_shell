@@ -6,6 +6,7 @@ import zipfile
 from importlib.resources import as_file, files
 from pathlib import Path
 
+from ai_shell.demo_bots.check_tools import validate_environment
 from ai_shell.utils.config_manager import Config
 
 
@@ -49,6 +50,10 @@ def initialize() -> None:
             return
     else:
         print("The src folder exists. You are good to go.")
+
+    if not validate_environment():
+        print("Environment not ready, exiting")
+        return
 
     print("Would you like to grant permission for the demo to modify the src folder? (y/n)")
     response = input()

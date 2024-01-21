@@ -129,7 +129,16 @@ def initialize_recommended_tools(root_folder: str, config: Config) -&gt; None:
         root_folder (str): The root folder to recommend tools for.
         config (Config): The developer input that bot shouldn&#39;t set.
     &#34;&#34;&#34;
-    initialize_all_tools(keeps=recommendations(root_folder, config))</code></pre>
+    initialize_all_tools(keeps=recommendations(root_folder, config))
+
+
+if __name__ == &#34;__main__&#34;:
+
+    def run():
+        for tool in just_tool_names():
+            print(f&#34;{tool},&#34;)
+
+    run()</code></pre>
 </details>
 </section>
 <section>

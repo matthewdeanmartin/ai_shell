@@ -100,12 +100,12 @@ mypy:
 docker:
 	docker build -t ai_shell -f Dockerfile .
 
-check_docs:
-	interrogate ai_shell
-	pydoctest --config .pydoctest.json | grep -v "__init__" | grep -v "ToolKit" | grep -v "__main__" | grep -v "Unable to parse"
-
-make_docs:
-	pdoc ai_shell ai_todo --html -o docs --force
+#check_docs:
+#	interrogate ai_shell
+#	pydoctest --config .pydoctest.json | grep -v "__init__" | grep -v "ToolKit" | grep -v "__main__" | grep -v "Unable to parse"
+#
+#make_docs:
+#	pdoc ai_shell ai_todo --html -o docs --force
 
 .PHONY: gen_code
 gen_code:
@@ -114,3 +114,26 @@ gen_code:
 	cd ai_shell && cd code_generate && python generate_cli.py
 	cd ai_shell && cd code_generate && python generate_toolkit.py
 	pwd
+
+check_docs:
+	$(VENV) interrogate ai_shell --verbose
+	$(VENV) pydoctest --config .pydoctest.json | grep -v "__init__" | grep -v "__main__" | grep -v "Unable to parse" | grep -v "openai_toolkit"
+
+make_docs:
+	pdoc ai_shell --html -o docs --force
+
+check_md:
+	$(VENV) mdformat README.md docs/*.md
+	# $(VENV) linkcheckMarkdown README.md # it is attempting to validate ssl certs
+	$(VENV) markdownlint README.md --config .markdownlintrc
+
+check_spelling:
+	$(VENV) pylint ai_shell --enable C0402 --rcfile=.pylintrc_spell
+	$(VENV) codespell README.md --ignore-words=private_dictionary.txt
+	$(VENV) codespell ai_shell --ignore-words=private_dictionary.txt
+
+check_changelog:
+	# pipx install keepachangelog-manager
+	$(VENV) changelogmanager validate
+
+check_all: check_docs check_md check_spelling check_changelog

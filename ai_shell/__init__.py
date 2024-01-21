@@ -1,5 +1,20 @@
 """
 Filesystem shell tools for OpenAI Assistant
+
+
+.. include:: ../README.md
+
+.. include:: ../docs/DocumentEditing.md
+
+.. include:: ../docs/Features.md
+
+.. include:: ../docs/Manual.md
+
+.. include:: ../docs/UseCases.md
+
+.. include:: ../docs/Design.md
+
+.. include:: ../CHANGELOG.md
 """
 from ai_shell.ai_logs.log_to_markdown import DialogLoggerWithMarkdown
 from ai_shell.ai_logs.logging_utils import configure_logging

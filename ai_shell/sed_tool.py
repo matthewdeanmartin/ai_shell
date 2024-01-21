@@ -114,7 +114,7 @@ class SedTool:
                     append_text = command[2:]
                     lines[i] += "\n" + append_text
                 elif re.match(r"\d+a\\", command):
-                    # insert "a"fter the specified line.
+                    # insert after the specified line. a for after.
                     target_line, change_text = command.split("a\\")
                     if i + 1 == int(target_line):
                         lines[i] = change_text
@@ -166,6 +166,7 @@ if __name__ == "__main__":
         commands = [
             "23a\\\ndef generate_ocean_waves():\\\n    # This function will create an animated line of wave emojis across the top line of the screen.\\\n    wave_emoji = u'\\U0001F30A'\\\n    top_line = wave_emoji * 80\\\n    print(top_line)\\\n"
         ]
+        # pylint: disable=protected-access
         result = SedTool._process_sed(input_text, commands)
         print(result)
 

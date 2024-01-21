@@ -109,8 +109,10 @@ class Config:
             self._list_data = data[&#34;lists&#34;]
         else:
             self.save_config()
-        if len(self._bots_data) &gt; 5:
-            raise ValueError(&#34;You have too many bots. Bot persistence must be failing somewhere.&#34;)
+        if len(self._bots_data) &gt; 100:
+            raise ValueError(
+                f&#34;You have too many bots. Bot persistence must be failing somewhere, see {self.config_file}&#34;
+            )
 
     def save_config(self):
         &#34;&#34;&#34;Save the config to the config file.&#34;&#34;&#34;
@@ -185,18 +187,32 @@ class Config:
         &#34;&#34;&#34;
         return self._flags_data.get(flag_name, default_value)
 
-    def get_value(self, name: str) -&gt; Optional[str]:
-        &#34;&#34;&#34;Return the value of the given flag.
+    def get_value(self, name: str, default: Optional[str] = None) -&gt; Optional[str]:
+        &#34;&#34;&#34;Return the value of the given named value.
+
         Args:
             name (str): The name of the config value.
+            default (Optional[str], optional): The default value to return if the value does not exist.
+                                               Defaults to None.
 
         Returns:
-            Optional[str]: The value of the flag, or None if the flag does not exist.
+            Optional[str]: The value of the named value, or None if the name does not exist.
         &#34;&#34;&#34;
-        return self._values_data.get(name, None)
+        return self._values_data.get(name, default)
+
+    def set_list(self, list_name: str, value: list[str]) -&gt; None:
+        &#34;&#34;&#34;Set the value of the given list of values.
+
+        Args:
+            list_name (str): The name of the config value.
+            value (list[str]): The value of the list.
+        &#34;&#34;&#34;
+        self._list_data[list_name] = value
+        self.save_config()
 
     def get_required_value(self, name: str) -&gt; str:
-        &#34;&#34;&#34;Return the value of the given flag.
+        &#34;&#34;&#34;Return the value of the given named value.
+
         Args:
             name (str): The name of the config value.
 
@@ -213,7 +229,8 @@ class Config:
         return value
 
     def get_list(self, list_name: str) -&gt; list[str]:
-        &#34;&#34;&#34;Return the value of the given flag.
+        &#34;&#34;&#34;Return the value of the given list of values.
+
         Args:
             list_name (str): The name of the config value.
 
@@ -364,8 +381,10 @@ class Bot:
             self._list_data = data[&#34;lists&#34;]
         else:
             self.save_config()
-        if len(self._bots_data) &gt; 5:
-            raise ValueError(&#34;You have too many bots. Bot persistence must be failing somewhere.&#34;)
+        if len(self._bots_data) &gt; 100:
+            raise ValueError(
+                f&#34;You have too many bots. Bot persistence must be failing somewhere, see {self.config_file}&#34;
+            )
 
     def save_config(self):
         &#34;&#34;&#34;Save the config to the config file.&#34;&#34;&#34;
@@ -440,18 +459,32 @@ class Bot:
         &#34;&#34;&#34;
         return self._flags_data.get(flag_name, default_value)
 
-    def get_value(self, name: str) -&gt; Optional[str]:
-        &#34;&#34;&#34;Return the value of the given flag.
+    def get_value(self, name: str, default: Optional[str] = None) -&gt; Optional[str]:
+        &#34;&#34;&#34;Return the value of the given named value.
+
         Args:
             name (str): The name of the config value.
+            default (Optional[str], optional): The default value to return if the value does not exist.
+                                               Defaults to None.
 
         Returns:
-            Optional[str]: The value of the flag, or None if the flag does not exist.
+            Optional[str]: The value of the named value, or None if the name does not exist.
         &#34;&#34;&#34;
-        return self._values_data.get(name, None)
+        return self._values_data.get(name, default)
+
+    def set_list(self, list_name: str, value: list[str]) -&gt; None:
+        &#34;&#34;&#34;Set the value of the given list of values.
+
+        Args:
+            list_name (str): The name of the config value.
+            value (list[str]): The value of the list.
+        &#34;&#34;&#34;
+        self._list_data[list_name] = value
+        self.save_config()
 
     def get_required_value(self, name: str) -&gt; str:
-        &#34;&#34;&#34;Return the value of the given flag.
+        &#34;&#34;&#34;Return the value of the given named value.
+
         Args:
             name (str): The name of the config value.
 
@@ -468,7 +501,8 @@ class Bot:
         return value
 
     def get_list(self, list_name: str) -&gt; list[str]:
-        &#34;&#34;&#34;Return the value of the given flag.
+        &#34;&#34;&#34;Return the value of the given list of values.
+
         Args:
             list_name (str): The name of the config value.
 
@@ -612,7 +646,7 @@ Defaults to None.</dd>
 <span>def <span class="ident">get_list</span></span>(<span>self, list_name: str) ‑> list[str]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return the value of the given flag.</p>
+<div class="desc"><p>Return the value of the given list of values.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>list_name</code></strong> :&ensp;<code>str</code></dt>
@@ -628,7 +662,8 @@ Defaults to None.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_list(self, list_name: str) -&gt; list[str]:
-    &#34;&#34;&#34;Return the value of the given flag.
+    &#34;&#34;&#34;Return the value of the given list of values.
+
     Args:
         list_name (str): The name of the config value.
 
@@ -642,7 +677,7 @@ Defaults to None.</dd>
 <span>def <span class="ident">get_required_value</span></span>(<span>self, name: str) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return the value of the given flag.</p>
+<div class="desc"><p>Return the value of the given named value.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
@@ -663,7 +698,8 @@ Defaults to None.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_required_value(self, name: str) -&gt; str:
-    &#34;&#34;&#34;Return the value of the given flag.
+    &#34;&#34;&#34;Return the value of the given named value.
+
     Args:
         name (str): The name of the config value.
 
@@ -681,33 +717,39 @@ Defaults to None.</dd>
 </details>
 </dd>
 <dt id="ai_shell.utils.config_manager.Config.get_value"><code class="name flex">
-<span>def <span class="ident">get_value</span></span>(<span>self, name: str) ‑> Optional[str]</span>
+<span>def <span class="ident">get_value</span></span>(<span>self, name: str, default: Optional[str] = None) ‑> Optional[str]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return the value of the given flag.</p>
+<div class="desc"><p>Return the value of the given named value.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the config value.</dd>
+<dt><strong><code>default</code></strong> :&ensp;<code>Optional[str]</code>, optional</dt>
+<dd>The default value to return if the value does not exist.
+Defaults to None.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>Optional[str]</code></dt>
-<dd>The value of the flag, or None if the flag does not exist.</dd>
+<dd>The value of the named value, or None if the name does not exist.</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_value(self, name: str) -&gt; Optional[str]:
-    &#34;&#34;&#34;Return the value of the given flag.
+<pre><code class="python">def get_value(self, name: str, default: Optional[str] = None) -&gt; Optional[str]:
+    &#34;&#34;&#34;Return the value of the given named value.
+
     Args:
         name (str): The name of the config value.
+        default (Optional[str], optional): The default value to return if the value does not exist.
+                                           Defaults to None.
 
     Returns:
-        Optional[str]: The value of the flag, or None if the flag does not exist.
+        Optional[str]: The value of the named value, or None if the name does not exist.
     &#34;&#34;&#34;
-    return self._values_data.get(name, None)</code></pre>
+    return self._values_data.get(name, default)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.utils.config_manager.Config.load_config"><code class="name flex">
@@ -729,8 +771,10 @@ Defaults to None.</dd>
         self._list_data = data[&#34;lists&#34;]
     else:
         self.save_config()
-    if len(self._bots_data) &gt; 5:
-        raise ValueError(&#34;You have too many bots. Bot persistence must be failing somewhere.&#34;)</code></pre>
+    if len(self._bots_data) &gt; 100:
+        raise ValueError(
+            f&#34;You have too many bots. Bot persistence must be failing somewhere, see {self.config_file}&#34;
+        )</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.utils.config_manager.Config.save_config"><code class="name flex">
@@ -781,6 +825,33 @@ Defaults to None.</dd>
         value (str): The value of the flag.
     &#34;&#34;&#34;
     self._flags_data[flag_name] = value
+    self.save_config()</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.utils.config_manager.Config.set_list"><code class="name flex">
+<span>def <span class="ident">set_list</span></span>(<span>self, list_name: str, value: list[str]) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the value of the given list of values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>list_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the config value.</dd>
+<dt><strong><code>value</code></strong> :&ensp;<code>list[str]</code></dt>
+<dd>The value of the list.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_list(self, list_name: str, value: list[str]) -&gt; None:
+    &#34;&#34;&#34;Set the value of the given list of values.
+
+    Args:
+        list_name (str): The name of the config value.
+        value (list[str]): The value of the list.
+    &#34;&#34;&#34;
+    self._list_data[list_name] = value
     self.save_config()</code></pre>
 </details>
 </dd>
@@ -854,6 +925,7 @@ class Thread:
 <li><code><a title="ai_shell.utils.config_manager.Config.load_config" href="#ai_shell.utils.config_manager.Config.load_config">load_config</a></code></li>
 <li><code><a title="ai_shell.utils.config_manager.Config.save_config" href="#ai_shell.utils.config_manager.Config.save_config">save_config</a></code></li>
 <li><code><a title="ai_shell.utils.config_manager.Config.set_flag" href="#ai_shell.utils.config_manager.Config.set_flag">set_flag</a></code></li>
+<li><code><a title="ai_shell.utils.config_manager.Config.set_list" href="#ai_shell.utils.config_manager.Config.set_list">set_list</a></code></li>
 </ul>
 </li>
 <li>

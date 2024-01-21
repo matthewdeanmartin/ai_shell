@@ -32,28 +32,16 @@
 _SCHEMAS = {
     &#34;answer_collector&#34;: {
         &#34;report_bool&#34;: {
-            &#34;description&#34;: &#34;Report answer in bool &#34; &#34;format.&#34;,
+            &#34;description&#34;: &#34;Report answer in bool format.&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;bool &#34; &#34;format.&#34;,
-                    &#34;type&#34;: &#34;boolean&#34;,
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in bool format.&#34;, &#34;type&#34;: &#34;boolean&#34;},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -61,28 +49,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;report_dict&#34;: {
-            &#34;description&#34;: &#34;Report answer in dict &#34; &#34;format.&#34;,
+            &#34;description&#34;: &#34;Report answer in dict format.&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;dict &#34; &#34;format.&#34;,
-                    &#34;type&#34;: [&#34;object&#34;],
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in dict format.&#34;, &#34;type&#34;: [&#34;object&#34;]},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -90,28 +66,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;report_float&#34;: {
-            &#34;description&#34;: &#34;Report answer in &#34; &#34;string format.&#34;,
+            &#34;description&#34;: &#34;Report answer in string format.&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;float &#34; &#34;format.&#34;,
-                    &#34;type&#34;: &#34;number&#34;,
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in float format.&#34;, &#34;type&#34;: &#34;number&#34;},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -119,28 +83,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;report_int&#34;: {
-            &#34;description&#34;: &#34;Report answer in &#34; &#34;integer format&#34;,
+            &#34;description&#34;: &#34;Report answer in integer format&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;integer &#34; &#34;format.&#34;,
-                    &#34;type&#34;: &#34;integer&#34;,
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in integer format.&#34;, &#34;type&#34;: &#34;integer&#34;},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -148,28 +100,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;report_json&#34;: {
-            &#34;description&#34;: &#34;Report answer in json &#34; &#34;format.&#34;,
+            &#34;description&#34;: &#34;Report answer in json format.&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;json &#34; &#34;format.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in json format.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -177,28 +117,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;report_list&#34;: {
-            &#34;description&#34;: &#34;Report answer in list &#34; &#34;format.&#34;,
+            &#34;description&#34;: &#34;Report answer in list format.&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;list &#34; &#34;format.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in list format.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -206,28 +134,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;report_set&#34;: {
-            &#34;description&#34;: &#34;Report answer in set &#34; &#34;format.&#34;,
+            &#34;description&#34;: &#34;Report answer in set format.&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;set &#34; &#34;format.&#34;,
-                    &#34;type&#34;: &#34;array&#34;,
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in set format.&#34;, &#34;type&#34;: &#34;array&#34;},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -235,28 +151,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;report_text&#34;: {
-            &#34;description&#34;: &#34;Report answer in &#34; &#34;string format.&#34;,
+            &#34;description&#34;: &#34;Report answer in string format.&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;string &#34; &#34;format.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in string format.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -264,28 +168,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;report_toml&#34;: {
-            &#34;description&#34;: &#34;Report answer in toml &#34; &#34;format.&#34;,
+            &#34;description&#34;: &#34;Report answer in toml format.&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;toml &#34; &#34;format.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in toml format.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -293,28 +185,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;report_tuple&#34;: {
-            &#34;description&#34;: &#34;Report answer in &#34; &#34;tuple format.&#34;,
+            &#34;description&#34;: &#34;Report answer in tuple format.&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;tuple &#34; &#34;format.&#34;,
-                    &#34;type&#34;: &#34;array&#34;,
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in tuple format.&#34;, &#34;type&#34;: &#34;array&#34;},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -322,28 +202,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;report_xml&#34;: {
-            &#34;description&#34;: &#34;Report answer in xml &#34; &#34;format.&#34;,
+            &#34;description&#34;: &#34;Report answer in xml format.&#34;,
             &#34;properties&#34;: {
-                &#34;answer&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;answer &#34; &#34;to &#34; &#34;be &#34; &#34;reported &#34; &#34;in &#34; &#34;xml &#34; &#34;format.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;answer&#34;: {&#34;description&#34;: &#34;The answer to be reported in xml format.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;comment&#34;: {
                     &#34;default&#34;: &#34;&#34;,
-                    &#34;description&#34;: &#34;Any &#34; &#34;comments, &#34; &#34;supplemental &#34; &#34;info &#34; &#34;about &#34; &#34;the &#34; &#34;answer.&#34;,
+                    &#34;description&#34;: &#34;Any comments, supplemental info about the answer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -353,28 +221,21 @@ _SCHEMAS = {
     },
     &#34;cat&#34;: {
         &#34;cat&#34;: {
-            &#34;description&#34;: &#34;Mimics the basic functionalities of the &#34; &#34;&#39;cat&#39; command in Unix.&#34;,
+            &#34;description&#34;: &#34;Mimics the basic functionalities of the &#39;cat&#39; command in Unix.&#34;,
             &#34;properties&#34;: {
-                &#34;file_paths&#34;: {&#34;description&#34;: &#34;A list of &#34; &#34;file paths &#34; &#34;to &#34; &#34;concatenate.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_paths&#34;: {&#34;description&#34;: &#34;A list of file paths to concatenate.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;number_lines&#34;: {
                     &#34;default&#34;: True,
-                    &#34;description&#34;: &#34;If True, &#34; &#34;number &#34; &#34;all &#34; &#34;output &#34; &#34;lines.&#34;,
+                    &#34;description&#34;: &#34;If True, number all output lines.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
                 &#34;squeeze_blank&#34;: {
                     &#34;default&#34;: False,
-                    &#34;description&#34;: &#34;If &#34; &#34;True, &#34; &#34;consecutive &#34; &#34;blank &#34; &#34;lines &#34; &#34;are &#34; &#34;squeezed &#34; &#34;to one.&#34;,
+                    &#34;description&#34;: &#34;If True, consecutive blank lines are squeezed to one.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
             },
@@ -382,30 +243,21 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;cat_markdown&#34;: {
-            &#34;description&#34;: &#34;Concatenates the content of given &#34; &#34;file paths and formats them as &#34; &#34;markdown.&#34;,
+            &#34;description&#34;: &#34;Concatenates the content of given file paths and formats them as markdown.&#34;,
             &#34;properties&#34;: {
-                &#34;file_paths&#34;: {&#34;description&#34;: &#34;List &#34; &#34;of &#34; &#34;file &#34; &#34;paths &#34; &#34;to &#34; &#34;concatenate.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_paths&#34;: {&#34;description&#34;: &#34;List of file paths to concatenate.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;number_lines&#34;: {
                     &#34;default&#34;: True,
-                    &#34;description&#34;: &#34;If &#34; &#34;True, &#34; &#34;number &#34; &#34;all &#34; &#34;output &#34; &#34;lines.&#34;,
+                    &#34;description&#34;: &#34;If True, number all output lines.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
                 &#34;squeeze_blank&#34;: {
                     &#34;default&#34;: False,
-                    &#34;description&#34;: &#34;If &#34; &#34;True, &#34; &#34;consecutive &#34; &#34;blank &#34; &#34;lines &#34; &#34;are &#34; &#34;squeezed &#34; &#34;to &#34; &#34;one.&#34;,
+                    &#34;description&#34;: &#34;If True, consecutive blank lines are squeezed to one.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
             },
@@ -415,24 +267,15 @@ _SCHEMAS = {
     },
     &#34;cut&#34;: {
         &#34;cut_characters&#34;: {
-            &#34;description&#34;: &#34;Reads a file and extracts &#34; &#34;characters based on specified &#34; &#34;ranges.&#34;,
+            &#34;description&#34;: &#34;Reads a file and extracts characters based on specified ranges.&#34;,
             &#34;properties&#34;: {
                 &#34;character_ranges&#34;: {
-                    &#34;description&#34;: &#34;A &#34; &#34;string &#34; &#34;representing &#34; &#34;character &#34; &#34;ranges, &#34; &#34;e.g., &#34; &#39;&#34;1-5,10&#34;.&#39;,
+                    &#34;description&#34;: &#39;A string representing character ranges, e.g., &#34;1-5,10&#34;.&#39;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;name &#34; &#34;of &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;process.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The name of the file to process.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -440,31 +283,17 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;cut_fields&#34;: {
-            &#34;description&#34;: &#34;Reads a file and extracts fields &#34;
-            &#34;based on specified ranges using the &#34;
-            &#34;given delimiter.&#34;,
+            &#34;description&#34;: &#34;Reads a file and extracts fields based on specified ranges using the given delimiter.&#34;,
             &#34;properties&#34;: {
                 &#34;delimiter&#34;: {
                     &#34;default&#34;: &#34;,&#34;,
-                    &#34;description&#34;: &#34;A &#34; &#34;single &#34; &#34;character &#34; &#34;used &#34; &#34;as &#34; &#34;the &#34; &#34;field &#34; &#34;delimiter.&#34;,
+                    &#34;description&#34;: &#34;A single character used as the field delimiter.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;field_ranges&#34;: {
-                    &#34;description&#34;: &#34;A &#34; &#34;string &#34; &#34;representing &#34; &#34;field &#34; &#34;ranges, &#34; &#34;e.g., &#34; &#39;&#34;1-3,5&#34;.&#39;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
-                &#34;filename&#34;: {&#34;description&#34;: &#34;The &#34; &#34;name &#34; &#34;of &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;process.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;field_ranges&#34;: {&#34;description&#34;: &#39;A string representing field ranges, e.g., &#34;1-3,5&#34;.&#39;, &#34;type&#34;: &#34;string&#34;},
+                &#34;filename&#34;: {&#34;description&#34;: &#34;The name of the file to process.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -472,29 +301,17 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;cut_fields_by_name&#34;: {
-            &#34;description&#34;: &#34;Reads a file and extracts &#34;
-            &#34;fields based on specified &#34;
-            &#34;field names using the given &#34;
-            &#34;delimiter.&#34;,
+            &#34;description&#34;: &#34;Reads a file and extracts fields based on specified field names using the given delimiter.&#34;,
             &#34;properties&#34;: {
                 &#34;delimiter&#34;: {
                     &#34;default&#34;: &#34;,&#34;,
-                    &#34;description&#34;: &#34;A &#34; &#34;single &#34; &#34;character &#34; &#34;used &#34; &#34;as &#34; &#34;the &#34; &#34;field &#34; &#34;delimiter.&#34;,
+                    &#34;description&#34;: &#34;A single character used as the field delimiter.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;field_names&#34;: {&#34;description&#34;: &#34;A &#34; &#34;list &#34; &#34;of &#34; &#34;field &#34; &#34;names &#34; &#34;to &#34; &#34;extract.&#34;, &#34;type&#34;: &#34;string&#34;},
-                &#34;filename&#34;: {&#34;description&#34;: &#34;The &#34; &#34;name &#34; &#34;of &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;process.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;field_names&#34;: {&#34;description&#34;: &#34;A list of field names to extract.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;filename&#34;: {&#34;description&#34;: &#34;The name of the file to process.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -506,17 +323,12 @@ _SCHEMAS = {
         &#34;ed&#34;: {
             &#34;description&#34;: &#34;A python version of ed.&#34;,
             &#34;properties&#34;: {
-                &#34;file_name&#34;: {&#34;description&#34;: &#34;Script &#34; &#34;creates or &#34; &#34;edits this &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_name&#34;: {&#34;description&#34;: &#34;Script creates or edits this file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return value &#34;
-                    &#34;as text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or text/yaml &#34;
-                    &#34;inside the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;script&#34;: {&#34;description&#34;: &#34;Ed commands to &#34; &#34;run.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;script&#34;: {&#34;description&#34;: &#34;Ed commands to run.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;script&#34;, &#34;file_name&#34;],
             &#34;type&#34;: &#34;object&#34;,
@@ -526,21 +338,12 @@ _SCHEMAS = {
         &#34;edlin&#34;: {
             &#34;description&#34;: &#34;An improved version of the edlin.&#34;,
             &#34;properties&#34;: {
-                &#34;file_name&#34;: {&#34;description&#34;: &#34;Script &#34; &#34;creates &#34; &#34;or &#34; &#34;edits &#34; &#34;this &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_name&#34;: {&#34;description&#34;: &#34;Script creates or edits this file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;script&#34;: {&#34;description&#34;: &#34;Edlin &#34; &#34;commands &#34; &#34;to run.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;script&#34;: {&#34;description&#34;: &#34;Edlin commands to run.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;script&#34;, &#34;file_name&#34;],
             &#34;type&#34;: &#34;object&#34;,
@@ -548,49 +351,17 @@ _SCHEMAS = {
     },
     &#34;find&#34;: {
         &#34;find_files&#34;: {
-            &#34;description&#34;: &#34;Recursively search for files or &#34;
-            &#34;directories matching given &#34;
-            &#34;criteria in a directory and its &#34;
-            &#34;subdirectories.&#34;,
+            &#34;description&#34;: &#34;Recursively search for files or directories matching given criteria in a directory and its subdirectories.&#34;,
             &#34;properties&#34;: {
-                &#34;file_type&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;type &#34; &#34;to &#34; &#34;filter &#34; &#34;(&#39;file&#39; &#34; &#34;or &#34; &#34;&#39;directory&#39;).&#34;,
-                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
-                },
+                &#34;file_type&#34;: {&#34;description&#34;: &#34;The type to filter (&#39;file&#39; or &#39;directory&#39;).&#34;, &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;]},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;name&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;exact &#34; &#34;name to &#34; &#34;match &#34; &#34;filenames &#34; &#34;against.&#34;,
-                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
-                },
-                &#34;regex&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;regex &#34; &#34;pattern &#34; &#34;to &#34; &#34;match &#34; &#34;filenames &#34; &#34;against.&#34;,
-                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
-                },
+                &#34;name&#34;: {&#34;description&#34;: &#34;The exact name to match filenames against.&#34;, &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;]},
+                &#34;regex&#34;: {&#34;description&#34;: &#34;The regex pattern to match filenames against.&#34;, &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;]},
                 &#34;size&#34;: {
-                    &#34;description&#34;: &#34;The size &#34;
-                    &#34;to &#34;
-                    &#34;filter &#34;
-                    &#34;files &#34;
-                    &#34;by, &#34;
-                    &#34;e.g., &#34;
-                    &#34;&#39;+100&#39; &#34;
-                    &#34;for &#34;
-                    &#34;files &#34;
-                    &#34;larger &#34;
-                    &#34;than 100 &#34;
-                    &#34;bytes.&#34;,
+                    &#34;description&#34;: &#34;The size to filter files by, e.g., &#39;+100&#39; for files larger than 100 bytes.&#34;,
                     &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
                 },
             },
@@ -598,52 +369,17 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;find_files_markdown&#34;: {
-            &#34;description&#34;: &#34;Recursively search for &#34;
-            &#34;files or directories &#34;
-            &#34;matching given criteria &#34;
-            &#34;in a directory and its &#34;
-            &#34;subdirectories.&#34;,
+            &#34;description&#34;: &#34;Recursively search for files or directories matching given criteria in a directory and its subdirectories.&#34;,
             &#34;properties&#34;: {
-                &#34;file_type&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;type &#34; &#34;to &#34; &#34;filter &#34; &#34;(&#39;file&#39; &#34; &#34;or &#34; &#34;&#39;directory&#39;).&#34;,
-                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
-                },
+                &#34;file_type&#34;: {&#34;description&#34;: &#34;The type to filter (&#39;file&#39; or &#39;directory&#39;).&#34;, &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;]},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;name&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;exact &#34; &#34;name &#34; &#34;to &#34; &#34;match &#34; &#34;filenames &#34; &#34;against.&#34;,
-                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
-                },
-                &#34;regex&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;regex &#34; &#34;pattern &#34; &#34;to &#34; &#34;match &#34; &#34;filenames &#34; &#34;against.&#34;,
-                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
-                },
+                &#34;name&#34;: {&#34;description&#34;: &#34;The exact name to match filenames against.&#34;, &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;]},
+                &#34;regex&#34;: {&#34;description&#34;: &#34;The regex pattern to match filenames against.&#34;, &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;]},
                 &#34;size&#34;: {
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;size &#34;
-                    &#34;to &#34;
-                    &#34;filter &#34;
-                    &#34;files &#34;
-                    &#34;by, &#34;
-                    &#34;e.g., &#34;
-                    &#34;&#39;+100&#39; &#34;
-                    &#34;for &#34;
-                    &#34;files &#34;
-                    &#34;larger &#34;
-                    &#34;than &#34;
-                    &#34;100 &#34;
-                    &#34;bytes.&#34;,
+                    &#34;description&#34;: &#34;The size to filter files by, e.g., &#39;+100&#39; for files larger than 100 bytes.&#34;,
                     &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
                 },
             },
@@ -653,19 +389,10 @@ _SCHEMAS = {
     },
     &#34;git&#34;: {
         &#34;get_current_branch&#34;: {
-            &#34;description&#34;: &#34;Retrieves the current &#34; &#34;branch name of the &#34; &#34;repository.&#34;,
+            &#34;description&#34;: &#34;Retrieves the current branch name of the repository.&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 }
             },
@@ -673,49 +400,20 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;get_recent_commits&#34;: {
-            &#34;description&#34;: &#34;Retrieves the most recent &#34; &#34;commit hashes from the &#34; &#34;current branch.&#34;,
+            &#34;description&#34;: &#34;Retrieves the most recent commit hashes from the current branch.&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;n&#34;: {
                     &#34;default&#34;: 10,
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;number &#34;
-                    &#34;of &#34;
-                    &#34;recent &#34;
-                    &#34;commits &#34;
-                    &#34;to &#34;
-                    &#34;retrieve. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#34;10.&#34;,
+                    &#34;description&#34;: &#34;The number of recent commits to retrieve. Defaults to 10.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;short_hash&#34;: {
                     &#34;default&#34;: False,
-                    &#34;description&#34;: &#34;If &#34;
-                    &#34;True, &#34;
-                    &#34;return &#34;
-                    &#34;short &#34;
-                    &#34;hashes; &#34;
-                    &#34;otherwise, &#34;
-                    &#34;return &#34;
-                    &#34;full &#34;
-                    &#34;hashes. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#34;False.&#34;,
+                    &#34;description&#34;: &#34;If True, return short hashes; otherwise, return full hashes. Defaults to False.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
             },
@@ -723,19 +421,10 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;git_diff&#34;: {
-            &#34;description&#34;: &#34;Returns the differences in the &#34; &#34;working directory.&#34;,
+            &#34;description&#34;: &#34;Returns the differences in the working directory.&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 }
             },
@@ -743,21 +432,12 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;git_diff_commit&#34;: {
-            &#34;description&#34;: &#34;Shows changes between two &#34; &#34;commits.&#34;,
+            &#34;description&#34;: &#34;Shows changes between two commits.&#34;,
             &#34;properties&#34;: {
-                &#34;commit1&#34;: {&#34;description&#34;: &#34;First &#34; &#34;commit&#34;, &#34;type&#34;: &#34;string&#34;},
-                &#34;commit2&#34;: {&#34;description&#34;: &#34;Second &#34; &#34;commit&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;commit1&#34;: {&#34;description&#34;: &#34;First commit&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;commit2&#34;: {&#34;description&#34;: &#34;Second commit&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -765,20 +445,11 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;git_log_file&#34;: {
-            &#34;description&#34;: &#34;Returns the commit history for a &#34; &#34;specific file.&#34;,
+            &#34;description&#34;: &#34;Returns the commit history for a specific file.&#34;,
             &#34;properties&#34;: {
-                &#34;filename&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;filename&#34;: {&#34;description&#34;: &#34;The path to the file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -786,40 +457,22 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;git_log_search&#34;: {
-            &#34;description&#34;: &#34;Returns the commit history that &#34; &#34;matches the search string.&#34;,
+            &#34;description&#34;: &#34;Returns the commit history that matches the search string.&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;search_string&#34;: {&#34;description&#34;: &#34;The &#34; &#34;search &#34; &#34;string.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;search_string&#34;: {&#34;description&#34;: &#34;The search string.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;search_string&#34;],
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;git_show&#34;: {
-            &#34;description&#34;: &#34;Shows various types of objects &#34; &#34;(commits, tags, etc.).&#34;,
+            &#34;description&#34;: &#34;Shows various types of objects (commits, tags, etc.).&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 }
             },
@@ -827,19 +480,10 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;git_status&#34;: {
-            &#34;description&#34;: &#34;Returns the status of the &#34; &#34;repository.&#34;,
+            &#34;description&#34;: &#34;Returns the status of the repository.&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 }
             },
@@ -847,37 +491,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;is_ignored_by_gitignore&#34;: {
-            &#34;description&#34;: &#34;Check if a file is &#34; &#34;ignored by .gitignore.&#34;,
+            &#34;description&#34;: &#34;Check if a file is ignored by .gitignore.&#34;,
             &#34;properties&#34;: {
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;of &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;check.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The path of the file to check.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;gitignore_path&#34;: {
                     &#34;default&#34;: &#34;.gitignore&#34;,
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;path &#34;
-                    &#34;to &#34;
-                    &#34;the &#34;
-                    &#34;.gitignore &#34;
-                    &#34;file. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#34;&#39;.gitignore&#39; &#34;
-                    &#34;in &#34;
-                    &#34;the &#34;
-                    &#34;current &#34;
-                    &#34;directory.&#34;,
+                    &#34;description&#34;: &#34;The path to the .gitignore file. Defaults to &#39;.gitignore&#39; in the current directory.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -887,37 +510,27 @@ _SCHEMAS = {
     },
     &#34;grep&#34;: {
         &#34;grep&#34;: {
-            &#34;description&#34;: &#34;Search for lines matching a regular &#34; &#34;expression in files specified by a glob &#34; &#34;pattern.&#34;,
+            &#34;description&#34;: &#34;Search for lines matching a regular expression in files specified by a glob pattern.&#34;,
             &#34;properties&#34;: {
-                &#34;glob_pattern&#34;: {
-                    &#34;description&#34;: &#34;A glob &#34; &#34;pattern &#34; &#34;string &#34; &#34;to &#34; &#34;specify &#34; &#34;files.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;glob_pattern&#34;: {&#34;description&#34;: &#34;A glob pattern string to specify files.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;maximum_matches_per_file&#34;: {
                     &#34;default&#34;: -1,
-                    &#34;description&#34;: &#34;Maximum &#34; &#34;number &#34; &#34;of &#34; &#34;matches &#34; &#34;to &#34; &#34;return &#34; &#34;for &#34; &#34;one &#34; &#34;file.&#34;,
+                    &#34;description&#34;: &#34;Maximum number of matches to return for one file.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;maximum_matches_total&#34;: {
                     &#34;default&#34;: -1,
-                    &#34;description&#34;: &#34;Maximum &#34; &#34;number &#34; &#34;of &#34; &#34;matches &#34; &#34;to &#34; &#34;return &#34; &#34;total.&#34;,
+                    &#34;description&#34;: &#34;Maximum number of matches to return total.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;regex&#34;: {&#34;description&#34;: &#34;A regular &#34; &#34;expression &#34; &#34;string to &#34; &#34;search for.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;regex&#34;: {&#34;description&#34;: &#34;A regular expression string to search for.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;skip_first_matches&#34;: {
                     &#34;default&#34;: -1,
-                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;initial &#34; &#34;matches &#34; &#34;to &#34; &#34;skip.&#34;,
+                    &#34;description&#34;: &#34;Number of initial matches to skip.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
             },
@@ -925,40 +538,22 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;grep_markdown&#34;: {
-            &#34;description&#34;: &#34;Search for lines matching a &#34;
-            &#34;regular expression in files and &#34;
-            &#34;returns markdown formatted &#34;
-            &#34;results.&#34;,
+            &#34;description&#34;: &#34;Search for lines matching a regular expression in files and returns markdown formatted results.&#34;,
             &#34;properties&#34;: {
-                &#34;glob_pattern&#34;: {
-                    &#34;description&#34;: &#34;A &#34; &#34;glob &#34; &#34;pattern &#34; &#34;string &#34; &#34;to &#34; &#34;specify &#34; &#34;files.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;glob_pattern&#34;: {&#34;description&#34;: &#34;A glob pattern string to specify files.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;maximum_matches&#34;: {
                     &#34;default&#34;: -1,
-                    &#34;description&#34;: &#34;Maximum &#34; &#34;number &#34; &#34;of &#34; &#34;matches &#34; &#34;to &#34; &#34;return.&#34;,
+                    &#34;description&#34;: &#34;Maximum number of matches to return.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;regex&#34;: {
-                    &#34;description&#34;: &#34;A &#34; &#34;regular &#34; &#34;expression &#34; &#34;string &#34; &#34;to &#34; &#34;search &#34; &#34;for.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;regex&#34;: {&#34;description&#34;: &#34;A regular expression string to search for.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;skip_first_matches&#34;: {
                     &#34;default&#34;: -1,
-                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;initial &#34; &#34;matches &#34; &#34;to &#34; &#34;skip.&#34;,
+                    &#34;description&#34;: &#34;Number of initial matches to skip.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
             },
@@ -968,38 +563,20 @@ _SCHEMAS = {
     },
     &#34;headtail&#34;: {
         &#34;head&#34;: {
-            &#34;description&#34;: &#34;Return the first &#39;lines&#39; or &#34; &#34;&#39;byte_count&#39; from a file.&#34;,
+            &#34;description&#34;: &#34;Return the first &#39;lines&#39; or &#39;byte_count&#39; from a file.&#34;,
             &#34;properties&#34;: {
                 &#34;byte_count&#34;: {
-                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;bytes &#34; &#34;to &#34; &#34;return. &#34; &#34;If &#34; &#34;specified, &#34; &#34;overrides &#34; &#34;lines.&#34;,
+                    &#34;description&#34;: &#34;Number of bytes to return. If specified, overrides lines.&#34;,
                     &#34;type&#34;: [&#34;integer&#34;, &#34;null&#34;],
                 },
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path to the file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;lines&#34;: {
                     &#34;default&#34;: 10,
-                    &#34;description&#34;: &#34;Number of &#34;
-                    &#34;lines to &#34;
-                    &#34;return. &#34;
-                    &#34;Ignored &#34;
-                    &#34;if &#34;
-                    &#34;byte_count &#34;
-                    &#34;is &#34;
-                    &#34;specified. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to 10.&#34;,
+                    &#34;description&#34;: &#34;Number of lines to return. Ignored if byte_count is specified. Defaults to 10.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -1007,25 +584,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;head_markdown&#34;: {
-            &#34;description&#34;: &#34;Return the first &#39;lines&#39; &#34; &#34;lines of a file formatted &#34; &#34;as markdown.&#34;,
+            &#34;description&#34;: &#34;Return the first &#39;lines&#39; lines of a file formatted as markdown.&#34;,
             &#34;properties&#34;: {
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path to the file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;lines&#34;: {
                     &#34;default&#34;: 10,
-                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;lines &#34; &#34;to &#34; &#34;return. &#34; &#34;Defaults &#34; &#34;to &#34; &#34;10.&#34;,
+                    &#34;description&#34;: &#34;Number of lines to return. Defaults to 10.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -1033,54 +601,25 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;head_tail&#34;: {
-            &#34;description&#34;: &#34;Read lines or bytes from the &#34; &#34;start (&#39;head&#39;) or end (&#39;tail&#39;) &#34; &#34;of a file.&#34;,
+            &#34;description&#34;: &#34;Read lines or bytes from the start (&#39;head&#39;) or end (&#39;tail&#39;) of a file.&#34;,
             &#34;properties&#34;: {
                 &#34;byte_count&#34;: {
-                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;bytes &#34; &#34;to &#34; &#34;read. &#34; &#34;If &#34; &#34;specified, &#34; &#34;overrides &#34; &#34;lines.&#34;,
+                    &#34;description&#34;: &#34;Number of bytes to read. If specified, overrides lines.&#34;,
                     &#34;type&#34;: [&#34;integer&#34;, &#34;null&#34;],
                 },
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path to the file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;lines&#34;: {
                     &#34;default&#34;: 10,
-                    &#34;description&#34;: &#34;Number &#34;
-                    &#34;of &#34;
-                    &#34;lines &#34;
-                    &#34;to &#34;
-                    &#34;read. &#34;
-                    &#34;Ignored &#34;
-                    &#34;if &#34;
-                    &#34;byte_count &#34;
-                    &#34;is &#34;
-                    &#34;specified. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#34;10.&#34;,
+                    &#34;description&#34;: &#34;Number of lines to read. Ignored if byte_count is specified. Defaults to 10.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mode&#34;: {
                     &#34;default&#34;: &#34;head&#34;,
-                    &#34;description&#34;: &#34;Operation &#34;
-                    &#34;mode, &#34;
-                    &#34;either &#34;
-                    &#34;&#39;head&#39; &#34;
-                    &#34;or &#34;
-                    &#34;&#39;tail&#39;. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#34;&#39;head&#39;.&#34;,
+                    &#34;description&#34;: &#34;Operation mode, either &#39;head&#39; or &#39;tail&#39;. Defaults to &#39;head&#39;.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -1088,38 +627,20 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;tail&#34;: {
-            &#34;description&#34;: &#34;Return the last &#39;lines&#39; or &#39;bytes&#39; &#34; &#34;from a file.&#34;,
+            &#34;description&#34;: &#34;Return the last &#39;lines&#39; or &#39;bytes&#39; from a file.&#34;,
             &#34;properties&#34;: {
                 &#34;byte_count&#34;: {
-                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;bytes &#34; &#34;to &#34; &#34;return. &#34; &#34;If &#34; &#34;specified, &#34; &#34;overrides &#34; &#34;lines.&#34;,
+                    &#34;description&#34;: &#34;Number of bytes to return. If specified, overrides lines.&#34;,
                     &#34;type&#34;: [&#34;integer&#34;, &#34;null&#34;],
                 },
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path to the file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;lines&#34;: {
                     &#34;default&#34;: 10,
-                    &#34;description&#34;: &#34;Number of &#34;
-                    &#34;lines to &#34;
-                    &#34;return. &#34;
-                    &#34;Ignored &#34;
-                    &#34;if &#34;
-                    &#34;byte_count &#34;
-                    &#34;is &#34;
-                    &#34;specified. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to 10.&#34;,
+                    &#34;description&#34;: &#34;Number of lines to return. Ignored if byte_count is specified. Defaults to 10.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -1127,25 +648,16 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;tail_markdown&#34;: {
-            &#34;description&#34;: &#34;Return the last &#39;lines&#39; &#34; &#34;lines of a file formatted &#34; &#34;as markdown.&#34;,
+            &#34;description&#34;: &#34;Return the last &#39;lines&#39; lines of a file formatted as markdown.&#34;,
             &#34;properties&#34;: {
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;Path to the file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;lines&#34;: {
                     &#34;default&#34;: 10,
-                    &#34;description&#34;: &#34;Number &#34; &#34;of &#34; &#34;lines &#34; &#34;to &#34; &#34;return. &#34; &#34;Defaults &#34; &#34;to &#34; &#34;10.&#34;,
+                    &#34;description&#34;: &#34;Number of lines to return. Defaults to 10.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -1155,126 +667,42 @@ _SCHEMAS = {
     },
     &#34;insert&#34;: {
         &#34;insert_text_after_context&#34;: {
-            &#34;description&#34;: &#34;Inserts a given &#34; &#34;text immediately &#34; &#34;after a specified &#34; &#34;context in a &#34; &#34;file.&#34;,
+            &#34;description&#34;: &#34;Inserts a given text immediately after a specified context in a file.&#34;,
             &#34;properties&#34;: {
                 &#34;context&#34;: {
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;context &#34;
-                    &#34;string &#34;
-                    &#34;to &#34;
-                    &#34;search &#34;
-                    &#34;for &#34;
-                    &#34;in &#34;
-                    &#34;the &#34;
-                    &#34;file. &#34;
-                    &#34;The &#34;
-                    &#34;text &#34;
-                    &#34;is\n&#34;
-                    &#34;inserted &#34;
-                    &#34;after &#34;
-                    &#34;the &#34;
-                    &#34;line &#34;
-                    &#34;containing &#34;
-                    &#34;this &#34;
-                    &#34;context.&#34;,
+                    &#34;description&#34;: &#34;The context string to search for in the file. The text is\ninserted after the line containing this context.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;file_path&#34;: {
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;path &#34;
-                    &#34;of &#34;
-                    &#34;the &#34;
-                    &#34;file &#34;
-                    &#34;in &#34;
-                    &#34;which &#34;
-                    &#34;the &#34;
-                    &#34;text &#34;
-                    &#34;is &#34;
-                    &#34;to &#34;
-                    &#34;be &#34;
-                    &#34;inserted.&#34;,
+                    &#34;description&#34;: &#34;The path of the file in which the text is to be inserted.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;text_to_insert&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;insert &#34; &#34;into &#34; &#34;the &#34; &#34;file.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;text_to_insert&#34;: {&#34;description&#34;: &#34;The text to insert into the file.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;file_path&#34;, &#34;context&#34;, &#34;text_to_insert&#34;],
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;insert_text_after_multiline_context&#34;: {
-            &#34;description&#34;: &#34;Inserts &#34;
-            &#34;text &#34;
-            &#34;immediately &#34;
-            &#34;after a &#34;
-            &#34;specified &#34;
-            &#34;multiline &#34;
-            &#34;context &#34;
-            &#34;in a &#34;
-            &#34;file.&#34;,
+            &#34;description&#34;: &#34;Inserts text immediately after a specified multiline context in a file.&#34;,
             &#34;properties&#34;: {
                 &#34;context_lines&#34;: {
-                    &#34;description&#34;: &#34;A &#34;
-                    &#34;list &#34;
-                    &#34;of &#34;
-                    &#34;strings &#34;
-                    &#34;representing &#34;
-                    &#34;the &#34;
-                    &#34;multiline\n&#34;
-                    &#34;context &#34;
-                    &#34;to &#34;
-                    &#34;search &#34;
-                    &#34;for &#34;
-                    &#34;in &#34;
-                    &#34;the &#34;
-                    &#34;file.&#34;,
+                    &#34;description&#34;: &#34;A list of strings representing the multiline\ncontext to search for in the file.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;file_path&#34;: {
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;path &#34;
-                    &#34;of &#34;
-                    &#34;the &#34;
-                    &#34;file &#34;
-                    &#34;in &#34;
-                    &#34;which &#34;
-                    &#34;the &#34;
-                    &#34;text &#34;
-                    &#34;is &#34;
-                    &#34;to &#34;
-                    &#34;be &#34;
-                    &#34;inserted.&#34;,
+                    &#34;description&#34;: &#34;The path of the file in which the text is to be inserted.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;text_to_insert&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;insert &#34; &#34;into &#34; &#34;the &#34; &#34;file &#34; &#34;after &#34; &#34;the &#34; &#34;context.&#34;,
+                    &#34;description&#34;: &#34;The text to insert into the file after the context.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -1282,62 +710,22 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;insert_text_at_start_or_end&#34;: {
-            &#34;description&#34;: &#34;Inserts text at &#34; &#34;the start or &#34; &#34;end of a file.&#34;,
+            &#34;description&#34;: &#34;Inserts text at the start or end of a file.&#34;,
             &#34;properties&#34;: {
                 &#34;file_path&#34;: {
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;path &#34;
-                    &#34;of &#34;
-                    &#34;the &#34;
-                    &#34;file &#34;
-                    &#34;in &#34;
-                    &#34;which &#34;
-                    &#34;the &#34;
-                    &#34;text &#34;
-                    &#34;is &#34;
-                    &#34;to &#34;
-                    &#34;be &#34;
-                    &#34;inserted.&#34;,
+                    &#34;description&#34;: &#34;The path of the file in which the text is to be inserted.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;position&#34;: {
                     &#34;default&#34;: &#34;end&#34;,
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;position &#34;
-                    &#34;where &#34;
-                    &#34;the &#34;
-                    &#34;text &#34;
-                    &#34;should &#34;
-                    &#34;be &#34;
-                    &#34;inserted.\n&#34;
-                    &#34;Should &#34;
-                    &#34;be &#34;
-                    &#34;either &#34;
-                    &#34;&#39;start&#39; &#34;
-                    &#34;or &#34;
-                    &#34;&#39;end&#39;. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#34;&#39;end&#39;.&#34;,
+                    &#34;description&#34;: &#34;The position where the text should be inserted.\nShould be either &#39;start&#39; or &#39;end&#39;. Defaults to &#39;end&#39;.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;text_to_insert&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;insert &#34; &#34;into &#34; &#34;the &#34; &#34;file.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;text_to_insert&#34;: {&#34;description&#34;: &#34;The text to insert into the file.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;file_path&#34;, &#34;text_to_insert&#34;],
             &#34;type&#34;: &#34;object&#34;,
@@ -1345,34 +733,24 @@ _SCHEMAS = {
     },
     &#34;ls&#34;: {
         &#34;ls&#34;: {
-            &#34;description&#34;: &#34;List directory contents, with options to &#34; &#34;include all files and detailed view.&#34;,
+            &#34;description&#34;: &#34;List directory contents, with options to include all files and detailed view.&#34;,
             &#34;properties&#34;: {
                 &#34;all_files&#34;: {
                     &#34;default&#34;: False,
-                    &#34;description&#34;: &#34;If True, &#34; &#34;include &#34; &#34;hidden files. &#34; &#34;Defaults to &#34; &#34;False.&#34;,
+                    &#34;description&#34;: &#34;If True, include hidden files. Defaults to False.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
                 &#34;long&#34;: {
                     &#34;default&#34;: False,
-                    &#34;description&#34;: &#34;If True, include &#34;
-                    &#34;details like &#34;
-                    &#34;permissions, &#34;
-                    &#34;owner, size, and &#34;
-                    &#34;modification date. &#34;
-                    &#34;Defaults to False.&#34;,
+                    &#34;description&#34;: &#34;If True, include details like permissions, owner, size, and modification date. Defaults to False.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return value &#34;
-                    &#34;as text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or text/yaml &#34;
-                    &#34;inside the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;path&#34;: {
-                    &#34;description&#34;: &#34;The directory path &#34; &#34;to list. Defaults &#34; &#34;to the current &#34; &#34;directory &#39;.&#39;.&#34;,
+                    &#34;description&#34;: &#34;The directory path to list. Defaults to the current directory &#39;.&#39;.&#34;,
                     &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
                 },
             },
@@ -1380,52 +758,25 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;ls_markdown&#34;: {
-            &#34;description&#34;: &#34;List directory contents, with &#34; &#34;options to include all files and &#34; &#34;detailed view.&#34;,
+            &#34;description&#34;: &#34;List directory contents, with options to include all files and detailed view.&#34;,
             &#34;properties&#34;: {
                 &#34;all_files&#34;: {
                     &#34;default&#34;: False,
-                    &#34;description&#34;: &#34;If &#34; &#34;True, &#34; &#34;include &#34; &#34;hidden &#34; &#34;files. &#34; &#34;Defaults &#34; &#34;to &#34; &#34;False.&#34;,
+                    &#34;description&#34;: &#34;If True, include hidden files. Defaults to False.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
                 &#34;long&#34;: {
                     &#34;default&#34;: False,
-                    &#34;description&#34;: &#34;If True, &#34;
-                    &#34;include &#34;
-                    &#34;details &#34;
-                    &#34;like &#34;
-                    &#34;permissions, &#34;
-                    &#34;owner, &#34;
-                    &#34;size, and &#34;
-                    &#34;modification &#34;
-                    &#34;date. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to False.&#34;,
+                    &#34;description&#34;: &#34;If True, include details like permissions, owner, size, and modification date. Defaults to False.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;path&#34;: {
                     &#34;default&#34;: &#34;.&#34;,
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;directory &#34;
-                    &#34;path to &#34;
-                    &#34;list. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to the &#34;
-                    &#34;current &#34;
-                    &#34;directory &#34;
-                    &#34;&#39;.&#39;.&#34;,
+                    &#34;description&#34;: &#34;The directory path to list. Defaults to the current directory &#39;.&#39;.&#34;,
                     &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
                 },
             },
@@ -1435,22 +786,13 @@ _SCHEMAS = {
     },
     &#34;patch&#34;: {
         &#34;apply_git_patch&#34;: {
-            &#34;description&#34;: &#34;Apply a git patch to the &#34; &#34;files in the root folder.&#34;,
+            &#34;description&#34;: &#34;Apply a git patch to the files in the root folder.&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;patch_content&#34;: {&#34;description&#34;: &#34;The &#34; &#34;content &#34; &#34;of &#34; &#34;the &#34; &#34;git &#34; &#34;patch.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;patch_content&#34;: {&#34;description&#34;: &#34;The content of the git patch.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;patch_content&#34;],
             &#34;type&#34;: &#34;object&#34;,
@@ -1458,67 +800,25 @@ _SCHEMAS = {
     },
     &#34;pycat&#34;: {
         &#34;format_code_as_markdown&#34;: {
-            &#34;description&#34;: &#34;Combine all Python &#34; &#34;files in a directory &#34; &#34;into a single &#34; &#34;Markdown file.&#34;,
+            &#34;description&#34;: &#34;Combine all Python files in a directory into a single Markdown file.&#34;,
             &#34;properties&#34;: {
-                &#34;base_path&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;base &#34; &#34;path &#34; &#34;of &#34; &#34;the &#34; &#34;directory &#34; &#34;to &#34; &#34;start &#34; &#34;traversing.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;base_path&#34;: {&#34;description&#34;: &#34;The base path of the directory to start traversing.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;header&#34;: {
-                    &#34;description&#34;: &#34;A &#34;
-                    &#34;header &#34;
-                    &#34;string &#34;
-                    &#34;to &#34;
-                    &#34;be &#34;
-                    &#34;included &#34;
-                    &#34;at &#34;
-                    &#34;the &#34;
-                    &#34;beginning &#34;
-                    &#34;of &#34;
-                    &#34;the &#34;
-                    &#34;Markdown &#34;
-                    &#34;file.&#34;,
+                    &#34;description&#34;: &#34;A header string to be included at the beginning of the Markdown file.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;no_comments&#34;: {
                     &#34;default&#34;: False,
-                    &#34;description&#34;: &#34;Whether &#34;
-                    &#34;to &#34;
-                    &#34;exclude &#34;
-                    &#34;comments &#34;
-                    &#34;from &#34;
-                    &#34;the &#34;
-                    &#34;output. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#34;False.&#34;,
+                    &#34;description&#34;: &#34;Whether to exclude comments from the output. Defaults to False.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
                 &#34;no_docs&#34;: {
                     &#34;default&#34;: False,
-                    &#34;description&#34;: &#34;Whether &#34;
-                    &#34;to &#34;
-                    &#34;exclude &#34;
-                    &#34;docstrings &#34;
-                    &#34;from &#34;
-                    &#34;the &#34;
-                    &#34;output. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#34;False.&#34;,
+                    &#34;description&#34;: &#34;Whether to exclude docstrings from the output. Defaults to False.&#34;,
                     &#34;type&#34;: &#34;boolean&#34;,
                 },
             },
@@ -1528,19 +828,10 @@ _SCHEMAS = {
     },
     &#34;pytest&#34;: {
         &#34;pytest&#34;: {
-            &#34;description&#34;: &#34;Runs pytest on tests in tests &#34; &#34;folder..&#34;,
+            &#34;description&#34;: &#34;Runs pytest on tests in tests folder..&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 }
             },
@@ -1550,204 +841,81 @@ _SCHEMAS = {
     },
     &#34;replace&#34;: {
         &#34;replace_all&#34;: {
-            &#34;description&#34;: &#34;Replaces all occurrences of a &#34; &#34;specified text with new text &#34; &#34;in a file.&#34;,
+            &#34;description&#34;: &#34;Replaces all occurrences of a specified text with new text in a file.&#34;,
             &#34;properties&#34;: {
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The path to the file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;new_text&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;new &#34; &#34;text &#34; &#34;to &#34; &#34;replace &#34; &#34;the &#34; &#34;old &#34; &#34;text.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
-                &#34;old_text&#34;: {&#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;be &#34; &#34;replaced.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;new_text&#34;: {&#34;description&#34;: &#34;The new text to replace the old text.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;old_text&#34;: {&#34;description&#34;: &#34;The text to be replaced.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;file_path&#34;, &#34;old_text&#34;, &#34;new_text&#34;],
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;replace_line_by_line&#34;: {
-            &#34;description&#34;: &#34;Replaces occurrences &#34;
-            &#34;of a specified text &#34;
-            &#34;with new text in a &#34;
-            &#34;range of lines in a &#34;
-            &#34;file.&#34;,
+            &#34;description&#34;: &#34;Replaces occurrences of a specified text with new text in a range of lines in a file.&#34;,
             &#34;properties&#34;: {
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The path to the file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;line_end&#34;: {
                     &#34;default&#34;: -1,
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;ending &#34;
-                    &#34;line &#34;
-                    &#34;number &#34;
-                    &#34;(0-indexed) &#34;
-                    &#34;for &#34;
-                    &#34;the &#34;
-                    &#34;replacement.\n&#34;
-                    &#34;If &#34;
-                    &#34;-1, &#34;
-                    &#34;it &#34;
-                    &#34;goes &#34;
-                    &#34;to &#34;
-                    &#34;the &#34;
-                    &#34;end &#34;
-                    &#34;of &#34;
-                    &#34;the &#34;
-                    &#34;file. &#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#34;-1.&#34;,
+                    &#34;description&#34;: &#34;The ending line number (0-indexed) for the replacement.\nIf -1, it goes to the end of the file. Defaults to -1.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;line_start&#34;: {
                     &#34;default&#34;: 0,
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;starting &#34;
-                    &#34;line &#34;
-                    &#34;number &#34;
-                    &#34;(0-indexed) &#34;
-                    &#34;for &#34;
-                    &#34;the &#34;
-                    &#34;replacement.\n&#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#34;0.&#34;,
+                    &#34;description&#34;: &#34;The starting line number (0-indexed) for the replacement.\nDefaults to 0.&#34;,
                     &#34;type&#34;: &#34;integer&#34;,
                 },
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;new_text&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;new &#34; &#34;text &#34; &#34;to &#34; &#34;replace &#34; &#34;the &#34; &#34;old &#34; &#34;text.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
-                &#34;old_text&#34;: {&#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;be &#34; &#34;replaced.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;new_text&#34;: {&#34;description&#34;: &#34;The new text to replace the old text.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;old_text&#34;: {&#34;description&#34;: &#34;The text to be replaced.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;file_path&#34;, &#34;old_text&#34;, &#34;new_text&#34;],
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;replace_with_regex&#34;: {
-            &#34;description&#34;: &#34;Replaces text in a file &#34; &#34;based on a regular &#34; &#34;expression match.&#34;,
+            &#34;description&#34;: &#34;Replaces text in a file based on a regular expression match.&#34;,
             &#34;properties&#34;: {
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The path to the file.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;regex_match_expression&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;regular &#34; &#34;expression &#34; &#34;pattern &#34; &#34;to &#34; &#34;match.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
-                &#34;replacement&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;replace &#34; &#34;the &#34; &#34;matched &#34; &#34;pattern.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;regex_match_expression&#34;: {&#34;description&#34;: &#34;The regular expression pattern to match.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;replacement&#34;: {&#34;description&#34;: &#34;The text to replace the matched pattern.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;file_path&#34;, &#34;regex_match_expression&#34;, &#34;replacement&#34;],
-            &#34;type&#34;: &#34;object&#34;,
-        },
-        &#34;save_if_changed&#34;: {
-            &#34;description&#34;: &#34;Saves the modified text to &#34; &#34;the file if changes have &#34; &#34;been made.&#34;,
-            &#34;properties&#34;: {
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;The &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
-                &#34;final&#34;: {&#34;description&#34;: &#34;The &#34; &#34;modified &#34; &#34;text.&#34;, &#34;type&#34;: &#34;string&#34;},
-                &#34;input_text&#34;: {&#34;description&#34;: &#34;The &#34; &#34;original &#34; &#34;text.&#34;, &#34;type&#34;: &#34;string&#34;},
-                &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
-            },
-            &#34;required&#34;: [&#34;file_path&#34;, &#34;final&#34;, &#34;input_text&#34;],
             &#34;type&#34;: &#34;object&#34;,
         },
     },
     &#34;rewrite&#34;: {
         &#34;rewrite_file&#34;: {
-            &#34;description&#34;: &#34;Backup and rewrite an &#34; &#34;existing file at file_path &#34; &#34;within the root_folder.&#34;,
+            &#34;description&#34;: &#34;Backup and rewrite an existing file at file_path within the root_folder.&#34;,
             &#34;properties&#34;: {
-                &#34;file_path&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;relative &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;be &#34; &#34;rewritten.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The relative path to the file to be rewritten.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;text&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;new &#34; &#34;content &#34; &#34;to &#34; &#34;write &#34; &#34;into &#34; &#34;the &#34; &#34;file.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;text&#34;: {&#34;description&#34;: &#34;The new content to write into the file.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;file_path&#34;, &#34;text&#34;],
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;write_new_file&#34;: {
-            &#34;description&#34;: &#34;Write a new file at &#34; &#34;file_path within the &#34; &#34;root_folder.&#34;,
+            &#34;description&#34;: &#34;Write a new file at file_path within the root_folder.&#34;,
             &#34;properties&#34;: {
-                &#34;file_path&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;relative &#34; &#34;path &#34; &#34;to &#34; &#34;the &#34; &#34;file &#34; &#34;to &#34; &#34;be &#34; &#34;written.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The relative path to the file to be written.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;text&#34;: {&#34;description&#34;: &#34;The &#34; &#34;content &#34; &#34;to &#34; &#34;write &#34; &#34;into &#34; &#34;the &#34; &#34;file.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;text&#34;: {&#34;description&#34;: &#34;The content to write into the file.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;file_path&#34;, &#34;text&#34;],
             &#34;type&#34;: &#34;object&#34;,
@@ -1755,24 +923,12 @@ _SCHEMAS = {
     },
     &#34;sed&#34;: {
         &#34;sed&#34;: {
-            &#34;description&#34;: &#34;Transform the contents of a file located &#34;
-            &#34;at file_path as per the provided sed-like &#34;
-            &#34;commands.&#34;,
+            &#34;description&#34;: &#34;Transform the contents of a file located at file_path as per the provided sed-like commands.&#34;,
             &#34;properties&#34;: {
-                &#34;commands&#34;: {
-                    &#34;description&#34;: &#34;A list of &#34; &#34;sed-like &#34; &#34;commands for &#34; &#34;text &#34; &#34;transformation.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
-                &#34;file_path&#34;: {&#34;description&#34;: &#34;The path of &#34; &#34;the file to &#34; &#34;be &#34; &#34;transformed.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;commands&#34;: {&#34;description&#34;: &#34;A list of sed-like commands for text transformation.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;file_path&#34;: {&#34;description&#34;: &#34;The path of the file to be transformed.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -1784,97 +940,55 @@ _SCHEMAS = {
         &#34;add_todo&#34;: {
             &#34;description&#34;: &#34;Adds a new task to the task manager.&#34;,
             &#34;properties&#34;: {
-                &#34;assignee&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;name &#34; &#34;of the &#34; &#34;assignee. &#34; &#34;Defaults &#34; &#34;to &#34; &#34;None.&#34;,
-                    &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;],
-                },
-                &#34;category&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;category &#34; &#34;of the &#34; &#34;task &#34; &#34;(e.g., &#34; &#34;&#39;bug&#39;, &#34; &#34;&#39;feature&#39;).&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
-                &#34;description&#34;: {&#34;description&#34;: &#34;A &#34; &#34;description &#34; &#34;of &#34; &#34;the &#34; &#34;task.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;assignee&#34;: {&#34;description&#34;: &#34;The name of the assignee. Defaults to None.&#34;, &#34;type&#34;: [&#34;string&#34;, &#34;null&#34;]},
+                &#34;category&#34;: {&#34;description&#34;: &#34;The category of the task (e.g., &#39;bug&#39;, &#39;feature&#39;).&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;description&#34;: {&#34;description&#34;: &#34;A description of the task.&#34;, &#34;type&#34;: &#34;string&#34;},
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;source_code_ref&#34;: {
-                    &#34;description&#34;: &#34;Reference &#34; &#34;to &#34; &#34;the &#34; &#34;source &#34; &#34;code &#34; &#34;related &#34; &#34;to &#34; &#34;the &#34; &#34;task.&#34;,
+                    &#34;description&#34;: &#34;Reference to the source code related to the task.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;title&#34;: {&#34;description&#34;: &#34;The title &#34; &#34;of the &#34; &#34;task.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;title&#34;: {&#34;description&#34;: &#34;The title of the task.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;title&#34;, &#34;description&#34;, &#34;category&#34;, &#34;source_code_ref&#34;, &#34;assignee&#34;],
             &#34;type&#34;: &#34;object&#34;,
         },
-        &#34;query_todos_by_assignee&#34;: {
-            &#34;description&#34;: &#34;Queries tasks &#34;
-            &#34;assigned to a &#34;
-            &#34;specific assignee. &#34;
-            &#34;Currently, the &#34;
-            &#34;assignee is &#34;
-            &#34;hard-coded as &#34;
-            &#34;&#39;Developer&#39;.&#34;,
+        &#34;list_valid_assignees&#34;: {
+            &#34;description&#34;: &#34;Lists the valid assignees for tasks.&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 }
             },
             &#34;required&#34;: [],
             &#34;type&#34;: &#34;object&#34;,
         },
+        &#34;query_todos_by_assignee&#34;: {
+            &#34;description&#34;: &#34;Queries tasks assigned to a specific assignee. Currently, the assignee is hard-coded as &#39;Developer&#39;.&#34;,
+            &#34;properties&#34;: {
+                &#34;assignee_name&#34;: {&#34;description&#34;: &#34;The name of the assignee to query tasks for.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                },
+            },
+            &#34;required&#34;: [&#34;assignee_name&#34;],
+            &#34;type&#34;: &#34;object&#34;,
+        },
         &#34;query_todos_by_regex&#34;: {
-            &#34;description&#34;: &#34;Queries tasks by a &#34; &#34;keyword in their title, &#34; &#34;using a regular &#34; &#34;expression pattern.&#34;,
+            &#34;description&#34;: &#34;Queries tasks by a keyword in their title, using a regular expression pattern.&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
                 &#34;regex_pattern&#34;: {
                     &#34;default&#34;: &#34;[\\s\\S]+&#34;,
-                    &#34;description&#34;: &#34;The &#34;
-                    &#34;regular &#34;
-                    &#34;expression &#34;
-                    &#34;pattern &#34;
-                    &#34;to &#34;
-                    &#34;match &#34;
-                    &#34;in &#34;
-                    &#34;task &#34;
-                    &#34;titles.\n&#34;
-                    &#34;Defaults &#34;
-                    &#34;to &#34;
-                    &#39;&#34;[\\s\\S]+&#34;, &#39;
-                    &#34;which &#34;
-                    &#34;matches &#34;
-                    &#34;any &#34;
-                    &#34;title.&#34;,
+                    &#34;description&#34;: &#39;The regular expression pattern to match in task titles.\nDefaults to &#34;[\\s\\S]+&#34;, which matches any title.&#39;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
             },
@@ -1882,25 +996,13 @@ _SCHEMAS = {
             &#34;type&#34;: &#34;object&#34;,
         },
         &#34;remove_todo&#34;: {
-            &#34;description&#34;: &#34;Marks a task as finished based on &#34; &#34;its title.&#34;,
+            &#34;description&#34;: &#34;Marks a task as finished based on its title.&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;title&#34;: {
-                    &#34;description&#34;: &#34;The &#34; &#34;title &#34; &#34;of the &#34; &#34;task &#34; &#34;to be &#34; &#34;marked &#34; &#34;as &#34; &#34;finished.&#34;,
-                    &#34;type&#34;: &#34;string&#34;,
-                },
+                &#34;title&#34;: {&#34;description&#34;: &#34;The title of the task to be marked as finished.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;title&#34;],
             &#34;type&#34;: &#34;object&#34;,
@@ -1908,22 +1010,13 @@ _SCHEMAS = {
     },
     &#34;token_counter&#34;: {
         &#34;count_tokens&#34;: {
-            &#34;description&#34;: &#34;Count the number of &#34; &#34;tokens in a string.&#34;,
+            &#34;description&#34;: &#34;Count the number of tokens in a string.&#34;,
             &#34;properties&#34;: {
                 &#34;mime_type&#34;: {
-                    &#34;description&#34;: &#34;Return &#34;
-                    &#34;value &#34;
-                    &#34;as &#34;
-                    &#34;text/csv, &#34;
-                    &#34;text/markdown, &#34;
-                    &#34;or &#34;
-                    &#34;text/yaml &#34;
-                    &#34;inside &#34;
-                    &#34;the &#34;
-                    &#34;JSON.&#34;,
+                    &#34;description&#34;: &#34;Return value as text/csv, text/markdown, or text/yaml inside the JSON.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                 },
-                &#34;text&#34;: {&#34;description&#34;: &#34;The &#34; &#34;text &#34; &#34;to &#34; &#34;count &#34; &#34;the &#34; &#34;tokens &#34; &#34;in.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;text&#34;: {&#34;description&#34;: &#34;The text to count the tokens in.&#34;, &#34;type&#34;: &#34;string&#34;},
             },
             &#34;required&#34;: [&#34;text&#34;],
             &#34;type&#34;: &#34;object&#34;,

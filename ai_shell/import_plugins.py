@@ -115,9 +115,9 @@ if __name__ == "__main__":
 
         # tool callbacks give us a method name, which we lookup in toolkit
         # and
-        for method_name, _tool in tool_kit.items():
-            instance = tool_kit[method_name][0]
-            schema = tool_kit[method_name][1]
+        for method_name, tool in tool_kit.items():
+            instance = tool[0]
+            schema = tool[1]
             bots_kwargs = generate_data_for_schema(schema)
             result = handle_tool(method_name, bots_kwargs, instance)
             print(f"Invoking... {method_name}() == {result}")

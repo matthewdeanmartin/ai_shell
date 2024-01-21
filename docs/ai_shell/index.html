@@ -30,6 +30,8 @@
 <pre><code class="python">&#34;&#34;&#34;
 Filesystem shell tools for OpenAI Assistant
 &#34;&#34;&#34;
+from ai_shell.ai_logs.log_to_markdown import DialogLoggerWithMarkdown
+from ai_shell.ai_logs.logging_utils import configure_logging
 from ai_shell.answer_tool import AnswerCollectorTool
 from ai_shell.bot_glue.bot import TaskBot
 from ai_shell.cat_tool import CatTool
@@ -58,8 +60,6 @@ from ai_shell.todo_tool import TodoTool
 from ai_shell.token_tool import TokenCounterTool
 from ai_shell.utils.config_manager import Config
 from ai_shell.utils.cwd_utils import change_directory
-from ai_shell.utils.log_conversation import DialogLoggerWithMarkdown
-from ai_shell.utils.logging_utils import configure_logging
 
 __all__ = [
     &#34;CatTool&#34;,
@@ -105,6 +105,10 @@ __all__ = [
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
+<dt><code class="name"><a title="ai_shell.ai_logs" href="ai_logs/index.html">ai_shell.ai_logs</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt><code class="name"><a title="ai_shell.answer_tool" href="answer_tool.html">ai_shell.answer_tool</a></code></dt>
 <dd>
 <div class="desc"><p>Call a tool, but actually the tool is just a way to get a structured response …</p></div>
@@ -216,7 +220,7 @@ you can't check if the tools are any good for a …</p></div>
 </dd>
 <dt><code class="name"><a title="ai_shell.read_py_source" href="read_py_source.html">ai_shell.read_py_source</a></code></dt>
 <dd>
-<div class="desc"><p>Read source with tools that understand the stucture of python</p></div>
+<div class="desc"><p>Read source with tools that understand the structure of python</p></div>
 </dd>
 <dt><code class="name"><a title="ai_shell.regex_tester_tool" href="regex_tester_tool.html">ai_shell.regex_tester_tool</a></code></dt>
 <dd>
@@ -310,6 +314,13 @@ def change_directory(new_path: str) -&gt; Iterator[None]:
                 &#34;class&#34;: &#34;logging.StreamHandler&#34;,
                 &#34;stream&#34;: &#34;ext://sys.stdout&#34;,  # Default is stderr
             },
+            &#34;bug_trail&#34;: {
+                &#34;level&#34;: &#34;DEBUG&#34;,
+                # &#34;formatter&#34;: &#34;standard&#34;,
+                &#34;class&#34;: &#34;bug_trail_core.BugTrailHandler&#34;,
+                &#34;db_path&#34;: bug_trail_config.database_path,
+                &#34;minimum_level&#34;: logging.DEBUG,
+            },
             # &#34;json&#34;: {
             #     # &#34;()&#34;: &#34;json_file_handler_factory&#34;,
             #     &#34;level&#34;: &#34;DEBUG&#34;,
@@ -321,7 +332,7 @@ def change_directory(new_path: str) -&gt; Iterator[None]:
         &#34;loggers&#34;: {
             # root logger can capture too much
             &#34;&#34;: {  # root logger
-                &#34;handlers&#34;: [&#34;default&#34;],
+                &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
                 &#34;level&#34;: &#34;DEBUG&#34;,
                 &#34;propagate&#34;: False,
             },
@@ -343,21 +354,21 @@ def change_directory(new_path: str) -&gt; Iterator[None]:
 
     for name in debug_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;],
+            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
             &#34;level&#34;: &#34;DEBUG&#34;,
             &#34;propagate&#34;: False,
         }
 
     for name in info_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;],
+            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
             &#34;level&#34;: &#34;INFO&#34;,
             &#34;propagate&#34;: False,
         }
 
     for name in warn_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;],
+            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
             &#34;level&#34;: &#34;WARNING&#34;,
             &#34;propagate&#34;: False,
         }
@@ -1531,8 +1542,10 @@ def cat_markdown(
             self._list_data = data[&#34;lists&#34;]
         else:
             self.save_config()
-        if len(self._bots_data) &gt; 5:
-            raise ValueError(&#34;You have too many bots. Bot persistence must be failing somewhere.&#34;)
+        if len(self._bots_data) &gt; 100:
+            raise ValueError(
+                f&#34;You have too many bots. Bot persistence must be failing somewhere, see {self.config_file}&#34;
+            )
 
     def save_config(self):
         &#34;&#34;&#34;Save the config to the config file.&#34;&#34;&#34;
@@ -1607,18 +1620,32 @@ def cat_markdown(
         &#34;&#34;&#34;
         return self._flags_data.get(flag_name, default_value)
 
-    def get_value(self, name: str) -&gt; Optional[str]:
-        &#34;&#34;&#34;Return the value of the given flag.
+    def get_value(self, name: str, default: Optional[str] = None) -&gt; Optional[str]:
+        &#34;&#34;&#34;Return the value of the given named value.
+
         Args:
             name (str): The name of the config value.
+            default (Optional[str], optional): The default value to return if the value does not exist.
+                                               Defaults to None.
 
         Returns:
-            Optional[str]: The value of the flag, or None if the flag does not exist.
+            Optional[str]: The value of the named value, or None if the name does not exist.
         &#34;&#34;&#34;
-        return self._values_data.get(name, None)
+        return self._values_data.get(name, default)
+
+    def set_list(self, list_name: str, value: list[str]) -&gt; None:
+        &#34;&#34;&#34;Set the value of the given list of values.
+
+        Args:
+            list_name (str): The name of the config value.
+            value (list[str]): The value of the list.
+        &#34;&#34;&#34;
+        self._list_data[list_name] = value
+        self.save_config()
 
     def get_required_value(self, name: str) -&gt; str:
-        &#34;&#34;&#34;Return the value of the given flag.
+        &#34;&#34;&#34;Return the value of the given named value.
+
         Args:
             name (str): The name of the config value.
 
@@ -1635,7 +1662,8 @@ def cat_markdown(
         return value
 
     def get_list(self, list_name: str) -&gt; list[str]:
-        &#34;&#34;&#34;Return the value of the given flag.
+        &#34;&#34;&#34;Return the value of the given list of values.
+
         Args:
             list_name (str): The name of the config value.
 
@@ -1779,7 +1807,7 @@ Defaults to None.</dd>
 <span>def <span class="ident">get_list</span></span>(<span>self, list_name: str) ‑> list[str]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return the value of the given flag.</p>
+<div class="desc"><p>Return the value of the given list of values.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>list_name</code></strong> :&ensp;<code>str</code></dt>
@@ -1795,7 +1823,8 @@ Defaults to None.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_list(self, list_name: str) -&gt; list[str]:
-    &#34;&#34;&#34;Return the value of the given flag.
+    &#34;&#34;&#34;Return the value of the given list of values.
+
     Args:
         list_name (str): The name of the config value.
 
@@ -1809,7 +1838,7 @@ Defaults to None.</dd>
 <span>def <span class="ident">get_required_value</span></span>(<span>self, name: str) ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return the value of the given flag.</p>
+<div class="desc"><p>Return the value of the given named value.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
@@ -1830,7 +1859,8 @@ Defaults to None.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_required_value(self, name: str) -&gt; str:
-    &#34;&#34;&#34;Return the value of the given flag.
+    &#34;&#34;&#34;Return the value of the given named value.
+
     Args:
         name (str): The name of the config value.
 
@@ -1848,33 +1878,39 @@ Defaults to None.</dd>
 </details>
 </dd>
 <dt id="ai_shell.Config.get_value"><code class="name flex">
-<span>def <span class="ident">get_value</span></span>(<span>self, name: str) ‑> Optional[str]</span>
+<span>def <span class="ident">get_value</span></span>(<span>self, name: str, default: Optional[str] = None) ‑> Optional[str]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Return the value of the given flag.</p>
+<div class="desc"><p>Return the value of the given named value.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the config value.</dd>
+<dt><strong><code>default</code></strong> :&ensp;<code>Optional[str]</code>, optional</dt>
+<dd>The default value to return if the value does not exist.
+Defaults to None.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>Optional[str]</code></dt>
-<dd>The value of the flag, or None if the flag does not exist.</dd>
+<dd>The value of the named value, or None if the name does not exist.</dd>
 </dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_value(self, name: str) -&gt; Optional[str]:
-    &#34;&#34;&#34;Return the value of the given flag.
+<pre><code class="python">def get_value(self, name: str, default: Optional[str] = None) -&gt; Optional[str]:
+    &#34;&#34;&#34;Return the value of the given named value.
+
     Args:
         name (str): The name of the config value.
+        default (Optional[str], optional): The default value to return if the value does not exist.
+                                           Defaults to None.
 
     Returns:
-        Optional[str]: The value of the flag, or None if the flag does not exist.
+        Optional[str]: The value of the named value, or None if the name does not exist.
     &#34;&#34;&#34;
-    return self._values_data.get(name, None)</code></pre>
+    return self._values_data.get(name, default)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.Config.load_config"><code class="name flex">
@@ -1896,8 +1932,10 @@ Defaults to None.</dd>
         self._list_data = data[&#34;lists&#34;]
     else:
         self.save_config()
-    if len(self._bots_data) &gt; 5:
-        raise ValueError(&#34;You have too many bots. Bot persistence must be failing somewhere.&#34;)</code></pre>
+    if len(self._bots_data) &gt; 100:
+        raise ValueError(
+            f&#34;You have too many bots. Bot persistence must be failing somewhere, see {self.config_file}&#34;
+        )</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.Config.save_config"><code class="name flex">
@@ -1951,6 +1989,33 @@ Defaults to None.</dd>
     self.save_config()</code></pre>
 </details>
 </dd>
+<dt id="ai_shell.Config.set_list"><code class="name flex">
+<span>def <span class="ident">set_list</span></span>(<span>self, list_name: str, value: list[str]) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Set the value of the given list of values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>list_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the config value.</dd>
+<dt><strong><code>value</code></strong> :&ensp;<code>list[str]</code></dt>
+<dd>The value of the list.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_list(self, list_name: str, value: list[str]) -&gt; None:
+    &#34;&#34;&#34;Set the value of the given list of values.
+
+    Args:
+        list_name (str): The name of the config value.
+        value (list[str]): The value of the list.
+    &#34;&#34;&#34;
+    self._list_data[list_name] = value
+    self.save_config()</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 <dt id="ai_shell.CutTool"><code class="flex name class">
@@ -1987,6 +2052,7 @@ class CutTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def cut_characters(self, file_path: str, character_ranges: str) -&gt; str:
@@ -2004,14 +2070,19 @@ class CutTool:
         ranges = parse_ranges(character_ranges)
         output = io.StringIO()
 
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
-            for line in file:
-                for i, char in enumerate(line, start=1):
-                    if is_in_ranges(i, ranges):
-                        output.write(char)
+        try:
+            with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                for line in file:
+                    for i, char in enumerate(line, start=1):
+                        if is_in_ranges(i, ranges):
+                            output.write(char)
 
-                # Optionally add a newline character after each line
-                output.write(&#34;\n&#34;)
+                    # Optionally add a newline character after each line
+                    output.write(&#34;\n&#34;)
+        except FileNotFoundError:
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {file_path} not found. Here are all the files you can see\n\n{tree_text}&#34;
+            return markdown_content
 
         return output.getvalue()
 
@@ -2031,13 +2102,18 @@ class CutTool:
             raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
         ranges = parse_ranges(field_ranges)
         output = io.StringIO()
+        try:
+            with open(filename, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                reader = csv.reader(file, delimiter=delimiter)
 
-        with open(filename, encoding=&#34;utf-8&#34;) as file:
-            reader = csv.reader(file, delimiter=delimiter)
-
-            for row in reader:
-                selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
-                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+                for row in reader:
+                    selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
+                    output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+        except FileNotFoundError:
+            # Host app should always have cwd == root dir.
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {filename} not found. Here are all the files you can see\n\n{tree_text}&#34;
+            return markdown_content
 
         return output.getvalue()
 
@@ -2046,9 +2122,9 @@ class CutTool:
         &#34;&#34;&#34;Reads a file and extracts fields based on specified field names using the given delimiter.
 
         Args:
-            filename: The name of the file to process.
-            field_names: A list of field names to extract.
-            delimiter: A single character used as the field delimiter.
+            filename(str): The name of the file to process.
+            field_names(list[str]): A list of field names to extract.
+            delimiter(str): A single character used as the field delimiter.
 
         Returns:
             A string containing the selected fields from the file.
@@ -2057,13 +2133,18 @@ class CutTool:
             raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
         output = io.StringIO()
 
-        with open(filename, encoding=&#34;utf-8&#34;) as file:
-            reader = csv.DictReader(file, delimiter=delimiter)
-            # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
+        try:
+            with open(filename, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                reader = csv.DictReader(file, delimiter=delimiter)
+                # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
 
-            for row in reader:
-                selected_fields = [row[field] for field in field_names if field in row]
-                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+                for row in reader:
+                    selected_fields = [row[field] for field in field_names if field in row]
+                    output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+        except FileNotFoundError:
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {filename} not found. Here are all the files you can see\n\n{tree_text}&#34;
+            return markdown_content
 
         return output.getvalue()</code></pre>
 </details>
@@ -2103,14 +2184,19 @@ def cut_characters(self, file_path: str, character_ranges: str) -&gt; str:
     ranges = parse_ranges(character_ranges)
     output = io.StringIO()
 
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
-        for line in file:
-            for i, char in enumerate(line, start=1):
-                if is_in_ranges(i, ranges):
-                    output.write(char)
+    try:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+            for line in file:
+                for i, char in enumerate(line, start=1):
+                    if is_in_ranges(i, ranges):
+                        output.write(char)
 
-            # Optionally add a newline character after each line
-            output.write(&#34;\n&#34;)
+                # Optionally add a newline character after each line
+                output.write(&#34;\n&#34;)
+    except FileNotFoundError:
+        tree_text = tree(Path(os.getcwd()))
+        markdown_content = f&#34;# File {file_path} not found. Here are all the files you can see\n\n{tree_text}&#34;
+        return markdown_content
 
     return output.getvalue()</code></pre>
 </details>
@@ -2151,13 +2237,18 @@ def cut_fields(self, filename: str, field_ranges: str, delimiter: str = &#34;,&#
         raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
     ranges = parse_ranges(field_ranges)
     output = io.StringIO()
+    try:
+        with open(filename, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+            reader = csv.reader(file, delimiter=delimiter)
 
-    with open(filename, encoding=&#34;utf-8&#34;) as file:
-        reader = csv.reader(file, delimiter=delimiter)
-
-        for row in reader:
-            selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
-            output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+            for row in reader:
+                selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
+                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+    except FileNotFoundError:
+        # Host app should always have cwd == root dir.
+        tree_text = tree(Path(os.getcwd()))
+        markdown_content = f&#34;# File {filename} not found. Here are all the files you can see\n\n{tree_text}&#34;
+        return markdown_content
 
     return output.getvalue()</code></pre>
 </details>
@@ -2168,14 +2259,9 @@ def cut_fields(self, filename: str, field_ranges: str, delimiter: str = &#34;,&#
 <dd>
 <div class="desc"><p>Reads a file and extracts fields based on specified field names using the given delimiter.</p>
 <h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>filename</code></strong></dt>
-<dd>The name of the file to process.</dd>
-<dt><strong><code>field_names</code></strong></dt>
-<dd>A list of field names to extract.</dd>
-<dt><strong><code>delimiter</code></strong></dt>
-<dd>A single character used as the field delimiter.</dd>
-</dl>
+<p>filename(str): The name of the file to process.
+field_names(list[str]): A list of field names to extract.
+delimiter(str): A single character used as the field delimiter.</p>
 <h2 id="returns">Returns</h2>
 <p>A string containing the selected fields from the file.</p></div>
 <details class="source">
@@ -2187,9 +2273,9 @@ def cut_fields_by_name(self, filename: str, field_names: list[str], delimiter: s
     &#34;&#34;&#34;Reads a file and extracts fields based on specified field names using the given delimiter.
 
     Args:
-        filename: The name of the file to process.
-        field_names: A list of field names to extract.
-        delimiter: A single character used as the field delimiter.
+        filename(str): The name of the file to process.
+        field_names(list[str]): A list of field names to extract.
+        delimiter(str): A single character used as the field delimiter.
 
     Returns:
         A string containing the selected fields from the file.
@@ -2198,13 +2284,18 @@ def cut_fields_by_name(self, filename: str, field_names: list[str], delimiter: s
         raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
     output = io.StringIO()
 
-    with open(filename, encoding=&#34;utf-8&#34;) as file:
-        reader = csv.DictReader(file, delimiter=delimiter)
-        # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
+    try:
+        with open(filename, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+            reader = csv.DictReader(file, delimiter=delimiter)
+            # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
 
-        for row in reader:
-            selected_fields = [row[field] for field in field_names if field in row]
-            output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+            for row in reader:
+                selected_fields = [row[field] for field in field_names if field in row]
+                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+    except FileNotFoundError:
+        tree_text = tree(Path(os.getcwd()))
+        markdown_content = f&#34;# File {filename} not found. Here are all the files you can see\n\n{tree_text}&#34;
+        return markdown_content
 
     return output.getvalue()</code></pre>
 </details>
@@ -2287,9 +2378,10 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
         self.log_file_path = os.path.join(self.base_directory, f&#34;dialog_{log_number}.md&#34;)
         os.makedirs(os.path.dirname(self.log_file_path), exist_ok=True)
 
-        # Context manger handles this, I think.
+        # Context manager handles this, I think.
         # pylint: disable=consider-using-with
         self.log_file = open(self.log_file_path, &#34;a&#34;, buffering=1, encoding=&#34;utf-8&#34;)
+        self.pending_tools: dict[str, dict[str, str]] = {}
 
     def write_header(self, bot_name: str, model: str, bot_instructions: str) -&gt; None:
         &#34;&#34;&#34;
@@ -2305,6 +2397,7 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
         self.bot_instructions = bot_instructions
         header = f&#34;# Bot Name: {self.bot_name}\n## Model: {self.model}\n### Instructions: {self.bot_instructions}\n\n&#34;
         self.log_file.write(header)
+        logger.info(header)
 
     def add_user(self, text: str) -&gt; None:
         &#34;&#34;&#34;
@@ -2313,7 +2406,9 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
         Args:
             text (str): The text input by the user.
         &#34;&#34;&#34;
-        self.log_file.write(f&#34;**User**: {text}\n\n&#34;)
+        users_message = f&#34;**User**: {text}&#34;
+        self.log_file.write(f&#34;{users_message}\n\n&#34;)
+        logger.info(users_message)
 
     def add_bot(self, text: str) -&gt; None:
         &#34;&#34;&#34;
@@ -2322,7 +2417,9 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
         Args:
             text (str): The text response from the bot.
         &#34;&#34;&#34;
-        self.log_file.write(f&#34;**Bot**: {text}\n\n&#34;)
+        bots_message = f&#34;**Bot**: {text}&#34;
+        self.log_file.write(f&#34;{bots_message}\n\n&#34;)
+        logger.info(bots_message)
 
     def add_toolkit(self, tools: list[str]) -&gt; None:
         &#34;&#34;&#34;
@@ -2332,24 +2429,35 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
             tools (List[str]): A list of tool names used in the dialog.
         &#34;&#34;&#34;
         toolkit_str = &#34;\n- &#34;.join([f&#34;`{tool}`&#34; for tool in tools])
-        self.log_file.write(f&#34;**Toolkit**: \n\n- {toolkit_str}\n\n&#34;)
+        toolkit_message = f&#34;**Toolkit**: \n\n- {toolkit_str}&#34;
+        self.log_file.write(f&#34;{toolkit_message}\n\n&#34;)
+        logger.info(toolkit_message.replace(&#34;\n&#34;, &#34;&#34;))
 
-    def add_tool(self, tool_name: str, tool_args: str) -&gt; None:
+    def add_tool(self, tool_call_id: str, tool_name: str, tool_args: str) -&gt; None:
         &#34;&#34;&#34;
         Logs a single tool and its arguments used in the dialog.
 
         Args:
+            tool_call_id (str): The unique identifier for the tool call.
             tool_name (str): The name of the tool.
             tool_args (str): The arguments passed to the tool, in JSON string format.
         &#34;&#34;&#34;
-        self.log_file.write(f&#34;**Tool**: `{tool_name}`, **Args**: {tool_args}\n&#34;)
+        bot_wants = f&#34;Bot wants to use `{tool_name}`\n&#34;
+        self.log_file.write(bot_wants)
+        logger.info(bot_wants)
         try:
             json_bits = json.loads(tool_args)
         except BaseException:
-            self.log_file.write(f&#34;Bad JSON: {tool_args}&#34;)
+            self.log_file.write(f&#34;Bot gave us Bad JSON: {tool_args}&#34;)
+            self.pending_tools[tool_call_id] = {&#34;tool_name&#34;: tool_name, &#34;tool_args&#34;: tool_args}
             return
+        args_lines: list[str] = []
         for name, value in json_bits.items():
-            self.log_file.write(f&#34;{name} : {value}&#34;)
+            if value is not None:
+                pair = f&#34;{name} : {value}&#34;
+                args_lines.append(f&#34; - {pair}\n&#34;)
+                # logger.info(pair)
+        self.pending_tools[tool_call_id] = {&#34;tool_name&#34;: tool_name, &#34;tool_args&#34;: &#34;\n&#34;.join(args_lines)}
 
     def add_tool_result(self, tool_results: list[dict[str, Any]]) -&gt; None:
         &#34;&#34;&#34;
@@ -2358,14 +2466,25 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
         Args:
             tool_results (List[Dict[str, Any]]): A list of dictionaries containing the tool results.
         &#34;&#34;&#34;
+        # result should always be of the same dict type
+        # tool_result = {&#34;tool_call_id&#34;: tool_call.id, &#34;output&#34;: json_result}
         for result in tool_results:
             self.log_file.write(&#34;### Result\n\n&#34;)
-            for key, value in result.items():
-                if key == &#34;output&#34;:
-                    # json.loads here should work, it isn&#39;t bot-json
-                    self.log_file.write(f&#34; {try_markpickle(json.loads(value))}\n&#34;)
+            self.log_file.write(f&#34;Tool call Id: {result[&#39;tool_call_id&#39;]}\n&#34;)
+            self.log_file.write(f&#34;Tool name: {self.pending_tools[result[&#39;tool_call_id&#39;]][&#39;tool_name&#39;]}\n&#34;)
+            self.log_file.write(f&#34;Tool args:\n {self.pending_tools[result[&#39;tool_call_id&#39;]][&#39;tool_args&#39;]}\n&#34;)
+            del self.pending_tools[&#34;tool_call_id&#34;]
+            json_string = result[&#34;output&#34;]
+            # json.loads here should work, it isn&#39;t bot-json
+            any_type = json.loads(json_string)
+            if isinstance(any_type, dict):
+                if &#34;type&#34; in any_type and &#34;title&#34; in any_type and &#34;status&#34; in any_type and &#34;detail&#34; in any_type:
+                    self.log_file.write(f&#34;ERROR: {any_type[&#39;type&#39;]} : {any_type[&#39;detail&#39;]}\n&#34;)
                 else:
-                    self.log_file.write(f&#34;{key}: {value}\n&#34;)
+                    for key, value in any_type.items():
+                        self.log_file.write(f&#34; - {key} : {value}\n&#34;)
+            else:
+                self.log_file.write(f&#34;{any_type}\n&#34;)
 
     def add_error(self, error: Exception) -&gt; None:
         &#34;&#34;&#34;
@@ -2374,7 +2493,9 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
         Args:
             error (Exception): The exception that was raised.
         &#34;&#34;&#34;
-        self.log_file.write(f&#34;**Error**: {error}\n\n&#34;)
+        error_message = f&#34;**Error**: {error}&#34;
+        self.log_file.write(f&#34;{error_message}\n\n&#34;)
+        logger.error(error_message)
 
     @contextmanager
     def ensure_log(self) -&gt; Iterator[None]:
@@ -2415,7 +2536,9 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
     Args:
         text (str): The text response from the bot.
     &#34;&#34;&#34;
-    self.log_file.write(f&#34;**Bot**: {text}\n\n&#34;)</code></pre>
+    bots_message = f&#34;**Bot**: {text}&#34;
+    self.log_file.write(f&#34;{bots_message}\n\n&#34;)
+    logger.info(bots_message)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.DialogLoggerWithMarkdown.add_error"><code class="name flex">
@@ -2439,16 +2562,20 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
     Args:
         error (Exception): The exception that was raised.
     &#34;&#34;&#34;
-    self.log_file.write(f&#34;**Error**: {error}\n\n&#34;)</code></pre>
+    error_message = f&#34;**Error**: {error}&#34;
+    self.log_file.write(f&#34;{error_message}\n\n&#34;)
+    logger.error(error_message)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.DialogLoggerWithMarkdown.add_tool"><code class="name flex">
-<span>def <span class="ident">add_tool</span></span>(<span>self, tool_name: str, tool_args: str) ‑> None</span>
+<span>def <span class="ident">add_tool</span></span>(<span>self, tool_call_id: str, tool_name: str, tool_args: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Logs a single tool and its arguments used in the dialog.</p>
 <h2 id="args">Args</h2>
 <dl>
+<dt><strong><code>tool_call_id</code></strong> :&ensp;<code>str</code></dt>
+<dd>The unique identifier for the tool call.</dd>
 <dt><strong><code>tool_name</code></strong> :&ensp;<code>str</code></dt>
 <dd>The name of the tool.</dd>
 <dt><strong><code>tool_args</code></strong> :&ensp;<code>str</code></dt>
@@ -2458,22 +2585,31 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_tool(self, tool_name: str, tool_args: str) -&gt; None:
+<pre><code class="python">def add_tool(self, tool_call_id: str, tool_name: str, tool_args: str) -&gt; None:
     &#34;&#34;&#34;
     Logs a single tool and its arguments used in the dialog.
 
     Args:
+        tool_call_id (str): The unique identifier for the tool call.
         tool_name (str): The name of the tool.
         tool_args (str): The arguments passed to the tool, in JSON string format.
     &#34;&#34;&#34;
-    self.log_file.write(f&#34;**Tool**: `{tool_name}`, **Args**: {tool_args}\n&#34;)
+    bot_wants = f&#34;Bot wants to use `{tool_name}`\n&#34;
+    self.log_file.write(bot_wants)
+    logger.info(bot_wants)
     try:
         json_bits = json.loads(tool_args)
     except BaseException:
-        self.log_file.write(f&#34;Bad JSON: {tool_args}&#34;)
+        self.log_file.write(f&#34;Bot gave us Bad JSON: {tool_args}&#34;)
+        self.pending_tools[tool_call_id] = {&#34;tool_name&#34;: tool_name, &#34;tool_args&#34;: tool_args}
         return
+    args_lines: list[str] = []
     for name, value in json_bits.items():
-        self.log_file.write(f&#34;{name} : {value}&#34;)</code></pre>
+        if value is not None:
+            pair = f&#34;{name} : {value}&#34;
+            args_lines.append(f&#34; - {pair}\n&#34;)
+            # logger.info(pair)
+    self.pending_tools[tool_call_id] = {&#34;tool_name&#34;: tool_name, &#34;tool_args&#34;: &#34;\n&#34;.join(args_lines)}</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.DialogLoggerWithMarkdown.add_tool_result"><code class="name flex">
@@ -2497,14 +2633,25 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
     Args:
         tool_results (List[Dict[str, Any]]): A list of dictionaries containing the tool results.
     &#34;&#34;&#34;
+    # result should always be of the same dict type
+    # tool_result = {&#34;tool_call_id&#34;: tool_call.id, &#34;output&#34;: json_result}
     for result in tool_results:
         self.log_file.write(&#34;### Result\n\n&#34;)
-        for key, value in result.items():
-            if key == &#34;output&#34;:
-                # json.loads here should work, it isn&#39;t bot-json
-                self.log_file.write(f&#34; {try_markpickle(json.loads(value))}\n&#34;)
+        self.log_file.write(f&#34;Tool call Id: {result[&#39;tool_call_id&#39;]}\n&#34;)
+        self.log_file.write(f&#34;Tool name: {self.pending_tools[result[&#39;tool_call_id&#39;]][&#39;tool_name&#39;]}\n&#34;)
+        self.log_file.write(f&#34;Tool args:\n {self.pending_tools[result[&#39;tool_call_id&#39;]][&#39;tool_args&#39;]}\n&#34;)
+        del self.pending_tools[&#34;tool_call_id&#34;]
+        json_string = result[&#34;output&#34;]
+        # json.loads here should work, it isn&#39;t bot-json
+        any_type = json.loads(json_string)
+        if isinstance(any_type, dict):
+            if &#34;type&#34; in any_type and &#34;title&#34; in any_type and &#34;status&#34; in any_type and &#34;detail&#34; in any_type:
+                self.log_file.write(f&#34;ERROR: {any_type[&#39;type&#39;]} : {any_type[&#39;detail&#39;]}\n&#34;)
             else:
-                self.log_file.write(f&#34;{key}: {value}\n&#34;)</code></pre>
+                for key, value in any_type.items():
+                    self.log_file.write(f&#34; - {key} : {value}\n&#34;)
+        else:
+            self.log_file.write(f&#34;{any_type}\n&#34;)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.DialogLoggerWithMarkdown.add_toolkit"><code class="name flex">
@@ -2529,7 +2676,9 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
         tools (List[str]): A list of tool names used in the dialog.
     &#34;&#34;&#34;
     toolkit_str = &#34;\n- &#34;.join([f&#34;`{tool}`&#34; for tool in tools])
-    self.log_file.write(f&#34;**Toolkit**: \n\n- {toolkit_str}\n\n&#34;)</code></pre>
+    toolkit_message = f&#34;**Toolkit**: \n\n- {toolkit_str}&#34;
+    self.log_file.write(f&#34;{toolkit_message}\n\n&#34;)
+    logger.info(toolkit_message.replace(&#34;\n&#34;, &#34;&#34;))</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.DialogLoggerWithMarkdown.add_user"><code class="name flex">
@@ -2553,7 +2702,9 @@ ensure_log: Context manager to ensure the log file is closed properly.</p>
     Args:
         text (str): The text input by the user.
     &#34;&#34;&#34;
-    self.log_file.write(f&#34;**User**: {text}\n\n&#34;)</code></pre>
+    users_message = f&#34;**User**: {text}&#34;
+    self.log_file.write(f&#34;{users_message}\n\n&#34;)
+    logger.info(users_message)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.DialogLoggerWithMarkdown.ensure_log"><code class="name flex">
@@ -2620,7 +2771,8 @@ def ensure_log(self) -&gt; Iterator[None]:
     self.model = model
     self.bot_instructions = bot_instructions
     header = f&#34;# Bot Name: {self.bot_name}\n## Model: {self.model}\n### Instructions: {self.bot_instructions}\n\n&#34;
-    self.log_file.write(header)</code></pre>
+    self.log_file.write(header)
+    logger.info(header)</code></pre>
 </details>
 </dd>
 </dl>
@@ -2658,6 +2810,7 @@ def ensure_log(self) -&gt; Iterator[None]:
         self.buffer = Buffer()
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def ed(self, script: str, file_name: str) -&gt; list[str]:
@@ -2676,7 +2829,7 @@ def ensure_log(self) -&gt; Iterator[None]:
 
         file_path = self.root_folder + file_name
         if os.path.isfile(file_path):
-            with open(file_path, encoding=&#34;utf-8&#34;) as f:
+            with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as f:
                 self.buffer = Buffer(f.readlines())
 
         command_lines: list[tuple[Any, list[str]]] = []
@@ -2784,7 +2937,7 @@ def ed(self, script: str, file_name: str) -&gt; list[str]:
 
     file_path = self.root_folder + file_name
     if os.path.isfile(file_path):
-        with open(file_path, encoding=&#34;utf-8&#34;) as f:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as f:
             self.buffer = Buffer(f.readlines())
 
     command_lines: list[tuple[Any, list[str]]] = []
@@ -3089,7 +3242,7 @@ def edlin(self, script: str, file_name: str) -&gt; list[str]:
         &#34;&#34;&#34;
         logger.info(f&#34;find --name {name} --regex {regex} --type {file_type} --size {size}&#34;)
         matching_files = []
-        for root, dirs, files in os.walk(self.root_folder):
+        for root, dirs, files in os.walk(os.getcwd()):
             # Combine files and directories for type filtering
             combined = files
             if file_type == &#34;directory&#34;:
@@ -3098,18 +3251,21 @@ def edlin(self, script: str, file_name: str) -&gt; list[str]:
             for entry in combined:
                 full_path = os.path.join(root, entry)
                 # TODO: handle this differently
-                if os.path.dirname(full_path) != &#34;__pycache__&#34;:
-                    if is_file_in_root_folder(full_path, self.root_folder):
-                        short_path = remove_root_folder(full_path, self.root_folder)
-                        # Check for name, regex, and size match
-                        if (name and fnmatch.fnmatch(entry, name)) or name is None:
-                            if self._match_type_and_size(full_path, file_type, size):
-                                matching_files.append(short_path)
-                        elif regex and re.search(regex, entry):
-                            if self._match_type_and_size(full_path, file_type, size):
-                                matching_files.append(short_path)
+                if &#34;__pycache__&#34; not in full_path:
+                    # TODO: handle differently. The bot
+                    # is put into the root_folder as cwd, so as long as there isn&#39;t .. in path we should be good.
+                    # if is_file_in_root_folder(full_path, self.root_folder):
+                    short_path = remove_root_folder(full_path, self.root_folder)
+                    # Check for name, regex, and size match
+                    if (name and fnmatch.fnmatch(entry, name)) or name is None:
+                        if self._match_type_and_size(full_path, file_type, size):
+                            matching_files.append(short_path)
+                    elif regex and re.search(regex, entry):
+                        if self._match_type_and_size(full_path, file_type, size):
+                            matching_files.append(short_path)
 
-        return list(sorted(matching_files))
+        # Not the best way to remove hidden.
+        return list(sorted(_ for _ in matching_files if not _.startswith(&#34;.&#34;)))
 
     def _match_type_and_size(self, path: str, file_type: Optional[str], size: Optional[str]) -&gt; bool:
         &#34;&#34;&#34;
@@ -3217,7 +3373,7 @@ def find_files(
     &#34;&#34;&#34;
     logger.info(f&#34;find --name {name} --regex {regex} --type {file_type} --size {size}&#34;)
     matching_files = []
-    for root, dirs, files in os.walk(self.root_folder):
+    for root, dirs, files in os.walk(os.getcwd()):
         # Combine files and directories for type filtering
         combined = files
         if file_type == &#34;directory&#34;:
@@ -3226,18 +3382,21 @@ def find_files(
         for entry in combined:
             full_path = os.path.join(root, entry)
             # TODO: handle this differently
-            if os.path.dirname(full_path) != &#34;__pycache__&#34;:
-                if is_file_in_root_folder(full_path, self.root_folder):
-                    short_path = remove_root_folder(full_path, self.root_folder)
-                    # Check for name, regex, and size match
-                    if (name and fnmatch.fnmatch(entry, name)) or name is None:
-                        if self._match_type_and_size(full_path, file_type, size):
-                            matching_files.append(short_path)
-                    elif regex and re.search(regex, entry):
-                        if self._match_type_and_size(full_path, file_type, size):
-                            matching_files.append(short_path)
+            if &#34;__pycache__&#34; not in full_path:
+                # TODO: handle differently. The bot
+                # is put into the root_folder as cwd, so as long as there isn&#39;t .. in path we should be good.
+                # if is_file_in_root_folder(full_path, self.root_folder):
+                short_path = remove_root_folder(full_path, self.root_folder)
+                # Check for name, regex, and size match
+                if (name and fnmatch.fnmatch(entry, name)) or name is None:
+                    if self._match_type_and_size(full_path, file_type, size):
+                        matching_files.append(short_path)
+                elif regex and re.search(regex, entry):
+                    if self._match_type_and_size(full_path, file_type, size):
+                        matching_files.append(short_path)
 
-    return list(sorted(matching_files))</code></pre>
+    # Not the best way to remove hidden.
+    return list(sorted(_ for _ in matching_files if not _.startswith(&#34;.&#34;)))</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.FindTool.find_files_markdown"><code class="name flex">
@@ -3327,6 +3486,7 @@ def find_files_markdown(
         self.repo = Repo(root_folder)
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     def is_ignored_by_gitignore(self, file_path: str, gitignore_path: str = &#34;.gitignore&#34;) -&gt; bool:
         &#34;&#34;&#34;
@@ -3351,7 +3511,7 @@ def find_files_markdown(
         # Normalize file path
         file_path = os.path.abspath(file_path)
 
-        with open(full_gitignore_path, encoding=&#34;utf-8&#34;) as gitignore:
+        with open(full_gitignore_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as gitignore:
             for line in gitignore:
                 line = line.strip()
                 # Skip empty lines and comments
@@ -3782,7 +3942,7 @@ def git_status(self) -&gt; dict[str, Any]:
     # Normalize file path
     file_path = os.path.abspath(file_path)
 
-    with open(full_gitignore_path, encoding=&#34;utf-8&#34;) as gitignore:
+    with open(full_gitignore_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as gitignore:
         for line in gitignore:
             line = line.strip()
             # Skip empty lines and comments
@@ -3832,6 +3992,7 @@ def git_status(self) -&gt; dict[str, Any]:
         self.root_folder: str = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def grep_markdown(
@@ -3900,18 +4061,23 @@ def git_status(self) -&gt; dict[str, Any]:
 
         for filename in glob.glob(glob_pattern, root_dir=self.root_folder, recursive=True):
             matches_per_file = 0
-
+            if os.path.isdir(filename):
+                logging.warning(f&#34;Skipping directory {filename}, because it isn&#39;t a file.&#34;)
+                continue
             if not os.path.exists(filename):
                 # What a hack
                 open_path = self.root_folder + &#34;/&#34; + filename
             else:
                 open_path = filename
-            with open(open_path, encoding=&#34;utf-8&#34;) as file:
+            with open(open_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
                 if not is_file_in_root_folder(filename, self.root_folder):
+                    logging.warning(f&#34;Skipping file {filename}, because it isn&#39;t in the root folder.&#34;)
                     continue
                 line_number = 0
                 for line in file:
-                    if matches_per_file &lt; maximum_matches_per_file or maximum_matches_per_file == -1:
+                    below_maximum = matches_per_file &lt; maximum_matches_per_file
+                    maximum_not_set = maximum_matches_per_file == -1
+                    if below_maximum or maximum_not_set:
                         line_number += 1
                         if pattern.search(line):
                             matches_total += 1
@@ -3997,18 +4163,23 @@ def grep(
 
     for filename in glob.glob(glob_pattern, root_dir=self.root_folder, recursive=True):
         matches_per_file = 0
-
+        if os.path.isdir(filename):
+            logging.warning(f&#34;Skipping directory {filename}, because it isn&#39;t a file.&#34;)
+            continue
         if not os.path.exists(filename):
             # What a hack
             open_path = self.root_folder + &#34;/&#34; + filename
         else:
             open_path = filename
-        with open(open_path, encoding=&#34;utf-8&#34;) as file:
+        with open(open_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             if not is_file_in_root_folder(filename, self.root_folder):
+                logging.warning(f&#34;Skipping file {filename}, because it isn&#39;t in the root folder.&#34;)
                 continue
             line_number = 0
             for line in file:
-                if matches_per_file &lt; maximum_matches_per_file or maximum_matches_per_file == -1:
+                below_maximum = matches_per_file &lt; maximum_matches_per_file
+                maximum_not_set = maximum_matches_per_file == -1
+                if below_maximum or maximum_not_set:
                     line_number += 1
                     if pattern.search(line):
                         matches_total += 1
@@ -4210,7 +4381,15 @@ def grep_markdown(
 
             # Read by lines if byte_count is not specified
             if mode == &#34;head&#34;:
-                return [next(file).decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for _ in range(lines)]
+                head_lines = []
+                for _ in range(lines):
+                    try:
+                        line = next(file).decode(&#34;utf-8&#34;)
+                        head_lines.append(line.rstrip(&#34;\r\n&#34;))
+                    except StopIteration:
+                        break
+                return head_lines
+                # return [next(file).decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for _ in range(lines)]
             # mode == &#39;tail&#39;
             return [line.decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for line in list(file)[-lines:]]</code></pre>
 </details>
@@ -4359,7 +4538,15 @@ def head_markdown(self, file_path: str, lines: int = 10) -&gt; str:
 
         # Read by lines if byte_count is not specified
         if mode == &#34;head&#34;:
-            return [next(file).decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for _ in range(lines)]
+            head_lines = []
+            for _ in range(lines):
+                try:
+                    line = next(file).decode(&#34;utf-8&#34;)
+                    head_lines.append(line.rstrip(&#34;\r\n&#34;))
+                except StopIteration:
+                    break
+            return head_lines
+            # return [next(file).decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for _ in range(lines)]
         # mode == &#39;tail&#39;
         return [line.decode(&#34;utf-8&#34;).rstrip(&#34;\r\n&#34;) for line in list(file)[-lines:]]</code></pre>
 </details>
@@ -4469,6 +4656,7 @@ def tail_markdown(self, file_path: str, lines: int = 10) -&gt; str:
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
         self.python_module = config.get_value(&#34;python_module&#34;)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def insert_text_after_context(self, file_path: str, context: str, text_to_insert: str) -&gt; str:
@@ -4494,19 +4682,31 @@ def tail_markdown(self, file_path: str, lines: int = 10) -&gt; str:
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not context:
             raise TypeError(&#34;No context, please context so I can find where to insert the text.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             lines = file.readlines()
         original_lines = list(lines)
 
         context_line_indices = [i for i, line in enumerate(lines) if context in line]
 
-        # Check for ambiguity in the context match
-        if len(context_line_indices) != 1:
+        if len(context_line_indices) == 0:
+            with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                plain_text = file.read()
             raise ValueError(
-                &#34;Ambiguous context: The provided context matches multiple lines. A context line the &#34;
+                f&#34;No matches found, no changes made, context is not a substring of any row. &#34;
+                f&#34;For reference, here is the contents of the file:\n{plain_text}&#34;
+            )
+
+        # Check for ambiguity in the context match
+        if len(context_line_indices) &gt; 1:
+            with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                plain_text = file.read()
+            found_at = &#34;, &#34;.join([str(i) for i in context_line_indices])
+            raise ValueError(
+                f&#34;Ambiguous context: The provided context matches multiple lines, namely {found_at}. A context line the &#34;
                 &#34;string or substring of the line just before your desired insertion point. It must &#34;
                 &#34;uniquely identify a location. Either use a longer substring to match or switch to using&#34;
-                &#34;the insert_text_after_multiline_context tool.&#34;
+                &#34;the insert_text_after_multiline_context tool.\n&#34;
+                f&#34;For reference, here is the contents of the file:\n{plain_text}&#34;
             )
 
         # Index of the line after the context line
@@ -4541,7 +4741,7 @@ def tail_markdown(self, file_path: str, lines: int = 10) -&gt; str:
             raise TypeError(&#34;No text_to_insert, please provide so I have something to insert.&#34;)
         if position not in (&#34;start&#34;, &#34;end&#34;):
             raise ValueError(&#34;position must be start or end, so I know where to insert text.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             lines = file.readlines()
         original_lines = list(lines)
         if position == &#34;start&#34;:
@@ -4575,7 +4775,7 @@ def tail_markdown(self, file_path: str, lines: int = 10) -&gt; str:
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not context_lines:
             raise TypeError(&#34;No context_lines, please context lines so I can find where to insert the new lines.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             lines = file.readlines()
 
         try:
@@ -4592,8 +4792,12 @@ def tail_markdown(self, file_path: str, lines: int = 10) -&gt; str:
 
         starts_at = file_string.find(context_string)
         if starts_at == -1:
-            raise ValueError(&#34;Context not found in the file.&#34;)
-
+            with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                plain_text = file.read()
+            raise ValueError(
+                f&#34;No matches found, no changes made, context_lines are not found in this document. &#34;
+                f&#34;For reference, here is the contents of the file:\n{plain_text}&#34;
+            )
         # Find the index where the context ends
         context_end_index = starts_at + len(context_string)
 
@@ -4643,7 +4847,7 @@ def tail_markdown(self, file_path: str, lines: int = 10) -&gt; str:
 
         # Write back to the file
         BackupRestore.backup_file(file_path)
-        with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             if isinstance(new_file_string, str):
                 file.write(new_file_string)
             else:
@@ -4741,19 +4945,31 @@ def insert_text_after_context(self, file_path: str, context: str, text_to_insert
         raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
     if not context:
         raise TypeError(&#34;No context, please context so I can find where to insert the text.&#34;)
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         lines = file.readlines()
     original_lines = list(lines)
 
     context_line_indices = [i for i, line in enumerate(lines) if context in line]
 
-    # Check for ambiguity in the context match
-    if len(context_line_indices) != 1:
+    if len(context_line_indices) == 0:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+            plain_text = file.read()
         raise ValueError(
-            &#34;Ambiguous context: The provided context matches multiple lines. A context line the &#34;
+            f&#34;No matches found, no changes made, context is not a substring of any row. &#34;
+            f&#34;For reference, here is the contents of the file:\n{plain_text}&#34;
+        )
+
+    # Check for ambiguity in the context match
+    if len(context_line_indices) &gt; 1:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+            plain_text = file.read()
+        found_at = &#34;, &#34;.join([str(i) for i in context_line_indices])
+        raise ValueError(
+            f&#34;Ambiguous context: The provided context matches multiple lines, namely {found_at}. A context line the &#34;
             &#34;string or substring of the line just before your desired insertion point. It must &#34;
             &#34;uniquely identify a location. Either use a longer substring to match or switch to using&#34;
-            &#34;the insert_text_after_multiline_context tool.&#34;
+            &#34;the insert_text_after_multiline_context tool.\n&#34;
+            f&#34;For reference, here is the contents of the file:\n{plain_text}&#34;
         )
 
     # Index of the line after the context line
@@ -4814,7 +5030,7 @@ def insert_text_after_multiline_context(self, file_path: str, context_lines: lis
         raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
     if not context_lines:
         raise TypeError(&#34;No context_lines, please context lines so I can find where to insert the new lines.&#34;)
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         lines = file.readlines()
 
     try:
@@ -4831,8 +5047,12 @@ def insert_text_after_multiline_context(self, file_path: str, context_lines: lis
 
     starts_at = file_string.find(context_string)
     if starts_at == -1:
-        raise ValueError(&#34;Context not found in the file.&#34;)
-
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+            plain_text = file.read()
+        raise ValueError(
+            f&#34;No matches found, no changes made, context_lines are not found in this document. &#34;
+            f&#34;For reference, here is the contents of the file:\n{plain_text}&#34;
+        )
     # Find the index where the context ends
     context_end_index = starts_at + len(context_string)
 
@@ -4900,7 +5120,7 @@ def insert_text_at_start_or_end(self, file_path: str, text_to_insert: str, posit
         raise TypeError(&#34;No text_to_insert, please provide so I have something to insert.&#34;)
     if position not in (&#34;start&#34;, &#34;end&#34;):
         raise ValueError(&#34;position must be start or end, so I know where to insert text.&#34;)
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         lines = file.readlines()
     original_lines = list(lines)
     if position == &#34;start&#34;:
@@ -4960,7 +5180,7 @@ def insert_text_at_start_or_end(self, file_path: str, text_to_insert: str, posit
         try:
             entries_info = self.ls(path, all_files, long)
         except (FileNotFoundError, NotADirectoryError):
-            tree_text = tree(Path(self.root_folder))
+            tree_text = tree(Path(os.getcwd()))
             markdown_content = f&#34;# Bad `ls` command. Here are all the files you can see\n\n{tree_text}&#34;
             return markdown_content
 
@@ -4991,11 +5211,10 @@ def insert_text_at_start_or_end(self, file_path: str, text_to_insert: str, posit
         &#34;&#34;&#34;
         logger.info(f&#34;ls --path {path} --all_files {all_files} --long  {long}&#34;)
 
-        if not path or path in (&#34;.&#34;, &#34;/&#34;):
-            # don&#39;t support cwd/pwd logic yet.
-            path = self.root_folder
+        if path is None:
+            path = &#34;&#34;
 
-        if &#34;?&#34; in path or &#34;*&#34; in path or &#34;[&#34; in path or &#34;]&#34; in path:
+        if path is not None and (&#34;?&#34; in path or &#34;*&#34; in path or &#34;[&#34; in path or &#34;]&#34; in path):
             # Globs behave very different from non-globs. :(
             #  or &#34;{&#34; in path or &#34;}&#34;  &lt;-- is this a glob pattern?
             entries = safe_glob(path, self.root_folder)
@@ -5009,13 +5228,14 @@ def insert_text_at_start_or_end(self, file_path: str, text_to_insert: str, posit
                 )
             except (FileNotFoundError, NotADirectoryError):
                 # if not, just tell the bot everything.
-                tree_text = tree(Path(self.root_folder))
+                tree_text = tree(Path(os.getcwd()))
                 markdown_content = f&#34;# Bad `ls` command. Here are all the files you can see\n\n{tree_text}&#34;
                 return markdown_content
         entries_info = []
 
         for entry in entries:
-            full_path = os.path.join(path, entry)
+            # is this None-safety here correct?
+            full_path = entry if path is None else os.path.join(path, entry)
             if not is_file_in_root_folder(full_path, self.root_folder):
                 continue
             if os.path.isdir(full_path) and entry.endswith(&#34;__pycache__&#34;):
@@ -5073,11 +5293,10 @@ def ls(self, path: Optional[str] = None, all_files: bool = False, long: bool = F
     &#34;&#34;&#34;
     logger.info(f&#34;ls --path {path} --all_files {all_files} --long  {long}&#34;)
 
-    if not path or path in (&#34;.&#34;, &#34;/&#34;):
-        # don&#39;t support cwd/pwd logic yet.
-        path = self.root_folder
+    if path is None:
+        path = &#34;&#34;
 
-    if &#34;?&#34; in path or &#34;*&#34; in path or &#34;[&#34; in path or &#34;]&#34; in path:
+    if path is not None and (&#34;?&#34; in path or &#34;*&#34; in path or &#34;[&#34; in path or &#34;]&#34; in path):
         # Globs behave very different from non-globs. :(
         #  or &#34;{&#34; in path or &#34;}&#34;  &lt;-- is this a glob pattern?
         entries = safe_glob(path, self.root_folder)
@@ -5091,13 +5310,14 @@ def ls(self, path: Optional[str] = None, all_files: bool = False, long: bool = F
             )
         except (FileNotFoundError, NotADirectoryError):
             # if not, just tell the bot everything.
-            tree_text = tree(Path(self.root_folder))
+            tree_text = tree(Path(os.getcwd()))
             markdown_content = f&#34;# Bad `ls` command. Here are all the files you can see\n\n{tree_text}&#34;
             return markdown_content
     entries_info = []
 
     for entry in entries:
-        full_path = os.path.join(path, entry)
+        # is this None-safety here correct?
+        full_path = entry if path is None else os.path.join(path, entry)
         if not is_file_in_root_folder(full_path, self.root_folder):
             continue
         if os.path.isdir(full_path) and entry.endswith(&#34;__pycache__&#34;):
@@ -5154,7 +5374,7 @@ def ls_markdown(self, path: Optional[str] = &#34;.&#34;, all_files: bool = False
     try:
         entries_info = self.ls(path, all_files, long)
     except (FileNotFoundError, NotADirectoryError):
-        tree_text = tree(Path(self.root_folder))
+        tree_text = tree(Path(os.getcwd()))
         markdown_content = f&#34;# Bad `ls` command. Here are all the files you can see\n\n{tree_text}&#34;
         return markdown_content
 
@@ -5226,11 +5446,7 @@ def ls_markdown(self, path: Optional[str] = &#34;.&#34;, all_files: bool = False
             tmp_patch.write(patch_content.encode(&#34;utf-8&#34;))
             tmp_patch.flush()
 
-        try:
-            patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
-            print(patch)
-        except Exception as ex:
-            print(ex)
+        _patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
 
         cmd = [&#34;git&#34;, &#34;apply&#34;, tmp_patch_name, &#34;--reject&#34;, &#34;--verbose&#34;]
 
@@ -5249,6 +5465,7 @@ def ls_markdown(self, path: Optional[str] = &#34;.&#34;, all_files: bool = False
             print(cpe)
             print(cpe.stdout)
             print(cpe.stderr)
+            raise
 
         return &#34;Patch applied without exception, please verify by other means to see if it was successful.&#34;
 
@@ -5323,11 +5540,7 @@ def apply_git_patch(self, patch_content: str) -&gt; str:
         tmp_patch.write(patch_content.encode(&#34;utf-8&#34;))
         tmp_patch.flush()
 
-    try:
-        patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
-        print(patch)
-    except Exception as ex:
-        print(ex)
+    _patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
 
     cmd = [&#34;git&#34;, &#34;apply&#34;, tmp_patch_name, &#34;--reject&#34;, &#34;--verbose&#34;]
 
@@ -5346,6 +5559,7 @@ def apply_git_patch(self, patch_content: str) -&gt; str:
         print(cpe)
         print(cpe.stdout)
         print(cpe.stderr)
+        raise
 
     return &#34;Patch applied without exception, please verify by other means to see if it was successful.&#34;</code></pre>
 </details>
@@ -5381,6 +5595,7 @@ def apply_git_patch(self, patch_content: str) -&gt; str:
         self.root_folder = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def format_code_as_markdown(
@@ -5422,7 +5637,9 @@ def apply_git_patch(self, patch_content: str) -&gt; str:
                     relative_path = os.path.relpath(full_path, base_path)
                     markdown_content += format_path_as_header(relative_path)
                     markdown_content += &#34;```python\n&#34;
-                    markdown_content += read_file_contents(full_path)
+                    with open(full_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as handle:
+                        text = handle.read()
+                    markdown_content += text
                     markdown_content += &#34;\n```\n\n&#34;
         output_file.write(markdown_content)
         return output_file.getvalue()</code></pre>
@@ -5496,7 +5713,9 @@ def format_code_as_markdown(
                 relative_path = os.path.relpath(full_path, base_path)
                 markdown_content += format_path_as_header(relative_path)
                 markdown_content += &#34;```python\n&#34;
-                markdown_content += read_file_contents(full_path)
+                with open(full_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as handle:
+                    text = handle.read()
+                markdown_content += text
                 markdown_content += &#34;\n```\n\n&#34;
     output_file.write(markdown_content)
     return output_file.getvalue()</code></pre>
@@ -5644,6 +5863,7 @@ def format_code_as_markdown(
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
         self.python_module = config.get_value(&#34;python_module&#34;)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def replace_line_by_line(
@@ -5674,7 +5894,7 @@ def format_code_as_markdown(
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not old_text:
             raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         lines = []
         input_lines = input_text.splitlines()
@@ -5687,7 +5907,7 @@ def format_code_as_markdown(
         if not lines:
             raise TypeError(&#34;Nothing left after replace, something went wrong, cancelling.&#34;)
         final = &#34;\n&#34;.join(lines)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
     @log()
     def replace_all(self, file_path: str, old_text: str, new_text: str) -&gt; str:
@@ -5713,10 +5933,10 @@ def format_code_as_markdown(
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not old_text:
             raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         final = input_text.replace(old_text, new_text)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
     @log()
     def replace_with_regex(self, file_path: str, regex_match_expression: str, replacement: str) -&gt; str:
@@ -5741,12 +5961,12 @@ def format_code_as_markdown(
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not regex_match_expression:
             raise TypeError(&#34;No regex_match_expression, please context so I can find the text to replace.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         final = re.sub(regex_match_expression, replacement, input_text)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
-    def save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
+    def _save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
         &#34;&#34;&#34;Saves the modified text to the file if changes have been made.
 
         Compares the original text with the modified text and writes the modified text
@@ -5769,7 +5989,7 @@ def format_code_as_markdown(
 
         if input_text != final:
             BackupRestore.backup_file(file_path)
-            with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
+            with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as output_file:
                 output_file.write(final)
 
             validation = self._validate_code(file_path)
@@ -5866,10 +6086,10 @@ def replace_all(self, file_path: str, old_text: str, new_text: str) -&gt; str:
         raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
     if not old_text:
         raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         input_text = file.read()
     final = input_text.replace(old_text, new_text)
-    return self.save_if_changed(file_path, final, input_text)</code></pre>
+    return self._save_if_changed(file_path, final, input_text)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.ReplaceTool.replace_line_by_line"><code class="name flex">
@@ -5938,7 +6158,7 @@ def replace_line_by_line(
         raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
     if not old_text:
         raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         input_text = file.read()
     lines = []
     input_lines = input_text.splitlines()
@@ -5951,7 +6171,7 @@ def replace_line_by_line(
     if not lines:
         raise TypeError(&#34;Nothing left after replace, something went wrong, cancelling.&#34;)
     final = &#34;\n&#34;.join(lines)
-    return self.save_if_changed(file_path, final, input_text)</code></pre>
+    return self._save_if_changed(file_path, final, input_text)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.ReplaceTool.replace_with_regex"><code class="name flex">
@@ -6008,84 +6228,10 @@ def replace_with_regex(self, file_path: str, regex_match_expression: str, replac
         raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
     if not regex_match_expression:
         raise TypeError(&#34;No regex_match_expression, please context so I can find the text to replace.&#34;)
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         input_text = file.read()
     final = re.sub(regex_match_expression, replacement, input_text)
-    return self.save_if_changed(file_path, final, input_text)</code></pre>
-</details>
-</dd>
-<dt id="ai_shell.ReplaceTool.save_if_changed"><code class="name flex">
-<span>def <span class="ident">save_if_changed</span></span>(<span>self, file_path: str, final: str, input_text: str) ‑> str</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Saves the modified text to the file if changes have been made.</p>
-<p>Compares the original text with the modified text and writes the modified text
-to the file if there are changes. Returns a message indicating whether any changes
-were made.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
-<dd>The path to the file.</dd>
-<dt><strong><code>final</code></strong> :&ensp;<code>str</code></dt>
-<dd>The modified text.</dd>
-<dt><strong><code>input_text</code></strong> :&ensp;<code>str</code></dt>
-<dd>The original text.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>str</code></dt>
-<dd>A message indicating whether changes were made or not.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>TypeError</code></dt>
-<dd>If file_path is None.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
-    &#34;&#34;&#34;Saves the modified text to the file if changes have been made.
-
-    Compares the original text with the modified text and writes the modified text
-    to the file if there are changes. Returns a message indicating whether any changes
-    were made.
-
-    Args:
-        file_path (str): The path to the file.
-        final (str): The modified text.
-        input_text (str): The original text.
-
-    Returns:
-        str: A message indicating whether changes were made or not.
-
-    Raises:
-        TypeError: If file_path is None.
-    &#34;&#34;&#34;
-    if not final:
-        raise TypeError(&#34;Something went wrong in replace and all text disappeared. Cancelling.&#34;)
-
-    if input_text != final:
-        BackupRestore.backup_file(file_path)
-        with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
-            output_file.write(final)
-
-        validation = self._validate_code(file_path)
-
-        if validation:
-            BackupRestore.revert_to_latest_backup(file_path)
-            return f&#34;File not written because of problems.\n{validation.message}&#34;
-
-        if self.auto_cat:
-            feedback = &#34;Changes applied without exception, please verify by other means.\n&#34;
-            contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
-            return f&#34;Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}&#34;
-        return &#34;Changes applied without exception, please verify by other means.&#34;
-    return (
-        &#34;No changes made, this means the old file contents are the same as the new. This has nothing &#34;
-        &#34;to do with file permissions. Try again with a different match pattern.&#34;
-    )</code></pre>
+    return self._save_if_changed(file_path, final, input_text)</code></pre>
 </details>
 </dd>
 </dl>
@@ -6158,7 +6304,11 @@ were made.</p>
 
             return f&#34;File written to {full_path}&#34;
         except FileExistsError as e:
-            raise ValueError(str(e) + &#34; Consider using rewrite_file method if you want to overwrite.&#34;) from e
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {full_path} already exists. Here are all the files you can see\n\n{tree_text}&#34;
+            raise ValueError(
+                str(e) + f&#34; {markdown_content}\n Consider using rewrite_file method if you want to overwrite.&#34;
+            ) from e
 
     @log()
     def rewrite_file(self, file_path: str, text: str) -&gt; str:
@@ -6416,7 +6566,11 @@ def write_new_file(self, file_path: str, text: str) -&gt; str:
 
         return f&#34;File written to {full_path}&#34;
     except FileExistsError as e:
-        raise ValueError(str(e) + &#34; Consider using rewrite_file method if you want to overwrite.&#34;) from e</code></pre>
+        tree_text = tree(Path(os.getcwd()))
+        markdown_content = f&#34;# File {full_path} already exists. Here are all the files you can see\n\n{tree_text}&#34;
+        raise ValueError(
+            str(e) + f&#34; {markdown_content}\n Consider using rewrite_file method if you want to overwrite.&#34;
+        ) from e</code></pre>
 </details>
 </dd>
 </dl>
@@ -6450,6 +6604,7 @@ def write_new_file(self, file_path: str, text: str) -&gt; str:
         self.root_folder = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def sed(self, file_path: str, commands: list[str]) -&gt; str:
@@ -6476,7 +6631,7 @@ def write_new_file(self, file_path: str, text: str) -&gt; str:
         if not is_file_in_root_folder(file_path, self.root_folder):
             raise ValueError(f&#34;File {file_path} is not in root folder {self.root_folder}.&#34;)
 
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         output_text = SedTool._process_sed(input_text, commands)
         if is_python_file(file_path):
@@ -6539,7 +6694,7 @@ def write_new_file(self, file_path: str, text: str) -&gt; str:
                     append_text = command[2:]
                     lines[i] += &#34;\n&#34; + append_text
                 elif re.match(r&#34;\d+a\\&#34;, command):
-                    # insert &#34;a&#34;fter the specified line.
+                    # insert after the specified line. a for after.
                     target_line, change_text = command.split(&#34;a\\&#34;)
                     if i + 1 == int(target_line):
                         lines[i] = change_text
@@ -6631,7 +6786,7 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
     if not is_file_in_root_folder(file_path, self.root_folder):
         raise ValueError(f&#34;File {file_path} is not in root folder {self.root_folder}.&#34;)
 
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         input_text = file.read()
     output_text = SedTool._process_sed(input_text, commands)
     if is_python_file(file_path):
@@ -6655,7 +6810,7 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
 </dd>
 <dt id="ai_shell.TaskBot"><code class="flex name class">
 <span>class <span class="ident">TaskBot</span></span>
-<span>(</span><span>config: <a title="ai_shell.utils.config_manager.Config" href="utils/config_manager.html#ai_shell.utils.config_manager.Config">Config</a>, name: str, bot_instructions: str, model: str, dialog_logger_md: <a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown" href="utils/log_conversation.html#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown">DialogLoggerWithMarkdown</a>, persist_bots: bool = False, persist_threads: bool = False, maximum_loops: int = 10)</span>
+<span>(</span><span>config: <a title="ai_shell.utils.config_manager.Config" href="utils/config_manager.html#ai_shell.utils.config_manager.Config">Config</a>, name: str, bot_instructions: str, model: str, dialog_logger_md: <a title="ai_shell.ai_logs.log_to_markdown.DialogLoggerWithMarkdown" href="ai_logs/log_to_markdown.html#ai_shell.ai_logs.log_to_markdown.DialogLoggerWithMarkdown">DialogLoggerWithMarkdown</a>, persist_bots: bool = False, persist_threads: bool = False, maximum_loops: int = 10)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Minimal bot management code.</p></div>
@@ -6709,6 +6864,9 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
         self.allow_self_certification = False
         &#34;&#34;&#34;Do you want to trust the bot when it says it has achieved the goal?&#34;&#34;&#34;
 
+        self.conversation_over_marker = &#34;DONE&#34;
+        &#34;&#34;&#34;Goal function checker returns this when done.&#34;&#34;&#34;
+
     async def initialize(self) -&gt; None:
         &#34;&#34;&#34;Get or create a bot and store it in the config.&#34;&#34;&#34;
         bot = await self.get_create_bot()
@@ -6746,6 +6904,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
         self, root_folder: str, model: str, tool_names: list[str]
     ) -&gt; tuple[ToolKit, list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction]]:
         self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names, config=self.config)
+        # sync COM
+        self.toolkit.conversation_over_marker = self.conversation_over_marker
         initialize_all_tools(keeps=tool_names)
         tools_schema: list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction] = [
             ToolAssistantToolsFunction(**{&#34;function&#34;: cast(FunctionDefinition, schema), &#34;type&#34;: &#34;function&#34;})
@@ -6804,7 +6964,6 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
             messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
             # logger.info(messages)
             last_words = parse_message(messages)
-            logger.info(last_words)
             self.dialog_logger_md.add_bot(last_words)
 
         except Exception as exception:
@@ -6824,7 +6983,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
         root_folder: str,
         tool_names: list[Any],
         keep_going_prompt: Callable[[ToolKit], Awaitable[str]],
-    ) -&gt; None:
+        stop_on_no_tool_use: bool,
+    ) -&gt; int:
         &#34;&#34;&#34;
         Loop through tool requests.
 
@@ -6833,6 +6993,7 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
             root_folder (str): The root folder for file operations.
             tool_names (list[Any]): The tools to use.
             keep_going_prompt (str): The prompt to use to keep going.
+            stop_on_no_tool_use (bool): Stop if no tools are used.
 
         Returns:
             None
@@ -6847,7 +7008,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
         tool_loops = 0
         total_tool_use_count = 0
         try:
-            tool_names.append(&#34;report_text&#34;)
+            if self.allow_self_certification:
+                tool_names.append(&#34;report_text&#34;)
             tool_names = list(set(tool_names))
             _, tool_schemas = self.toolkit_factory(root_folder, self.model, tool_names)
             if not self.toolkit:
@@ -6873,17 +7035,17 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
             initial_bot_response = parse_message(messages)
             self.dialog_logger_md.add_bot(initial_bot_response)
 
-            # Did you use any tools?
-            if tools_used_this_round == 0:
-                initial_user_response = (
-                    &#34;I see you didn&#39;t use any tools.  &#34;
-                    &#34;Please list what tools you have available, and if there are some available, &#34;
-                    &#34;why they were not useful.&#34;
-                )
-            else:
-                if not self.toolkit:
-                    raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
-                initial_user_response = await keep_going_prompt(self.toolkit)
+            # Did you use any tools? (maybe move this to goal function)
+            # if tools_used_this_round == 0:
+            #     initial_user_response = (
+            #         &#34;I see you didn&#39;t use any tools.  &#34;
+            #         &#34;Please list what tools you have available, and if there are some available, &#34;
+            #         &#34;why they were not useful.&#34;
+            #     )
+            # else:
+            if not self.toolkit:
+                raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
+            initial_user_response = await keep_going_prompt(self.toolkit)
 
             # TODO: make into method.
             await self.client.beta.threads.messages.create(
@@ -6892,24 +7054,31 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
                 content=initial_user_response,
             )
             run = await self.client.beta.threads.runs.create(thread_id=thread.id, assistant_id=self.assistant.id)
+
             self.dialog_logger_md.add_user(initial_user_response)
 
             # &#34;keep going/done&#34; loop
             done = &#34;NOPE&#34;
             tools_used_this_round = -1
 
-            # TODO: intializee this in constructor
-            if hasattr(self.toolkit, &#34;tool_answer_collector&#34;) and self.toolkit.tool_answer_collector:
+            # TODO: initialize this in constructor
+            if (
+                self.allow_self_certification
+                and hasattr(self.toolkit, &#34;tool_answer_collector&#34;)
+                and self.toolkit.tool_answer_collector
+            ):
                 final_report = self.toolkit.tool_answer_collector.text_answer
                 final_comment = self.toolkit.tool_answer_collector.comment
                 self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
-                return
+                return total_tool_use_count
 
             # Bot has at least 3 ways to stop
             # - return message of DONE
             # - use answer tool to submit DONE, or IMPOSSIBLE
             # - stop using tools
-            while done != &#34;DONE&#34; or tools_used_this_round == 0:
+            if tools_used_this_round == 0 and stop_on_no_tool_use:
+                logger.info(&#34;No tools used this round, conversation will end.&#34;)
+            while done != self.conversation_over_marker or (tools_used_this_round == 0 and stop_on_no_tool_use):
                 tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
                 # Did we use any tools
                 total_tool_use_count += tools_used_this_round
@@ -6922,9 +7091,11 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
                 messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
                 successive_response = parse_message(messages)
                 self.dialog_logger_md.add_bot(successive_response)
-                done = capture_done_message(messages)
-                if done == &#34;DONE&#34;:
-                    break
+                if self.allow_self_certification:
+                    # TODO: move this to goal checker?
+                    done = capture_done_message(messages, self.conversation_over_marker)
+                    if done == self.conversation_over_marker:
+                        break
 
                 # Did bot use tool to submit final report. Wow. Can&#39;t trust all bots.
                 if (
@@ -6937,10 +7108,11 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
                     self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
                     break
 
-                if done != &#34;DONE&#34;:
+                if done != self.conversation_over_marker:
                     # Replace with 2nd bot?
                     keep_going_text = await keep_going_prompt(self.toolkit)
-                    if keep_going_text == &#34;DONE&#34;:
+                    # This is *not* self certification
+                    if keep_going_text == self.conversation_over_marker:
                         # The bot did a good job and we can certify that.
                         break
                     self.dialog_logger_md.add_user(keep_going_text)
@@ -6963,7 +7135,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
                 await self.client.beta.threads.delete(self.thread.id)
             if self.assistant and not self.persist_bots:
                 # clean up assistant
-                await self.client.beta.assistants.delete(self.assistant.id)</code></pre>
+                await self.client.beta.assistants.delete(self.assistant.id)
+        return total_tool_use_count</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
@@ -6978,6 +7151,10 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
 <dt id="ai_shell.TaskBot.config"><code class="name">var <span class="ident">config</span></code></dt>
 <dd>
 <div class="desc"><p>Stores bot, thread config and other global config.</p></div>
+</dd>
+<dt id="ai_shell.TaskBot.conversation_over_marker"><code class="name">var <span class="ident">conversation_over_marker</span></code></dt>
+<dd>
+<div class="desc"><p>Goal function checker returns this when done.</p></div>
 </dd>
 <dt id="ai_shell.TaskBot.dialog_logger_md"><code class="name">var <span class="ident">dialog_logger_md</span></code></dt>
 <dd>
@@ -7011,7 +7188,7 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
 <h3>Methods</h3>
 <dl>
 <dt id="ai_shell.TaskBot.basic_tool_loop"><code class="name flex">
-<span>async def <span class="ident">basic_tool_loop</span></span>(<span>self, the_ask: str, root_folder: str, tool_names: list[typing.Any], keep_going_prompt: collections.abc.Callable[[<a title="ai_shell.openai_toolkit.ToolKit" href="openai_toolkit.html#ai_shell.openai_toolkit.ToolKit">ToolKit</a>], collections.abc.Awaitable[str]]) ‑> None</span>
+<span>async def <span class="ident">basic_tool_loop</span></span>(<span>self, the_ask: str, root_folder: str, tool_names: list[typing.Any], keep_going_prompt: collections.abc.Callable[[<a title="ai_shell.openai_toolkit.ToolKit" href="openai_toolkit.html#ai_shell.openai_toolkit.ToolKit">ToolKit</a>], collections.abc.Awaitable[str]], stop_on_no_tool_use: bool) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Loop through tool requests.</p>
@@ -7025,6 +7202,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
 <dd>The tools to use.</dd>
 <dt><strong><code>keep_going_prompt</code></strong> :&ensp;<code>str</code></dt>
 <dd>The prompt to use to keep going.</dd>
+<dt><strong><code>stop_on_no_tool_use</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Stop if no tools are used.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>None</p></div>
@@ -7038,7 +7217,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
     root_folder: str,
     tool_names: list[Any],
     keep_going_prompt: Callable[[ToolKit], Awaitable[str]],
-) -&gt; None:
+    stop_on_no_tool_use: bool,
+) -&gt; int:
     &#34;&#34;&#34;
     Loop through tool requests.
 
@@ -7047,6 +7227,7 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
         root_folder (str): The root folder for file operations.
         tool_names (list[Any]): The tools to use.
         keep_going_prompt (str): The prompt to use to keep going.
+        stop_on_no_tool_use (bool): Stop if no tools are used.
 
     Returns:
         None
@@ -7061,7 +7242,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
     tool_loops = 0
     total_tool_use_count = 0
     try:
-        tool_names.append(&#34;report_text&#34;)
+        if self.allow_self_certification:
+            tool_names.append(&#34;report_text&#34;)
         tool_names = list(set(tool_names))
         _, tool_schemas = self.toolkit_factory(root_folder, self.model, tool_names)
         if not self.toolkit:
@@ -7087,17 +7269,17 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
         initial_bot_response = parse_message(messages)
         self.dialog_logger_md.add_bot(initial_bot_response)
 
-        # Did you use any tools?
-        if tools_used_this_round == 0:
-            initial_user_response = (
-                &#34;I see you didn&#39;t use any tools.  &#34;
-                &#34;Please list what tools you have available, and if there are some available, &#34;
-                &#34;why they were not useful.&#34;
-            )
-        else:
-            if not self.toolkit:
-                raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
-            initial_user_response = await keep_going_prompt(self.toolkit)
+        # Did you use any tools? (maybe move this to goal function)
+        # if tools_used_this_round == 0:
+        #     initial_user_response = (
+        #         &#34;I see you didn&#39;t use any tools.  &#34;
+        #         &#34;Please list what tools you have available, and if there are some available, &#34;
+        #         &#34;why they were not useful.&#34;
+        #     )
+        # else:
+        if not self.toolkit:
+            raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
+        initial_user_response = await keep_going_prompt(self.toolkit)
 
         # TODO: make into method.
         await self.client.beta.threads.messages.create(
@@ -7106,24 +7288,31 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
             content=initial_user_response,
         )
         run = await self.client.beta.threads.runs.create(thread_id=thread.id, assistant_id=self.assistant.id)
+
         self.dialog_logger_md.add_user(initial_user_response)
 
         # &#34;keep going/done&#34; loop
         done = &#34;NOPE&#34;
         tools_used_this_round = -1
 
-        # TODO: intializee this in constructor
-        if hasattr(self.toolkit, &#34;tool_answer_collector&#34;) and self.toolkit.tool_answer_collector:
+        # TODO: initialize this in constructor
+        if (
+            self.allow_self_certification
+            and hasattr(self.toolkit, &#34;tool_answer_collector&#34;)
+            and self.toolkit.tool_answer_collector
+        ):
             final_report = self.toolkit.tool_answer_collector.text_answer
             final_comment = self.toolkit.tool_answer_collector.comment
             self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
-            return
+            return total_tool_use_count
 
         # Bot has at least 3 ways to stop
         # - return message of DONE
         # - use answer tool to submit DONE, or IMPOSSIBLE
         # - stop using tools
-        while done != &#34;DONE&#34; or tools_used_this_round == 0:
+        if tools_used_this_round == 0 and stop_on_no_tool_use:
+            logger.info(&#34;No tools used this round, conversation will end.&#34;)
+        while done != self.conversation_over_marker or (tools_used_this_round == 0 and stop_on_no_tool_use):
             tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
             # Did we use any tools
             total_tool_use_count += tools_used_this_round
@@ -7136,9 +7325,11 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
             messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
             successive_response = parse_message(messages)
             self.dialog_logger_md.add_bot(successive_response)
-            done = capture_done_message(messages)
-            if done == &#34;DONE&#34;:
-                break
+            if self.allow_self_certification:
+                # TODO: move this to goal checker?
+                done = capture_done_message(messages, self.conversation_over_marker)
+                if done == self.conversation_over_marker:
+                    break
 
             # Did bot use tool to submit final report. Wow. Can&#39;t trust all bots.
             if (
@@ -7151,10 +7342,11 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
                 self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
                 break
 
-            if done != &#34;DONE&#34;:
+            if done != self.conversation_over_marker:
                 # Replace with 2nd bot?
                 keep_going_text = await keep_going_prompt(self.toolkit)
-                if keep_going_text == &#34;DONE&#34;:
+                # This is *not* self certification
+                if keep_going_text == self.conversation_over_marker:
                     # The bot did a good job and we can certify that.
                     break
                 self.dialog_logger_md.add_user(keep_going_text)
@@ -7177,7 +7369,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
             await self.client.beta.threads.delete(self.thread.id)
         if self.assistant and not self.persist_bots:
             # clean up assistant
-            await self.client.beta.assistants.delete(self.assistant.id)</code></pre>
+            await self.client.beta.assistants.delete(self.assistant.id)
+    return total_tool_use_count</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.TaskBot.create_bot"><code class="name flex">
@@ -7311,7 +7504,6 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
         messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
         # logger.info(messages)
         last_words = parse_message(messages)
-        logger.info(last_words)
         self.dialog_logger_md.add_bot(last_words)
 
     except Exception as exception:
@@ -7339,6 +7531,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
     self, root_folder: str, model: str, tool_names: list[str]
 ) -&gt; tuple[ToolKit, list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction]]:
     self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names, config=self.config)
+    # sync COM
+    self.toolkit.conversation_over_marker = self.conversation_over_marker
     initialize_all_tools(keeps=tool_names)
     tools_schema: list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction] = [
         ToolAssistantToolsFunction(**{&#34;function&#34;: cast(FunctionDefinition, schema), &#34;type&#34;: &#34;function&#34;})
@@ -7403,7 +7597,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
             str: A confirmation message indicating successful addition of the task.
         &#34;&#34;&#34;
         self.task_manager.add_task(title, description, category, source_code_ref, assignee)
-        return &#34;Successful&#34;
+        summary = self.task_manager.get_stats()
+        return f&#34;Successful added task {title}\n{summary}&#34;
 
     @log()
     def remove_todo(self, title: str) -&gt; str:
@@ -7417,7 +7612,8 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
             str: A confirmation message indicating the task was successfully marked as finished.
         &#34;&#34;&#34;
         self.task_manager.finish_task(title)
-        return &#34;Successful&#34;
+        summary = self.task_manager.get_stats()
+        return f&#34;Successful removed task {title}\n{summary}&#34;
 
     @log()
     def query_todos_by_regex(self, regex_pattern: str = r&#34;[\s\S]+&#34;) -&gt; str:
@@ -7434,15 +7630,29 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
         return self.task_manager.query_by_title_keyword(regex_pattern)
 
     @log()
-    def query_todos_by_assignee(self) -&gt; str:
+    def query_todos_by_assignee(self, assignee_name: str) -&gt; str:
         &#34;&#34;&#34;
         Queries tasks assigned to a specific assignee. Currently, the assignee is hard-coded as &#39;Developer&#39;.
 
+        Args:
+            assignee_name (str): The name of the assignee to query tasks for.
+
         Returns:
-        str: The rendered Markdown string of tasks assigned to the specified assignee.
+            str: The rendered Markdown string of tasks assigned to the specified assignee.
         &#34;&#34;&#34;
-        assignee_name = &#34;Developer&#34;
-        return self.task_manager.query_by_assignee(assignee_name)</code></pre>
+        return self.task_manager.query_by_assignee(assignee_name)
+
+    @log()
+    def list_valid_assignees(
+        self,
+    ) -&gt; list[str]:
+        &#34;&#34;&#34;
+        Lists the valid assignees for tasks.
+
+        Returns:
+            list[str]: The rendered Markdown string of valid assignees.
+        &#34;&#34;&#34;
+        return self.task_manager.valid_assignees</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -7491,29 +7701,67 @@ def add_todo(
         str: A confirmation message indicating successful addition of the task.
     &#34;&#34;&#34;
     self.task_manager.add_task(title, description, category, source_code_ref, assignee)
-    return &#34;Successful&#34;</code></pre>
+    summary = self.task_manager.get_stats()
+    return f&#34;Successful added task {title}\n{summary}&#34;</code></pre>
 </details>
 </dd>
-<dt id="ai_shell.TodoTool.query_todos_by_assignee"><code class="name flex">
-<span>def <span class="ident">query_todos_by_assignee</span></span>(<span>self) ‑> str</span>
+<dt id="ai_shell.TodoTool.list_valid_assignees"><code class="name flex">
+<span>def <span class="ident">list_valid_assignees</span></span>(<span>self) ‑> list[str]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Queries tasks assigned to a specific assignee. Currently, the assignee is hard-coded as 'Developer'.</p>
-<p>Returns:
-str: The rendered Markdown string of tasks assigned to the specified assignee.</p></div>
+<div class="desc"><p>Lists the valid assignees for tasks.</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>list[str]</code></dt>
+<dd>The rendered Markdown string of valid assignees.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@log()
-def query_todos_by_assignee(self) -&gt; str:
+def list_valid_assignees(
+    self,
+) -&gt; list[str]:
+    &#34;&#34;&#34;
+    Lists the valid assignees for tasks.
+
+    Returns:
+        list[str]: The rendered Markdown string of valid assignees.
+    &#34;&#34;&#34;
+    return self.task_manager.valid_assignees</code></pre>
+</details>
+</dd>
+<dt id="ai_shell.TodoTool.query_todos_by_assignee"><code class="name flex">
+<span>def <span class="ident">query_todos_by_assignee</span></span>(<span>self, assignee_name: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Queries tasks assigned to a specific assignee. Currently, the assignee is hard-coded as 'Developer'.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>assignee_name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the assignee to query tasks for.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code></dt>
+<dd>The rendered Markdown string of tasks assigned to the specified assignee.</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@log()
+def query_todos_by_assignee(self, assignee_name: str) -&gt; str:
     &#34;&#34;&#34;
     Queries tasks assigned to a specific assignee. Currently, the assignee is hard-coded as &#39;Developer&#39;.
 
+    Args:
+        assignee_name (str): The name of the assignee to query tasks for.
+
     Returns:
-    str: The rendered Markdown string of tasks assigned to the specified assignee.
+        str: The rendered Markdown string of tasks assigned to the specified assignee.
     &#34;&#34;&#34;
-    assignee_name = &#34;Developer&#34;
     return self.task_manager.query_by_assignee(assignee_name)</code></pre>
 </details>
 </dd>
@@ -7583,7 +7831,8 @@ def remove_todo(self, title: str) -&gt; str:
         str: A confirmation message indicating the task was successfully marked as finished.
     &#34;&#34;&#34;
     self.task_manager.finish_task(title)
-    return &#34;Successful&#34;</code></pre>
+    summary = self.task_manager.get_stats()
+    return f&#34;Successful removed task {title}\n{summary}&#34;</code></pre>
 </details>
 </dd>
 </dl>
@@ -7771,11 +8020,11 @@ def remove_todo(self, title: str) -&gt; str:
             &#34;replace_all&#34;: self.replace_all,
             &#34;replace_line_by_line&#34;: self.replace_line_by_line,
             &#34;replace_with_regex&#34;: self.replace_with_regex,
-            &#34;save_if_changed&#34;: self.save_if_changed,
             &#34;rewrite_file&#34;: self.rewrite_file,
             &#34;write_new_file&#34;: self.write_new_file,
             &#34;sed&#34;: self.sed,
             &#34;add_todo&#34;: self.add_todo,
+            &#34;list_valid_assignees&#34;: self.list_valid_assignees,
             &#34;query_todos_by_assignee&#34;: self.query_todos_by_assignee,
             &#34;query_todos_by_regex&#34;: self.query_todos_by_regex,
             &#34;remove_todo&#34;: self.remove_todo,
@@ -8595,30 +8844,6 @@ def remove_todo(self, title: str) -&gt; str:
             file_path=file_path, regex_match_expression=regex_match_expression, replacement=replacement
         )
 
-    def save_if_changed(self, arguments: dict[str, Any]) -&gt; Any:
-        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-        tool = ReplaceTool(self.root_folder, self.config)
-
-        file_path = cast(
-            str,
-            arguments.get(
-                &#34;file_path&#34;,
-            ),
-        )
-        final = cast(
-            str,
-            arguments.get(
-                &#34;final&#34;,
-            ),
-        )
-        input_text = cast(
-            str,
-            arguments.get(
-                &#34;input_text&#34;,
-            ),
-        )
-        return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)
-
     def rewrite_file(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
         tool = RewriteTool(self.root_folder, self.config)
@@ -8711,11 +8936,23 @@ def remove_todo(self, title: str) -&gt; str:
             assignee=assignee, category=category, description=description, source_code_ref=source_code_ref, title=title
         )
 
+    def list_valid_assignees(self, arguments: dict[str, Any]) -&gt; Any:
+        &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+        tool = TodoTool(self.root_folder, self.config)
+
+        return tool.list_valid_assignees()
+
     def query_todos_by_assignee(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
         tool = TodoTool(self.root_folder, self.config)
 
-        return tool.query_todos_by_assignee()
+        assignee_name = cast(
+            str,
+            arguments.get(
+                &#34;assignee_name&#34;,
+            ),
+        )
+        return tool.query_todos_by_assignee(assignee_name=assignee_name)
 
     def query_todos_by_regex(self, arguments: dict[str, Any]) -&gt; Any:
         &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
@@ -9578,6 +9815,22 @@ def remove_todo(self, title: str) -&gt; str:
     return tool.is_ignored_by_gitignore(file_path=file_path, gitignore_path=gitignore_path)</code></pre>
 </details>
 </dd>
+<dt id="ai_shell.ToolKit.list_valid_assignees"><code class="name flex">
+<span>def <span class="ident">list_valid_assignees</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Generated Do Not Edit</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def list_valid_assignees(self, arguments: dict[str, Any]) -&gt; Any:
+    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
+    tool = TodoTool(self.root_folder, self.config)
+
+    return tool.list_valid_assignees()</code></pre>
+</details>
+</dd>
 <dt id="ai_shell.ToolKit.ls"><code class="name flex">
 <span>def <span class="ident">ls</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
 </code></dt>
@@ -9650,7 +9903,13 @@ def remove_todo(self, title: str) -&gt; str:
     &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
     tool = TodoTool(self.root_folder, self.config)
 
-    return tool.query_todos_by_assignee()</code></pre>
+    assignee_name = cast(
+        str,
+        arguments.get(
+            &#34;assignee_name&#34;,
+        ),
+    )
+    return tool.query_todos_by_assignee(assignee_name=assignee_name)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.ToolKit.query_todos_by_regex"><code class="name flex">
@@ -10136,40 +10395,6 @@ def remove_todo(self, title: str) -&gt; str:
     return tool.rewrite_file(file_path=file_path, text=text)</code></pre>
 </details>
 </dd>
-<dt id="ai_shell.ToolKit.save_if_changed"><code class="name flex">
-<span>def <span class="ident">save_if_changed</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Generated Do Not Edit</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save_if_changed(self, arguments: dict[str, Any]) -&gt; Any:
-    &#34;&#34;&#34;Generated Do Not Edit&#34;&#34;&#34;
-    tool = ReplaceTool(self.root_folder, self.config)
-
-    file_path = cast(
-        str,
-        arguments.get(
-            &#34;file_path&#34;,
-        ),
-    )
-    final = cast(
-        str,
-        arguments.get(
-            &#34;final&#34;,
-        ),
-    )
-    input_text = cast(
-        str,
-        arguments.get(
-            &#34;input_text&#34;,
-        ),
-    )
-    return tool.save_if_changed(file_path=file_path, final=final, input_text=input_text)</code></pre>
-</details>
-</dd>
 <dt id="ai_shell.ToolKit.sed"><code class="name flex">
 <span>def <span class="ident">sed</span></span>(<span>self, arguments: dict[str, typing.Any]) ‑> Any</span>
 </code></dt>
@@ -10283,6 +10508,7 @@ def remove_todo(self, title: str) -&gt; str:
 <ul class="hlist">
 <li><code><b><a title="ai_shell.openai_support.ToolKitBase" href="openai_support.html#ai_shell.openai_support.ToolKitBase">ToolKitBase</a></b></code>:
 <ul class="hlist">
+<li><code><a title="ai_shell.openai_support.ToolKitBase.convert_media_type_arg_to_method_name" href="openai_support.html#ai_shell.openai_support.ToolKitBase.convert_media_type_arg_to_method_name">convert_media_type_arg_to_method_name</a></code></li>
 <li><code><a title="ai_shell.openai_support.ToolKitBase.get_tool_usage_for" href="openai_support.html#ai_shell.openai_support.ToolKitBase.get_tool_usage_for">get_tool_usage_for</a></code></li>
 <li><code><a title="ai_shell.openai_support.ToolKitBase.process_tool_calls" href="openai_support.html#ai_shell.openai_support.ToolKitBase.process_tool_calls">process_tool_calls</a></code></li>
 <li><code><a title="ai_shell.openai_support.ToolKitBase.tool_usage_stats" href="openai_support.html#ai_shell.openai_support.ToolKitBase.tool_usage_stats">tool_usage_stats</a></code></li>
@@ -10301,6 +10527,7 @@ def remove_todo(self, title: str) -&gt; str:
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
+<li><code><a title="ai_shell.ai_logs" href="ai_logs/index.html">ai_shell.ai_logs</a></code></li>
 <li><code><a title="ai_shell.answer_tool" href="answer_tool.html">ai_shell.answer_tool</a></code></li>
 <li><code><a title="ai_shell.backup_restore" href="backup_restore.html">ai_shell.backup_restore</a></code></li>
 <li><code><a title="ai_shell.bot_glue" href="bot_glue/index.html">ai_shell.bot_glue</a></code></li>
@@ -10389,6 +10616,7 @@ def remove_todo(self, title: str) -&gt; str:
 <li><code><a title="ai_shell.Config.load_config" href="#ai_shell.Config.load_config">load_config</a></code></li>
 <li><code><a title="ai_shell.Config.save_config" href="#ai_shell.Config.save_config">save_config</a></code></li>
 <li><code><a title="ai_shell.Config.set_flag" href="#ai_shell.Config.set_flag">set_flag</a></code></li>
+<li><code><a title="ai_shell.Config.set_list" href="#ai_shell.Config.set_list">set_list</a></code></li>
 </ul>
 </li>
 <li>
@@ -10501,7 +10729,6 @@ def remove_todo(self, title: str) -&gt; str:
 <li><code><a title="ai_shell.ReplaceTool.replace_all" href="#ai_shell.ReplaceTool.replace_all">replace_all</a></code></li>
 <li><code><a title="ai_shell.ReplaceTool.replace_line_by_line" href="#ai_shell.ReplaceTool.replace_line_by_line">replace_line_by_line</a></code></li>
 <li><code><a title="ai_shell.ReplaceTool.replace_with_regex" href="#ai_shell.ReplaceTool.replace_with_regex">replace_with_regex</a></code></li>
-<li><code><a title="ai_shell.ReplaceTool.save_if_changed" href="#ai_shell.ReplaceTool.save_if_changed">save_if_changed</a></code></li>
 </ul>
 </li>
 <li>
@@ -10524,6 +10751,7 @@ def remove_todo(self, title: str) -&gt; str:
 <li><code><a title="ai_shell.TaskBot.basic_tool_loop" href="#ai_shell.TaskBot.basic_tool_loop">basic_tool_loop</a></code></li>
 <li><code><a title="ai_shell.TaskBot.bot_instructions" href="#ai_shell.TaskBot.bot_instructions">bot_instructions</a></code></li>
 <li><code><a title="ai_shell.TaskBot.config" href="#ai_shell.TaskBot.config">config</a></code></li>
+<li><code><a title="ai_shell.TaskBot.conversation_over_marker" href="#ai_shell.TaskBot.conversation_over_marker">conversation_over_marker</a></code></li>
 <li><code><a title="ai_shell.TaskBot.create_bot" href="#ai_shell.TaskBot.create_bot">create_bot</a></code></li>
 <li><code><a title="ai_shell.TaskBot.dialog_logger_md" href="#ai_shell.TaskBot.dialog_logger_md">dialog_logger_md</a></code></li>
 <li><code><a title="ai_shell.TaskBot.get_create_bot" href="#ai_shell.TaskBot.get_create_bot">get_create_bot</a></code></li>
@@ -10542,6 +10770,7 @@ def remove_todo(self, title: str) -&gt; str:
 <h4><code><a title="ai_shell.TodoTool" href="#ai_shell.TodoTool">TodoTool</a></code></h4>
 <ul class="">
 <li><code><a title="ai_shell.TodoTool.add_todo" href="#ai_shell.TodoTool.add_todo">add_todo</a></code></li>
+<li><code><a title="ai_shell.TodoTool.list_valid_assignees" href="#ai_shell.TodoTool.list_valid_assignees">list_valid_assignees</a></code></li>
 <li><code><a title="ai_shell.TodoTool.query_todos_by_assignee" href="#ai_shell.TodoTool.query_todos_by_assignee">query_todos_by_assignee</a></code></li>
 <li><code><a title="ai_shell.TodoTool.query_todos_by_regex" href="#ai_shell.TodoTool.query_todos_by_regex">query_todos_by_regex</a></code></li>
 <li><code><a title="ai_shell.TodoTool.remove_todo" href="#ai_shell.TodoTool.remove_todo">remove_todo</a></code></li>
@@ -10586,6 +10815,7 @@ def remove_todo(self, title: str) -&gt; str:
 <li><code><a title="ai_shell.ToolKit.insert_text_after_multiline_context" href="#ai_shell.ToolKit.insert_text_after_multiline_context">insert_text_after_multiline_context</a></code></li>
 <li><code><a title="ai_shell.ToolKit.insert_text_at_start_or_end" href="#ai_shell.ToolKit.insert_text_at_start_or_end">insert_text_at_start_or_end</a></code></li>
 <li><code><a title="ai_shell.ToolKit.is_ignored_by_gitignore" href="#ai_shell.ToolKit.is_ignored_by_gitignore">is_ignored_by_gitignore</a></code></li>
+<li><code><a title="ai_shell.ToolKit.list_valid_assignees" href="#ai_shell.ToolKit.list_valid_assignees">list_valid_assignees</a></code></li>
 <li><code><a title="ai_shell.ToolKit.ls" href="#ai_shell.ToolKit.ls">ls</a></code></li>
 <li><code><a title="ai_shell.ToolKit.ls_markdown" href="#ai_shell.ToolKit.ls_markdown">ls_markdown</a></code></li>
 <li><code><a title="ai_shell.ToolKit.pytest" href="#ai_shell.ToolKit.pytest">pytest</a></code></li>
@@ -10607,7 +10837,6 @@ def remove_todo(self, title: str) -&gt; str:
 <li><code><a title="ai_shell.ToolKit.report_tuple" href="#ai_shell.ToolKit.report_tuple">report_tuple</a></code></li>
 <li><code><a title="ai_shell.ToolKit.report_xml" href="#ai_shell.ToolKit.report_xml">report_xml</a></code></li>
 <li><code><a title="ai_shell.ToolKit.rewrite_file" href="#ai_shell.ToolKit.rewrite_file">rewrite_file</a></code></li>
-<li><code><a title="ai_shell.ToolKit.save_if_changed" href="#ai_shell.ToolKit.save_if_changed">save_if_changed</a></code></li>
 <li><code><a title="ai_shell.ToolKit.sed" href="#ai_shell.ToolKit.sed">sed</a></code></li>
 <li><code><a title="ai_shell.ToolKit.tail" href="#ai_shell.ToolKit.tail">tail</a></code></li>
 <li><code><a title="ai_shell.ToolKit.tail_markdown" href="#ai_shell.ToolKit.tail_markdown">tail_markdown</a></code></li>

@@ -37,11 +37,11 @@ import logging
 import re
 from typing import Optional
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.backup_restore import BackupRestore
 from ai_shell.cat_tool import CatTool
 from ai_shell.pyutils.validate import ValidateModule, ValidationMessageForBot, is_python_file
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +59,7 @@ class ReplaceTool:
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
         self.python_module = config.get_value(&#34;python_module&#34;)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def replace_line_by_line(
@@ -89,7 +90,7 @@ class ReplaceTool:
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not old_text:
             raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         lines = []
         input_lines = input_text.splitlines()
@@ -102,7 +103,7 @@ class ReplaceTool:
         if not lines:
             raise TypeError(&#34;Nothing left after replace, something went wrong, cancelling.&#34;)
         final = &#34;\n&#34;.join(lines)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
     @log()
     def replace_all(self, file_path: str, old_text: str, new_text: str) -&gt; str:
@@ -128,10 +129,10 @@ class ReplaceTool:
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not old_text:
             raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         final = input_text.replace(old_text, new_text)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
     @log()
     def replace_with_regex(self, file_path: str, regex_match_expression: str, replacement: str) -&gt; str:
@@ -156,12 +157,12 @@ class ReplaceTool:
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not regex_match_expression:
             raise TypeError(&#34;No regex_match_expression, please context so I can find the text to replace.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         final = re.sub(regex_match_expression, replacement, input_text)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
-    def save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
+    def _save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
         &#34;&#34;&#34;Saves the modified text to the file if changes have been made.
 
         Compares the original text with the modified text and writes the modified text
@@ -184,7 +185,7 @@ class ReplaceTool:
 
         if input_text != final:
             BackupRestore.backup_file(file_path)
-            with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
+            with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as output_file:
                 output_file.write(final)
 
             validation = self._validate_code(file_path)
@@ -265,6 +266,7 @@ class ReplaceTool:
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
         self.python_module = config.get_value(&#34;python_module&#34;)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def replace_line_by_line(
@@ -295,7 +297,7 @@ class ReplaceTool:
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not old_text:
             raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         lines = []
         input_lines = input_text.splitlines()
@@ -308,7 +310,7 @@ class ReplaceTool:
         if not lines:
             raise TypeError(&#34;Nothing left after replace, something went wrong, cancelling.&#34;)
         final = &#34;\n&#34;.join(lines)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
     @log()
     def replace_all(self, file_path: str, old_text: str, new_text: str) -&gt; str:
@@ -334,10 +336,10 @@ class ReplaceTool:
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not old_text:
             raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         final = input_text.replace(old_text, new_text)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
     @log()
     def replace_with_regex(self, file_path: str, regex_match_expression: str, replacement: str) -&gt; str:
@@ -362,12 +364,12 @@ class ReplaceTool:
             raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
         if not regex_match_expression:
             raise TypeError(&#34;No regex_match_expression, please context so I can find the text to replace.&#34;)
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         final = re.sub(regex_match_expression, replacement, input_text)
-        return self.save_if_changed(file_path, final, input_text)
+        return self._save_if_changed(file_path, final, input_text)
 
-    def save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
+    def _save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
         &#34;&#34;&#34;Saves the modified text to the file if changes have been made.
 
         Compares the original text with the modified text and writes the modified text
@@ -390,7 +392,7 @@ class ReplaceTool:
 
         if input_text != final:
             BackupRestore.backup_file(file_path)
-            with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
+            with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as output_file:
                 output_file.write(final)
 
             validation = self._validate_code(file_path)
@@ -487,10 +489,10 @@ def replace_all(self, file_path: str, old_text: str, new_text: str) -&gt; str:
         raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
     if not old_text:
         raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         input_text = file.read()
     final = input_text.replace(old_text, new_text)
-    return self.save_if_changed(file_path, final, input_text)</code></pre>
+    return self._save_if_changed(file_path, final, input_text)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.replace_tool.ReplaceTool.replace_line_by_line"><code class="name flex">
@@ -559,7 +561,7 @@ def replace_line_by_line(
         raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
     if not old_text:
         raise TypeError(&#34;No old_text, please context so I can find the text to replace.&#34;)
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         input_text = file.read()
     lines = []
     input_lines = input_text.splitlines()
@@ -572,7 +574,7 @@ def replace_line_by_line(
     if not lines:
         raise TypeError(&#34;Nothing left after replace, something went wrong, cancelling.&#34;)
     final = &#34;\n&#34;.join(lines)
-    return self.save_if_changed(file_path, final, input_text)</code></pre>
+    return self._save_if_changed(file_path, final, input_text)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.replace_tool.ReplaceTool.replace_with_regex"><code class="name flex">
@@ -629,84 +631,10 @@ def replace_with_regex(self, file_path: str, regex_match_expression: str, replac
         raise TypeError(&#34;No file_path, please provide file_path for each request.&#34;)
     if not regex_match_expression:
         raise TypeError(&#34;No regex_match_expression, please context so I can find the text to replace.&#34;)
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         input_text = file.read()
     final = re.sub(regex_match_expression, replacement, input_text)
-    return self.save_if_changed(file_path, final, input_text)</code></pre>
-</details>
-</dd>
-<dt id="ai_shell.replace_tool.ReplaceTool.save_if_changed"><code class="name flex">
-<span>def <span class="ident">save_if_changed</span></span>(<span>self, file_path: str, final: str, input_text: str) ‑> str</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Saves the modified text to the file if changes have been made.</p>
-<p>Compares the original text with the modified text and writes the modified text
-to the file if there are changes. Returns a message indicating whether any changes
-were made.</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>file_path</code></strong> :&ensp;<code>str</code></dt>
-<dd>The path to the file.</dd>
-<dt><strong><code>final</code></strong> :&ensp;<code>str</code></dt>
-<dd>The modified text.</dd>
-<dt><strong><code>input_text</code></strong> :&ensp;<code>str</code></dt>
-<dd>The original text.</dd>
-</dl>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><code>str</code></dt>
-<dd>A message indicating whether changes were made or not.</dd>
-</dl>
-<h2 id="raises">Raises</h2>
-<dl>
-<dt><code>TypeError</code></dt>
-<dd>If file_path is None.</dd>
-</dl></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def save_if_changed(self, file_path: str, final: str, input_text: str) -&gt; str:
-    &#34;&#34;&#34;Saves the modified text to the file if changes have been made.
-
-    Compares the original text with the modified text and writes the modified text
-    to the file if there are changes. Returns a message indicating whether any changes
-    were made.
-
-    Args:
-        file_path (str): The path to the file.
-        final (str): The modified text.
-        input_text (str): The original text.
-
-    Returns:
-        str: A message indicating whether changes were made or not.
-
-    Raises:
-        TypeError: If file_path is None.
-    &#34;&#34;&#34;
-    if not final:
-        raise TypeError(&#34;Something went wrong in replace and all text disappeared. Cancelling.&#34;)
-
-    if input_text != final:
-        BackupRestore.backup_file(file_path)
-        with open(file_path, &#34;w&#34;, encoding=&#34;utf-8&#34;) as output_file:
-            output_file.write(final)
-
-        validation = self._validate_code(file_path)
-
-        if validation:
-            BackupRestore.revert_to_latest_backup(file_path)
-            return f&#34;File not written because of problems.\n{validation.message}&#34;
-
-        if self.auto_cat:
-            feedback = &#34;Changes applied without exception, please verify by other means.\n&#34;
-            contents = CatTool(self.root_folder, self.config).cat_markdown([file_path])
-            return f&#34;Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}&#34;
-        return &#34;Changes applied without exception, please verify by other means.&#34;
-    return (
-        &#34;No changes made, this means the old file contents are the same as the new. This has nothing &#34;
-        &#34;to do with file permissions. Try again with a different match pattern.&#34;
-    )</code></pre>
+    return self._save_if_changed(file_path, final, input_text)</code></pre>
 </details>
 </dd>
 </dl>
@@ -733,7 +661,6 @@ were made.</p>
 <li><code><a title="ai_shell.replace_tool.ReplaceTool.replace_all" href="#ai_shell.replace_tool.ReplaceTool.replace_all">replace_all</a></code></li>
 <li><code><a title="ai_shell.replace_tool.ReplaceTool.replace_line_by_line" href="#ai_shell.replace_tool.ReplaceTool.replace_line_by_line">replace_line_by_line</a></code></li>
 <li><code><a title="ai_shell.replace_tool.ReplaceTool.replace_with_regex" href="#ai_shell.replace_tool.ReplaceTool.replace_with_regex">replace_with_regex</a></code></li>
-<li><code><a title="ai_shell.replace_tool.ReplaceTool.save_if_changed" href="#ai_shell.replace_tool.ReplaceTool.save_if_changed">save_if_changed</a></code></li>
 </ul>
 </li>
 </ul>

@@ -3,6 +3,7 @@ Generated code, do not edit.
 """
 import argparse
 
+from ai_shell.__about__ import __description__, __version__
 from ai_shell.answer_tool import AnswerCollectorTool
 from ai_shell.cat_tool import CatTool
 from ai_shell.cut_tool import CutTool
@@ -22,6 +23,8 @@ from ai_shell.utils.config_manager import Config
 from ai_shell.utils.console_utils import pretty_console
 
 CONFIG = Config()
+
+
 # pylint: disable=unused-argument
 
 
@@ -592,7 +595,25 @@ def pytest_command(args):
 
 def run():
     """Create the main parser"""
-    parser = argparse.ArgumentParser(prog="ais", description="AI Shell Command Line Interface")
+    program = "ais"
+    parser = argparse.ArgumentParser(
+        prog=program,
+        allow_abbrev=False,
+        description=__description__,
+        epilog="""
+    Examples:
+
+        ais cat hello.py
+""",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        "-V",
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="Show program's version number and exit.",
+    )
     subparsers = parser.add_subparsers(dest="subcommand", help="sub-command help")
     # Create a parser for the "head" command
     head_parser = subparsers.add_parser("head", help="""Return the first \'lines\' or \'byte_count\' from a file..""")

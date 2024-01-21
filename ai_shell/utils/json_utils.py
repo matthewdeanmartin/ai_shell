@@ -6,6 +6,7 @@ import datetime
 import http
 import json as slowjson
 import logging
+import sys
 import types
 from typing import Any
 
@@ -104,7 +105,7 @@ def exception_to_rfc7807_dict(exception: Exception) -> dict[str, Any]:
     if isinstance(exception, FatalConfigurationError):
         logger.error(exception)
         print("FatalConfigurationError: " + str(exception))
-        exit(1)
+        sys.exit(1)
 
     # Mapping of standard exceptions to HTTP status codes and documentation URLs
     exception_mapping = {

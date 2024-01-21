@@ -298,7 +298,7 @@ if __name__ == &#39;__main__&#39;:
     with open(target_file, &#34;w&#34;, encoding=&#34;utf-8&#34;) as source:
         source.write(&#39;&#34;&#34;&#34;jsonschema for functions&#34;&#34;&#34;&#39;)
         source.write(&#34;\n\n&#34;)
-        source.write(f&#34;_SCHEMAS = {pformat(schemas, indent=2)}&#34;)</code></pre>
+        source.write(f&#34;_SCHEMAS = {pformat(schemas, width=500, indent=2)}&#34;)</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.code_generate.generate_the_toolkit"><code class="name flex">

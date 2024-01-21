@@ -77,9 +77,10 @@ class DialogLoggerWithMarkdown:
         self.log_file_path = os.path.join(self.base_directory, f"dialog_{log_number}.md")
         os.makedirs(os.path.dirname(self.log_file_path), exist_ok=True)
 
-        # Context manger handles this, I think.
+        # Context manager handles this, I think.
         # pylint: disable=consider-using-with
         self.log_file = open(self.log_file_path, "a", buffering=1, encoding="utf-8")
+        self.pending_tools: dict[str, dict[str, str]] = {}
 
     def write_header(self, bot_name: str, model: str, bot_instructions: str) -> None:
         """
@@ -131,27 +132,31 @@ class DialogLoggerWithMarkdown:
         self.log_file.write(f"{toolkit_message}\n\n")
         logger.info(toolkit_message.replace("\n", ""))
 
-    def add_tool(self, tool_name: str, tool_args: str) -> None:
+    def add_tool(self, tool_call_id: str, tool_name: str, tool_args: str) -> None:
         """
         Logs a single tool and its arguments used in the dialog.
 
         Args:
+            tool_call_id (str): The unique identifier for the tool call.
             tool_name (str): The name of the tool.
             tool_args (str): The arguments passed to the tool, in JSON string format.
         """
-        bot_wants = f"Bot wants to use **Tool**: `{tool_name}`, **Args**: {tool_args}"
-        self.log_file.write(f"{bot_wants}\n\n")
+        bot_wants = f"Bot wants to use `{tool_name}`\n"
+        self.log_file.write(bot_wants)
         logger.info(bot_wants)
         try:
             json_bits = json.loads(tool_args)
         except BaseException:
-            self.log_file.write(f"Bad JSON: {tool_args}")
+            self.log_file.write(f"Bot gave us Bad JSON: {tool_args}")
+            self.pending_tools[tool_call_id] = {"tool_name": tool_name, "tool_args": tool_args}
             return
+        args_lines: list[str] = []
         for name, value in json_bits.items():
             if value is not None:
                 pair = f"{name} : {value}"
-                self.log_file.write(f"{pair}\n")
-                logger.info(pair)
+                args_lines.append(f" - {pair}\n")
+                # logger.info(pair)
+        self.pending_tools[tool_call_id] = {"tool_name": tool_name, "tool_args": "\n".join(args_lines)}
 
     def add_tool_result(self, tool_results: list[dict[str, Any]]) -> None:
         """
@@ -160,17 +165,25 @@ class DialogLoggerWithMarkdown:
         Args:
             tool_results (List[Dict[str, Any]]): A list of dictionaries containing the tool results.
         """
+        # result should always be of the same dict type
+        # tool_result = {"tool_call_id": tool_call.id, "output": json_result}
         for result in tool_results:
             self.log_file.write("### Result\n\n")
-            if isinstance(result, dict):
-                for key, value in result.items():
-                    if key == "output":
-                        # json.loads here should work, it isn't bot-json
-                        self.log_file.write(f" {try_markpickle(json.loads(value))}\n")
-                    else:
-                        self.log_file.write(f"{key}: {value}\n")
+            self.log_file.write(f"Tool call Id: {result['tool_call_id']}\n")
+            self.log_file.write(f"Tool name: {self.pending_tools[result['tool_call_id']]['tool_name']}\n")
+            self.log_file.write(f"Tool args:\n {self.pending_tools[result['tool_call_id']]['tool_args']}\n")
+            del self.pending_tools["tool_call_id"]
+            json_string = result["output"]
+            # json.loads here should work, it isn't bot-json
+            any_type = json.loads(json_string)
+            if isinstance(any_type, dict):
+                if "type" in any_type and "title" in any_type and "status" in any_type and "detail" in any_type:
+                    self.log_file.write(f"ERROR: {any_type['type']} : {any_type['detail']}\n")
+                else:
+                    for key, value in any_type.items():
+                        self.log_file.write(f" - {key} : {value}\n")
             else:
-                self.log_file.write(f"{result}\n")
+                self.log_file.write(f"{any_type}\n")
 
     def add_error(self, error: Exception) -> None:
         """
@@ -215,7 +228,7 @@ if __name__ == "__main__":
             dialog_logger_md.add_user("Hello, bot!")
             dialog_logger_md.add_bot("Hello, user!")
             dialog_logger_md.add_toolkit(["python", "dalle"])
-            dialog_logger_md.add_tool("python", "calculate something")
+            dialog_logger_md.add_tool("xyzzy", "python", "calculate something")
             # In case of an error
             # dialog_logger_md.add_error("Some error occurred")
 

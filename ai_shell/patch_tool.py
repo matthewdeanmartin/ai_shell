@@ -52,11 +52,7 @@ class PatchTool:
             tmp_patch.write(patch_content.encode("utf-8"))
             tmp_patch.flush()
 
-        try:
-            patch = PatchSet.from_filename(tmp_patch_name, encoding="utf-8")
-            print(patch)
-        except Exception as ex:
-            print(ex)
+        _patch = PatchSet.from_filename(tmp_patch_name, encoding="utf-8")
 
         cmd = ["git", "apply", tmp_patch_name, "--reject", "--verbose"]
 
@@ -75,6 +71,7 @@ class PatchTool:
             print(cpe)
             print(cpe.stdout)
             print(cpe.stderr)
+            raise
 
         return "Patch applied without exception, please verify by other means to see if it was successful."
 

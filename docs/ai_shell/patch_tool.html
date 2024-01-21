@@ -42,8 +42,8 @@ import tempfile
 
 from unidiff import PatchSet
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 
 logger = logging.getLogger(__name__)
 
@@ -83,11 +83,7 @@ class PatchTool:
             tmp_patch.write(patch_content.encode(&#34;utf-8&#34;))
             tmp_patch.flush()
 
-        try:
-            patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
-            print(patch)
-        except Exception as ex:
-            print(ex)
+        _patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
 
         cmd = [&#34;git&#34;, &#34;apply&#34;, tmp_patch_name, &#34;--reject&#34;, &#34;--verbose&#34;]
 
@@ -106,6 +102,7 @@ class PatchTool:
             print(cpe)
             print(cpe.stdout)
             print(cpe.stderr)
+            raise
 
         return &#34;Patch applied without exception, please verify by other means to see if it was successful.&#34;
 
@@ -250,11 +247,7 @@ class PatchTool:
             tmp_patch.write(patch_content.encode(&#34;utf-8&#34;))
             tmp_patch.flush()
 
-        try:
-            patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
-            print(patch)
-        except Exception as ex:
-            print(ex)
+        _patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
 
         cmd = [&#34;git&#34;, &#34;apply&#34;, tmp_patch_name, &#34;--reject&#34;, &#34;--verbose&#34;]
 
@@ -273,6 +266,7 @@ class PatchTool:
             print(cpe)
             print(cpe.stdout)
             print(cpe.stderr)
+            raise
 
         return &#34;Patch applied without exception, please verify by other means to see if it was successful.&#34;
 
@@ -347,11 +341,7 @@ def apply_git_patch(self, patch_content: str) -&gt; str:
         tmp_patch.write(patch_content.encode(&#34;utf-8&#34;))
         tmp_patch.flush()
 
-    try:
-        patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
-        print(patch)
-    except Exception as ex:
-        print(ex)
+    _patch = PatchSet.from_filename(tmp_patch_name, encoding=&#34;utf-8&#34;)
 
     cmd = [&#34;git&#34;, &#34;apply&#34;, tmp_patch_name, &#34;--reject&#34;, &#34;--verbose&#34;]
 
@@ -370,6 +360,7 @@ def apply_git_patch(self, patch_content: str) -&gt; str:
         print(cpe)
         print(cpe.stdout)
         print(cpe.stderr)
+        raise
 
     return &#34;Patch applied without exception, please verify by other means to see if it was successful.&#34;</code></pre>
 </details>

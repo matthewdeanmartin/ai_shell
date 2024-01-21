@@ -275,7 +275,7 @@ class TaskBot:
             done = "NOPE"
             tools_used_this_round = -1
 
-            # TODO: intialize this in constructor
+            # TODO: initialize this in constructor
             if (
                 self.allow_self_certification
                 and hasattr(self.toolkit, "tool_answer_collector")

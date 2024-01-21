@@ -38,8 +38,9 @@ import re
 from dataclasses import dataclass, field
 from io import StringIO
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
+from ai_shell.utils.cwd_utils import change_directory
 from ai_shell.utils.read_fs import is_file_in_root_folder, remove_root_folder
 
 
@@ -84,6 +85,7 @@ class GrepTool:
         self.root_folder: str = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def grep_markdown(
@@ -152,18 +154,23 @@ class GrepTool:
 
         for filename in glob.glob(glob_pattern, root_dir=self.root_folder, recursive=True):
             matches_per_file = 0
-
+            if os.path.isdir(filename):
+                logging.warning(f&#34;Skipping directory {filename}, because it isn&#39;t a file.&#34;)
+                continue
             if not os.path.exists(filename):
                 # What a hack
                 open_path = self.root_folder + &#34;/&#34; + filename
             else:
                 open_path = filename
-            with open(open_path, encoding=&#34;utf-8&#34;) as file:
+            with open(open_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
                 if not is_file_in_root_folder(filename, self.root_folder):
+                    logging.warning(f&#34;Skipping file {filename}, because it isn&#39;t in the root folder.&#34;)
                     continue
                 line_number = 0
                 for line in file:
-                    if matches_per_file &lt; maximum_matches_per_file or maximum_matches_per_file == -1:
+                    below_maximum = matches_per_file &lt; maximum_matches_per_file
+                    maximum_not_set = maximum_matches_per_file == -1
+                    if below_maximum or maximum_not_set:
                         line_number += 1
                         if pattern.search(line):
                             matches_total += 1
@@ -186,8 +193,24 @@ class GrepTool:
 
 
 if __name__ == &#34;__main__&#34;:
-    tool = GrepTool(&#34;.&#34;, config=Config(&#34;..&#34;))
-    print(tool.grep(glob_pattern=&#34;*.py&#34;, regex=&#34;print\\(|logging&#34;, maximum_matches_per_file=1))</code></pre>
+
+    def run() -&gt; None:
+        &#34;&#34;&#34;Example&#34;&#34;&#34;
+        with change_directory(&#34;src&#34;):
+            tool = GrepTool(&#34;.&#34;, config=Config(&#34;..&#34;))
+            # glob_pattern&#34;: &#34;fish_tank/*&#34;, &#34;regex&#34;: &#34;TODO|todo&#34;
+            # import orjson
+            # print(orjson.dumps(tool.grep(glob_pattern=&#34;fish_tank/*&#34;, regex=&#34;TODO|todo&#34;)).decode(&#34;utf-8&#34;))
+            #
+            # print(orjson.dumps(tool.grep(glob_pattern=&#34;./fish_tank/*&#34;, regex=&#34;TODO|todo&#34;)).decode(&#34;utf-8&#34;))
+            #
+            # print(tool.grep_markdown(glob_pattern=&#34;./**&#34;, regex=&#34;TODO&#34;))
+            # print(tool.grep(glob_pattern=&#34;*.py&#34;, regex=&#34;print\\(|logging&#34;, maximum_matches_per_file=1))
+            # TODO:|FIXME:|NOTE:|XXX: --glob_pattern ./fish_tank/__main__.py
+            print(tool.grep_markdown(glob_pattern=&#34;./fish_tank/__main__.py&#34;, regex=&#34;TODO|FIXME|NOTE|XXX&#34;))
+            # print(tool.grep_markdown(glob_pattern=&#34;./**&#34;, regex=&#34;TODO&#34;))
+
+    run()</code></pre>
 </details>
 </section>
 <section>
@@ -289,6 +312,7 @@ class GrepResults:
         self.root_folder: str = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def grep_markdown(
@@ -357,18 +381,23 @@ class GrepResults:
 
         for filename in glob.glob(glob_pattern, root_dir=self.root_folder, recursive=True):
             matches_per_file = 0
-
+            if os.path.isdir(filename):
+                logging.warning(f&#34;Skipping directory {filename}, because it isn&#39;t a file.&#34;)
+                continue
             if not os.path.exists(filename):
                 # What a hack
                 open_path = self.root_folder + &#34;/&#34; + filename
             else:
                 open_path = filename
-            with open(open_path, encoding=&#34;utf-8&#34;) as file:
+            with open(open_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
                 if not is_file_in_root_folder(filename, self.root_folder):
+                    logging.warning(f&#34;Skipping file {filename}, because it isn&#39;t in the root folder.&#34;)
                     continue
                 line_number = 0
                 for line in file:
-                    if matches_per_file &lt; maximum_matches_per_file or maximum_matches_per_file == -1:
+                    below_maximum = matches_per_file &lt; maximum_matches_per_file
+                    maximum_not_set = maximum_matches_per_file == -1
+                    if below_maximum or maximum_not_set:
                         line_number += 1
                         if pattern.search(line):
                             matches_total += 1
@@ -454,18 +483,23 @@ def grep(
 
     for filename in glob.glob(glob_pattern, root_dir=self.root_folder, recursive=True):
         matches_per_file = 0
-
+        if os.path.isdir(filename):
+            logging.warning(f&#34;Skipping directory {filename}, because it isn&#39;t a file.&#34;)
+            continue
         if not os.path.exists(filename):
             # What a hack
             open_path = self.root_folder + &#34;/&#34; + filename
         else:
             open_path = filename
-        with open(open_path, encoding=&#34;utf-8&#34;) as file:
+        with open(open_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             if not is_file_in_root_folder(filename, self.root_folder):
+                logging.warning(f&#34;Skipping file {filename}, because it isn&#39;t in the root folder.&#34;)
                 continue
             line_number = 0
             for line in file:
-                if matches_per_file &lt; maximum_matches_per_file or maximum_matches_per_file == -1:
+                below_maximum = matches_per_file &lt; maximum_matches_per_file
+                maximum_not_set = maximum_matches_per_file == -1
+                if below_maximum or maximum_not_set:
                     line_number += 1
                     if pattern.search(line):
                         matches_total += 1

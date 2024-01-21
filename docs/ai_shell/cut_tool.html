@@ -37,11 +37,13 @@ import csv
 import dataclasses
 import io
 import logging
+import os
+from pathlib import Path
 from typing import Optional, Union
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
-from ai_shell.utils.read_fs import is_file_in_root_folder
+from ai_shell.utils.read_fs import is_file_in_root_folder, tree
 
 logger = logging.getLogger(__name__)
 
@@ -106,6 +108,7 @@ class CutTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def cut_characters(self, file_path: str, character_ranges: str) -&gt; str:
@@ -123,14 +126,19 @@ class CutTool:
         ranges = parse_ranges(character_ranges)
         output = io.StringIO()
 
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
-            for line in file:
-                for i, char in enumerate(line, start=1):
-                    if is_in_ranges(i, ranges):
-                        output.write(char)
+        try:
+            with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                for line in file:
+                    for i, char in enumerate(line, start=1):
+                        if is_in_ranges(i, ranges):
+                            output.write(char)
 
-                # Optionally add a newline character after each line
-                output.write(&#34;\n&#34;)
+                    # Optionally add a newline character after each line
+                    output.write(&#34;\n&#34;)
+        except FileNotFoundError:
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {file_path} not found. Here are all the files you can see\n\n{tree_text}&#34;
+            return markdown_content
 
         return output.getvalue()
 
@@ -150,13 +158,18 @@ class CutTool:
             raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
         ranges = parse_ranges(field_ranges)
         output = io.StringIO()
+        try:
+            with open(filename, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                reader = csv.reader(file, delimiter=delimiter)
 
-        with open(filename, encoding=&#34;utf-8&#34;) as file:
-            reader = csv.reader(file, delimiter=delimiter)
-
-            for row in reader:
-                selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
-                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+                for row in reader:
+                    selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
+                    output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+        except FileNotFoundError:
+            # Host app should always have cwd == root dir.
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {filename} not found. Here are all the files you can see\n\n{tree_text}&#34;
+            return markdown_content
 
         return output.getvalue()
 
@@ -165,9 +178,9 @@ class CutTool:
         &#34;&#34;&#34;Reads a file and extracts fields based on specified field names using the given delimiter.
 
         Args:
-            filename: The name of the file to process.
-            field_names: A list of field names to extract.
-            delimiter: A single character used as the field delimiter.
+            filename(str): The name of the file to process.
+            field_names(list[str]): A list of field names to extract.
+            delimiter(str): A single character used as the field delimiter.
 
         Returns:
             A string containing the selected fields from the file.
@@ -176,13 +189,18 @@ class CutTool:
             raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
         output = io.StringIO()
 
-        with open(filename, encoding=&#34;utf-8&#34;) as file:
-            reader = csv.DictReader(file, delimiter=delimiter)
-            # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
+        try:
+            with open(filename, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                reader = csv.DictReader(file, delimiter=delimiter)
+                # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
 
-            for row in reader:
-                selected_fields = [row[field] for field in field_names if field in row]
-                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+                for row in reader:
+                    selected_fields = [row[field] for field in field_names if field in row]
+                    output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+        except FileNotFoundError:
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {filename} not found. Here are all the files you can see\n\n{tree_text}&#34;
+            return markdown_content
 
         return output.getvalue()</code></pre>
 </details>
@@ -311,6 +329,7 @@ class CutTool:
         &#34;&#34;&#34;
         self.root_folder = root_folder
         self.config = config
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def cut_characters(self, file_path: str, character_ranges: str) -&gt; str:
@@ -328,14 +347,19 @@ class CutTool:
         ranges = parse_ranges(character_ranges)
         output = io.StringIO()
 
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
-            for line in file:
-                for i, char in enumerate(line, start=1):
-                    if is_in_ranges(i, ranges):
-                        output.write(char)
+        try:
+            with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                for line in file:
+                    for i, char in enumerate(line, start=1):
+                        if is_in_ranges(i, ranges):
+                            output.write(char)
 
-                # Optionally add a newline character after each line
-                output.write(&#34;\n&#34;)
+                    # Optionally add a newline character after each line
+                    output.write(&#34;\n&#34;)
+        except FileNotFoundError:
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {file_path} not found. Here are all the files you can see\n\n{tree_text}&#34;
+            return markdown_content
 
         return output.getvalue()
 
@@ -355,13 +379,18 @@ class CutTool:
             raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
         ranges = parse_ranges(field_ranges)
         output = io.StringIO()
+        try:
+            with open(filename, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                reader = csv.reader(file, delimiter=delimiter)
 
-        with open(filename, encoding=&#34;utf-8&#34;) as file:
-            reader = csv.reader(file, delimiter=delimiter)
-
-            for row in reader:
-                selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
-                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+                for row in reader:
+                    selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
+                    output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+        except FileNotFoundError:
+            # Host app should always have cwd == root dir.
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {filename} not found. Here are all the files you can see\n\n{tree_text}&#34;
+            return markdown_content
 
         return output.getvalue()
 
@@ -370,9 +399,9 @@ class CutTool:
         &#34;&#34;&#34;Reads a file and extracts fields based on specified field names using the given delimiter.
 
         Args:
-            filename: The name of the file to process.
-            field_names: A list of field names to extract.
-            delimiter: A single character used as the field delimiter.
+            filename(str): The name of the file to process.
+            field_names(list[str]): A list of field names to extract.
+            delimiter(str): A single character used as the field delimiter.
 
         Returns:
             A string containing the selected fields from the file.
@@ -381,13 +410,18 @@ class CutTool:
             raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
         output = io.StringIO()
 
-        with open(filename, encoding=&#34;utf-8&#34;) as file:
-            reader = csv.DictReader(file, delimiter=delimiter)
-            # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
+        try:
+            with open(filename, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+                reader = csv.DictReader(file, delimiter=delimiter)
+                # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
 
-            for row in reader:
-                selected_fields = [row[field] for field in field_names if field in row]
-                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+                for row in reader:
+                    selected_fields = [row[field] for field in field_names if field in row]
+                    output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+        except FileNotFoundError:
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {filename} not found. Here are all the files you can see\n\n{tree_text}&#34;
+            return markdown_content
 
         return output.getvalue()</code></pre>
 </details>
@@ -427,14 +461,19 @@ def cut_characters(self, file_path: str, character_ranges: str) -&gt; str:
     ranges = parse_ranges(character_ranges)
     output = io.StringIO()
 
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
-        for line in file:
-            for i, char in enumerate(line, start=1):
-                if is_in_ranges(i, ranges):
-                    output.write(char)
+    try:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+            for line in file:
+                for i, char in enumerate(line, start=1):
+                    if is_in_ranges(i, ranges):
+                        output.write(char)
 
-            # Optionally add a newline character after each line
-            output.write(&#34;\n&#34;)
+                # Optionally add a newline character after each line
+                output.write(&#34;\n&#34;)
+    except FileNotFoundError:
+        tree_text = tree(Path(os.getcwd()))
+        markdown_content = f&#34;# File {file_path} not found. Here are all the files you can see\n\n{tree_text}&#34;
+        return markdown_content
 
     return output.getvalue()</code></pre>
 </details>
@@ -475,13 +514,18 @@ def cut_fields(self, filename: str, field_ranges: str, delimiter: str = &#34;,&#
         raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
     ranges = parse_ranges(field_ranges)
     output = io.StringIO()
+    try:
+        with open(filename, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+            reader = csv.reader(file, delimiter=delimiter)
 
-    with open(filename, encoding=&#34;utf-8&#34;) as file:
-        reader = csv.reader(file, delimiter=delimiter)
-
-        for row in reader:
-            selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
-            output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+            for row in reader:
+                selected_fields = [field for i, field in enumerate(row, start=1) if is_in_ranges(i, ranges)]
+                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+    except FileNotFoundError:
+        # Host app should always have cwd == root dir.
+        tree_text = tree(Path(os.getcwd()))
+        markdown_content = f&#34;# File {filename} not found. Here are all the files you can see\n\n{tree_text}&#34;
+        return markdown_content
 
     return output.getvalue()</code></pre>
 </details>
@@ -492,14 +536,9 @@ def cut_fields(self, filename: str, field_ranges: str, delimiter: str = &#34;,&#
 <dd>
 <div class="desc"><p>Reads a file and extracts fields based on specified field names using the given delimiter.</p>
 <h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>filename</code></strong></dt>
-<dd>The name of the file to process.</dd>
-<dt><strong><code>field_names</code></strong></dt>
-<dd>A list of field names to extract.</dd>
-<dt><strong><code>delimiter</code></strong></dt>
-<dd>A single character used as the field delimiter.</dd>
-</dl>
+<p>filename(str): The name of the file to process.
+field_names(list[str]): A list of field names to extract.
+delimiter(str): A single character used as the field delimiter.</p>
 <h2 id="returns">Returns</h2>
 <p>A string containing the selected fields from the file.</p></div>
 <details class="source">
@@ -511,9 +550,9 @@ def cut_fields_by_name(self, filename: str, field_names: list[str], delimiter: s
     &#34;&#34;&#34;Reads a file and extracts fields based on specified field names using the given delimiter.
 
     Args:
-        filename: The name of the file to process.
-        field_names: A list of field names to extract.
-        delimiter: A single character used as the field delimiter.
+        filename(str): The name of the file to process.
+        field_names(list[str]): A list of field names to extract.
+        delimiter(str): A single character used as the field delimiter.
 
     Returns:
         A string containing the selected fields from the file.
@@ -522,13 +561,18 @@ def cut_fields_by_name(self, filename: str, field_names: list[str], delimiter: s
         raise ValueError(f&#34;File {filename} is not in root folder {self.root_folder}.&#34;)
     output = io.StringIO()
 
-    with open(filename, encoding=&#34;utf-8&#34;) as file:
-        reader = csv.DictReader(file, delimiter=delimiter)
-        # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
+    try:
+        with open(filename, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
+            reader = csv.DictReader(file, delimiter=delimiter)
+            # field_indices = {field: i for i, field in enumerate(reader.fieldnames)}
 
-        for row in reader:
-            selected_fields = [row[field] for field in field_names if field in row]
-            output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+            for row in reader:
+                selected_fields = [row[field] for field in field_names if field in row]
+                output.write(delimiter.join(selected_fields) + &#34;\n&#34;)
+    except FileNotFoundError:
+        tree_text = tree(Path(os.getcwd()))
+        markdown_content = f&#34;# File {filename} not found. Here are all the files you can see\n\n{tree_text}&#34;
+        return markdown_content
 
     return output.getvalue()</code></pre>
 </details>

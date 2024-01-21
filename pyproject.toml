@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ai_shell"
-version = "1.0.3"
+version = "1.0.4"
 description = "Filesystem Shell interface that an OpenAI Assitant can use as a tool."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["openai", "chatgpt", ]
@@ -39,7 +39,7 @@ documentation = "https://github.com/matthewdeanmartin/ai_shell"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/matthewdeanmartin/ai_shell/issues"
-"Change Log" = "https://github.com/matthewdeanmartin/ai_shell/blob/main/CHANGES.md"
+"Change Log" = "https://github.com/matthewdeanmartin/ai_shell/blob/main/CHANGELOG.md"
 
 [tool.poetry.scripts]
 ai_shell = 'ai_shell.__main__:run'
@@ -104,6 +104,8 @@ bug-trail-core = ">=2.0.0"
 ## Demo support
 #importlib_resources = ">=6.1.1"
 
+cli-tool-audit = ">=3.0.0"
+
 [tool.poetry.dev-dependencies]
 python-dotenv = ">=1.0.0"
 # various attempts to auto generate the jsonschema from toolkit_factory' metadata
@@ -128,13 +130,16 @@ anyio = ">=4.2.0"
 trio = ">=0.23.2"
 
 pre-commit = ">=3.5.0"
-scriv = ">=1.5.0"
 
 # docs
 interrogate = ">=1.5.0"
 pydoctest = ">=0.1.22"
 pdoc3 = ">=0.10.0"
-
+mdformat = ">=0.7.17"
+linkcheckmd = ">=1.4.0"
+codespell = ">=2.2.6"
+pyenchant = ">=3.2.2"
+metametameta = ">=0.1.0"
 # contract
 griffe = ">=0.38.1"
 
@@ -263,12 +268,12 @@ ignore_missing_imports = true
 ignore_missing_imports = true
 
 [tool.cli-tools]
-pipx = { description = "Python package installer for applications", version = "^1.0.0", version_switch = "--version" }
-mypy = { description = "Python Type Checker", version = "^1.0.0", version_switch = "--version" }
-pylint = { description = "Python Linter", version = "^1.0.0", version_switch = "--version" }
-black = { description = "Python formatter", version = "^1.0.0", version_switch = "--version" }
-pygount = { description = "Python lines of code counter", version = "^1.0.0", version_switch = "--version" }
-ruff = { description = "Python linter and formatter", version = "^1.0.0", version_switch = "--version" }
+# python deps, don't really need to check, unless we make these optional and allow for pipx installation
+mypy = { version = ">=1.8.0" }
+pylint = { version = ">=3.0.2" }
+ruff = {  version = ">=0.1.9" }
+black = {  version = ">=23.11.0" }
+pygount = {  version = "*" }
 
 [tool.bug_trail]
 app_name= "ai_shell"

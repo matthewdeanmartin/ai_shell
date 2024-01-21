@@ -41,13 +41,15 @@ import asyncio
 import logging
 import logging.config
 import os
+from importlib.resources import files
 
 from dotenv import load_dotenv
 
 import ai_shell
 import ai_shell.demo_bots.demo_setup as demo_setup
+import ai_todo
 
-ai_shell.utils.logging_utils.LOGGING_ENABLED = True
+ai_shell.ai_logs.log_to_bash.LOGGING_ENABLED = True
 
 if __name__ == &#34;__main__&#34; and not os.path.exists(&#34;src&#34;):
     demo_setup.initialize()
@@ -60,42 +62,106 @@ async def main():
     logging.config.dictConfig(ai_shell.configure_logging())
 
     model = &#34;gpt-3.5-turbo-1106&#34;
-
-    bot_instructions = &#34;You are a tool tester. You will test out tools and then provide a report on if they work the way you expected them to.&#34;
+    short_name = &#34;tool_tester&#34;
+    source = files(&#34;ai_shell&#34;).joinpath(f&#34;demo_bots/{short_name}_bot_instructions.md&#34;)
+    with open(str(source), encoding=&#34;utf-8&#34;) as instructions:
+        bot_instructions = instructions.read()
+    #    bot_instructions = &#34;You are a tool tester. You will test out tools and then provide a report on if they work the way you expected them to.&#34;
     tool_names = [
-        &#34;query_todos_by_regex&#34;,
-        &#34;remove_todo&#34;,
-        &#34;add_todo&#34;,
-        &#34;ls&#34;,
+        # readonly
+        # &#34;cat&#34;,
         &#34;cat_markdown&#34;,
-        &#34;rewrite_file&#34;,
-        &#34;write_new_file&#34;,
-        &#34;grep&#34;,
-        &#34;report_text&#34;,
+        # &#34;cut_characters&#34;,
+        # &#34;cut_fields&#34;,
+        # &#34;cut_fields_by_name&#34;,
+        # &#34;find_files&#34;,
+        &#34;find_files_markdown&#34;,
+        # &#34;grep&#34;,
+        # &#34;grep_markdown&#34;,
+        # &#34;head&#34;,
+        &#34;head_markdown&#34;,
+        # &#34;head_tail&#34;,
+        # &#34;tail&#34;,
+        &#34;tail_markdown&#34;,
+        # &#34;ls&#34;,
+        &#34;ls_markdown&#34;,
+        # &#34;format_code_as_markdown&#34;,
+        #
+        # # read only git
+        # &#34;get_current_branch&#34;,
+        # &#34;get_recent_commits&#34;,
+        # &#34;git_diff&#34;,
+        # &#34;git_diff_commit&#34;,
+        # &#34;git_log_file&#34;,
+        # &#34;git_log_search&#34;,
+        # &#34;git_show&#34;,
+        # &#34;git_status&#34;,
+        # # &#34;is_ignored_by_gitignore&#34;,
+        #
+        # # read write
+        # &#34;ed&#34;,
+        # &#34;edlin&#34;,
+        #
         &#34;insert_text_after_context&#34;,
         &#34;insert_text_after_multiline_context&#34;,
         &#34;insert_text_at_start_or_end&#34;,
         &#34;replace_all&#34;,
         &#34;replace_line_by_line&#34;,
         &#34;replace_with_regex&#34;,
+        #
+        # &#34;apply_git_patch&#34;,
+        # &#34;rewrite_file&#34;,
+        &#34;write_new_file&#34;,
+        # &#34;sed&#34;,
+        # # python specific
+        # &#34;pytest&#34;,
+        # # &#34;save_if_changed&#34;,
+        # TODO management
+        &#34;add_todo&#34;,
+        # &#34;query_todos_by_assignee&#34;,
+        # &#34;query_todos_by_regex&#34;,
+        # &#34;remove_todo&#34;,
+        # # Utility
+        # &#34;count_tokens&#34;,
     ]
-    bot_name = &#34;cat_markdown, insert, replace tool user.&#34;
+    bot_name = &#34;Lead Software Validation Engineer.&#34;
 
     root_folder = &#34;src&#34;
     if not os.path.exists(root_folder):
         raise ValueError(&#34;The demo requires that there be a src folder with some python code in it.&#34;)
     dialog_logger_md = ai_shell.DialogLoggerWithMarkdown(&#34;./tmp&#34;)
-    request = &#34;&#34;&#34;You are in the &#39;./&#39; folder. The base folder is &#39;./&#39;. You do not need to guess the pwd, it is &#39;./&#39;.
+    source = files(&#34;ai_shell&#34;).joinpath(f&#34;demo_bots/{short_name}_bot_mission.md&#34;)
+    with open(str(source), encoding=&#34;utf-8&#34;) as instructions:
+        request = instructions.read()
 
-Now that is out of the way, use the tools available to you to make edits to files. Then check using tools to see if 
-the edits worked the way you expected them to.
+    async def static_keep_going(toolkit: ai_shell.ToolKit) -&gt; str:
+        &#34;&#34;&#34;Check goal&#34;&#34;&#34;
+        not_used: list[str] = []
+        used: list[str] = []
+        total_usages = 0
+        for tool in tool_names:
+            usage = toolkit.get_tool_usage_for(tool)
+            if usage[&#34;count&#34;] == 0:
+                not_used.append(tool)
+            else:
+                used.append(tool)
+            total_usages += usage[&#34;count&#34;]
+        if not_used and total_usages == 0:
+            # Nothing done!
+            return f&#34;You haven&#39;t used any tools yet, please keep going. We want to test: {&#39;, &#39;.join(tool_names)}.&#34;
 
-Report results using report_text. Then you are done.
-```
-    &#34;&#34;&#34;
-
-    async def static_keep_going(_toolkit: ai_shell.ToolKit):
-        return &#34;Do you feel that you have exercised all the tools? If so, report your results using report_text.&#34;
+        if not_used and used and total_usages:
+            # Something done, but not all of them.
+            return (
+                f&#34;This is looking good, we&#39;ve done {total_usages} tests with the tools so far. &#34;
+                f&#34;We still need to test {&#39;, &#39;.join(not_used)}&#34;
+            )
+        if not_used:
+            # This might not get called. Fallback for safety.
+            return f&#34;We still need to test {&#39;, &#39;.join(not_used)}&#34;
+        if not not_used:
+            return toolkit.conversation_over_marker
+        raise TypeError(&#34;Why did we get here...&#34;)
 
     config = ai_shell.Config()
     bot = ai_shell.TaskBot(
@@ -107,10 +173,16 @@ Report results using report_text. Then you are done.
         persist_bots=True,
         persist_threads=True,
     )
+    bot.allow_self_certification = False
+    if not config.get_list(&#34;todo_roles&#34;):
+        config.set_list(&#34;todo_roles&#34;, [&#34;Developer&#34;, &#34;Tester&#34;])
+    ai_todo.TaskManager(&#34;src&#34;, config.get_list(&#34;todo_roles&#34;))
     with ai_shell.change_directory(&#34;src&#34;):
         await bot.initialize()
-        await bot.basic_tool_loop(request, root_folder, tool_names, static_keep_going)
-        logger.info(&#34;Run completed.&#34;)
+        usage_count = await bot.basic_tool_loop(
+            request, &#34;.&#34;, tool_names, static_keep_going, stop_on_no_tool_use=False  # root_folder,
+        )
+        logger.info(f&#34;Run completed. tool usage count: {usage_count}&#34;)
 
 
 if __name__ == &#34;__main__&#34;:
@@ -140,42 +212,106 @@ if __name__ == &#34;__main__&#34;:
     logging.config.dictConfig(ai_shell.configure_logging())
 
     model = &#34;gpt-3.5-turbo-1106&#34;
-
-    bot_instructions = &#34;You are a tool tester. You will test out tools and then provide a report on if they work the way you expected them to.&#34;
+    short_name = &#34;tool_tester&#34;
+    source = files(&#34;ai_shell&#34;).joinpath(f&#34;demo_bots/{short_name}_bot_instructions.md&#34;)
+    with open(str(source), encoding=&#34;utf-8&#34;) as instructions:
+        bot_instructions = instructions.read()
+    #    bot_instructions = &#34;You are a tool tester. You will test out tools and then provide a report on if they work the way you expected them to.&#34;
     tool_names = [
-        &#34;query_todos_by_regex&#34;,
-        &#34;remove_todo&#34;,
-        &#34;add_todo&#34;,
-        &#34;ls&#34;,
+        # readonly
+        # &#34;cat&#34;,
         &#34;cat_markdown&#34;,
-        &#34;rewrite_file&#34;,
-        &#34;write_new_file&#34;,
-        &#34;grep&#34;,
-        &#34;report_text&#34;,
+        # &#34;cut_characters&#34;,
+        # &#34;cut_fields&#34;,
+        # &#34;cut_fields_by_name&#34;,
+        # &#34;find_files&#34;,
+        &#34;find_files_markdown&#34;,
+        # &#34;grep&#34;,
+        # &#34;grep_markdown&#34;,
+        # &#34;head&#34;,
+        &#34;head_markdown&#34;,
+        # &#34;head_tail&#34;,
+        # &#34;tail&#34;,
+        &#34;tail_markdown&#34;,
+        # &#34;ls&#34;,
+        &#34;ls_markdown&#34;,
+        # &#34;format_code_as_markdown&#34;,
+        #
+        # # read only git
+        # &#34;get_current_branch&#34;,
+        # &#34;get_recent_commits&#34;,
+        # &#34;git_diff&#34;,
+        # &#34;git_diff_commit&#34;,
+        # &#34;git_log_file&#34;,
+        # &#34;git_log_search&#34;,
+        # &#34;git_show&#34;,
+        # &#34;git_status&#34;,
+        # # &#34;is_ignored_by_gitignore&#34;,
+        #
+        # # read write
+        # &#34;ed&#34;,
+        # &#34;edlin&#34;,
+        #
         &#34;insert_text_after_context&#34;,
         &#34;insert_text_after_multiline_context&#34;,
         &#34;insert_text_at_start_or_end&#34;,
         &#34;replace_all&#34;,
         &#34;replace_line_by_line&#34;,
         &#34;replace_with_regex&#34;,
+        #
+        # &#34;apply_git_patch&#34;,
+        # &#34;rewrite_file&#34;,
+        &#34;write_new_file&#34;,
+        # &#34;sed&#34;,
+        # # python specific
+        # &#34;pytest&#34;,
+        # # &#34;save_if_changed&#34;,
+        # TODO management
+        &#34;add_todo&#34;,
+        # &#34;query_todos_by_assignee&#34;,
+        # &#34;query_todos_by_regex&#34;,
+        # &#34;remove_todo&#34;,
+        # # Utility
+        # &#34;count_tokens&#34;,
     ]
-    bot_name = &#34;cat_markdown, insert, replace tool user.&#34;
+    bot_name = &#34;Lead Software Validation Engineer.&#34;
 
     root_folder = &#34;src&#34;
     if not os.path.exists(root_folder):
         raise ValueError(&#34;The demo requires that there be a src folder with some python code in it.&#34;)
     dialog_logger_md = ai_shell.DialogLoggerWithMarkdown(&#34;./tmp&#34;)
-    request = &#34;&#34;&#34;You are in the &#39;./&#39; folder. The base folder is &#39;./&#39;. You do not need to guess the pwd, it is &#39;./&#39;.
+    source = files(&#34;ai_shell&#34;).joinpath(f&#34;demo_bots/{short_name}_bot_mission.md&#34;)
+    with open(str(source), encoding=&#34;utf-8&#34;) as instructions:
+        request = instructions.read()
 
-Now that is out of the way, use the tools available to you to make edits to files. Then check using tools to see if 
-the edits worked the way you expected them to.
+    async def static_keep_going(toolkit: ai_shell.ToolKit) -&gt; str:
+        &#34;&#34;&#34;Check goal&#34;&#34;&#34;
+        not_used: list[str] = []
+        used: list[str] = []
+        total_usages = 0
+        for tool in tool_names:
+            usage = toolkit.get_tool_usage_for(tool)
+            if usage[&#34;count&#34;] == 0:
+                not_used.append(tool)
+            else:
+                used.append(tool)
+            total_usages += usage[&#34;count&#34;]
+        if not_used and total_usages == 0:
+            # Nothing done!
+            return f&#34;You haven&#39;t used any tools yet, please keep going. We want to test: {&#39;, &#39;.join(tool_names)}.&#34;
 
-Report results using report_text. Then you are done.
-```
-    &#34;&#34;&#34;
-
-    async def static_keep_going(_toolkit: ai_shell.ToolKit):
-        return &#34;Do you feel that you have exercised all the tools? If so, report your results using report_text.&#34;
+        if not_used and used and total_usages:
+            # Something done, but not all of them.
+            return (
+                f&#34;This is looking good, we&#39;ve done {total_usages} tests with the tools so far. &#34;
+                f&#34;We still need to test {&#39;, &#39;.join(not_used)}&#34;
+            )
+        if not_used:
+            # This might not get called. Fallback for safety.
+            return f&#34;We still need to test {&#39;, &#39;.join(not_used)}&#34;
+        if not not_used:
+            return toolkit.conversation_over_marker
+        raise TypeError(&#34;Why did we get here...&#34;)
 
     config = ai_shell.Config()
     bot = ai_shell.TaskBot(
@@ -187,10 +323,16 @@ Report results using report_text. Then you are done.
         persist_bots=True,
         persist_threads=True,
     )
+    bot.allow_self_certification = False
+    if not config.get_list(&#34;todo_roles&#34;):
+        config.set_list(&#34;todo_roles&#34;, [&#34;Developer&#34;, &#34;Tester&#34;])
+    ai_todo.TaskManager(&#34;src&#34;, config.get_list(&#34;todo_roles&#34;))
     with ai_shell.change_directory(&#34;src&#34;):
         await bot.initialize()
-        await bot.basic_tool_loop(request, root_folder, tool_names, static_keep_going)
-        logger.info(&#34;Run completed.&#34;)</code></pre>
+        usage_count = await bot.basic_tool_loop(
+            request, &#34;.&#34;, tool_names, static_keep_going, stop_on_no_tool_use=False  # root_folder,
+        )
+        logger.info(f&#34;Run completed. tool usage count: {usage_count}&#34;)</code></pre>
 </details>
 </dd>
 </dl>

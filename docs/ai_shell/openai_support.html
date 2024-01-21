@@ -35,21 +35,30 @@ All the tools are optimized for LLMs, but not openai specifically.
 This Toolkit and schemas handles some of the boilerplate for interfacing with
 the openai python client.
 &#34;&#34;&#34;
-import json
 import logging
 import os
 import traceback
 from collections.abc import Callable
 from typing import Any
 
+import orjson as json
 from openai.types.beta.threads import Run
 
 from ai_shell.import_plugins import convert_to_toolkit, handle_tool
 from ai_shell.utils import medias
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.json_utils import LoosyGoosyEncoder, exception_to_rfc7807_dict, try_everything
+from ai_shell.utils.json_utils import (
+    FatalConfigurationError,
+    exception_to_rfc7807_dict,
+    loosy_goosy_default_encoder,
+    try_everything,
+)
 
 logger = logging.getLogger(__name__)
+
+
+class FatalToolException(Exception):
+    &#34;&#34;&#34;A fatal configuration error.&#34;&#34;&#34;
 
 
 class ToolKitBase:
@@ -81,6 +90,7 @@ class ToolKitBase:
         self.permitted_tools: list[str] = permitted_tools
         self.tool_usage_stats: dict[str, dict[str, int]] = {}
         &#34;&#34;&#34;Name: {count, success, failure}&#34;&#34;&#34;
+        self.conversation_over_marker: str = &#34;DONE&#34;
 
     def get_tool_usage_for(self, name: str) -&gt; dict[str, int]:
         &#34;&#34;&#34;Get tool usage stats for a given tool
@@ -133,17 +143,35 @@ class ToolKitBase:
                 # TODO: assert pwd is self.root_folder already.
                 # with temporary_change_dir(self.root_folder):
                 try:
-                    if &#34;media_type&#34; in arguments:
-                        media_type = arguments[&#34;media_type&#34;]
-                        del arguments[&#34;media_type&#34;]
-                    else:
-                        media_type = None
+                    # redirect according to media type
+                    original_name = name
+                    media_type, name = await self.convert_media_type_arg_to_method_name(arguments, name)
+
                     result = self._lookup[name](arguments)
                     self.tool_usage_stats[name][&#34;success&#34;] += 1
-                    if media_type:
+
+                    # post process media types. If tool name changed that means
+                    # that the tool handled the media type itself.
+                    if media_type and original_name == name:
+                        # Converting ordinary python types to dict friendly types
                         result = medias.convert_to_media_type(result, media_type)
 
+                    if result is None:
+                        raise FatalToolException(&#34;Never return None from a tool.&#34;)
+                    if result in (&#34;&#34;, &#39;&#34;&#34;&#39;):
+                        logger.warning(f&#34;Blank result from {name}. Why? {arguments}&#34;)
+                        # raise FatalToolException(&#34;Blank result, why?.&#34;)
+                except FatalToolException as fatal_tool_exception:
+                    logger.error(fatal_tool_exception)
+                    # bot can&#39;t handle this, don&#39;t report, stop.
+                    raise
+                except FatalConfigurationError as fatal_configuration_exception:
+                    logger.error(fatal_configuration_exception)
+                    # bot can&#39;t handle this, don&#39;t report stop.
+                    raise
+                # pylint: disable=broad-exception-caught
                 except Exception as exception:
+                    logger.error(exception)
                     self.tool_usage_stats[name][&#34;failure&#34;] += 1
                     print(exception)
                     traceback.print_exc()
@@ -154,17 +182,26 @@ class ToolKitBase:
                 # TODO: change folder, mimetypes, error handling, call stats, etc.
                 tool_info = self.plugin_tools[name]
                 method_name = name
-                instance = tool_info[0]
-                tool_info[1]
+                # TODO: refactor away this cryptic tuple
+                instance = tool_info[0]  # (instance, schema)
                 bots_kwargs = arguments
                 result = handle_tool(method_name, bots_kwargs, instance)
             else:
                 self.tool_usage_stats[name][&#34;failure&#34;] += 1
                 raise TypeError(f&#34;Unknown function name {name}&#34;)
-            tool_result = {
-                &#34;tool_call_id&#34;: tool_call.id,
-                &#34;output&#34;: json.dumps(result, cls=LoosyGoosyEncoder),
-            }
+
+            # What is returning bytes?
+            if isinstance(result, bytes):
+                result = result.decode(&#34;utf-8&#34;)
+
+            try:
+                json_result = json.dumps(result, default=loosy_goosy_default_encoder).decode(&#34;utf-8&#34;)
+            except TypeError as type_error:
+                logger.error(type_error)
+                logger.error(f&#34;Error encoding result: {type_error}&#34;)
+                logger.error(f&#34;Result that json can&#39;t handle: {result}&#34;)
+                raise
+            tool_result = {&#34;tool_call_id&#34;: tool_call.id, &#34;output&#34;: json_result}
             write_json_to_logs(tool_call, f&#34;tool_call_{name}&#34;)
             write_json_to_logs(result, f&#34;tool_result_{name}&#34;)
 
@@ -172,7 +209,25 @@ class ToolKitBase:
 
         # Let library user submit_tool_outputs and poll the run
         logger.info(f&#34;results: {results}&#34;)
-        return results</code></pre>
+        return results
+
+    async def convert_media_type_arg_to_method_name(self, arguments: dict[str, Any], name: str) -&gt; tuple[str, str]:
+        &#34;&#34;&#34;Convert media type argument to method name
+
+        Args:
+            arguments (dict[str, Any]): The arguments
+            name (str): The name of the tool
+        Returns:
+            tuple[str, str]: The media type and method name
+        &#34;&#34;&#34;
+        if &#34;mime_type&#34; in arguments:
+            media_type = arguments[&#34;mime_type&#34;]
+            del arguments[&#34;mime_type&#34;]
+        else:
+            media_type = None
+        if media_type == &#34;markdown&#34;:
+            name = name + &#34;_markdown&#34;
+        return media_type, name</code></pre>
 </details>
 </section>
 <section>
@@ -184,6 +239,25 @@ class ToolKitBase:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="ai_shell.openai_support.FatalToolException"><code class="flex name class">
+<span>class <span class="ident">FatalToolException</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>A fatal configuration error.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class FatalToolException(Exception):
+    &#34;&#34;&#34;A fatal configuration error.&#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.Exception</li>
+<li>builtins.BaseException</li>
+</ul>
+</dd>
 <dt id="ai_shell.openai_support.ToolKitBase"><code class="flex name class">
 <span>class <span class="ident">ToolKitBase</span></span>
 <span>(</span><span>root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config: <a title="ai_shell.utils.config_manager.Config" href="utils/config_manager.html#ai_shell.utils.config_manager.Config">Config</a>)</span>
@@ -237,6 +311,7 @@ class ToolKitBase:
         self.permitted_tools: list[str] = permitted_tools
         self.tool_usage_stats: dict[str, dict[str, int]] = {}
         &#34;&#34;&#34;Name: {count, success, failure}&#34;&#34;&#34;
+        self.conversation_over_marker: str = &#34;DONE&#34;
 
     def get_tool_usage_for(self, name: str) -&gt; dict[str, int]:
         &#34;&#34;&#34;Get tool usage stats for a given tool
@@ -289,17 +364,35 @@ class ToolKitBase:
                 # TODO: assert pwd is self.root_folder already.
                 # with temporary_change_dir(self.root_folder):
                 try:
-                    if &#34;media_type&#34; in arguments:
-                        media_type = arguments[&#34;media_type&#34;]
-                        del arguments[&#34;media_type&#34;]
-                    else:
-                        media_type = None
+                    # redirect according to media type
+                    original_name = name
+                    media_type, name = await self.convert_media_type_arg_to_method_name(arguments, name)
+
                     result = self._lookup[name](arguments)
                     self.tool_usage_stats[name][&#34;success&#34;] += 1
-                    if media_type:
+
+                    # post process media types. If tool name changed that means
+                    # that the tool handled the media type itself.
+                    if media_type and original_name == name:
+                        # Converting ordinary python types to dict friendly types
                         result = medias.convert_to_media_type(result, media_type)
 
+                    if result is None:
+                        raise FatalToolException(&#34;Never return None from a tool.&#34;)
+                    if result in (&#34;&#34;, &#39;&#34;&#34;&#39;):
+                        logger.warning(f&#34;Blank result from {name}. Why? {arguments}&#34;)
+                        # raise FatalToolException(&#34;Blank result, why?.&#34;)
+                except FatalToolException as fatal_tool_exception:
+                    logger.error(fatal_tool_exception)
+                    # bot can&#39;t handle this, don&#39;t report, stop.
+                    raise
+                except FatalConfigurationError as fatal_configuration_exception:
+                    logger.error(fatal_configuration_exception)
+                    # bot can&#39;t handle this, don&#39;t report stop.
+                    raise
+                # pylint: disable=broad-exception-caught
                 except Exception as exception:
+                    logger.error(exception)
                     self.tool_usage_stats[name][&#34;failure&#34;] += 1
                     print(exception)
                     traceback.print_exc()
@@ -310,17 +403,26 @@ class ToolKitBase:
                 # TODO: change folder, mimetypes, error handling, call stats, etc.
                 tool_info = self.plugin_tools[name]
                 method_name = name
-                instance = tool_info[0]
-                tool_info[1]
+                # TODO: refactor away this cryptic tuple
+                instance = tool_info[0]  # (instance, schema)
                 bots_kwargs = arguments
                 result = handle_tool(method_name, bots_kwargs, instance)
             else:
                 self.tool_usage_stats[name][&#34;failure&#34;] += 1
                 raise TypeError(f&#34;Unknown function name {name}&#34;)
-            tool_result = {
-                &#34;tool_call_id&#34;: tool_call.id,
-                &#34;output&#34;: json.dumps(result, cls=LoosyGoosyEncoder),
-            }
+
+            # What is returning bytes?
+            if isinstance(result, bytes):
+                result = result.decode(&#34;utf-8&#34;)
+
+            try:
+                json_result = json.dumps(result, default=loosy_goosy_default_encoder).decode(&#34;utf-8&#34;)
+            except TypeError as type_error:
+                logger.error(type_error)
+                logger.error(f&#34;Error encoding result: {type_error}&#34;)
+                logger.error(f&#34;Result that json can&#39;t handle: {result}&#34;)
+                raise
+            tool_result = {&#34;tool_call_id&#34;: tool_call.id, &#34;output&#34;: json_result}
             write_json_to_logs(tool_call, f&#34;tool_call_{name}&#34;)
             write_json_to_logs(result, f&#34;tool_result_{name}&#34;)
 
@@ -328,7 +430,25 @@ class ToolKitBase:
 
         # Let library user submit_tool_outputs and poll the run
         logger.info(f&#34;results: {results}&#34;)
-        return results</code></pre>
+        return results
+
+    async def convert_media_type_arg_to_method_name(self, arguments: dict[str, Any], name: str) -&gt; tuple[str, str]:
+        &#34;&#34;&#34;Convert media type argument to method name
+
+        Args:
+            arguments (dict[str, Any]): The arguments
+            name (str): The name of the tool
+        Returns:
+            tuple[str, str]: The media type and method name
+        &#34;&#34;&#34;
+        if &#34;mime_type&#34; in arguments:
+            media_type = arguments[&#34;mime_type&#34;]
+            del arguments[&#34;mime_type&#34;]
+        else:
+            media_type = None
+        if media_type == &#34;markdown&#34;:
+            name = name + &#34;_markdown&#34;
+        return media_type, name</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -343,6 +463,46 @@ class ToolKitBase:
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="ai_shell.openai_support.ToolKitBase.convert_media_type_arg_to_method_name"><code class="name flex">
+<span>async def <span class="ident">convert_media_type_arg_to_method_name</span></span>(<span>self, arguments: dict[str, typing.Any], name: str) ‑> tuple[str, str]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Convert media type argument to method name</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>arguments</code></strong> :&ensp;<code>dict[str, Any]</code></dt>
+<dd>The arguments</dd>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the tool</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>tuple[str, str]</code></dt>
+<dd>The media type and method name</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">async def convert_media_type_arg_to_method_name(self, arguments: dict[str, Any], name: str) -&gt; tuple[str, str]:
+    &#34;&#34;&#34;Convert media type argument to method name
+
+    Args:
+        arguments (dict[str, Any]): The arguments
+        name (str): The name of the tool
+    Returns:
+        tuple[str, str]: The media type and method name
+    &#34;&#34;&#34;
+    if &#34;mime_type&#34; in arguments:
+        media_type = arguments[&#34;mime_type&#34;]
+        del arguments[&#34;mime_type&#34;]
+    else:
+        media_type = None
+    if media_type == &#34;markdown&#34;:
+        name = name + &#34;_markdown&#34;
+    return media_type, name</code></pre>
+</details>
+</dd>
 <dt id="ai_shell.openai_support.ToolKitBase.get_tool_usage_for"><code class="name flex">
 <span>def <span class="ident">get_tool_usage_for</span></span>(<span>self, name: str) ‑> dict[str, int]</span>
 </code></dt>
@@ -435,17 +595,35 @@ class ToolKitBase:
             # TODO: assert pwd is self.root_folder already.
             # with temporary_change_dir(self.root_folder):
             try:
-                if &#34;media_type&#34; in arguments:
-                    media_type = arguments[&#34;media_type&#34;]
-                    del arguments[&#34;media_type&#34;]
-                else:
-                    media_type = None
+                # redirect according to media type
+                original_name = name
+                media_type, name = await self.convert_media_type_arg_to_method_name(arguments, name)
+
                 result = self._lookup[name](arguments)
                 self.tool_usage_stats[name][&#34;success&#34;] += 1
-                if media_type:
+
+                # post process media types. If tool name changed that means
+                # that the tool handled the media type itself.
+                if media_type and original_name == name:
+                    # Converting ordinary python types to dict friendly types
                     result = medias.convert_to_media_type(result, media_type)
 
+                if result is None:
+                    raise FatalToolException(&#34;Never return None from a tool.&#34;)
+                if result in (&#34;&#34;, &#39;&#34;&#34;&#39;):
+                    logger.warning(f&#34;Blank result from {name}. Why? {arguments}&#34;)
+                    # raise FatalToolException(&#34;Blank result, why?.&#34;)
+            except FatalToolException as fatal_tool_exception:
+                logger.error(fatal_tool_exception)
+                # bot can&#39;t handle this, don&#39;t report, stop.
+                raise
+            except FatalConfigurationError as fatal_configuration_exception:
+                logger.error(fatal_configuration_exception)
+                # bot can&#39;t handle this, don&#39;t report stop.
+                raise
+            # pylint: disable=broad-exception-caught
             except Exception as exception:
+                logger.error(exception)
                 self.tool_usage_stats[name][&#34;failure&#34;] += 1
                 print(exception)
                 traceback.print_exc()
@@ -456,17 +634,26 @@ class ToolKitBase:
             # TODO: change folder, mimetypes, error handling, call stats, etc.
             tool_info = self.plugin_tools[name]
             method_name = name
-            instance = tool_info[0]
-            tool_info[1]
+            # TODO: refactor away this cryptic tuple
+            instance = tool_info[0]  # (instance, schema)
             bots_kwargs = arguments
             result = handle_tool(method_name, bots_kwargs, instance)
         else:
             self.tool_usage_stats[name][&#34;failure&#34;] += 1
             raise TypeError(f&#34;Unknown function name {name}&#34;)
-        tool_result = {
-            &#34;tool_call_id&#34;: tool_call.id,
-            &#34;output&#34;: json.dumps(result, cls=LoosyGoosyEncoder),
-        }
+
+        # What is returning bytes?
+        if isinstance(result, bytes):
+            result = result.decode(&#34;utf-8&#34;)
+
+        try:
+            json_result = json.dumps(result, default=loosy_goosy_default_encoder).decode(&#34;utf-8&#34;)
+        except TypeError as type_error:
+            logger.error(type_error)
+            logger.error(f&#34;Error encoding result: {type_error}&#34;)
+            logger.error(f&#34;Result that json can&#39;t handle: {result}&#34;)
+            raise
+        tool_result = {&#34;tool_call_id&#34;: tool_call.id, &#34;output&#34;: json_result}
         write_json_to_logs(tool_call, f&#34;tool_call_{name}&#34;)
         write_json_to_logs(result, f&#34;tool_result_{name}&#34;)
 
@@ -496,8 +683,12 @@ class ToolKitBase:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="ai_shell.openai_support.FatalToolException" href="#ai_shell.openai_support.FatalToolException">FatalToolException</a></code></h4>
+</li>
+<li>
 <h4><code><a title="ai_shell.openai_support.ToolKitBase" href="#ai_shell.openai_support.ToolKitBase">ToolKitBase</a></code></h4>
 <ul class="">
+<li><code><a title="ai_shell.openai_support.ToolKitBase.convert_media_type_arg_to_method_name" href="#ai_shell.openai_support.ToolKitBase.convert_media_type_arg_to_method_name">convert_media_type_arg_to_method_name</a></code></li>
 <li><code><a title="ai_shell.openai_support.ToolKitBase.get_tool_usage_for" href="#ai_shell.openai_support.ToolKitBase.get_tool_usage_for">get_tool_usage_for</a></code></li>
 <li><code><a title="ai_shell.openai_support.ToolKitBase.process_tool_calls" href="#ai_shell.openai_support.ToolKitBase.process_tool_calls">process_tool_calls</a></code></li>
 <li><code><a title="ai_shell.openai_support.ToolKitBase.tool_usage_stats" href="#ai_shell.openai_support.ToolKitBase.tool_usage_stats">tool_usage_stats</a></code></li>

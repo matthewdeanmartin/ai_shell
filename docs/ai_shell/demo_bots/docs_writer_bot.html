@@ -58,8 +58,9 @@ from pygount import SourceAnalysis
 
 import ai_shell
 import ai_shell.demo_bots.demo_setup as demo_setup
+import ai_todo
 
-ai_shell.utils.logging_utils.LOGGING_ENABLED = True
+ai_shell.ai_logs.log_to_bash.LOGGING_ENABLED = True
 initial_lines_of_code: Optional[SourceAnalysis] = None
 
 if __name__ == &#34;__main__&#34; and not os.path.exists(&#34;src&#34;):
@@ -93,14 +94,11 @@ async def main():
         # read only tools
         &#34;ls&#34;,
         &#34;cat_markdown&#34;,
-
         # write only
         &#34;write_new_file&#34;,
-
         # Could effectively delete if Lines fall.
         # So we enable &#34;only_add_text&#34; in the config.
         &#34;rewrite_file&#34;,
-
         # Insert or Edit only (same number of lines of code if no \n in args)
         &#34;insert_text_after_context&#34;,
         &#34;insert_text_after_multiline_context&#34;,
@@ -167,13 +165,13 @@ files. If you use rewrite, don&#39;t omit original code!
             # Make mypy happy
             raise TypeError(&#34;Shouldn&#39;t be none by this point.&#34;)
         if lines_of_code.documentation_count &gt; 25 and lines_of_code.code_count &gt;= initial_lines_of_code.code_count:
-            return &#34;DONE&#34;
+            return _toolkit.conversation_over_marker
         if initial_lines_of_code.code_count &lt; lines_of_code.code_count:
             return (
                 pretty_loc(lines_of_code) + f&#34;\n\n Code disappeared! There used to be {initial_lines_of_code}&#34;
                 f&#34;lines of code, now there are only {lines_of_code.code_count}! You&#39;re supposed to document not delete.&#34;
             )
-        return pretty_loc(lines_of_code) + &#34;\n\n and thats not enough documentation. Please try again. You can do it!&#34;
+        return pretty_loc(lines_of_code) + &#34;\n\n and that&#39;s not enough documentation. Please try again. You can do it!&#34;
 
     config = ai_shell.Config()
     config.set_flag(&#34;only_add_text&#34;, True)
@@ -186,11 +184,16 @@ files. If you use rewrite, don&#39;t omit original code!
         persist_bots=True,
         persist_threads=True,
     )
+    if not config.get_list(&#34;todo_roles&#34;):
+        config.set_list(&#34;todo_roles&#34;, [&#34;Developer&#34;, &#34;Tester&#34;])
+    ai_todo.TaskManager(&#34;src&#34;, config.get_list(&#34;todo_roles&#34;))
     with ai_shell.change_directory(&#34;src&#34;):
         # Initialize async things.
         await bot.initialize()
         # Run until goal checker is done
-        await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
+        await bot.basic_tool_loop(
+            request, &#34;.&#34;, tool_names, pylint_goal_checker, stop_on_no_tool_use=True  # root_folder,
+        )
         logger.info(&#34;Run completed.&#34;)
 
 
@@ -230,14 +233,11 @@ if __name__ == &#34;__main__&#34;:
         # read only tools
         &#34;ls&#34;,
         &#34;cat_markdown&#34;,
-
         # write only
         &#34;write_new_file&#34;,
-
         # Could effectively delete if Lines fall.
         # So we enable &#34;only_add_text&#34; in the config.
         &#34;rewrite_file&#34;,
-
         # Insert or Edit only (same number of lines of code if no \n in args)
         &#34;insert_text_after_context&#34;,
         &#34;insert_text_after_multiline_context&#34;,
@@ -304,13 +304,13 @@ files. If you use rewrite, don&#39;t omit original code!
             # Make mypy happy
             raise TypeError(&#34;Shouldn&#39;t be none by this point.&#34;)
         if lines_of_code.documentation_count &gt; 25 and lines_of_code.code_count &gt;= initial_lines_of_code.code_count:
-            return &#34;DONE&#34;
+            return _toolkit.conversation_over_marker
         if initial_lines_of_code.code_count &lt; lines_of_code.code_count:
             return (
                 pretty_loc(lines_of_code) + f&#34;\n\n Code disappeared! There used to be {initial_lines_of_code}&#34;
                 f&#34;lines of code, now there are only {lines_of_code.code_count}! You&#39;re supposed to document not delete.&#34;
             )
-        return pretty_loc(lines_of_code) + &#34;\n\n and thats not enough documentation. Please try again. You can do it!&#34;
+        return pretty_loc(lines_of_code) + &#34;\n\n and that&#39;s not enough documentation. Please try again. You can do it!&#34;
 
     config = ai_shell.Config()
     config.set_flag(&#34;only_add_text&#34;, True)
@@ -323,11 +323,16 @@ files. If you use rewrite, don&#39;t omit original code!
         persist_bots=True,
         persist_threads=True,
     )
+    if not config.get_list(&#34;todo_roles&#34;):
+        config.set_list(&#34;todo_roles&#34;, [&#34;Developer&#34;, &#34;Tester&#34;])
+    ai_todo.TaskManager(&#34;src&#34;, config.get_list(&#34;todo_roles&#34;))
     with ai_shell.change_directory(&#34;src&#34;):
         # Initialize async things.
         await bot.initialize()
         # Run until goal checker is done
-        await bot.basic_tool_loop(request, root_folder, tool_names, pylint_goal_checker)
+        await bot.basic_tool_loop(
+            request, &#34;.&#34;, tool_names, pylint_goal_checker, stop_on_no_tool_use=True  # root_folder,
+        )
         logger.info(&#34;Run completed.&#34;)</code></pre>
 </details>
 </dd>

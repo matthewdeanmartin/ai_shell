@@ -143,6 +143,7 @@ def temporary_change_dir(new_dir: str) -> Generator[None, None, None]:
     Args:
         new_dir (str): The new directory path.
     """
+    # pylint:disable=global-statement
     global _is_in_context
 
     # Check if the context manager is already active

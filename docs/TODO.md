@@ -1,6 +1,15 @@
 # TODO
 
+## Possible break-thrus
+
+- Goal function is also a workload queue.
+  - Task split up by human (e.g. 1 line of lint, 1 function that needs docstring)
+  - Give to bot
+  - Check if bot did the 1 thing (repeat a few times, continue on failure)
+  - Move on to next work item
+
 ## Pain points
+
 - no more log folder by convention
 - put API log on hold (replace with ordinary file?)
 - Stop on "Fatal Errors" that the bot can't fix.
@@ -8,13 +17,15 @@
 - Mime types not fully working and it really confuses the bot.
   - Not enough functions support markdown distinctly.
   - Need tests for other mime types
+  - https://docs.python.org/3/library/mimetypes.html (easy?)
 - junk free tree (hide .folders, hidden files, etc)
 - regular logging not showing bot responses in console, esp for demo
 - markdown log is a mess, especially for tool args
 - stop using python a format for jsonschema object, fixed formatter, but still slow?
 
 ## Fig leaf security (Yes, it isn't for preventing real malice)
-- Prohibited file types 
+
+- Prohibited file types
   - (e.g. bash)
   - executable (i.e. not .txt, .md, .json, .yaml, .yml)
 - Config
@@ -23,7 +34,7 @@
 - Test writer bot
   - disable writing to fish_tank
   - no editing without 1st viewing, cat unlocks edit!
-- Is cat folder/* failing?
+- Is cat folder/\* failing?
 - an exclude file similar to gitignore or dockerignore
 
 ## Demo Bots
@@ -38,6 +49,7 @@
 - can't use certain tools until they're unlocked (e.g no edit w/o looking at file)
 
 ## Plugin Architecture
+
 - First, allow for dynamic tools (dynamic schema and dynamic toolkit code)
 - File validator hooks
 - Tool hooks

@@ -1,5 +1,5 @@
 """
-Read source with tools that understand the stucture of python
+Read source with tools that understand the structure of python
 """
 import ast
 import inspect
@@ -15,7 +15,7 @@ def minify(file_path: str) -> str:
         file_path (str): path to file
 
     Returns:
-        str: minimified source of file
+        str: minified source of file
     """
     with open(file_path, encoding="utf-8") as f:
         raw_text = f.read()

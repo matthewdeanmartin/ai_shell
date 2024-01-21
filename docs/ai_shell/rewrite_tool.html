@@ -36,14 +36,15 @@ TODO: set maximum file size for re-write, because it costs tokens to rewrite a l
 import difflib
 import logging
 import os
+from pathlib import Path
 from typing import Optional
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.backup_restore import BackupRestore
 from ai_shell.cat_tool import CatTool
 from ai_shell.pyutils.validate import ValidateModule, ValidationMessageForBot, is_python_file
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
-from ai_shell.utils.read_fs import is_file_in_root_folder, sanitize_path
+from ai_shell.utils.read_fs import is_file_in_root_folder, sanitize_path, tree
 
 logger = logging.getLogger(__name__)
 
@@ -144,7 +145,11 @@ class RewriteTool:
 
             return f&#34;File written to {full_path}&#34;
         except FileExistsError as e:
-            raise ValueError(str(e) + &#34; Consider using rewrite_file method if you want to overwrite.&#34;) from e
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {full_path} already exists. Here are all the files you can see\n\n{tree_text}&#34;
+            raise ValueError(
+                str(e) + f&#34; {markdown_content}\n Consider using rewrite_file method if you want to overwrite.&#34;
+            ) from e
 
     @log()
     def rewrite_file(self, file_path: str, text: str) -&gt; str:
@@ -393,7 +398,11 @@ total, unchanged, added, and removed lines.</p>
 
             return f&#34;File written to {full_path}&#34;
         except FileExistsError as e:
-            raise ValueError(str(e) + &#34; Consider using rewrite_file method if you want to overwrite.&#34;) from e
+            tree_text = tree(Path(os.getcwd()))
+            markdown_content = f&#34;# File {full_path} already exists. Here are all the files you can see\n\n{tree_text}&#34;
+            raise ValueError(
+                str(e) + f&#34; {markdown_content}\n Consider using rewrite_file method if you want to overwrite.&#34;
+            ) from e
 
     @log()
     def rewrite_file(self, file_path: str, text: str) -&gt; str:
@@ -651,7 +660,11 @@ def write_new_file(self, file_path: str, text: str) -&gt; str:
 
         return f&#34;File written to {full_path}&#34;
     except FileExistsError as e:
-        raise ValueError(str(e) + &#34; Consider using rewrite_file method if you want to overwrite.&#34;) from e</code></pre>
+        tree_text = tree(Path(os.getcwd()))
+        markdown_content = f&#34;# File {full_path} already exists. Here are all the files you can see\n\n{tree_text}&#34;
+        raise ValueError(
+            str(e) + f&#34; {markdown_content}\n Consider using rewrite_file method if you want to overwrite.&#34;
+        ) from e</code></pre>
 </details>
 </dd>
 </dl>

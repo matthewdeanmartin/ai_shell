@@ -48,11 +48,11 @@ from typing import Any, Optional, cast
 import openai
 from openai.types.beta import Assistant, Thread
 
+from ai_shell.ai_logs.log_to_markdown import DialogLoggerWithMarkdown
 from ai_shell.bot_glue.tool_utils import loop_tools
 from ai_shell.openai_toolkit import ToolKit
 from ai_shell.openai_tools import ALL_TOOLS, initialize_all_tools
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.log_conversation import DialogLoggerWithMarkdown
 
 logger = logging.getLogger(__name__)
 
@@ -107,6 +107,9 @@ class TaskBot:
         self.allow_self_certification = False
         &#34;&#34;&#34;Do you want to trust the bot when it says it has achieved the goal?&#34;&#34;&#34;
 
+        self.conversation_over_marker = &#34;DONE&#34;
+        &#34;&#34;&#34;Goal function checker returns this when done.&#34;&#34;&#34;
+
     async def initialize(self) -&gt; None:
         &#34;&#34;&#34;Get or create a bot and store it in the config.&#34;&#34;&#34;
         bot = await self.get_create_bot()
@@ -144,6 +147,8 @@ class TaskBot:
         self, root_folder: str, model: str, tool_names: list[str]
     ) -&gt; tuple[ToolKit, list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction]]:
         self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names, config=self.config)
+        # sync COM
+        self.toolkit.conversation_over_marker = self.conversation_over_marker
         initialize_all_tools(keeps=tool_names)
         tools_schema: list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction] = [
             ToolAssistantToolsFunction(**{&#34;function&#34;: cast(FunctionDefinition, schema), &#34;type&#34;: &#34;function&#34;})
@@ -202,7 +207,6 @@ class TaskBot:
             messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
             # logger.info(messages)
             last_words = parse_message(messages)
-            logger.info(last_words)
             self.dialog_logger_md.add_bot(last_words)
 
         except Exception as exception:
@@ -222,7 +226,8 @@ class TaskBot:
         root_folder: str,
         tool_names: list[Any],
         keep_going_prompt: Callable[[ToolKit], Awaitable[str]],
-    ) -&gt; None:
+        stop_on_no_tool_use: bool,
+    ) -&gt; int:
         &#34;&#34;&#34;
         Loop through tool requests.
 
@@ -231,6 +236,7 @@ class TaskBot:
             root_folder (str): The root folder for file operations.
             tool_names (list[Any]): The tools to use.
             keep_going_prompt (str): The prompt to use to keep going.
+            stop_on_no_tool_use (bool): Stop if no tools are used.
 
         Returns:
             None
@@ -245,7 +251,8 @@ class TaskBot:
         tool_loops = 0
         total_tool_use_count = 0
         try:
-            tool_names.append(&#34;report_text&#34;)
+            if self.allow_self_certification:
+                tool_names.append(&#34;report_text&#34;)
             tool_names = list(set(tool_names))
             _, tool_schemas = self.toolkit_factory(root_folder, self.model, tool_names)
             if not self.toolkit:
@@ -271,17 +278,17 @@ class TaskBot:
             initial_bot_response = parse_message(messages)
             self.dialog_logger_md.add_bot(initial_bot_response)
 
-            # Did you use any tools?
-            if tools_used_this_round == 0:
-                initial_user_response = (
-                    &#34;I see you didn&#39;t use any tools.  &#34;
-                    &#34;Please list what tools you have available, and if there are some available, &#34;
-                    &#34;why they were not useful.&#34;
-                )
-            else:
-                if not self.toolkit:
-                    raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
-                initial_user_response = await keep_going_prompt(self.toolkit)
+            # Did you use any tools? (maybe move this to goal function)
+            # if tools_used_this_round == 0:
+            #     initial_user_response = (
+            #         &#34;I see you didn&#39;t use any tools.  &#34;
+            #         &#34;Please list what tools you have available, and if there are some available, &#34;
+            #         &#34;why they were not useful.&#34;
+            #     )
+            # else:
+            if not self.toolkit:
+                raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
+            initial_user_response = await keep_going_prompt(self.toolkit)
 
             # TODO: make into method.
             await self.client.beta.threads.messages.create(
@@ -290,24 +297,31 @@ class TaskBot:
                 content=initial_user_response,
             )
             run = await self.client.beta.threads.runs.create(thread_id=thread.id, assistant_id=self.assistant.id)
+
             self.dialog_logger_md.add_user(initial_user_response)
 
             # &#34;keep going/done&#34; loop
             done = &#34;NOPE&#34;
             tools_used_this_round = -1
 
-            # TODO: intializee this in constructor
-            if hasattr(self.toolkit, &#34;tool_answer_collector&#34;) and self.toolkit.tool_answer_collector:
+            # TODO: initialize this in constructor
+            if (
+                self.allow_self_certification
+                and hasattr(self.toolkit, &#34;tool_answer_collector&#34;)
+                and self.toolkit.tool_answer_collector
+            ):
                 final_report = self.toolkit.tool_answer_collector.text_answer
                 final_comment = self.toolkit.tool_answer_collector.comment
                 self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
-                return
+                return total_tool_use_count
 
             # Bot has at least 3 ways to stop
             # - return message of DONE
             # - use answer tool to submit DONE, or IMPOSSIBLE
             # - stop using tools
-            while done != &#34;DONE&#34; or tools_used_this_round == 0:
+            if tools_used_this_round == 0 and stop_on_no_tool_use:
+                logger.info(&#34;No tools used this round, conversation will end.&#34;)
+            while done != self.conversation_over_marker or (tools_used_this_round == 0 and stop_on_no_tool_use):
                 tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
                 # Did we use any tools
                 total_tool_use_count += tools_used_this_round
@@ -320,9 +334,11 @@ class TaskBot:
                 messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
                 successive_response = parse_message(messages)
                 self.dialog_logger_md.add_bot(successive_response)
-                done = capture_done_message(messages)
-                if done == &#34;DONE&#34;:
-                    break
+                if self.allow_self_certification:
+                    # TODO: move this to goal checker?
+                    done = capture_done_message(messages, self.conversation_over_marker)
+                    if done == self.conversation_over_marker:
+                        break
 
                 # Did bot use tool to submit final report. Wow. Can&#39;t trust all bots.
                 if (
@@ -335,10 +351,11 @@ class TaskBot:
                     self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
                     break
 
-                if done != &#34;DONE&#34;:
+                if done != self.conversation_over_marker:
                     # Replace with 2nd bot?
                     keep_going_text = await keep_going_prompt(self.toolkit)
-                    if keep_going_text == &#34;DONE&#34;:
+                    # This is *not* self certification
+                    if keep_going_text == self.conversation_over_marker:
                         # The bot did a good job and we can certify that.
                         break
                     self.dialog_logger_md.add_user(keep_going_text)
@@ -362,6 +379,7 @@ class TaskBot:
             if self.assistant and not self.persist_bots:
                 # clean up assistant
                 await self.client.beta.assistants.delete(self.assistant.id)
+        return total_tool_use_count
 
 
 def parse_message(messages) -&gt; str:
@@ -373,15 +391,15 @@ def parse_message(messages) -&gt; str:
     raise TypeError(&#34;Couldn&#39;t find data/message/content&#34;)
 
 
-def capture_done_message(messages) -&gt; str:
+def capture_done_message(messages: Any, conversation_over_marker: str) -&gt; str:
     &#34;&#34;&#34;Return DONE if found in messages&#34;&#34;&#34;
     # Replace with structured?
     done = &#34;&#34;
     for key, message in messages:
         if key == &#34;data&#34;:
             text_message = message[0].content[0].text.value
-            if &#34;DONE&#34; in str(text_message).upper():
-                done = &#34;DONE&#34;
+            if conversation_over_marker in str(text_message).upper():
+                done = conversation_over_marker
                 break
     return done</code></pre>
 </details>
@@ -394,7 +412,7 @@ def capture_done_message(messages) -&gt; str:
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="ai_shell.bot_glue.bot.capture_done_message"><code class="name flex">
-<span>def <span class="ident">capture_done_message</span></span>(<span>messages) ‑> str</span>
+<span>def <span class="ident">capture_done_message</span></span>(<span>messages: Any, conversation_over_marker: str) ‑> str</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return DONE if found in messages</p></div>
@@ -402,15 +420,15 @@ def capture_done_message(messages) -&gt; str:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def capture_done_message(messages) -&gt; str:
+<pre><code class="python">def capture_done_message(messages: Any, conversation_over_marker: str) -&gt; str:
     &#34;&#34;&#34;Return DONE if found in messages&#34;&#34;&#34;
     # Replace with structured?
     done = &#34;&#34;
     for key, message in messages:
         if key == &#34;data&#34;:
             text_message = message[0].content[0].text.value
-            if &#34;DONE&#34; in str(text_message).upper():
-                done = &#34;DONE&#34;
+            if conversation_over_marker in str(text_message).upper():
+                done = conversation_over_marker
                 break
     return done</code></pre>
 </details>
@@ -440,7 +458,7 @@ def capture_done_message(messages) -&gt; str:
 <dl>
 <dt id="ai_shell.bot_glue.bot.TaskBot"><code class="flex name class">
 <span>class <span class="ident">TaskBot</span></span>
-<span>(</span><span>config: <a title="ai_shell.utils.config_manager.Config" href="../utils/config_manager.html#ai_shell.utils.config_manager.Config">Config</a>, name: str, bot_instructions: str, model: str, dialog_logger_md: <a title="ai_shell.utils.log_conversation.DialogLoggerWithMarkdown" href="../utils/log_conversation.html#ai_shell.utils.log_conversation.DialogLoggerWithMarkdown">DialogLoggerWithMarkdown</a>, persist_bots: bool = False, persist_threads: bool = False, maximum_loops: int = 10)</span>
+<span>(</span><span>config: <a title="ai_shell.utils.config_manager.Config" href="../utils/config_manager.html#ai_shell.utils.config_manager.Config">Config</a>, name: str, bot_instructions: str, model: str, dialog_logger_md: <a title="ai_shell.ai_logs.log_to_markdown.DialogLoggerWithMarkdown" href="../ai_logs/log_to_markdown.html#ai_shell.ai_logs.log_to_markdown.DialogLoggerWithMarkdown">DialogLoggerWithMarkdown</a>, persist_bots: bool = False, persist_threads: bool = False, maximum_loops: int = 10)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Minimal bot management code.</p></div>
@@ -494,6 +512,9 @@ def capture_done_message(messages) -&gt; str:
         self.allow_self_certification = False
         &#34;&#34;&#34;Do you want to trust the bot when it says it has achieved the goal?&#34;&#34;&#34;
 
+        self.conversation_over_marker = &#34;DONE&#34;
+        &#34;&#34;&#34;Goal function checker returns this when done.&#34;&#34;&#34;
+
     async def initialize(self) -&gt; None:
         &#34;&#34;&#34;Get or create a bot and store it in the config.&#34;&#34;&#34;
         bot = await self.get_create_bot()
@@ -531,6 +552,8 @@ def capture_done_message(messages) -&gt; str:
         self, root_folder: str, model: str, tool_names: list[str]
     ) -&gt; tuple[ToolKit, list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction]]:
         self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names, config=self.config)
+        # sync COM
+        self.toolkit.conversation_over_marker = self.conversation_over_marker
         initialize_all_tools(keeps=tool_names)
         tools_schema: list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction] = [
             ToolAssistantToolsFunction(**{&#34;function&#34;: cast(FunctionDefinition, schema), &#34;type&#34;: &#34;function&#34;})
@@ -589,7 +612,6 @@ def capture_done_message(messages) -&gt; str:
             messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
             # logger.info(messages)
             last_words = parse_message(messages)
-            logger.info(last_words)
             self.dialog_logger_md.add_bot(last_words)
 
         except Exception as exception:
@@ -609,7 +631,8 @@ def capture_done_message(messages) -&gt; str:
         root_folder: str,
         tool_names: list[Any],
         keep_going_prompt: Callable[[ToolKit], Awaitable[str]],
-    ) -&gt; None:
+        stop_on_no_tool_use: bool,
+    ) -&gt; int:
         &#34;&#34;&#34;
         Loop through tool requests.
 
@@ -618,6 +641,7 @@ def capture_done_message(messages) -&gt; str:
             root_folder (str): The root folder for file operations.
             tool_names (list[Any]): The tools to use.
             keep_going_prompt (str): The prompt to use to keep going.
+            stop_on_no_tool_use (bool): Stop if no tools are used.
 
         Returns:
             None
@@ -632,7 +656,8 @@ def capture_done_message(messages) -&gt; str:
         tool_loops = 0
         total_tool_use_count = 0
         try:
-            tool_names.append(&#34;report_text&#34;)
+            if self.allow_self_certification:
+                tool_names.append(&#34;report_text&#34;)
             tool_names = list(set(tool_names))
             _, tool_schemas = self.toolkit_factory(root_folder, self.model, tool_names)
             if not self.toolkit:
@@ -658,17 +683,17 @@ def capture_done_message(messages) -&gt; str:
             initial_bot_response = parse_message(messages)
             self.dialog_logger_md.add_bot(initial_bot_response)
 
-            # Did you use any tools?
-            if tools_used_this_round == 0:
-                initial_user_response = (
-                    &#34;I see you didn&#39;t use any tools.  &#34;
-                    &#34;Please list what tools you have available, and if there are some available, &#34;
-                    &#34;why they were not useful.&#34;
-                )
-            else:
-                if not self.toolkit:
-                    raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
-                initial_user_response = await keep_going_prompt(self.toolkit)
+            # Did you use any tools? (maybe move this to goal function)
+            # if tools_used_this_round == 0:
+            #     initial_user_response = (
+            #         &#34;I see you didn&#39;t use any tools.  &#34;
+            #         &#34;Please list what tools you have available, and if there are some available, &#34;
+            #         &#34;why they were not useful.&#34;
+            #     )
+            # else:
+            if not self.toolkit:
+                raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
+            initial_user_response = await keep_going_prompt(self.toolkit)
 
             # TODO: make into method.
             await self.client.beta.threads.messages.create(
@@ -677,24 +702,31 @@ def capture_done_message(messages) -&gt; str:
                 content=initial_user_response,
             )
             run = await self.client.beta.threads.runs.create(thread_id=thread.id, assistant_id=self.assistant.id)
+
             self.dialog_logger_md.add_user(initial_user_response)
 
             # &#34;keep going/done&#34; loop
             done = &#34;NOPE&#34;
             tools_used_this_round = -1
 
-            # TODO: intializee this in constructor
-            if hasattr(self.toolkit, &#34;tool_answer_collector&#34;) and self.toolkit.tool_answer_collector:
+            # TODO: initialize this in constructor
+            if (
+                self.allow_self_certification
+                and hasattr(self.toolkit, &#34;tool_answer_collector&#34;)
+                and self.toolkit.tool_answer_collector
+            ):
                 final_report = self.toolkit.tool_answer_collector.text_answer
                 final_comment = self.toolkit.tool_answer_collector.comment
                 self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
-                return
+                return total_tool_use_count
 
             # Bot has at least 3 ways to stop
             # - return message of DONE
             # - use answer tool to submit DONE, or IMPOSSIBLE
             # - stop using tools
-            while done != &#34;DONE&#34; or tools_used_this_round == 0:
+            if tools_used_this_round == 0 and stop_on_no_tool_use:
+                logger.info(&#34;No tools used this round, conversation will end.&#34;)
+            while done != self.conversation_over_marker or (tools_used_this_round == 0 and stop_on_no_tool_use):
                 tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
                 # Did we use any tools
                 total_tool_use_count += tools_used_this_round
@@ -707,9 +739,11 @@ def capture_done_message(messages) -&gt; str:
                 messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
                 successive_response = parse_message(messages)
                 self.dialog_logger_md.add_bot(successive_response)
-                done = capture_done_message(messages)
-                if done == &#34;DONE&#34;:
-                    break
+                if self.allow_self_certification:
+                    # TODO: move this to goal checker?
+                    done = capture_done_message(messages, self.conversation_over_marker)
+                    if done == self.conversation_over_marker:
+                        break
 
                 # Did bot use tool to submit final report. Wow. Can&#39;t trust all bots.
                 if (
@@ -722,10 +756,11 @@ def capture_done_message(messages) -&gt; str:
                     self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
                     break
 
-                if done != &#34;DONE&#34;:
+                if done != self.conversation_over_marker:
                     # Replace with 2nd bot?
                     keep_going_text = await keep_going_prompt(self.toolkit)
-                    if keep_going_text == &#34;DONE&#34;:
+                    # This is *not* self certification
+                    if keep_going_text == self.conversation_over_marker:
                         # The bot did a good job and we can certify that.
                         break
                     self.dialog_logger_md.add_user(keep_going_text)
@@ -748,7 +783,8 @@ def capture_done_message(messages) -&gt; str:
                 await self.client.beta.threads.delete(self.thread.id)
             if self.assistant and not self.persist_bots:
                 # clean up assistant
-                await self.client.beta.assistants.delete(self.assistant.id)</code></pre>
+                await self.client.beta.assistants.delete(self.assistant.id)
+        return total_tool_use_count</code></pre>
 </details>
 <h3>Instance variables</h3>
 <dl>
@@ -763,6 +799,10 @@ def capture_done_message(messages) -&gt; str:
 <dt id="ai_shell.bot_glue.bot.TaskBot.config"><code class="name">var <span class="ident">config</span></code></dt>
 <dd>
 <div class="desc"><p>Stores bot, thread config and other global config.</p></div>
+</dd>
+<dt id="ai_shell.bot_glue.bot.TaskBot.conversation_over_marker"><code class="name">var <span class="ident">conversation_over_marker</span></code></dt>
+<dd>
+<div class="desc"><p>Goal function checker returns this when done.</p></div>
 </dd>
 <dt id="ai_shell.bot_glue.bot.TaskBot.dialog_logger_md"><code class="name">var <span class="ident">dialog_logger_md</span></code></dt>
 <dd>
@@ -796,7 +836,7 @@ def capture_done_message(messages) -&gt; str:
 <h3>Methods</h3>
 <dl>
 <dt id="ai_shell.bot_glue.bot.TaskBot.basic_tool_loop"><code class="name flex">
-<span>async def <span class="ident">basic_tool_loop</span></span>(<span>self, the_ask: str, root_folder: str, tool_names: list[typing.Any], keep_going_prompt: collections.abc.Callable[[<a title="ai_shell.openai_toolkit.ToolKit" href="../openai_toolkit.html#ai_shell.openai_toolkit.ToolKit">ToolKit</a>], collections.abc.Awaitable[str]]) ‑> None</span>
+<span>async def <span class="ident">basic_tool_loop</span></span>(<span>self, the_ask: str, root_folder: str, tool_names: list[typing.Any], keep_going_prompt: collections.abc.Callable[[<a title="ai_shell.openai_toolkit.ToolKit" href="../openai_toolkit.html#ai_shell.openai_toolkit.ToolKit">ToolKit</a>], collections.abc.Awaitable[str]], stop_on_no_tool_use: bool) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Loop through tool requests.</p>
@@ -810,6 +850,8 @@ def capture_done_message(messages) -&gt; str:
 <dd>The tools to use.</dd>
 <dt><strong><code>keep_going_prompt</code></strong> :&ensp;<code>str</code></dt>
 <dd>The prompt to use to keep going.</dd>
+<dt><strong><code>stop_on_no_tool_use</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Stop if no tools are used.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>None</p></div>
@@ -823,7 +865,8 @@ def capture_done_message(messages) -&gt; str:
     root_folder: str,
     tool_names: list[Any],
     keep_going_prompt: Callable[[ToolKit], Awaitable[str]],
-) -&gt; None:
+    stop_on_no_tool_use: bool,
+) -&gt; int:
     &#34;&#34;&#34;
     Loop through tool requests.
 
@@ -832,6 +875,7 @@ def capture_done_message(messages) -&gt; str:
         root_folder (str): The root folder for file operations.
         tool_names (list[Any]): The tools to use.
         keep_going_prompt (str): The prompt to use to keep going.
+        stop_on_no_tool_use (bool): Stop if no tools are used.
 
     Returns:
         None
@@ -846,7 +890,8 @@ def capture_done_message(messages) -&gt; str:
     tool_loops = 0
     total_tool_use_count = 0
     try:
-        tool_names.append(&#34;report_text&#34;)
+        if self.allow_self_certification:
+            tool_names.append(&#34;report_text&#34;)
         tool_names = list(set(tool_names))
         _, tool_schemas = self.toolkit_factory(root_folder, self.model, tool_names)
         if not self.toolkit:
@@ -872,17 +917,17 @@ def capture_done_message(messages) -&gt; str:
         initial_bot_response = parse_message(messages)
         self.dialog_logger_md.add_bot(initial_bot_response)
 
-        # Did you use any tools?
-        if tools_used_this_round == 0:
-            initial_user_response = (
-                &#34;I see you didn&#39;t use any tools.  &#34;
-                &#34;Please list what tools you have available, and if there are some available, &#34;
-                &#34;why they were not useful.&#34;
-            )
-        else:
-            if not self.toolkit:
-                raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
-            initial_user_response = await keep_going_prompt(self.toolkit)
+        # Did you use any tools? (maybe move this to goal function)
+        # if tools_used_this_round == 0:
+        #     initial_user_response = (
+        #         &#34;I see you didn&#39;t use any tools.  &#34;
+        #         &#34;Please list what tools you have available, and if there are some available, &#34;
+        #         &#34;why they were not useful.&#34;
+        #     )
+        # else:
+        if not self.toolkit:
+            raise TypeError(&#34;Missing toolkit before keep_going_prompt&#34;)
+        initial_user_response = await keep_going_prompt(self.toolkit)
 
         # TODO: make into method.
         await self.client.beta.threads.messages.create(
@@ -891,24 +936,31 @@ def capture_done_message(messages) -&gt; str:
             content=initial_user_response,
         )
         run = await self.client.beta.threads.runs.create(thread_id=thread.id, assistant_id=self.assistant.id)
+
         self.dialog_logger_md.add_user(initial_user_response)
 
         # &#34;keep going/done&#34; loop
         done = &#34;NOPE&#34;
         tools_used_this_round = -1
 
-        # TODO: intializee this in constructor
-        if hasattr(self.toolkit, &#34;tool_answer_collector&#34;) and self.toolkit.tool_answer_collector:
+        # TODO: initialize this in constructor
+        if (
+            self.allow_self_certification
+            and hasattr(self.toolkit, &#34;tool_answer_collector&#34;)
+            and self.toolkit.tool_answer_collector
+        ):
             final_report = self.toolkit.tool_answer_collector.text_answer
             final_comment = self.toolkit.tool_answer_collector.comment
             self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
-            return
+            return total_tool_use_count
 
         # Bot has at least 3 ways to stop
         # - return message of DONE
         # - use answer tool to submit DONE, or IMPOSSIBLE
         # - stop using tools
-        while done != &#34;DONE&#34; or tools_used_this_round == 0:
+        if tools_used_this_round == 0 and stop_on_no_tool_use:
+            logger.info(&#34;No tools used this round, conversation will end.&#34;)
+        while done != self.conversation_over_marker or (tools_used_this_round == 0 and stop_on_no_tool_use):
             tools_used_this_round = await loop_tools(self.client, self.toolkit, run, thread, self.dialog_logger_md)
             # Did we use any tools
             total_tool_use_count += tools_used_this_round
@@ -921,9 +973,11 @@ def capture_done_message(messages) -&gt; str:
             messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
             successive_response = parse_message(messages)
             self.dialog_logger_md.add_bot(successive_response)
-            done = capture_done_message(messages)
-            if done == &#34;DONE&#34;:
-                break
+            if self.allow_self_certification:
+                # TODO: move this to goal checker?
+                done = capture_done_message(messages, self.conversation_over_marker)
+                if done == self.conversation_over_marker:
+                    break
 
             # Did bot use tool to submit final report. Wow. Can&#39;t trust all bots.
             if (
@@ -936,10 +990,11 @@ def capture_done_message(messages) -&gt; str:
                 self.dialog_logger_md.add_bot(f&#34;Final word: {final_report}, {final_comment}&#34;)
                 break
 
-            if done != &#34;DONE&#34;:
+            if done != self.conversation_over_marker:
                 # Replace with 2nd bot?
                 keep_going_text = await keep_going_prompt(self.toolkit)
-                if keep_going_text == &#34;DONE&#34;:
+                # This is *not* self certification
+                if keep_going_text == self.conversation_over_marker:
                     # The bot did a good job and we can certify that.
                     break
                 self.dialog_logger_md.add_user(keep_going_text)
@@ -962,7 +1017,8 @@ def capture_done_message(messages) -&gt; str:
             await self.client.beta.threads.delete(self.thread.id)
         if self.assistant and not self.persist_bots:
             # clean up assistant
-            await self.client.beta.assistants.delete(self.assistant.id)</code></pre>
+            await self.client.beta.assistants.delete(self.assistant.id)
+    return total_tool_use_count</code></pre>
 </details>
 </dd>
 <dt id="ai_shell.bot_glue.bot.TaskBot.create_bot"><code class="name flex">
@@ -1096,7 +1152,6 @@ def capture_done_message(messages) -&gt; str:
         messages = await self.client.beta.threads.messages.list(thread_id=thread.id, order=&#34;desc&#34;)
         # logger.info(messages)
         last_words = parse_message(messages)
-        logger.info(last_words)
         self.dialog_logger_md.add_bot(last_words)
 
     except Exception as exception:
@@ -1124,6 +1179,8 @@ def capture_done_message(messages) -&gt; str:
     self, root_folder: str, model: str, tool_names: list[str]
 ) -&gt; tuple[ToolKit, list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction]]:
     self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names, config=self.config)
+    # sync COM
+    self.toolkit.conversation_over_marker = self.conversation_over_marker
     initialize_all_tools(keeps=tool_names)
     tools_schema: list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction] = [
         ToolAssistantToolsFunction(**{&#34;function&#34;: cast(FunctionDefinition, schema), &#34;type&#34;: &#34;function&#34;})
@@ -1165,6 +1222,7 @@ def capture_done_message(messages) -&gt; str:
 <li><code><a title="ai_shell.bot_glue.bot.TaskBot.basic_tool_loop" href="#ai_shell.bot_glue.bot.TaskBot.basic_tool_loop">basic_tool_loop</a></code></li>
 <li><code><a title="ai_shell.bot_glue.bot.TaskBot.bot_instructions" href="#ai_shell.bot_glue.bot.TaskBot.bot_instructions">bot_instructions</a></code></li>
 <li><code><a title="ai_shell.bot_glue.bot.TaskBot.config" href="#ai_shell.bot_glue.bot.TaskBot.config">config</a></code></li>
+<li><code><a title="ai_shell.bot_glue.bot.TaskBot.conversation_over_marker" href="#ai_shell.bot_glue.bot.TaskBot.conversation_over_marker">conversation_over_marker</a></code></li>
 <li><code><a title="ai_shell.bot_glue.bot.TaskBot.create_bot" href="#ai_shell.bot_glue.bot.TaskBot.create_bot">create_bot</a></code></li>
 <li><code><a title="ai_shell.bot_glue.bot.TaskBot.dialog_logger_md" href="#ai_shell.bot_glue.bot.TaskBot.dialog_logger_md">dialog_logger_md</a></code></li>
 <li><code><a title="ai_shell.bot_glue.bot.TaskBot.get_create_bot" href="#ai_shell.bot_glue.bot.TaskBot.get_create_bot">get_create_bot</a></code></li>

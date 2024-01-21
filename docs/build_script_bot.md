@@ -25,16 +25,19 @@ A series of bots that do the same thing as a typical build script.
   - Record/Close TODO issues
 
 ## Write tests
+
 - Stop it from changing code under test
 - Stop calls to os.system, subprocess
 
 ## Docs
+
 - Blows away all code leaving just the docs
 
 ## All bots that edit
+
 - Is willing to edit without viewing
 - Happy to write corrupt python
 
 ## Mypy bot
-- Need to write it.
 
+- Need to write it.

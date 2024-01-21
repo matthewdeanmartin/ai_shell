@@ -103,12 +103,14 @@ def is_file_in_root_folder(file_path: str, root_folder: str) -&gt; bool:
     if not os.path.isabs(file_path):
         file_path = root_folder + &#34;/&#34; + file_path
     absolute_file_path = os.path.abspath(file_path)
+
     absolute_root_folder = os.path.abspath(root_folder)
 
     # Use os.path.commonpath to check if the root folder is a prefix of the file path
     common_path = os.path.commonpath([absolute_file_path, absolute_root_folder])
     # This won&#39;t work on linux, but on Windows I&#39;m getting e: and E:!
     is_same = common_path.lower() == absolute_root_folder.lower()
+
     if not is_same:
         logger.warning(f&#34;File {absolute_file_path} is not in root folder {absolute_root_folder}&#34;)
     return is_same
@@ -170,6 +172,7 @@ def temporary_change_dir(new_dir: str) -&gt; Generator[None, None, None]:
     Args:
         new_dir (str): The new directory path.
     &#34;&#34;&#34;
+    # pylint:disable=global-statement
     global _is_in_context
 
     # Check if the context manager is already active
@@ -209,6 +212,7 @@ def is_in_root_now(root_folder: str) -&gt; bool:
     Returns:
     bool: True if `root_folder` is an absolute path and is the same as the current working directory, False otherwise.
     &#34;&#34;&#34;
+    root_folder = str(Path(&#34;.&#34;).resolve())
     # Check if the path is absolute
     if os.path.isfile(root_folder):
         root_folder = os.path.dirname(root_folder)
@@ -236,7 +240,7 @@ def remove_root_folder(file_path: str, root_folder: str) -&gt; str:
         str: The relative path of the file.
     &#34;&#34;&#34;
     if not is_in_root_now(root_folder):
-        raise ValueError(f&#34;Root folder must be the current working directory, current {os.getcwd()}&#34;)
+        raise ValueError(f&#34;Root folder ({root_folder}) must be the current working directory, current {os.getcwd()}&#34;)
     # with temporary_change_dir(root_folder):
     root = Path(&#34;.&#34;).resolve()
     file = Path(file_path)
@@ -446,12 +450,14 @@ True
     if not os.path.isabs(file_path):
         file_path = root_folder + &#34;/&#34; + file_path
     absolute_file_path = os.path.abspath(file_path)
+
     absolute_root_folder = os.path.abspath(root_folder)
 
     # Use os.path.commonpath to check if the root folder is a prefix of the file path
     common_path = os.path.commonpath([absolute_file_path, absolute_root_folder])
     # This won&#39;t work on linux, but on Windows I&#39;m getting e: and E:!
     is_same = common_path.lower() == absolute_root_folder.lower()
+
     if not is_same:
         logger.warning(f&#34;File {absolute_file_path} is not in root folder {absolute_root_folder}&#34;)
     return is_same</code></pre>
@@ -480,6 +486,7 @@ bool: True if <code>root_folder</code> is an absolute path and is the same as th
     Returns:
     bool: True if `root_folder` is an absolute path and is the same as the current working directory, False otherwise.
     &#34;&#34;&#34;
+    root_folder = str(Path(&#34;.&#34;).resolve())
     # Check if the path is absolute
     if os.path.isfile(root_folder):
         root_folder = os.path.dirname(root_folder)
@@ -528,7 +535,7 @@ bool: True if <code>root_folder</code> is an absolute path and is the same as th
         str: The relative path of the file.
     &#34;&#34;&#34;
     if not is_in_root_now(root_folder):
-        raise ValueError(f&#34;Root folder must be the current working directory, current {os.getcwd()}&#34;)
+        raise ValueError(f&#34;Root folder ({root_folder}) must be the current working directory, current {os.getcwd()}&#34;)
     # with temporary_change_dir(root_folder):
     root = Path(&#34;.&#34;).resolve()
     file = Path(file_path)
@@ -638,6 +645,7 @@ def temporary_change_dir(new_dir: str) -&gt; Generator[None, None, None]:
     Args:
         new_dir (str): The new directory path.
     &#34;&#34;&#34;
+    # pylint:disable=global-statement
     global _is_in_context
 
     # Check if the context manager is already active

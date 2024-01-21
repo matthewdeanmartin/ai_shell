@@ -38,8 +38,8 @@ from typing import Any
 
 from ed.buffer import Buffer
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import sanitize_path
 
 
@@ -58,6 +58,7 @@ class EdTool:
         self.buffer = Buffer()
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def ed(self, script: str, file_name: str) -&gt; list[str]:
@@ -76,7 +77,7 @@ class EdTool:
 
         file_path = self.root_folder + file_name
         if os.path.isfile(file_path):
-            with open(file_path, encoding=&#34;utf-8&#34;) as f:
+            with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as f:
                 self.buffer = Buffer(f.readlines())
 
         command_lines: list[tuple[Any, list[str]]] = []
@@ -225,6 +226,7 @@ if __name__ == &#34;__main__&#34;:
         self.buffer = Buffer()
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def ed(self, script: str, file_name: str) -&gt; list[str]:
@@ -243,7 +245,7 @@ if __name__ == &#34;__main__&#34;:
 
         file_path = self.root_folder + file_name
         if os.path.isfile(file_path):
-            with open(file_path, encoding=&#34;utf-8&#34;) as f:
+            with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as f:
                 self.buffer = Buffer(f.readlines())
 
         command_lines: list[tuple[Any, list[str]]] = []
@@ -351,7 +353,7 @@ def ed(self, script: str, file_name: str) -&gt; list[str]:
 
     file_path = self.root_folder + file_name
     if os.path.isfile(file_path):
-        with open(file_path, encoding=&#34;utf-8&#34;) as f:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as f:
             self.buffer = Buffer(f.readlines())
 
     command_lines: list[tuple[Any, list[str]]] = []

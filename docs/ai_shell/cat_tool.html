@@ -36,8 +36,9 @@ from collections.abc import Generator
 from io import StringIO
 from typing import IO
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
+from ai_shell.utils.cwd_utils import change_directory
 from ai_shell.utils.read_fs import is_file_in_root_folder, safe_glob
 from ai_shell.utils.type_repair import convert_to_list
 
@@ -178,10 +179,19 @@ class CatTool:
 
 
 if __name__ == &#34;__main__&#34;:
-    tool = CatTool(root_folder=&#34;./..&#34;, config=Config(&#34;..&#34;))
 
-    for thing in tool.cat(file_paths=[&#34;*.py&#34;]):
-        print(thing, end=&#34;&#34;)</code></pre>
+    def run() -&gt; None:
+        &#34;&#34;&#34;Example&#34;&#34;&#34;
+        with change_directory(&#34;src&#34;):
+            tool = CatTool(root_folder=&#34;.&#34;, config=Config(&#34;..&#34;))
+
+            for thing in tool.cat_markdown(
+                file_paths=&#34;./fish_tank/__main__.py&#34;
+                # [&#34;./fish_tank/*.py&#34;]
+            ):
+                print(thing, end=&#34;&#34;)
+
+    run()</code></pre>
 </details>
 </section>
 <section>

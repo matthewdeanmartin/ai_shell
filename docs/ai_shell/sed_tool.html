@@ -35,10 +35,10 @@ However, the bot keeps trying to use features of real sed that this tool doesn&#
 &#34;&#34;&#34;
 import re
 
+from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.cat_tool import CatTool
 from ai_shell.pyutils.validate import is_python_file, is_valid_python_source
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.logging_utils import log
 from ai_shell.utils.read_fs import is_file_in_root_folder
 
 
@@ -54,6 +54,7 @@ class SedTool:
         self.root_folder = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def sed(self, file_path: str, commands: list[str]) -&gt; str:
@@ -80,7 +81,7 @@ class SedTool:
         if not is_file_in_root_folder(file_path, self.root_folder):
             raise ValueError(f&#34;File {file_path} is not in root folder {self.root_folder}.&#34;)
 
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         output_text = SedTool._process_sed(input_text, commands)
         if is_python_file(file_path):
@@ -143,7 +144,7 @@ class SedTool:
                     append_text = command[2:]
                     lines[i] += &#34;\n&#34; + append_text
                 elif re.match(r&#34;\d+a\\&#34;, command):
-                    # insert &#34;a&#34;fter the specified line.
+                    # insert after the specified line. a for after.
                     target_line, change_text = command.split(&#34;a\\&#34;)
                     if i + 1 == int(target_line):
                         lines[i] = change_text
@@ -195,6 +196,7 @@ if __name__ == &#34;__main__&#34;:
         commands = [
             &#34;23a\\\ndef generate_ocean_waves():\\\n    # This function will create an animated line of wave emojis across the top line of the screen.\\\n    wave_emoji = u&#39;\\U0001F30A&#39;\\\n    top_line = wave_emoji * 80\\\n    print(top_line)\\\n&#34;
         ]
+        # pylint: disable=protected-access
         result = SedTool._process_sed(input_text, commands)
         print(result)
 
@@ -239,6 +241,7 @@ if __name__ == &#34;__main__&#34;:
         self.root_folder = root_folder
         self.config = config
         self.auto_cat = config.get_flag(&#34;auto_cat&#34;, True)
+        self.utf8_errors = config.get_value(&#34;utf8_errors&#34;, &#34;surrogateescape&#34;)
 
     @log()
     def sed(self, file_path: str, commands: list[str]) -&gt; str:
@@ -265,7 +268,7 @@ if __name__ == &#34;__main__&#34;:
         if not is_file_in_root_folder(file_path, self.root_folder):
             raise ValueError(f&#34;File {file_path} is not in root folder {self.root_folder}.&#34;)
 
-        with open(file_path, encoding=&#34;utf-8&#34;) as file:
+        with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
             input_text = file.read()
         output_text = SedTool._process_sed(input_text, commands)
         if is_python_file(file_path):
@@ -328,7 +331,7 @@ if __name__ == &#34;__main__&#34;:
                     append_text = command[2:]
                     lines[i] += &#34;\n&#34; + append_text
                 elif re.match(r&#34;\d+a\\&#34;, command):
-                    # insert &#34;a&#34;fter the specified line.
+                    # insert after the specified line. a for after.
                     target_line, change_text = command.split(&#34;a\\&#34;)
                     if i + 1 == int(target_line):
                         lines[i] = change_text
@@ -420,7 +423,7 @@ def sed(self, file_path: str, commands: list[str]) -&gt; str:
     if not is_file_in_root_folder(file_path, self.root_folder):
         raise ValueError(f&#34;File {file_path} is not in root folder {self.root_folder}.&#34;)
 
-    with open(file_path, encoding=&#34;utf-8&#34;) as file:
+    with open(file_path, encoding=&#34;utf-8&#34;, errors=self.utf8_errors) as file:
         input_text = file.read()
     output_text = SedTool._process_sed(input_text, commands)
     if is_python_file(file_path):

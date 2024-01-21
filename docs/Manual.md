@@ -7,6 +7,7 @@
 - Use the tools in the toolkit with your own bot framework
 
 ## Extension Points
+
 - Goal checking functions
 - New tools with plugins
 - External tools (with merge request)

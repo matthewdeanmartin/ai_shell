@@ -143,6 +143,7 @@ Generated code, do not edit.
 import argparse
 from ai_shell.utils.console_utils import pretty_console
 from ai_shell.utils.config_manager import Config
+from ai_shell.__about__ import __version__, __description__
 
 CONFIG = Config()
 # pylint: disable=unused-argument
@@ -169,7 +170,27 @@ CONFIG = Config()
 
     argparse_part = """\n\ndef run():
         \"\"\"Create the main parser\"\"\"
-        parser = argparse.ArgumentParser(prog='ais', description='AI Shell Command Line Interface')
+        program = 'ais'
+        parser = argparse.ArgumentParser(
+        prog=program,
+        allow_abbrev=False,
+        description=__description__,
+        epilog=f\"\"\"
+    Examples:
+
+        ais cat hello.py
+\"\"\",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        "-V",
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="Show program's version number and exit.",
+    )
+        
+        )
         subparsers = parser.add_subparsers(dest='subcommand', help='sub-command help')
     """
     for ns, _data in meta.items():

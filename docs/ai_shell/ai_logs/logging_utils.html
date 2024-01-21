@@ -30,7 +30,6 @@
 <pre><code class="python">&#34;&#34;&#34;
 Code-as-config for logging.
 &#34;&#34;&#34;
-import logging
 import os
 from typing import Any
 
@@ -61,13 +60,13 @@ def configure_logging() -&gt; dict[str, Any]:
                 &#34;class&#34;: &#34;logging.StreamHandler&#34;,
                 &#34;stream&#34;: &#34;ext://sys.stdout&#34;,  # Default is stderr
             },
-            &#34;bug_trail&#34;: {
-                &#34;level&#34;: &#34;DEBUG&#34;,
-                # &#34;formatter&#34;: &#34;standard&#34;,
-                &#34;class&#34;: &#34;bug_trail_core.BugTrailHandler&#34;,
-                &#34;db_path&#34;: bug_trail_config.database_path,
-                &#34;minimum_level&#34;: logging.DEBUG,
-            },
+            # &#34;bug_trail&#34;: {
+            #     &#34;level&#34;: &#34;DEBUG&#34;,
+            #     # &#34;formatter&#34;: &#34;standard&#34;,
+            #     &#34;class&#34;: &#34;bug_trail_core.BugTrailHandler&#34;,
+            #     &#34;db_path&#34;: bug_trail_config.database_path,
+            #     &#34;minimum_level&#34;: logging.DEBUG,
+            # },
             # &#34;json&#34;: {
             #     # &#34;()&#34;: &#34;json_file_handler_factory&#34;,
             #     &#34;level&#34;: &#34;DEBUG&#34;,
@@ -101,28 +100,34 @@ def configure_logging() -&gt; dict[str, Any]:
 
     for name in debug_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
+            &#34;handlers&#34;: [
+                &#34;default&#34;,
+                # &#34;bug_trail&#34;
+            ],
             &#34;level&#34;: &#34;DEBUG&#34;,
             &#34;propagate&#34;: False,
         }
 
     for name in info_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
+            &#34;handlers&#34;: [
+                &#34;default&#34;,
+                # &#34;bug_trail&#34;
+            ],
             &#34;level&#34;: &#34;INFO&#34;,
             &#34;propagate&#34;: False,
         }
 
     for name in warn_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
+            &#34;handlers&#34;: [
+                &#34;default&#34;,
+                # &#34;bug_trail&#34;
+            ],
             &#34;level&#34;: &#34;WARNING&#34;,
             &#34;propagate&#34;: False,
         }
-    return logging_config
-
-
-print()</code></pre>
+    return logging_config</code></pre>
 </details>
 </section>
 <section>
@@ -156,13 +161,13 @@ print()</code></pre>
                 &#34;class&#34;: &#34;logging.StreamHandler&#34;,
                 &#34;stream&#34;: &#34;ext://sys.stdout&#34;,  # Default is stderr
             },
-            &#34;bug_trail&#34;: {
-                &#34;level&#34;: &#34;DEBUG&#34;,
-                # &#34;formatter&#34;: &#34;standard&#34;,
-                &#34;class&#34;: &#34;bug_trail_core.BugTrailHandler&#34;,
-                &#34;db_path&#34;: bug_trail_config.database_path,
-                &#34;minimum_level&#34;: logging.DEBUG,
-            },
+            # &#34;bug_trail&#34;: {
+            #     &#34;level&#34;: &#34;DEBUG&#34;,
+            #     # &#34;formatter&#34;: &#34;standard&#34;,
+            #     &#34;class&#34;: &#34;bug_trail_core.BugTrailHandler&#34;,
+            #     &#34;db_path&#34;: bug_trail_config.database_path,
+            #     &#34;minimum_level&#34;: logging.DEBUG,
+            # },
             # &#34;json&#34;: {
             #     # &#34;()&#34;: &#34;json_file_handler_factory&#34;,
             #     &#34;level&#34;: &#34;DEBUG&#34;,
@@ -196,21 +201,30 @@ print()</code></pre>
 
     for name in debug_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
+            &#34;handlers&#34;: [
+                &#34;default&#34;,
+                # &#34;bug_trail&#34;
+            ],
             &#34;level&#34;: &#34;DEBUG&#34;,
             &#34;propagate&#34;: False,
         }
 
     for name in info_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
+            &#34;handlers&#34;: [
+                &#34;default&#34;,
+                # &#34;bug_trail&#34;
+            ],
             &#34;level&#34;: &#34;INFO&#34;,
             &#34;propagate&#34;: False,
         }
 
     for name in warn_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
+            &#34;handlers&#34;: [
+                &#34;default&#34;,
+                # &#34;bug_trail&#34;
+            ],
             &#34;level&#34;: &#34;WARNING&#34;,
             &#34;propagate&#34;: False,
         }

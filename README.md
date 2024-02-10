@@ -6,6 +6,9 @@ Even if you trust the bot to run bash directly on your machine or docker contain
 bill with excess tokens in the reply, or a command generates too few tokens and the bot doesn't know what is
 going on.
 
+This project is most similar to [Aider](https://github.com/paul-gauthier/aider) and overlaps with the tool support 
+in LangChain.
+
 This is an alternative to `code_interpreter`, tools running code in docker container locally, or tools running arbitrary
 shell code locally.
 
@@ -135,6 +138,21 @@ n.b. Every file is read and written as utf-8 strings.
 ai_shell draws inspiration from various command-line interface (CLI) tools and shell environments, integrating
 features from traditional shells with OpenAI's language models. It is designed to provide an easy and secure interface
 for AI-assisted file system interactions, keeping in mind both usability and safety.
+
+All of these use the Completions API (last I checked):
+- [openai-functions](https://pypi.org/project/openai-functions/)
+- [ActionWeaver](https://pypi.org/project/actionweaver/)
+- [openai-function-calling](https://pypi.org/project/openai-function-calling/)
+- [gptfunctionutils](https://pypi.org/project/gptfunctionutils/)
+- [openai-decorator](https://pypi.org/project/openai-decorator/)
+- [openai-agent](https://github.com/laipz8200/openai-agent])
+- [openai-func-parser](https://pypi.org/project/openai-func-parser/)
+- [openai-function-call](https://pypi.org/project/openai-function-call/)
+- [langjam.func_to_tool](https://pypi.org/project/langjam/)
+
+
+Uses Assistant/Beta API
+-[openai_assistant_toolkit](https://pypi.org/project/openai_assistant_toolkit/) minimal code in this library.
 
 ## Documentation
 

@@ -51,6 +51,8 @@ To create a well known Patch format, the bot has to be able to count lines perfe
 tool rejects the patches and after a few attempts the bot gives up. Common patch tools provide almost no feedback
 because the bot is failing in a way that normal tools don't, so why would they provide helpful feedback?
 
+Aider uses a [diff/patch approach with a lengthy prompt](https://github.com/paul-gauthier/aider/blob/main/aider/coders/editblock_prompts.py)
+
 ## Validated Format
 
 In the case of, say python code, the syntax can be validated and if the bot messed up the document, it can be

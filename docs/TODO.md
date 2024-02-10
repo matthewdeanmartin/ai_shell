@@ -1,5 +1,10 @@
 # TODO
 
+## Refactoring plans
+
+- Move all the tools to a plugin model
+   - Some plugins will be bundled
+
 ## Possible break-thrus
 
 - Goal function is also a workload queue.

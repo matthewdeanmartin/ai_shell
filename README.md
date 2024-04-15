@@ -149,6 +149,7 @@ All of these use the Completions API (last I checked):
 - [openai-func-parser](https://pypi.org/project/openai-func-parser/)
 - [openai-function-call](https://pypi.org/project/openai-function-call/)
 - [langjam.func_to_tool](https://pypi.org/project/langjam/)
+- [schemafunc](https://github.com/dmwyatt/schemafunc)
 
 
 Uses Assistant/Beta API

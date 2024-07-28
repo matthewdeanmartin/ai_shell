@@ -1,6 +1,7 @@
 """
 A module to provide a safe subprocess wrapper.
 """
+
 import dataclasses
 import shlex  # nosec
 import subprocess  # nosec

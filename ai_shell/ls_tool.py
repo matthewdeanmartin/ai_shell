@@ -1,6 +1,7 @@
 """
 Directory listing tool, optimized for AI.
 """
+
 import logging
 import os
 import time

@@ -3,6 +3,7 @@ Runs pylint.
 
 External tools are not pure python and have subprocess risks.
 """
+
 from ai_shell.externals.subprocess_utils import CommandResult, safe_subprocess
 
 

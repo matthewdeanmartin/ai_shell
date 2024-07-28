@@ -1,6 +1,7 @@
 """
 Generated code, do not edit.
 """
+
 import argparse
 
 from ai_shell.__about__ import __description__, __version__

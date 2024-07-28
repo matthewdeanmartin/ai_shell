@@ -1,6 +1,7 @@
 """
 Initialization for demo bots.
 """
+
 import os
 import zipfile
 from importlib.resources import as_file, files

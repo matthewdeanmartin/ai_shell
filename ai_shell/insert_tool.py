@@ -1,6 +1,7 @@
 """
 Text editor for simple text insertion at line or context.
 """
+
 import logging
 from typing import Optional, Union
 

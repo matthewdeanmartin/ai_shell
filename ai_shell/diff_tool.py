@@ -1,6 +1,7 @@
 """
 Apply patch with unidiff instead of Git
 """
+
 import unidiff
 
 from ai_shell.ai_logs.log_to_bash import log

@@ -1,8 +1,11 @@
 """Bot with no extra logging or config."""
 import asyncio
 
+from dotenv import load_dotenv
+
 import ai_shell
 
+load_dotenv()
 
 async def main():
     async def static_keep_going(toolkit: ai_shell.ToolKit):
@@ -22,7 +25,7 @@ async def main():
         ai_shell.Config(),
         name="Folder inspection bot.",
         bot_instructions="Run the ls tool and tell me what you see.",
-        model="gpt-3.5-turbo-1106",
+        model="gpt-4o-mini",
         dialog_logger_md=ai_shell.DialogLoggerWithMarkdown("./tmp"),
     )
     await bot.initialize()
@@ -36,6 +39,7 @@ async def main():
             "report_text",
         ],
         keep_going_prompt=static_keep_going,
+        stop_on_no_tool_use=True,
     )
 
 

@@ -1,6 +1,7 @@
 """
 Wrapper around GitPython and shell commands to git.
 """
+
 import fnmatch
 import logging
 import os

@@ -10,6 +10,7 @@ It sometimes falls back to "ed" or "vi" conventions.
 
 Also, the edlin clone as of early 2024 still has bugs.
 """
+
 import logging
 import logging.config
 import traceback

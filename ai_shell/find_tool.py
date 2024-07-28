@@ -3,6 +3,7 @@ AI Optimized version of find, but much simpler.
 
 The bot confuses name with wildcard search.
 """
+
 import fnmatch
 import logging
 import os

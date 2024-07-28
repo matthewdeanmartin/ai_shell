@@ -12,6 +12,7 @@ How is this different from a tool call?
 
 
 """
+
 from typing import Any, Optional
 
 from ai_shell.ai_logs.log_to_bash import log

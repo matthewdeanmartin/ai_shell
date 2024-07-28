@@ -2,6 +2,7 @@
 Credits: phpdude Github Gist as covered by Github's Terms of Service.
 https://gist.github.com/phpdude/1ae6f19de213d66286c8183e9e3b9ec1
 """
+
 import ast
 import re
 

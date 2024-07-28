@@ -169,10 +169,11 @@ class DialogLoggerWithMarkdown:
         # tool_result = {"tool_call_id": tool_call.id, "output": json_result}
         for result in tool_results:
             self.log_file.write("### Result\n\n")
-            self.log_file.write(f"Tool call Id: {result['tool_call_id']}\n")
-            self.log_file.write(f"Tool name: {self.pending_tools[result['tool_call_id']]['tool_name']}\n")
-            self.log_file.write(f"Tool args:\n {self.pending_tools[result['tool_call_id']]['tool_args']}\n")
-            del self.pending_tools["tool_call_id"]
+            self.log_file.write(f"Tool call Id: {result['tool_call_id']}\n\n")
+            self.log_file.write(f"Tool name: {self.pending_tools[result['tool_call_id']]['tool_name']}\n\n")
+            self.log_file.write(f"Tool args:\n {self.pending_tools[result['tool_call_id']]['tool_args']}\n\n")
+            if "tool_call_id" in self.pending_tools:
+                del self.pending_tools["tool_call_id"]
             json_string = result["output"]
             # json.loads here should work, it isn't bot-json
             any_type = json.loads(json_string)
@@ -184,6 +185,7 @@ class DialogLoggerWithMarkdown:
                         self.log_file.write(f" - {key} : {value}\n")
             else:
                 self.log_file.write(f"{any_type}\n")
+            self.log_file.write(f"{any_type}\n")
 
     def add_error(self, error: Exception) -> None:
         """

@@ -1,17 +1,19 @@
 """
 Cat, except optimized for python files.
 """
+
 import logging
 import os
 from io import StringIO
 from pathlib import Path
 
-import python_minifier
-
 from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.pyutils.validate import is_python_file
 from ai_shell.utils.config_manager import Config
 from ai_shell.utils.read_fs import is_file_in_root_folder, tree
+
+# import python_minifier
+
 
 logger = logging.getLogger(__name__)
 
@@ -101,14 +103,16 @@ def strip_docstrings(source_code: str) -> str:
     Returns:
         str: The Python source code with docstrings removed.
     """
-    return python_minifier.minify(
-        source_code,
-        remove_annotations=True,
-        remove_literal_statements=True,
-        rename_locals=False,
-        rename_globals=False,
-        hoist_literals=False,
-    )
+    print("minificiation disabled")
+    return source_code
+    # return python_minifier.minify(
+    #     source_code,
+    #     remove_annotations=True,
+    #     remove_literal_statements=True,
+    #     rename_locals=False,
+    #     rename_globals=False,
+    #     hoist_literals=False,
+    # )
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 """
 Utility code for testing app via console.
 """
+
 from typing import Any
 
 import orjson

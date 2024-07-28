@@ -2,6 +2,7 @@
 This module contains the loop_tools function, which is used to process
 tools in a thread.
 """
+
 # pylint: disable=wrong-import-position, using-constant-test
 import logging
 import time

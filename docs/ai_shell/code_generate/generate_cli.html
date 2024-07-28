@@ -172,6 +172,7 @@ Generated code, do not edit.
 import argparse
 from ai_shell.utils.console_utils import pretty_console
 from ai_shell.utils.config_manager import Config
+from ai_shell.__about__ import __version__, __description__
 
 CONFIG = Config()
 # pylint: disable=unused-argument
@@ -198,7 +199,27 @@ CONFIG = Config()
 
     argparse_part = &#34;&#34;&#34;\n\ndef run():
         \&#34;\&#34;\&#34;Create the main parser\&#34;\&#34;\&#34;
-        parser = argparse.ArgumentParser(prog=&#39;ais&#39;, description=&#39;AI Shell Command Line Interface&#39;)
+        program = &#39;ais&#39;
+        parser = argparse.ArgumentParser(
+        prog=program,
+        allow_abbrev=False,
+        description=__description__,
+        epilog=f\&#34;\&#34;\&#34;
+    Examples:
+
+        ais cat hello.py
+\&#34;\&#34;\&#34;,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        &#34;-V&#34;,
+        &#34;--version&#34;,
+        action=&#34;version&#34;,
+        version=f&#34;%(prog)s {__version__}&#34;,
+        help=&#34;Show program&#39;s version number and exit.&#34;,
+    )
+        
+        )
         subparsers = parser.add_subparsers(dest=&#39;subcommand&#39;, help=&#39;sub-command help&#39;)
     &#34;&#34;&#34;
     for ns, _data in meta.items():
@@ -429,6 +450,7 @@ Generated code, do not edit.
 import argparse
 from ai_shell.utils.console_utils import pretty_console
 from ai_shell.utils.config_manager import Config
+from ai_shell.__about__ import __version__, __description__
 
 CONFIG = Config()
 # pylint: disable=unused-argument
@@ -455,7 +477,27 @@ CONFIG = Config()
 
     argparse_part = &#34;&#34;&#34;\n\ndef run():
         \&#34;\&#34;\&#34;Create the main parser\&#34;\&#34;\&#34;
-        parser = argparse.ArgumentParser(prog=&#39;ais&#39;, description=&#39;AI Shell Command Line Interface&#39;)
+        program = &#39;ais&#39;
+        parser = argparse.ArgumentParser(
+        prog=program,
+        allow_abbrev=False,
+        description=__description__,
+        epilog=f\&#34;\&#34;\&#34;
+    Examples:
+
+        ais cat hello.py
+\&#34;\&#34;\&#34;,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument(
+        &#34;-V&#34;,
+        &#34;--version&#34;,
+        action=&#34;version&#34;,
+        version=f&#34;%(prog)s {__version__}&#34;,
+        help=&#34;Show program&#39;s version number and exit.&#34;,
+    )
+        
+        )
         subparsers = parser.add_subparsers(dest=&#39;subcommand&#39;, help=&#39;sub-command help&#39;)
     &#34;&#34;&#34;
     for ns, _data in meta.items():

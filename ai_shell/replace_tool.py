@@ -3,6 +3,7 @@ Optimized for AI version of sed. For file editing.
 
 However, the bot keeps trying to use features of real sed that this tool doesn't support.
 """
+
 import logging
 import re
 from typing import Optional

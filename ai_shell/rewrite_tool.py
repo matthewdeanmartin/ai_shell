@@ -3,6 +3,7 @@ For short files with lots of edits, just let the bot rewrite the file.
 
 TODO: set maximum file size for re-write, because it costs tokens to rewrite a large file.
 """
+
 import difflib
 import logging
 import os

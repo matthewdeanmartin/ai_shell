@@ -1,6 +1,7 @@
 """
 Support various media types without a function for each.
 """
+
 import csv
 import io
 import logging

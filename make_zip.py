@@ -33,4 +33,4 @@ def zip_folder(src_folder: str, output_zip: str) -> None:
 
 if __name__ == "__main__":
     # Usage
-    zip_folder("./src/", "./ai_shell/fish_tank.zip")
+    zip_folder("./src_static/", "./ai_shell/fish_tank.zip")

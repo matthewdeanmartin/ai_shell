@@ -1,6 +1,7 @@
 """
 Cat optimized for AI prompts.
 """
+
 import logging
 import os.path
 from collections.abc import Generator

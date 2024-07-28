@@ -34,11 +34,11 @@ def validate_environment():
     &#34;&#34;&#34;Check if external tools are available.&#34;&#34;&#34;
     tool_configs = {}
     for tool, installer in (
-            (&#34;pytest&#34;, &#34;pip&#34;),
-            (&#34;pylint&#34;, &#34;pipx&#34;),
-            (&#34;black&#34;, &#34;pipx&#34;),
-            (&#34;pygount&#34;, &#34;pipx&#34;),
-            (&#34;ruff&#34;, &#34;pip&#34;)
+        (&#34;pytest&#34;, &#34;pip&#34;),
+        (&#34;pylint&#34;, &#34;pipx&#34;),
+        (&#34;black&#34;, &#34;pipx&#34;),
+        (&#34;pygount&#34;, &#34;pipx&#34;),
+        (&#34;ruff&#34;, &#34;pip&#34;),
     ):
         if installer == &#34;pip&#34;:
             instructions = f&#34;{tool} needs to be installed in the same virtual environment&#34;
@@ -52,33 +52,28 @@ def validate_environment():
             if_os=None,
             tags=None,
             install_command=f&#34;{installer} install {tool}&#34;,
-            install_docs=instructions
+            install_docs=instructions,
         )
         tool_configs[tool] = config
-    results = audit.process_tools(
-        cli_tools=tool_configs,
-        no_cache=True,
-        tags=None,
-        disable_progress_bar=True
-    )
+    results = audit.process_tools(cli_tools=tool_configs, no_cache=True, tags=None, disable_progress_bar=True)
     for result in results:
         if result.is_problem():
             print(f&#34;There is a problem with {result.tool}&#34;)
             if not result.is_available:
-                print(f&#34;It is not installed or not on the PATH.&#34;)
+                print(&#34;It is not installed or not on the PATH.&#34;)
                 print(f&#34;Consider running `{result.tool_config.install_command}`&#34;)
             elif result.is_broken:
-                print(f&#34;It is installed and on the PATH, but I can&#39;t check its version.&#34;)
-                print(f&#34;It might be okay or it might not be.&#34;)
+                print(&#34;It is installed and on the PATH, but I can&#39;t check its version.&#34;)
+                print(&#34;It might be okay or it might not be.&#34;)
             elif not result.is_compatible:
-                print(f&#34;It is installed and on the PATH and runs, but appears to be the wrong version.&#34;)
+                print(&#34;It is installed and on the PATH and runs, but appears to be the wrong version.&#34;)
                 print(f&#34;Compatibility report: {result.is_compatible}&#34;)
             print()
         else:
             print(f&#34;{result.tool} is ready for the bot to use.&#34;)
 
 
-if __name__ == &#39;__main__&#39;:
+if __name__ == &#34;__main__&#34;:
     validate_environment()</code></pre>
 </details>
 </section>
@@ -102,11 +97,11 @@ if __name__ == &#39;__main__&#39;:
     &#34;&#34;&#34;Check if external tools are available.&#34;&#34;&#34;
     tool_configs = {}
     for tool, installer in (
-            (&#34;pytest&#34;, &#34;pip&#34;),
-            (&#34;pylint&#34;, &#34;pipx&#34;),
-            (&#34;black&#34;, &#34;pipx&#34;),
-            (&#34;pygount&#34;, &#34;pipx&#34;),
-            (&#34;ruff&#34;, &#34;pip&#34;)
+        (&#34;pytest&#34;, &#34;pip&#34;),
+        (&#34;pylint&#34;, &#34;pipx&#34;),
+        (&#34;black&#34;, &#34;pipx&#34;),
+        (&#34;pygount&#34;, &#34;pipx&#34;),
+        (&#34;ruff&#34;, &#34;pip&#34;),
     ):
         if installer == &#34;pip&#34;:
             instructions = f&#34;{tool} needs to be installed in the same virtual environment&#34;
@@ -120,26 +115,21 @@ if __name__ == &#39;__main__&#39;:
             if_os=None,
             tags=None,
             install_command=f&#34;{installer} install {tool}&#34;,
-            install_docs=instructions
+            install_docs=instructions,
         )
         tool_configs[tool] = config
-    results = audit.process_tools(
-        cli_tools=tool_configs,
-        no_cache=True,
-        tags=None,
-        disable_progress_bar=True
-    )
+    results = audit.process_tools(cli_tools=tool_configs, no_cache=True, tags=None, disable_progress_bar=True)
     for result in results:
         if result.is_problem():
             print(f&#34;There is a problem with {result.tool}&#34;)
             if not result.is_available:
-                print(f&#34;It is not installed or not on the PATH.&#34;)
+                print(&#34;It is not installed or not on the PATH.&#34;)
                 print(f&#34;Consider running `{result.tool_config.install_command}`&#34;)
             elif result.is_broken:
-                print(f&#34;It is installed and on the PATH, but I can&#39;t check its version.&#34;)
-                print(f&#34;It might be okay or it might not be.&#34;)
+                print(&#34;It is installed and on the PATH, but I can&#39;t check its version.&#34;)
+                print(&#34;It might be okay or it might not be.&#34;)
             elif not result.is_compatible:
-                print(f&#34;It is installed and on the PATH and runs, but appears to be the wrong version.&#34;)
+                print(&#34;It is installed and on the PATH and runs, but appears to be the wrong version.&#34;)
                 print(f&#34;Compatibility report: {result.is_compatible}&#34;)
             print()
         else:

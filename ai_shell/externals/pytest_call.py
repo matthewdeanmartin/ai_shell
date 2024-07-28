@@ -3,6 +3,7 @@ Runs pytest.
 
 External tools are not pure python and have subprocess risks.
 """
+
 import re
 
 from ai_shell.externals.subprocess_utils import CommandResult, safe_subprocess

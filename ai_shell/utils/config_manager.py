@@ -1,4 +1,5 @@
 """A module for managing the ai_shell.toml file."""
+
 # pylint: disable=wrong-import-position, using-constant-test
 import dataclasses
 import os

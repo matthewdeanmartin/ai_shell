@@ -1,6 +1,7 @@
 """
 Check for lines of code for when the bot blows away most of the file.
 """
+
 from pygount import SourceAnalysis
 
 

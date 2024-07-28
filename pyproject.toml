@@ -46,7 +46,7 @@ ai_shell = 'ai_shell.__main__:run'
 ais = 'ai_shell.__main__:run'
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.12"
+python = ">=3.12,<4.0"
 openai = ">=1.3.3"
 openai_multi_tool_use_parallel_patch = "*"
 
@@ -73,7 +73,7 @@ gitpython = ">=3.1.31"
 unidiff = ">=0.7.5"
 
 # pycat support
-python-minifier = ">=2.9.0"
+# python-minifier = ">=2.9.0" not 3.12 compatible!
 astor = ">=0.8.1"
 
 # editors

@@ -109,8 +109,7 @@ async def main():
     logging.config.dictConfig(ai_shell.configure_logging())
     logger.info("Verbose mode enabled")
 
-    # model = "gpt-4-1106-preview" OMG this is expensive.
-    model = "gpt-3.5-turbo-1106"
+    model = "gpt-4o-mini"
 
     short_name = "todo"
     source = files("ai_shell").joinpath(f"demo_bots/{short_name}_bot_instructions.md")

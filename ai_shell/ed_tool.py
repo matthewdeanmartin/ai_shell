@@ -3,6 +3,7 @@ Ed is a bad editor, but it is documented.
 
 This
 """
+
 import os
 from typing import Any
 
@@ -105,7 +106,7 @@ class EdTool:
 
         return self.buffer.lines
 
-    def _run_commands(self, command_lines: (list[tuple[Any, list[str]]])) -> None:
+    def _run_commands(self, command_lines: list[tuple[Any, list[str]]]) -> None:
         """Run the commands.
 
         Args:

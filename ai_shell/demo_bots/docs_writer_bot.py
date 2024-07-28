@@ -48,7 +48,7 @@ async def main():
 
     logger = logging.getLogger(__name__)
     logging.config.dictConfig(ai_shell.configure_logging())
-    model = "gpt-3.5-turbo-1106"
+    model = "gpt-4o-mini"
 
     # The bot likes praise.
     bot_instructions = (

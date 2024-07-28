@@ -1,6 +1,7 @@
 """
 Bot that looks for TODOs and tracks them.
 """
+
 import asyncio
 import logging
 import logging.config
@@ -25,7 +26,7 @@ async def main():
     logger = logging.getLogger(__name__)
     logging.config.dictConfig(ai_shell.configure_logging())
 
-    model = "gpt-3.5-turbo-1106"
+    model = "gpt-4o-mini"
 
     short_name = "todo"
     source = files("ai_shell").joinpath(f"demo_bots/{short_name}_bot_instructions.md")

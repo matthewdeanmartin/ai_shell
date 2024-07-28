@@ -1,6 +1,7 @@
 """
 AI optimized head/tail tool
 """
+
 import logging
 from typing import Optional
 

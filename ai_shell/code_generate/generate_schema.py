@@ -1,6 +1,7 @@
 """
 Generates JsonSchema in form of a python file.
 """
+
 import logging
 from pprint import pformat
 

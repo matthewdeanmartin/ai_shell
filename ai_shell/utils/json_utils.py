@@ -1,6 +1,7 @@
 """
 Tools for handling AI's peculiar way of making json
 """
+
 import dataclasses
 import datetime
 import http
@@ -47,7 +48,7 @@ class LoosyGoosyEncoderForSlowJson(slowjson.JSONEncoder):
         if isinstance(o, types.GeneratorType):
             return list(o)
         if dataclasses.is_dataclass(o):
-            return dataclasses.asdict(o)
+            return dataclasses.asdict(o)  # type: ignore
         if isinstance(o, datetime.datetime):
             return o.isoformat()
         return slowjson.JSONEncoder.default(self, o)

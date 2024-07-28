@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>ai_shell API documentation</title>
-<meta name="description" content="Filesystem shell tools for OpenAI Assistant" />
+<meta name="description" content="Filesystem shell tools for OpenAI Assistant …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -23,12 +23,362 @@
 </header>
 <section id="section-intro">
 <p>Filesystem shell tools for OpenAI Assistant</p>
+<h1 id="ai_shell">ai_shell</h1>
+<p>OpenAI-centric shell for giving safe, chat-optimized, filesystem access to an Assistant as a "tool".</p>
+<p>Even if you trust the bot to run bash directly on your machine or docker container, standard tools will run up your
+bill with excess tokens in the reply, or a command generates too few tokens and the bot doesn't know what is
+going on.</p>
+<p>This is an alternative to <code>code_interpreter</code>, tools running code in docker container locally, or tools running arbitrary
+shell code locally.</p>
+<h2 id="installation">Installation</h2>
+<p><code>pip install <a title="ai_shell" href="#ai_shell">ai_shell</a></code></p>
+<h2 id="usage">Usage</h2>
+<p>See these full examples. As long as the OPENAI_API_KEY environment variable is set, you can run these examples.</p>
+<ul>
+<li><a href="https://github.com/matthewdeanmartin/ai_shell/blob/main/ai_shell/demo_bots/pylint_bot.py">Pylint bot</a> will
+attempt to
+fix python
+code lint issues.</li>
+<li><a href="https://github.com/matthewdeanmartin/ai_shell/blob/main/ai_shell/demo_bots/test_writer_bot.py">Test writer bot</a> will attempt to
+write unit tests for python code.</li>
+<li><a href="https://github.com/matthewdeanmartin/ai_shell/blob/main/ai_shell/demo_bots/tool_tester_bot.py">Tool tester bot</a> tries out tools
+to see if they basically work.</li>
+</ul>
+<p>To execute demo bots, run these commands and follow initialization instructions if needed. They all expect to
+manipulate python code in an /src/ folder.</p>
+<pre><code class="language-shell">python -m ai_shell.demo_bots.docs_writer_bot
+python -m ai_shell.demo_bots.pylint_bot
+python -m ai_shell.demo_bots.test_writer_bot
+python -m ai_shell.demo_bots.tool_tester_bot
+python -m ai_shell.demo_bots.todo_bot
+</code></pre>
+<p>This is the python interface to the tools, how you're expected to wire up the tool to your bot.</p>
+<pre><code class="language-python">import ai_shell
+
+cat = ai_shell.CatTool(&quot;.&quot;)
+print(cat.cat([&quot;file.py&quot;]))
+print(cat.cat_markdown([&quot;file.py&quot;]))
+
+ls = ai_shell.LsTool(&quot;.&quot;)
+print(ls.ls(&quot;docs&quot;))
+print(ls.ls_markdown(&quot;docs&quot;))
+</code></pre>
+<p>This is the smallest example to illustrate basic capabilities, also
+see <a href="https://github.com/matthewdeanmartin/ai_shell/blob/main/example_tiny_bot.py">here</a>.</p>
+<pre><code class="language-python">import asyncio
+import ai_shell
+
+
+async def main():
+    def static_keep_going(toolkit: ai_shell.ToolKit):
+        usage = toolkit.get_tool_usage_for(&quot;ls&quot;)
+        if usage[&quot;count&quot;] &gt; 0:
+            return (
+                &quot;Great job! You've used ls. Summarize in paragraph form and we're done.&quot;
+            )
+        return (
+            &quot;You haven't used the ls tool yet. Do you have access to the ls tool? If&quot;
+            &quot; there is a problem report it to the report_text tool to end the session.&quot;
+        )
+
+    # Creates temporary bots
+    bot = ai_shell.TaskBot(
+        ai_shell.Config(),
+        name=&quot;Folder inspection bot.&quot;,
+        bot_instructions=&quot;Run the ls tool and tell me what you see.&quot;,
+        model=&quot;gpt-3.5-turbo-1106&quot;,
+        dialog_logger_md=ai_shell.DialogLoggerWithMarkdown(&quot;./tmp&quot;),
+    )
+    await bot.initialize()
+    the_ask = f&quot;&quot;&quot;You are in the './' folder. You do not need to guess the pwd, it is './'. 
+    Run ls and tell me what you see in paragraph format.&quot;&quot;&quot;
+    await bot.basic_tool_loop(
+        the_ask=the_ask,
+        root_folder=&quot;./src&quot;,
+        tool_names=[
+            &quot;ls&quot;,
+            &quot;report_text&quot;,
+        ],
+        keep_going_prompt=static_keep_going,
+    )
+
+
+if __name__ == &quot;__main__&quot;:
+    asyncio.run(main())
+</code></pre>
+<p>This is the cli interface, which is intended for testing, not for bot usage.</p>
+<pre><code class="language-shell">ais cat_markdown --file-paths pyproject.toml
+</code></pre>
+<h2 id="features-in-brief">Features in Brief</h2>
+<ul>
+<li>Many cli-like tools interfaces, such as ls, cat, grep, head, tail, and git.</li>
+<li>OpenAI glue for all cli tools.</li>
+<li>UX with a bot in mind.</li>
+<li>Security with mischievous but not especially malicious bot in mind.</li>
+<li>Bot (Assistant) boilerplate help</li>
+<li>Support for bots doing one shot tool use and goal function driven tool use.</li>
+<li>Bot have extensibility points.</li>
+<li>TODO: plugin system for tools.</li>
+</ul>
+<h2 id="analogues-supported-today">Analogues supported today</h2>
+<p><strong>Directories</strong>: ls, find</p>
+<p><strong>Files</strong>: cat, grep, head, tail</p>
+<p><strong>Editing</strong>: sed, ed, edlin, patch, replace, insert, rewrite, write new</p>
+<p><strong>Data</strong>: cut</p>
+<p><strong>Other</strong>: pycat, token counter, git</p>
+<p><strong>Tasking</strong>: todo</p>
+<p>n.b. Every file is read and written as utf-8 strings.</p>
+<h2 id="prior-art">Prior Art</h2>
+<p>ai_shell draws inspiration from various command-line interface (CLI) tools and shell environments, integrating
+features from traditional shells with OpenAI's language models. It is designed to provide an easy and secure interface
+for AI-assisted file system interactions, keeping in mind both usability and safety.</p>
+<h2 id="documentation">Documentation</h2>
+<ul>
+<li><a href="https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Features.md">Features</a></li>
+<li><a href="https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Design.md">Design</a></li>
+<li><a href="https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Usecases.md">Use Cases</a></li>
+<li><a href="https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/TODO.md">TODO</a></li>
+<li><a href="https://matthewdeanmartin.github.io/ai_shell/">API docs, pdoc3 style</a></li>
+</ul>
+<h1 id="document-editing">Document Editing</h1>
+<p>The bot has a hard time with editing files.</p>
+<p>Some top level strategies</p>
+<ul>
+<li>editor-like tools, eg ed and edlin</li>
+<li>text replacement tools, e.g. sed, regex, replace</li>
+<li>full document replacement</li>
+<li>write only new files</li>
+<li>multiline insert tool</li>
+<li>diff/patch tool</li>
+<li>well known tools vs simpler ad-hoc tools</li>
+<li>validated format</li>
+<li>Guided edit</li>
+</ul>
+<h2 id="editors">Editors</h2>
+<p>The bot cannot consistently edit a document with ed or edlin. It gets confused about the state of the document, the syntax of editor, etc.</p>
+<h2 id="text-replacers">Text Replacers</h2>
+<p>It gets confused about the syntax of sed and regex.</p>
+<p>It also has to keep straight complex escaping patterns as it
+write JSON that has to be escaped for JSON, which wraps editor syntax, which can included regex.</p>
+<h2 id="full-text-replacement">Full Text replacement</h2>
+<p>It constantly confused rewriting an entire document with modifications with writing just the modified lines,
+creating non-stop mass, accidental deletions.</p>
+<h2 id="writing-only-new-files">Writing only new files</h2>
+<p>This shift the burden of merging document to a human.</p>
+<h3 id="multiline-insert">Multiline Insert</h3>
+<p>This is similar to the sed and regex tool, but with simpler syntax. The cost for simplicity is that the bot has no
+background knowledge of how to use the multiline insert tool, while it has lots of knowledge of sed and regex.</p>
+<h2 id="success-vs-failure">Success vs Failure</h2>
+<p>When the bot gets a success flag, it thinks the job is done and stops early. When the bot gets a failure, it
+sometimes assumes the task is impossible and gives up.
+This is mitigated a little bit by returning the entire
+document after each edit so it can see what happened.</p>
+<h2 id="diffpatch">Diff/Patch</h2>
+<p>To create a well known Patch format, the bot has to be able to count lines perfectly. It often can't so the Patch
+tool rejects the patches and after a few attempts the bot gives up. Common patch tools provide almost no feedback
+because the bot is failing in a way that normal tools don't, so why would they provide helpful feedback?</p>
+<h2 id="validated-format">Validated Format</h2>
+<p>In the case of, say python code, the syntax can be validated and if the bot messed up the document, it can be
+reverted adn the bot can try again.</p>
+<h2 id="guided-edit">Guided Edit</h2>
+<p>An example of guided edit is feeding the bot one line or paragraph of text and asking it to transform it or
+otherwise do something with it. Then ordinary code merges it in a predictable format. For example, show the bot a
+function, then ask for a docstring.</p>
+<h2 id="features">Features</h2>
+<h3 id="general-features">General Features</h3>
+<ul>
+<li>Tools are similar to common shell commands like ls, grep, head, tail, and git for easy use by the bot.</li>
+<li>Handle bot "accessibility". The bot can't see, hear, or interact with the console display.</li>
+<li>Designed to minimize token usage in both input and output</li>
+<li>Supports maximum row response for output.</li>
+<li>Supports mime_types</li>
+<li>Outputs in Markdown to reduce token repetition through sections and subsection headers.</li>
+<li>Implementation is simplified with no command chaining.</li>
+</ul>
+<h3 id="text-and-size-management">Text and Size Management</h3>
+<ul>
+<li>TODO: Maximum output limits, both by config and by bot.</li>
+<li>Capability to count tokens, with a maximum limit and fallbacks to word or byte count.</li>
+<li>Implements whitespace and other lossless/lossy text compressions.</li>
+</ul>
+<h3 id="source-code-display-and-analysis">Source Code Display and Analysis</h3>
+<ul>
+<li>Converts code to Markdown (.md) files, including minified versions.</li>
+<li>TODO: AST (Abstract Syntax Tree) display and search capabilities using pycodesearch.</li>
+<li>TODO: Features for displaying source code of functions, classes in imported modules.</li>
+<li>TODO: Simplified directory listings (dir(module)) and module help (help(module)) focusing on key elements.</li>
+</ul>
+<h2 id="security-constraints">Security Constraints</h2>
+<h3 id="general-security-measures">General Security Measures</h3>
+<ul>
+<li>Provides multiple output formats: plain text, light markdown, and JSON (structured objects).</li>
+<li>TODO: Ignores files specified in .gitignore.</li>
+<li>TODO: Skips files hidden by the operating system.</li>
+<li>Prevents parent directory traversal. Disallows file system modification outside of specified folders.</li>
+<li>No direct shell access and write permissions are restricted.</li>
+<li>Limited write access to source code, isolated within a specific git branch.</li>
+<li>File writes are permitted only in a designated branch.</li>
+<li>No network access.</li>
+</ul>
+<h2 id="bots-and-subbots">Bots and Subbots</h2>
+<p>(in progress)</p>
+<p>I created this so I could create a swarm of bots to collaboratively work on a task. As it turns out, sub-bots or
+subbots, would be useful for tool usage.</p>
+<h3 id="subbots">Subbots</h3>
+<ul>
+<li>tool selection. Too many tools or extraneous tools confuse the bot.</li>
+<li>prompt improvement. The bot can often write a better prompt.</li>
+<li>todo management. Splitting up tasks and managing them and doing the task makes the task execution part worse.</li>
+</ul>
+<p>Subbot usage requires an editable config file for storing assistant ids.</p>
+<h1 id="programmers-manual">Programmer's Manual</h1>
+<h2 id="possible-goals">Possible goals</h2>
+<ul>
+<li>Write a single shot bot, that uses tools but does not loop.</li>
+<li>Write a tool using bot. It uses tools, loops and has a goal function.</li>
+<li>Use the tools in the toolkit with your own bot framework</li>
+</ul>
+<h2 id="extension-points">Extension Points</h2>
+<ul>
+<li>Goal checking functions</li>
+<li>New tools with plugins</li>
+<li>External tools (with merge request)</li>
+</ul>
+<h1 id="use-cases-for-ai_shell">Use Cases for ai_shell</h1>
+<h2 id="good-uses">Good uses</h2>
+<p>It is a library for making more bots, especially if the bot needs shell access and either that is dangerous or
+the bot has a hard time with the complexities of a real shell.</p>
+<h2 id="bad-uses">Bad uses</h2>
+<p>It in no way is trying to compete with unix tools, faithfully reproduce their behavior, etc.</p>
+<h2 id="bots-to-add-types">Bots to add types</h2>
+<ul>
+<li>Add typehints</li>
+<li>Do typehints make sense</li>
+</ul>
+<h2 id="bots-to-add-documentation">Bots to add documentation</h2>
+<ul>
+<li>Add docstrings</li>
+<li>Convert docstrings to particular format</li>
+<li>Check if docstrings still match the content of the function</li>
+<li>Add intra-code comments</li>
+</ul>
+<h2 id="bot-to-do-tests">Bot to do tests</h2>
+<ul>
+<li>Add doctests</li>
+<li>Add unit tests</li>
+<li>Add examples (e.g. if name == main, at end of file)</li>
+</ul>
+<h2 id="work-lint-issues">Work lint issues</h2>
+<ul>
+<li>Run pylint, bandit, mypy, etc, work issues</li>
+</ul>
+<h2 id="code-generation">Code Generation</h2>
+<p>A code generation tool generates all the OpenAI assistant code</p>
+<ul>
+<li>jsonschema, as generated from the method signatures</li>
+<li>toolkit, the python tool invocation code, as generated from the jsonschema</li>
+<li>a CLI interface in <code>__main__.py</code> that invokes the tool for human testing, not intended for bot use.</li>
+</ul>
+<h2 id="json">JSON</h2>
+<p>The tools expect chaotic JSON from the bot.</p>
+<ul>
+<li>truncated JSON</li>
+<li>Invalid escape codes</li>
+<li>Function args sometimes are the wrong type, e.g. string instead of list of strings.</li>
+</ul>
+<p>All messages returned are JSON, even if the return value is plaintext markdown, it is wrapped in a layer of JSON.</p>
+<p>Error messages for the bot also need to be json, so I used RFC-7807 as inspiration.</p>
+<h2 id="toolkit-safety">Toolkit Safety</h2>
+<p>The bot sometimes attempts to call tools that don't exist, e.g. <code>parallel</code> Sometimes this means the bot knows about a
+feature not
+yet known to the openai client. To be safe, you have to whitelist tools that the bot can use. Otherwise it could
+potentially call a tool by guessing its name.</p>
+<h2 id="mime-types">Mime Types</h2>
+<p>"Mime types for API". Rather than give the bot two or more formats, I will implement a mimetype, so that the APIs
+are configured to either return markdown or structure, depending on config. The mime type is still wrapped in JSON!
+Just less of it.</p>
+<p>The bot sometimes fills in mime type when it is submitting a file thinking that the mime type is for classifying input.</p>
+<h2 id="editing">Editing</h2>
+<p>The bot finds it difficult to edit files. For many techniques, it can get close. In chat dialogs, the bot wants to
+regenerate the whole document to edit even a single character. Or it wants to use ad hoc diffs. This is problematic
+for programatic use.</p>
+<h3 id="linux-like-editing-strategies">Linux-Like Editing Strategies</h3>
+<p>The bot knows unix tools and often can get really close to using a function that behaves like that tool.</p>
+<ul>
+<li>ed. Ed is such a bad editor even the bot has hard time with it.</li>
+<li>edlin/dedlin. Edlin's commands almost can be used as an executable script.</li>
+<li>patch. git diffs/unidiffs. The bot can sometimes generate a diff. Sometimes the diff is corrupt because it requires
+careful line counting. Sometimes the bot create a diff for a hallucinated target file.</li>
+<li>sed. Fancy replace.</li>
+</ul>
+<h3 id="simpler-ad-hoc-tools">Simpler Ad Hoc Tools.</h3>
+<ul>
+<li>replace. This has no equivalent in unix, it is a replacer that doesn't require line numbers.</li>
+<li>insert. This has no equivalent in unix, it is an inserter that doesn't require line numbers.</li>
+<li>rewrite. This has no equivalent in unix, it is a tool to rewrite a file, or create a new one, e.g. a corrected copy.</li>
+</ul>
+<p>A surprising with all of these approaches is that the bot doesn't check its work (won't run a cat after an edit), and
+often just assumes everything worked because it didn't get an error message. It assumes that the success message means
+the user really is happy and the task is done.</p>
+<h2 id="viewing-strategies">Viewing Strategies</h2>
+<ul>
+<li>Cat.</li>
+<li>Head/Tail.</li>
+<li>PyCat. Work in progress, view python code either aggregated or compressed.</li>
+</ul>
+<h2 id="file-browsing-strategies">File Browsing Strategies</h2>
+<ul>
+<li>Ls. Returns directory tree if bot tries to browse a directory that doesn't exist.</li>
+<li>Grep.</li>
+<li>Find.</li>
+<li>Cut. Primitive CSV browser</li>
+</ul>
+<h2 id="safety-tools">Safety Tools</h2>
+<ul>
+<li>Git. Particularly to allow for commit/revert</li>
+<li>Diff tool.</li>
+</ul>
+<h2 id="logging">Logging</h2>
+<p>At least three kinds of logging</p>
+<ul>
+<li>REST API calls. Each API call to OpenAPI written as JSON document.</li>
+<li>Tool commands. This is a nearly executable bash script to replay what the bot did.</li>
+<li>The dialog. This is a chat log style log.</li>
+</ul>
+<h2 id="config">Config</h2>
+<p>Config is intended to bound the behavior of certain tools, to persist a bot and to enable helper bots.</p>
+<p>Helper bots attempt to help the bot use tools by letting specialized bot focus on a narrow part of the problem of
+using tool.</p>
+<h1 id="changelog">Changelog</h1>
+<p>All notable changes to this project will be documented in this file.</p>
+<p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
+and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<h2 id="104-2024-01-20">[1.0.4] - 2024-01-20</h2>
+<h3 id="added">Added</h3>
+<ul>
+<li>Started tracking changes.</li>
+</ul>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
 Filesystem shell tools for OpenAI Assistant
+
+
+.. include:: ../README.md
+
+.. include:: ../docs/DocumentEditing.md
+
+.. include:: ../docs/Features.md
+
+.. include:: ../docs/Manual.md
+
+.. include:: ../docs/UseCases.md
+
+.. include:: ../docs/Design.md
+
+.. include:: ../CHANGELOG.md
 &#34;&#34;&#34;
 from ai_shell.ai_logs.log_to_markdown import DialogLoggerWithMarkdown
 from ai_shell.ai_logs.logging_utils import configure_logging
@@ -314,13 +664,13 @@ def change_directory(new_path: str) -&gt; Iterator[None]:
                 &#34;class&#34;: &#34;logging.StreamHandler&#34;,
                 &#34;stream&#34;: &#34;ext://sys.stdout&#34;,  # Default is stderr
             },
-            &#34;bug_trail&#34;: {
-                &#34;level&#34;: &#34;DEBUG&#34;,
-                # &#34;formatter&#34;: &#34;standard&#34;,
-                &#34;class&#34;: &#34;bug_trail_core.BugTrailHandler&#34;,
-                &#34;db_path&#34;: bug_trail_config.database_path,
-                &#34;minimum_level&#34;: logging.DEBUG,
-            },
+            # &#34;bug_trail&#34;: {
+            #     &#34;level&#34;: &#34;DEBUG&#34;,
+            #     # &#34;formatter&#34;: &#34;standard&#34;,
+            #     &#34;class&#34;: &#34;bug_trail_core.BugTrailHandler&#34;,
+            #     &#34;db_path&#34;: bug_trail_config.database_path,
+            #     &#34;minimum_level&#34;: logging.DEBUG,
+            # },
             # &#34;json&#34;: {
             #     # &#34;()&#34;: &#34;json_file_handler_factory&#34;,
             #     &#34;level&#34;: &#34;DEBUG&#34;,
@@ -354,21 +704,30 @@ def change_directory(new_path: str) -&gt; Iterator[None]:
 
     for name in debug_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
+            &#34;handlers&#34;: [
+                &#34;default&#34;,
+                # &#34;bug_trail&#34;
+            ],
             &#34;level&#34;: &#34;DEBUG&#34;,
             &#34;propagate&#34;: False,
         }
 
     for name in info_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
+            &#34;handlers&#34;: [
+                &#34;default&#34;,
+                # &#34;bug_trail&#34;
+            ],
             &#34;level&#34;: &#34;INFO&#34;,
             &#34;propagate&#34;: False,
         }
 
     for name in warn_level_modules:
         logging_config[&#34;loggers&#34;][name] = {
-            &#34;handlers&#34;: [&#34;default&#34;, &#34;bug_trail&#34;],
+            &#34;handlers&#34;: [
+                &#34;default&#34;,
+                # &#34;bug_trail&#34;
+            ],
             &#34;level&#34;: &#34;WARNING&#34;,
             &#34;propagate&#34;: False,
         }
@@ -10522,7 +10881,80 @@ def remove_todo(self, title: str) -&gt; str:
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul></ul>
+<ul>
+<li><a href="#ai_shell">ai_shell</a><ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#features-in-brief">Features in Brief</a></li>
+<li><a href="#analogues-supported-today">Analogues supported today</a></li>
+<li><a href="#prior-art">Prior Art</a></li>
+<li><a href="#documentation">Documentation</a></li>
+</ul>
+</li>
+<li><a href="#document-editing">Document Editing</a><ul>
+<li><a href="#editors">Editors</a></li>
+<li><a href="#text-replacers">Text Replacers</a></li>
+<li><a href="#full-text-replacement">Full Text replacement</a></li>
+<li><a href="#writing-only-new-files">Writing only new files</a><ul>
+<li><a href="#multiline-insert">Multiline Insert</a></li>
+</ul>
+</li>
+<li><a href="#success-vs-failure">Success vs Failure</a></li>
+<li><a href="#diffpatch">Diff/Patch</a></li>
+<li><a href="#validated-format">Validated Format</a></li>
+<li><a href="#guided-edit">Guided Edit</a></li>
+<li><a href="#features">Features</a><ul>
+<li><a href="#general-features">General Features</a></li>
+<li><a href="#text-and-size-management">Text and Size Management</a></li>
+<li><a href="#source-code-display-and-analysis">Source Code Display and Analysis</a></li>
+</ul>
+</li>
+<li><a href="#security-constraints">Security Constraints</a><ul>
+<li><a href="#general-security-measures">General Security Measures</a></li>
+</ul>
+</li>
+<li><a href="#bots-and-subbots">Bots and Subbots</a><ul>
+<li><a href="#subbots">Subbots</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#programmers-manual">Programmer's Manual</a><ul>
+<li><a href="#possible-goals">Possible goals</a></li>
+<li><a href="#extension-points">Extension Points</a></li>
+</ul>
+</li>
+<li><a href="#use-cases-for-ai_shell">Use Cases for ai_shell</a><ul>
+<li><a href="#good-uses">Good uses</a></li>
+<li><a href="#bad-uses">Bad uses</a></li>
+<li><a href="#bots-to-add-types">Bots to add types</a></li>
+<li><a href="#bots-to-add-documentation">Bots to add documentation</a></li>
+<li><a href="#bot-to-do-tests">Bot to do tests</a></li>
+<li><a href="#work-lint-issues">Work lint issues</a></li>
+<li><a href="#code-generation">Code Generation</a></li>
+<li><a href="#json">JSON</a></li>
+<li><a href="#toolkit-safety">Toolkit Safety</a></li>
+<li><a href="#mime-types">Mime Types</a></li>
+<li><a href="#editing">Editing</a><ul>
+<li><a href="#linux-like-editing-strategies">Linux-Like Editing Strategies</a></li>
+<li><a href="#simpler-ad-hoc-tools">Simpler Ad Hoc Tools.</a></li>
+</ul>
+</li>
+<li><a href="#viewing-strategies">Viewing Strategies</a></li>
+<li><a href="#file-browsing-strategies">File Browsing Strategies</a></li>
+<li><a href="#safety-tools">Safety Tools</a></li>
+<li><a href="#logging">Logging</a></li>
+<li><a href="#config">Config</a></li>
+</ul>
+</li>
+<li><a href="#changelog">Changelog</a><ul>
+<li><a href="#104-2024-01-20">[1.0.4] - 2024-01-20</a><ul>
+<li><a href="#added">Added</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 </div>
 <ul id="index">
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>

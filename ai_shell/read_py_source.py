@@ -1,11 +1,11 @@
 """
 Read source with tools that understand the structure of python
 """
+
 import ast
 import inspect
 
 import markpickle
-import python_minifier
 
 
 def minify(file_path: str) -> str:
@@ -19,7 +19,8 @@ def minify(file_path: str) -> str:
     """
     with open(file_path, encoding="utf-8") as f:
         raw_text = f.read()
-        return python_minifier.minify(raw_text)
+        print("minificiation disabled")
+        return raw_text
 
 
 def astify(file_path: str) -> str:

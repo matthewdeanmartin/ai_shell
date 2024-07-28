@@ -1,11 +1,7 @@
 """
 Simple bot that doesn't need any tools
 """
-from openai.types.beta.threads.run_create_params import (
-    ToolAssistantToolsCode,
-    ToolAssistantToolsFunction,
-    ToolAssistantToolsRetrieval,
-)
+
 from openai.types.shared_params import FunctionDefinition
 
 # pylint: disable=wrong-import-position, using-constant-test
@@ -114,16 +110,13 @@ class TaskBot:
         self.config.add_bot(self.assistant.id, self.name)
         logger.debug(f"Assistant created: {self.assistant.id}")
 
-    def toolkit_factory(
-        self, root_folder: str, model: str, tool_names: list[str]
-    ) -> tuple[ToolKit, list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction]]:
+    def toolkit_factory(self, root_folder: str, model: str, tool_names: list[str]) -> tuple[ToolKit, list[Any]]:
         self.toolkit = ToolKit(root_folder, model, 500, permitted_tools=tool_names, config=self.config)
         # sync COM
         self.toolkit.conversation_over_marker = self.conversation_over_marker
         initialize_all_tools(keeps=tool_names)
-        tools_schema: list[ToolAssistantToolsCode | ToolAssistantToolsRetrieval | ToolAssistantToolsFunction] = [
-            ToolAssistantToolsFunction(**{"function": cast(FunctionDefinition, schema), "type": "function"})
-            for schema in ALL_TOOLS
+        tools_schema: list[Any] = [
+            {"function": cast(FunctionDefinition, schema), "type": "function"} for schema in ALL_TOOLS
         ]
         if not tools_schema:
             raise Exception("Not enough tools!")

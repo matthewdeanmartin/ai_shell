@@ -3,6 +3,7 @@ Attempt to capture API traffic.
 
 This module contains a custom logging handler that writes JSON-formatted log messages to a folder.
 """
+
 import ast
 from logging import Handler
 from pathlib import Path

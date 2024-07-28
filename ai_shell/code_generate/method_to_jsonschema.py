@@ -1,6 +1,7 @@
 """
 Utility for generating jsonschema from class methods.
 """
+
 import inspect
 import typing
 from typing import Any

@@ -1,6 +1,7 @@
 """
 Attempt to write to log the cli commands to replay on console.
 """
+
 import functools
 import os
 from collections.abc import Callable

@@ -1,6 +1,7 @@
 """
 Grab bag of functions for file system.
 """
+
 import glob
 import logging
 import math

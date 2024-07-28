@@ -1,6 +1,7 @@
 """
 Code generate reverse client
 """
+
 from typing import Any, cast
 
 import ai_shell.openai_schemas as schemas

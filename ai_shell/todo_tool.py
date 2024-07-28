@@ -3,6 +3,7 @@ AI Optimized TODO tool. Alternative to JIRA or the like.
 
 The bot doesn't understand the assignee field.
 """
+
 import logging
 from typing import Optional
 

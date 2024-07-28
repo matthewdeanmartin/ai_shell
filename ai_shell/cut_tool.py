@@ -3,6 +3,7 @@ AI optimized cut tool.
 
 The real version makes for sense for creating sql-like chains of pipes. I don't support pipe-like behavior yet.
 """
+
 import csv
 import dataclasses
 import io

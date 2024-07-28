@@ -1,6 +1,7 @@
 """
 Bot frequently does lists in 3 different ways.
 """
+
 import csv
 from io import StringIO
 from typing import Union

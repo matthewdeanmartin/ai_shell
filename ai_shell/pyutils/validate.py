@@ -1,6 +1,7 @@
 """
 Validate python by a variety of strategies.
 """
+
 import ast
 import hashlib
 import os

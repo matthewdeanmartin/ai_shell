@@ -6,7 +6,7 @@ import logging
 import os
 from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Any, Optional
+from typing import Any
 
 import markpickle
 import orjson as json
@@ -68,9 +68,9 @@ class DialogLoggerWithMarkdown:
         if not base_directory:
             raise ValueError("base_directory must be provided.")
         os.makedirs(base_directory, exist_ok=True)
-        self.bot_name: Optional[str] = None
-        self.model: Optional[str] = None
-        self.bot_instructions: Optional[str] = None
+        self.bot_name: str | None = None
+        self.model: str | None = None
+        self.bot_instructions: str | None = None
         self.base_directory = base_directory
         log_files = [f for f in os.listdir(self.base_directory) if f.endswith(".md")]
         log_number = len(log_files) + 1

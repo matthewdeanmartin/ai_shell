@@ -7,7 +7,7 @@ the openai python client.
 
 import logging
 from collections.abc import Collection
-from typing import Any, Optional, Union
+from typing import Any, Union
 
 from ai_shell.ls_tool import LsTool
 from ai_shell.openai_schemas import _SCHEMAS
@@ -31,7 +31,7 @@ def just_tool_names() -> list[str]:
     return names
 
 
-def initialize_all_tools(skips: Optional[list[str]] = None, keeps: Optional[list[str]] = None) -> None:
+def initialize_all_tools(skips: list[str] | None = None, keeps: list[str] | None = None) -> None:
     """Initialize all tools
 
     Args:

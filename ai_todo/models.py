@@ -1,7 +1,6 @@
 import os
 import re
 from dataclasses import asdict, dataclass
-from typing import Optional
 
 import toml
 
@@ -13,7 +12,7 @@ class Task:
     done_status: bool
     category: str
     source_code_ref: str
-    assignee: Optional[str] = None
+    assignee: str | None = None
 
 
 @dataclass

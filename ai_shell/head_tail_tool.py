@@ -3,7 +3,6 @@ AI optimized head/tail tool
 """
 
 import logging
-from typing import Optional
 
 from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
@@ -39,7 +38,7 @@ class HeadTailTool:
         return "\n".join(self.head(file_path, lines))
 
     @log()
-    def head(self, file_path: str, lines: int = 10, byte_count: Optional[int] = None) -> list[str]:
+    def head(self, file_path: str, lines: int = 10, byte_count: int | None = None) -> list[str]:
         """Return the first 'lines' or 'byte_count' from a file.
 
         Args:
@@ -66,7 +65,7 @@ class HeadTailTool:
         return "\n".join(self.tail(file_path, lines))
 
     @log()
-    def tail(self, file_path: str, lines: int = 10, byte_count: Optional[int] = None) -> list[str]:
+    def tail(self, file_path: str, lines: int = 10, byte_count: int | None = None) -> list[str]:
         """Return the last 'lines' or 'bytes' from a file.
 
         Args:
@@ -80,7 +79,7 @@ class HeadTailTool:
         return self.head_tail(file_path, lines, "tail", byte_count)
 
     def head_tail(
-        self, file_path: str, lines: int = 10, mode: str = "head", byte_count: Optional[int] = None
+        self, file_path: str, lines: int = 10, mode: str = "head", byte_count: int | None = None
     ) -> list[str]:
         """Read lines or bytes from the start ('head') or end ('tail') of a file.
 

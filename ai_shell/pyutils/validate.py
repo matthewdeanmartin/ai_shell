@@ -6,7 +6,6 @@ import ast
 import hashlib
 import os
 from dataclasses import dataclass
-from typing import Optional
 
 import ai_shell.externals as externals
 from ai_shell.externals.subprocess_utils import CommandResult
@@ -49,7 +48,7 @@ def is_valid_python_file(file_name: str) -> bool:
     return is_valid
 
 
-def is_valid_python_source(text: str) -> tuple[bool, Optional[SyntaxError]]:
+def is_valid_python_source(text: str) -> tuple[bool, SyntaxError | None]:
     """
     Check if a given string is valid Python source code.
 

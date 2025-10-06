@@ -3,7 +3,7 @@ Generate code, do not edit.
 """
 
 from collections.abc import Callable
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 from ai_shell.answer_tool import AnswerCollectorTool
 from ai_shell.cat_tool import CatTool
@@ -421,25 +421,25 @@ class ToolKit(ToolKitBase):
         tool = FindTool(self.root_folder, self.config)
 
         file_type = cast(
-            Optional[str],
+            str | None,
             arguments.get(
                 "file_type",
             ),
         )
         name = cast(
-            Optional[str],
+            str | None,
             arguments.get(
                 "name",
             ),
         )
         regex = cast(
-            Optional[str],
+            str | None,
             arguments.get(
                 "regex",
             ),
         )
         size = cast(
-            Optional[str],
+            str | None,
             arguments.get(
                 "size",
             ),
@@ -451,25 +451,25 @@ class ToolKit(ToolKitBase):
         tool = FindTool(self.root_folder, self.config)
 
         file_type = cast(
-            Optional[str],
+            str | None,
             arguments.get(
                 "file_type",
             ),
         )
         name = cast(
-            Optional[str],
+            str | None,
             arguments.get(
                 "name",
             ),
         )
         regex = cast(
-            Optional[str],
+            str | None,
             arguments.get(
                 "regex",
             ),
         )
         size = cast(
-            Optional[str],
+            str | None,
             arguments.get(
                 "size",
             ),
@@ -620,7 +620,7 @@ class ToolKit(ToolKitBase):
         tool = HeadTailTool(self.root_folder, self.config)
 
         byte_count = cast(
-            Optional[int],
+            int | None,
             arguments.get(
                 "byte_count",
             ),
@@ -652,7 +652,7 @@ class ToolKit(ToolKitBase):
         tool = HeadTailTool(self.root_folder, self.config)
 
         byte_count = cast(
-            Optional[int],
+            int | None,
             arguments.get(
                 "byte_count",
             ),
@@ -672,7 +672,7 @@ class ToolKit(ToolKitBase):
         tool = HeadTailTool(self.root_folder, self.config)
 
         byte_count = cast(
-            Optional[int],
+            int | None,
             arguments.get(
                 "byte_count",
             ),
@@ -775,7 +775,7 @@ class ToolKit(ToolKitBase):
         all_files = cast(bool, arguments.get("all_files", False))
         long = cast(bool, arguments.get("long", False))
         path = cast(
-            Optional[str],
+            str | None,
             arguments.get(
                 "path",
             ),
@@ -788,7 +788,7 @@ class ToolKit(ToolKitBase):
 
         all_files = cast(bool, arguments.get("all_files", False))
         long = cast(bool, arguments.get("long", False))
-        path = cast(Optional[str], arguments.get("path", "."))
+        path = cast(str | None, arguments.get("path", "."))
         return tool.ls_markdown(all_files=all_files, long=long, path=path)
 
     def apply_git_patch(self, arguments: dict[str, Any]) -> Any:
@@ -968,7 +968,7 @@ class ToolKit(ToolKitBase):
         tool = TodoTool(self.root_folder, self.config)
 
         assignee = cast(
-            Optional[str],
+            str | None,
             arguments.get(
                 "assignee",
             ),

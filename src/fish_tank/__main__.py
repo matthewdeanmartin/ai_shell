@@ -9,7 +9,7 @@ class Fish:
     def __init__(self, emoji, x, y):
         """
         Initialize a fish with emoji and position.
-        
+
         Args:
             emoji (str): The emoji that represents the fish.
             x (int): The x-coordinate of the fish in the tank.
@@ -22,7 +22,7 @@ class Fish:
     def move(self, width, height):
         """
         Move the fish randomly within the boundaries of the tank.
-        
+
         Args:
             width (int): The width of the tank.
             height (int): The height of the tank.
@@ -37,7 +37,7 @@ class Tank:
     def __init__(self, width, height):
         """
         Initialize a tank with given dimensions.
-        
+
         Args:
             width (int): The width of the tank.
             height (int): The height of the tank.
@@ -50,7 +50,7 @@ class Tank:
     def add_fish(self, fish):
         """
         Add a fish to the tank.
-        
+
         Args:
             fish (Fish): An instance of Fish to add to the tank.
         """
@@ -102,16 +102,13 @@ if __name__ == "__main__":
     main()
 
 
-import os
-import random
-import time
 
 
 class Fish:
     def __init__(self, emoji, x, y):
         """
         Initialize a fish with emoji and position.
-        
+
         Args:
             emoji (str): The emoji that represents the fish.
             x (int): The x-coordinate of the fish in the tank.
@@ -124,7 +121,7 @@ class Fish:
     def move(self, width, height):
         """
         Move the fish randomly within the boundaries of the tank.
-        
+
         Args:
             width (int): The width of the tank.
             height (int): The height of the tank.
@@ -139,7 +136,7 @@ class Tank:
     def __init__(self, width, height):
         """
         Initialize a tank with given dimensions.
-        
+
         Args:
             width (int): The width of the tank.
             height (int): The height of the tank.
@@ -152,7 +149,7 @@ class Tank:
     def add_fish(self, fish):
         """
         Add a fish to the tank.
-        
+
         Args:
             fish (Fish): An instance of Fish to add to the tank.
         """
@@ -205,16 +202,13 @@ if __name__ == "__main__":
 
 # Fish Tank Main File
 
-import os
-import random
-import time
 
 
 class Fish:
     def __init__(self, emoji, x, y):
         """
         Initialize a fish with emoji and position.
-        
+
         Args:
             emoji (str): The emoji that represents the fish.
             x (int): The x-coordinate of the fish in the tank.
@@ -227,7 +221,7 @@ class Fish:
     def move(self, width, height):
         """
         Move the fish randomly within the boundaries of the tank.
-        
+
         Args:
             width (int): The width of the tank.
             height (int): The height of the tank.
@@ -242,7 +236,7 @@ class Tank:
     def __init__(self, width, height):
         """
         Initialize a tank with given dimensions.
-        
+
         Args:
             width (int): The width of the tank.
             height (int): The height of the tank.
@@ -255,7 +249,7 @@ class Tank:
     def add_fish(self, fish):
         """
         Add a fish to the tank.
-        
+
         Args:
             fish (Fish): An instance of Fish to add to the tank.
         """
@@ -307,9 +301,6 @@ if __name__ == "__main__":
     main()
 
 
-import os
-import random
-import time
 
 
 class Fish:

@@ -6,7 +6,6 @@ However, the bot keeps trying to use features of real sed that this tool doesn't
 
 import logging
 import re
-from typing import Optional
 
 from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.backup_restore import BackupRestore
@@ -175,7 +174,7 @@ class ReplaceTool:
             "to do with file permissions. Try again with a different match pattern."
         )
 
-    def _validate_code(self, full_path: str) -> Optional[ValidationMessageForBot]:
+    def _validate_code(self, full_path: str) -> ValidationMessageForBot | None:
         """
         Validate python
 

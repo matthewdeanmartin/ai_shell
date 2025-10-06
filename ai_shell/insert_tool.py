@@ -3,7 +3,7 @@ Text editor for simple text insertion at line or context.
 """
 
 import logging
-from typing import Optional, Union
+from typing import Union
 
 from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.backup_restore import BackupRestore
@@ -236,7 +236,7 @@ class InsertTool:
             return f"Tool feedback: {feedback}\n\nCurrent file contents:\n\n{contents}"
         return "Insert completed and no exceptions thrown. Please verify by other means."
 
-    def _validate_code(self, full_path: str) -> Optional[ValidationMessageForBot]:
+    def _validate_code(self, full_path: str) -> ValidationMessageForBot | None:
         """
         Validate python
 

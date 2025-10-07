@@ -4,7 +4,6 @@
 import dataclasses
 import os
 from datetime import datetime
-from typing import Optional
 
 from ai_shell.utils.json_utils import FatalConfigurationError
 
@@ -134,7 +133,7 @@ class Config:
         """Return a list of Bot objects."""
         return [Bot(**bot) for bot in self._bots_data]
 
-    def get_bot(self, name: str) -> Optional[Bot]:
+    def get_bot(self, name: str) -> Bot | None:
         """Return a Bot object with the given name.
         Args:
             name (str): The name of the bot.
@@ -147,7 +146,7 @@ class Config:
                 return Bot(**bot)
         return None
 
-    def get_flag(self, flag_name: str, default_value: Optional[bool] = None) -> Optional[bool]:
+    def get_flag(self, flag_name: str, default_value: bool | None = None) -> bool | None:
         """Return the value of the given flag.
         Args:
             flag_name (str): The name of the flag.
@@ -159,7 +158,7 @@ class Config:
         """
         return self._flags_data.get(flag_name, default_value)
 
-    def get_value(self, name: str, default: Optional[str] = None) -> Optional[str]:
+    def get_value(self, name: str, default: str | None = None) -> str | None:
         """Return the value of the given named value.
 
         Args:

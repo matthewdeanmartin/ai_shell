@@ -10,7 +10,7 @@ if True:
 
 import logging.config
 from collections.abc import Awaitable, Callable
-from typing import Any, Optional, cast
+from typing import Any, cast
 
 import openai
 from openai.types.beta import Assistant, Thread
@@ -50,8 +50,8 @@ class TaskBot:
         """Model, name and instructions uniquely identify a bot."""
 
         self.client: openai.AsyncOpenAI = openai.AsyncOpenAI()
-        self.thread: Optional[Thread] = None
-        self.assistant: Optional[Assistant] = None
+        self.thread: Thread | None = None
+        self.assistant: Assistant | None = None
 
         self.dialog_logger_md = dialog_logger_md
         """Conversation style logger"""
@@ -68,7 +68,7 @@ class TaskBot:
         self.maximum_loops = maximum_loops
         """Prevent infinite loops and money wastage."""
 
-        self.toolkit: Optional[ToolKit] = None
+        self.toolkit: ToolKit | None = None
         """Reference to toolkit so that goal checkers can check if any tools were used."""
 
         self.allow_self_certification = False

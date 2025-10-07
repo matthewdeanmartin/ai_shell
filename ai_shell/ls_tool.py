@@ -7,7 +7,7 @@ import os
 import time
 from io import StringIO
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 
 from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
@@ -31,7 +31,7 @@ class LsTool:
         self.auto_cat = config.get_flag("auto_cat", True)
 
     @log()
-    def ls_markdown(self, path: Optional[str] = ".", all_files: bool = False, long: bool = False) -> str:
+    def ls_markdown(self, path: str | None = ".", all_files: bool = False, long: bool = False) -> str:
         """List directory contents, with options to include all files and detailed view.
 
         Args:
@@ -62,7 +62,7 @@ class LsTool:
         return output.read()
 
     @log()
-    def ls(self, path: Optional[str] = None, all_files: bool = False, long: bool = False) -> Union[list[str], str]:
+    def ls(self, path: str | None = None, all_files: bool = False, long: bool = False) -> Union[list[str], str]:
         """
         List directory contents, with options to include all files and detailed view.
 

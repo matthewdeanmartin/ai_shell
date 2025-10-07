@@ -10,7 +10,7 @@ import io
 import logging
 import os
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 
 from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
@@ -19,7 +19,7 @@ from ai_shell.utils.read_fs import is_file_in_root_folder, tree
 logger = logging.getLogger(__name__)
 
 
-def parse_ranges(range_str: str) -> list[Union[int, tuple[int, Optional[int]]]]:
+def parse_ranges(range_str: str) -> list[Union[int, tuple[int, int | None]]]:
     """Parses a range string into a list of integers and integer tuples.
 
     Args:
@@ -28,7 +28,7 @@ def parse_ranges(range_str: str) -> list[Union[int, tuple[int, Optional[int]]]]:
     Returns:
         A list where each element is either an integer or a tuple of two integers.
     """
-    ranges: list[Union[int, tuple[int, Optional[int]]]] = []
+    ranges: list[Union[int, tuple[int, int | None]]] = []
     for part in range_str.split(","):
         if "-" in part:
             start_string, end_string = part.split("-")
@@ -40,7 +40,7 @@ def parse_ranges(range_str: str) -> list[Union[int, tuple[int, Optional[int]]]]:
     return ranges
 
 
-def is_in_ranges(index: int, ranges: list[Union[int, tuple[int, Optional[int]]]]) -> bool:
+def is_in_ranges(index: int, ranges: list[Union[int, tuple[int, int | None]]]) -> bool:
     """Checks if a given index is within the specified ranges.
 
     Args:

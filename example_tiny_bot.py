@@ -1,4 +1,5 @@
 """Bot with no extra logging or config."""
+
 import asyncio
 
 from dotenv import load_dotenv
@@ -6,6 +7,7 @@ from dotenv import load_dotenv
 import ai_shell
 
 load_dotenv()
+
 
 async def main():
     async def static_keep_going(toolkit: ai_shell.ToolKit):

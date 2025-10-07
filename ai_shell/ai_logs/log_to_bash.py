@@ -5,7 +5,7 @@ Attempt to write to log the cli commands to replay on console.
 import functools
 import os
 from collections.abc import Callable
-from typing import Any, Optional
+from typing import Any
 
 import ai_shell.openai_schemas as schemas
 
@@ -16,7 +16,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 LOG_FOLDER = os.path.join(current_dir, "../logs")
 # Global settings for logging
 LOGGING_ENABLED = True
-SESSION_LOG_FILE: Optional[str] = None
+SESSION_LOG_FILE: str | None = None
 
 
 def set_log_folder(relative_path: str) -> None:
@@ -71,7 +71,7 @@ def log_to_executable(args: Any, kwargs: Any, func: Callable) -> None:
             file.write("\n")
 
 
-def log_success_failure(result: Any, exception: Optional[Exception]) -> None:
+def log_success_failure(result: Any, exception: Exception | None) -> None:
     """Log the command to an executable file"""
     # pylint: disable=global-statement
     global SESSION_LOG_FILE
@@ -145,7 +145,7 @@ def log():
 if __name__ == "__main__":
 
     @log()
-    def example(path: Optional[str] = ".", _some: bool = False, _long: bool = False) -> str:
+    def example(path: str | None = ".", _some: bool = False, _long: bool = False) -> str:
         """Example"""
         # Function implementation goes here
         return f"Listing markdown files at {path}"

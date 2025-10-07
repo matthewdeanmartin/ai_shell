@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from typing import Optional
 
 import pytest
 
@@ -55,7 +54,7 @@ def add_sample_tasks(task_manager: TaskManager):
 
 
 @pytest.mark.parametrize("assignee, expected_count", [("Alice", 1), ("Bob", 1), ("Charlie", 0), (None, 0)])
-def test_query_by_assignee(task_manager: TaskManager, assignee: Optional[str], expected_count: int):
+def test_query_by_assignee(task_manager: TaskManager, assignee: str | None, expected_count: int):
     add_sample_tasks(task_manager)
 
     result = task_manager.query_by_assignee(assignee)

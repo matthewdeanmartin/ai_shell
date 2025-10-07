@@ -13,7 +13,7 @@ How is this different from a tool call?
 
 """
 
-from typing import Any, Optional
+from typing import Any
 
 from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
@@ -30,18 +30,18 @@ class AnswerCollectorTool:
         """
         self.root_folder = root_folder
         self.config = config
-        self.comment: Optional[str] = None
-        self.bool_answer: Optional[bool] = None
-        self.json_answer: Optional[str] = None
-        self.xml_answer: Optional[str] = None
-        self.toml_answer: Optional[str] = None
-        self.tuple_answer: Optional[tuple] = None
-        self.set_answer: Optional[set] = None
-        self.text_answer: Optional[str] = None
-        self.list_answer: Optional[list[str]] = None
-        self.int_answer: Optional[int] = None
-        self.float_answer: Optional[float] = None
-        self.dict_answer: Optional[dict[str, Any]] = None
+        self.comment: str | None = None
+        self.bool_answer: bool | None = None
+        self.json_answer: str | None = None
+        self.xml_answer: str | None = None
+        self.toml_answer: str | None = None
+        self.tuple_answer: tuple | None = None
+        self.set_answer: set | None = None
+        self.text_answer: str | None = None
+        self.list_answer: list[str] | None = None
+        self.int_answer: int | None = None
+        self.float_answer: float | None = None
+        self.dict_answer: dict[str, Any] | None = None
         self.response_received = "Response received."
 
     def _answered(self) -> None:

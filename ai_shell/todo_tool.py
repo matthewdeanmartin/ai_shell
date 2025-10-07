@@ -5,7 +5,6 @@ The bot doesn't understand the assignee field.
 """
 
 import logging
-from typing import Optional
 
 import ai_todo
 from ai_shell.ai_logs.log_to_bash import log
@@ -32,7 +31,7 @@ class TodoTool:
 
     @log()
     def add_todo(
-        self, title: str, description: str, category: str, source_code_ref: str, assignee: Optional[str] = None
+        self, title: str, description: str, category: str, source_code_ref: str, assignee: str | None = None
     ) -> str:
         """
         Adds a new task to the task manager.

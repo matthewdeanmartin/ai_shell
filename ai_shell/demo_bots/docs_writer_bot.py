@@ -16,7 +16,6 @@ import asyncio
 import logging
 import logging.config
 import os
-from typing import Optional
 
 from dotenv import load_dotenv
 from pygount import SourceAnalysis
@@ -26,7 +25,7 @@ import ai_shell.demo_bots.demo_setup as demo_setup
 import ai_todo
 
 ai_shell.ai_logs.log_to_bash.LOGGING_ENABLED = True
-initial_lines_of_code: Optional[SourceAnalysis] = None
+initial_lines_of_code: SourceAnalysis | None = None
 
 if __name__ == "__main__" and not os.path.exists("src"):
     demo_setup.initialize()

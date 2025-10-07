@@ -8,7 +8,6 @@ import difflib
 import logging
 import os
 from pathlib import Path
-from typing import Optional
 
 from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.backup_restore import BackupRestore
@@ -193,7 +192,7 @@ class RewriteTool:
                 str(e) + " Consider using write_new_file method if you want to create a new file."
             ) from e
 
-    def _validate_code(self, full_path: str) -> Optional[ValidationMessageForBot]:
+    def _validate_code(self, full_path: str) -> ValidationMessageForBot | None:
         """
         Validate python
 

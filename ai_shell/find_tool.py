@@ -9,7 +9,6 @@ import logging
 import os
 import re
 from io import StringIO
-from typing import Optional
 
 from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.utils.config_manager import Config
@@ -35,10 +34,10 @@ class FindTool:
     @log()
     def find_files(
         self,
-        name: Optional[str] = None,
-        regex: Optional[str] = None,
-        file_type: Optional[str] = None,
-        size: Optional[str] = None,
+        name: str | None = None,
+        regex: str | None = None,
+        file_type: str | None = None,
+        size: str | None = None,
     ) -> list[str]:
         """
         Recursively search for files or directories matching given criteria in a directory and its subdirectories.
@@ -79,7 +78,7 @@ class FindTool:
         # Not the best way to remove hidden.
         return list(sorted(_ for _ in matching_files if not _.startswith(".")))
 
-    def _match_type_and_size(self, path: str, file_type: Optional[str], size: Optional[str]) -> bool:
+    def _match_type_and_size(self, path: str, file_type: str | None, size: str | None) -> bool:
         """
         Check if a file/directory matches the specified type and size criteria.
 
@@ -111,10 +110,10 @@ class FindTool:
     @log()
     def find_files_markdown(
         self,
-        name: Optional[str] = None,
-        regex: Optional[str] = None,
-        file_type: Optional[str] = None,
-        size: Optional[str] = None,
+        name: str | None = None,
+        regex: str | None = None,
+        file_type: str | None = None,
+        size: str | None = None,
     ) -> str:
         """
         Recursively search for files or directories matching given criteria in a directory and its subdirectories.

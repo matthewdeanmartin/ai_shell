@@ -1,5 +1,4 @@
 import os
-from typing import Optional
 
 from ai_todo.models import Task, Work
 from ai_todo.views import assigned_incomplete_tasks_to_markdown, search_results_to_markdown
@@ -28,7 +27,7 @@ class TaskManager:
         return search_results_to_markdown(keyword, results)
 
     def add_task(
-        self, title: str, description: str, category: str, source_code_ref: str, assignee: Optional[str] = None
+        self, title: str, description: str, category: str, source_code_ref: str, assignee: str | None = None
     ) -> None:
         if assignee not in self.valid_assignees and assignee is not None:
             raise ValueError(f"Invalid assignee. These are valid {self.valid_assignees}")

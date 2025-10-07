@@ -50,9 +50,10 @@ def configure_logging() -> dict[str, Any]:
         "loggers": {
             # root logger can capture too much
             "": {  # root logger
-                "handlers": ["default",
-                             # "bug_trail"
-                             ],
+                "handlers": [
+                    "default",
+                    # "bug_trail"
+                ],
                 "level": "DEBUG",
                 "propagate": False,
             },

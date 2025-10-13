@@ -102,8 +102,6 @@ if __name__ == "__main__":
     main()
 
 
-
-
 class Fish:
     def __init__(self, emoji, x, y):
         """
@@ -203,7 +201,6 @@ if __name__ == "__main__":
 # Fish Tank Main File
 
 
-
 class Fish:
     def __init__(self, emoji, x, y):
         """
@@ -299,8 +296,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
 
 
 class Fish:

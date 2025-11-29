@@ -1,5 +1,12 @@
 # ai_shell
 
+*ARCHIVED* because claude code, open code, gemeni cli, aider etc all exist.
+
+This was written with Chat GPT 3.5 and 4. If I was going to do this again it would have a different architecture and would be written with a smarter bot.
+
+
+## Description
+
 OpenAI-centric shell for giving safe, chat-optimized, filesystem access to an Assistant as a "tool".
 
 Even if you trust the bot to run bash directly on your machine or docker container, standard tools will run up your

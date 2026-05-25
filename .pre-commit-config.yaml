@@ -31,7 +31,7 @@ repos:
   #        hooks:
   #            -   id: validate-pyproject
   - repo: https://github.com/PyCQA/autoflake
-    rev: v2.3.1
+    rev: v2.3.3
     hooks:
       - id: autoflake
         args:
@@ -42,7 +42,7 @@ repos:
           - --remove-duplicate-keys
           - --remove-unused-variables
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 25.11.0
+    rev: 26.5.1
     hooks:
       - id: black
         language_version: python3.10
@@ -54,7 +54,7 @@ repos:
   #                args:
   #                    - --profile black
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.6
+    rev: v0.15.14
     hooks:
       - id: ruff
         exclude: ^dead_code/

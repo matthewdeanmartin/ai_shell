@@ -280,3 +280,6 @@ app_name= "ai_shell"
 app_author= "matthewdeanmartin"
 source_folder = "ai_shell"
 #ctags_file = "fish_tank.tags"
+
+[tool.uv]
+universal = true

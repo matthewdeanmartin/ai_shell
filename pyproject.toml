@@ -282,4 +282,6 @@ source_folder = "ai_shell"
 #ctags_file = "fish_tank.tags"
 
 [tool.uv]
+
+[tool.uv.pip]
 universal = true

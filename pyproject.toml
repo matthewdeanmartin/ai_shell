@@ -281,6 +281,12 @@ app_author= "matthewdeanmartin"
 source_folder = "ai_shell"
 #ctags_file = "fish_tank.tags"
 
+[dependency-groups]
+dev = [
+    "mypy>=1.8",
+    "pylint>=3.0",
+]
+
 [tool.uv]
 
 [tool.uv.pip]

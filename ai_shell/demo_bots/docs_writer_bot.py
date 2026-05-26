@@ -21,6 +21,7 @@ from dotenv import load_dotenv
 from pygount import SourceAnalysis
 
 import ai_shell
+import ai_shell.ai_logs.log_to_bash
 import ai_shell.demo_bots.demo_setup as demo_setup
 import ai_todo
 

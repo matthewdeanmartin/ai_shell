@@ -33,7 +33,7 @@ def strip_comments_docstrings(source: str) -> str:
         if not isinstance(node.body[0], ast.Expr):
             continue
 
-        if not hasattr(node.body[0], "value") or not isinstance(node.body[0].value, ast.Str):
+        if not hasattr(node.body[0], "value") or not isinstance(node.body[0].value, ast.Constant):
             continue
 
         # Uncomment lines below if you want print what and where we are removing

@@ -176,3 +176,10 @@ Uses Assistant/Beta API
 - [Use Cases](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Usecases.md)
 - [TODO](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/TODO.md)
 - [API docs, pdoc3 style](https://matthewdeanmartin.github.io/ai_shell/)
+
+## Project Links
+
+- [GitHub](https://github.com/matthewdeanmartin/ai_shell)
+- [PyPI](https://pypi.org/project/ai-shell/)
+- [Bug Tracker](https://github.com/matthewdeanmartin/ai_shell/issues)
+- [Change Log](https://github.com/matthewdeanmartin/ai_shell/blob/main/CHANGELOG.md)

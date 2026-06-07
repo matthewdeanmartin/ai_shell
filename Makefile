@@ -119,7 +119,7 @@ check_docs:
 	$(VENV) pydoctest --config .pydoctest.json | grep -v "__init__" | grep -v "__main__" | grep -v "Unable to parse" | grep -v "openai_toolkit"
 
 make_docs:
-	pdoc ai_shell --html -o docs --force
+	$(VENV) pdoc -o docs_api ai_shell
 
 check_md:
 	$(VENV) mdformat README.md docs/*.md

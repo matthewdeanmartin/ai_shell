@@ -616,7 +616,7 @@ def run():
         version=f"%(prog)s {__version__}",
         help="Show program's version number and exit.",
     )
-    subparsers = parser.add_subparsers(dest="subcommand", help="sub-command help")
+    subparsers = parser.add_subparsers(dest="subcommand", help="sub-command help", required=True)
     # Create a parser for the "head" command
     head_parser = subparsers.add_parser("head", help="""Return the first \'lines\' or \'byte_count\' from a file..""")
 

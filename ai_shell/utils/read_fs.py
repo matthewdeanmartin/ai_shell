@@ -71,6 +71,11 @@ def is_file_in_root_folder(file_path: str, root_folder: str) -> bool:
     if "*" in root_folder or "?" in root_folder:
         raise ValueError("Root folder cannot contain wildcards")
 
+    normalized_file_path = file_path.replace("/", os.sep).replace("\\", os.sep)
+    if normalized_file_path.startswith(os.sep) and not os.path.isabs(file_path):
+        logger.warning("File %s is rooted but not relative to root folder %s", file_path, root_folder)
+        return False
+
     # Normalize paths to create absolute paths
     if not os.path.isabs(file_path):
         file_path = root_folder + "/" + file_path

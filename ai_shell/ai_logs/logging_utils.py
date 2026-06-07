@@ -2,19 +2,7 @@
 Code-as-config for logging.
 """
 
-import os
 from typing import Any
-
-import bug_trail_core
-
-config_location = "pyproject.toml"
-if not os.path.exists(config_location):
-    config_location = "../pyproject.toml"
-if not os.path.exists(config_location):
-    config_location = "../../pyproject.toml"
-
-
-bug_trail_config = bug_trail_core.read_config(config_path=config_location)
 
 
 def configure_logging() -> dict[str, Any]:

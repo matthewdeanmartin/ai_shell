@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+Reframed from an OpenAI-Assistant shell into a provider-agnostic library of safe,
+token-aware filesystem tools for any LLM agent.
+
+### Removed
+- The OpenAI Assistants (Beta) bot runtime: `TaskBot`, the tool loop, the demo
+  bots, the markdown dialog logger, and the `openai` / `openai_multi_tool_use_parallel_patch`
+  dependencies. Bring your own agent loop.
+- The `ed` and `edlin` line-editor tools — edit via unified diffs (`apply_git_patch`)
+  or `replace`/`insert`/`rewrite` instead.
+- Unimplemented stubs (regex-tester, tool-picker sub-bot) and their config flags.
+- `gitpython`, `bug-trail-core`, and doc-only markdown dependencies from the core
+  install.
+
+### Changed
+- Tools are now invoked through a neutral `ToolKit.dispatch(name, arguments)`
+  instead of an OpenAI-run object.
+- Linters/formatters/test-runners are now an optional `checkers` extra rather than
+  required dependencies.
+- Packaging migrated from Poetry to standard PEP 621 (`uv`).
+
 ## [1.0.4] - 2024-01-21
 ### Changed
 - Integrate metametameta and documentation updates
@@ -56,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
+[Unreleased]: https://github.com/matthewdeanmartin/ai_shell/compare/v1.0.4...HEAD
 [1.0.4]: https://github.com/matthewdeanmartin/ai_shell/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/matthewdeanmartin/ai_shell/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/matthewdeanmartin/ai_shell/compare/v1.0.1...v1.0.2

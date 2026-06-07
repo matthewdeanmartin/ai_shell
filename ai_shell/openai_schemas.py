@@ -290,36 +290,6 @@ _SCHEMAS = {
             "type": "object",
         },
     },
-    "ed": {
-        "ed": {
-            "description": "A python version of ed.",
-            "properties": {
-                "file_name": {"description": "Script creates or edits this file.", "type": "string"},
-                "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
-                    "type": "string",
-                },
-                "script": {"description": "Ed commands to run.", "type": "string"},
-            },
-            "required": ["script", "file_name"],
-            "type": "object",
-        }
-    },
-    "edlin": {
-        "edlin": {
-            "description": "An improved version of the edlin.",
-            "properties": {
-                "file_name": {"description": "Script creates or edits this file.", "type": "string"},
-                "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
-                    "type": "string",
-                },
-                "script": {"description": "Edlin commands to run.", "type": "string"},
-            },
-            "required": ["script", "file_name"],
-            "type": "object",
-        }
-    },
     "find": {
         "find_files": {
             "description": "Recursively search for files or directories matching given criteria in a directory and its subdirectories.",

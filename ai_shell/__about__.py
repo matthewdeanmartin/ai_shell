@@ -16,12 +16,12 @@ __all__ = [
 ]
 
 __title__ = "ai_shell"
-__version__ = "1.0.4"
-__description__ = "Filesystem Shell interface that an OpenAI Assitant can use as a tool."
+__version__ = "2.0.0"
+__description__ = "Safe, token-aware filesystem tools for LLM agents."
 __author__ = "Matthew Martin"
 __author_email__ = "matthewdeanmartin@gmail.com"
-__keywords__ = ["openai", "chatgpt"]
-__status__ = "3 - Alpha"
+__keywords__ = ["llm", "agent", "tools", "filesystem", "shell"]
+__status__ = "4 - Beta"
 __license__ = "MIT"
 __readme__ = "README.md"
 __repository__ = "https://github.com/matthewdeanmartin/ai_shell"

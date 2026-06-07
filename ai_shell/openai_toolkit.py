@@ -8,8 +8,6 @@ from typing import Any, cast
 from ai_shell.answer_tool import AnswerCollectorTool
 from ai_shell.cat_tool import CatTool
 from ai_shell.cut_tool import CutTool
-from ai_shell.ed_tool import EdTool
-from ai_shell.edlin_tool import EdlinTool
 from ai_shell.find_tool import FindTool
 from ai_shell.git_tool import GitTool
 from ai_shell.grep_tool import GrepTool
@@ -54,8 +52,6 @@ class ToolKit(ToolKitBase):
             "cut_characters": self.cut_characters,
             "cut_fields": self.cut_fields,
             "cut_fields_by_name": self.cut_fields_by_name,
-            "ed": self.ed,
-            "edlin": self.edlin,
             "find_files": self.find_files,
             "find_files_markdown": self.find_files_markdown,
             "get_current_branch": self.get_current_branch,
@@ -379,42 +375,6 @@ class ToolKit(ToolKitBase):
             ),
         )
         return tool.cut_fields_by_name(delimiter=delimiter, field_names=field_names, filename=filename)
-
-    def ed(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
-        tool = EdTool(self.root_folder, self.config)
-
-        file_name = cast(
-            str,
-            arguments.get(
-                "file_name",
-            ),
-        )
-        script = cast(
-            str,
-            arguments.get(
-                "script",
-            ),
-        )
-        return tool.ed(file_name=file_name, script=script)
-
-    def edlin(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
-        tool = EdlinTool(self.root_folder, self.config)
-
-        file_name = cast(
-            str,
-            arguments.get(
-                "file_name",
-            ),
-        )
-        script = cast(
-            str,
-            arguments.get(
-                "script",
-            ),
-        )
-        return tool.edlin(file_name=file_name, script=script)
 
     def find_files(self, arguments: dict[str, Any]) -> Any:
         """Generated Do Not Edit"""

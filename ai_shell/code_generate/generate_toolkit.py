@@ -99,9 +99,7 @@ from ai_shell.git_tool import GitTool
 from ai_shell.grep_tool import GrepTool
 from ai_shell.ls_tool import LsTool
 from ai_shell.token_tool import TokenCounterTool
-from ai_shell.edlin_tool import EdlinTool
 from ai_shell.pycat_tool import PyCatTool
-from ai_shell.ed_tool import EdTool
 from ai_shell.cut_tool import CutTool
 from ai_shell.head_tail_tool import HeadTailTool
 from ai_shell.patch_tool import PatchTool

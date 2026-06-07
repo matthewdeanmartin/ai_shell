@@ -1,18 +1,18 @@
 """
-All the tools are optimized for LLMs, but not openai specifically.
+Provider-agnostic tool dispatch.
 
-This Toolkit and schemas handles some of the boilerplate for interfacing with
-the openai python client.
+The tools are optimized for LLMs but not for any specific vendor. This base class
+handles the boilerplate of turning a tool name + argument dict (as produced by any
+tool-calling model) into a result: permission gating, usage stats, media-type
+handling, and error-to-RFC7807 conversion.
 """
 
 import logging
-import os
 import traceback
 from collections.abc import Callable
 from typing import Any
 
 import orjson as json
-from openai.types.beta.threads import Run
 
 from ai_shell.import_plugins import convert_to_toolkit, handle_tool
 from ai_shell.utils import medias
@@ -21,32 +21,34 @@ from ai_shell.utils.json_utils import (
     FatalConfigurationError,
     exception_to_rfc7807_dict,
     loosy_goosy_default_encoder,
-    try_everything,
 )
 
 logger = logging.getLogger(__name__)
 
 
 class FatalToolException(Exception):
-    """A fatal configuration error."""
+    """A fatal tool error the model cannot recover from."""
 
 
 class ToolKitBase:
-    """Non generated base class for generated toolkit"""
+    """Non-generated base class for the generated toolkit.
+
+    Subclasses populate ``self._lookup`` with ``name -> callable(arguments)``.
+    """
 
     def __init__(
         self, root_folder: str, token_model: str, global_max_lines: int, permitted_tools: list[str], config: Config
     ) -> None:
         """
-        Initialize the ToolKitBase class.
-
         Args:
             root_folder (str): The root folder path for file operations.
-            token_model (str): The token model to use for the toolkit
-            global_max_lines (int): The global max lines to use for the toolkit
-            permitted_tools (list[str]): The permitted tools for the toolkit
-            config (Config): The developer input that bot shouldn't set.
+            token_model (str): The token model to use for the toolkit.
+            global_max_lines (int): The global max lines to use for the toolkit.
+            permitted_tools (list[str]): The tools the caller is allowed to invoke.
+            config (Config): Developer config the model shouldn't set.
         """
+        import os
+
         self.root_folder = os.path.abspath(root_folder)
         self.token_model = token_model
         self.global_max_lines = global_max_lines
@@ -60,141 +62,98 @@ class ToolKitBase:
         self.permitted_tools: list[str] = permitted_tools
         self.tool_usage_stats: dict[str, dict[str, int]] = {}
         """Name: {count, success, failure}"""
-        self.conversation_over_marker: str = "DONE"
 
     def get_tool_usage_for(self, name: str) -> dict[str, int]:
-        """Get tool usage stats for a given tool
+        """Get tool usage stats for a given tool.
 
         Args:
-            name (str): The tool name
+            name (str): The tool name.
 
         Returns:
-            dict[str, int]: The tool usage stats
+            dict[str, int]: The tool usage stats.
         """
         return self.tool_usage_stats.get(name, {"count": 0, "success": 0, "failure": 0})
 
-    async def process_tool_calls(self, run: Run, write_json_to_logs=(lambda x, y: None)) -> list[Any]:
-        """
-        Process the tool calls in the run and return the results.
+    def dispatch(self, name: str, arguments: dict[str, Any]) -> str:
+        """Invoke a tool by name with a dict of arguments and return a JSON string.
+
+        This is the neutral entry point: feed it the tool name and parsed arguments
+        from any tool-calling model's response.
 
         Args:
-            run (Run): The run to process
-            write_json_to_logs (Callable[[Any, str], None]): A function that writes json to the logs
+            name (str): The tool name the model requested.
+            arguments (dict[str, Any]): The parsed arguments.
 
         Returns:
-            list[Any]: The results of the tool calls
+            str: The tool result, JSON-encoded.
         """
         if not self._lookup:
             raise TypeError("Missing lookup table")
-        results: list[dict[str, Any]] = []
 
-        if not run.required_action:
-            # This probably won't actually happen?
-            return results
-        for tool_call in run.required_action.submit_tool_outputs.tool_calls:
-            logger.info(f"tool_call: {tool_call.function.name}")
-            logger.info(f"tool_call: {tool_call.function.arguments}")
-            name = tool_call.function.name
+        self.tool_usage_stats.setdefault(name, {"count": 0, "success": 0, "failure": 0})
 
-            self.tool_usage_stats[name] = self.tool_usage_stats.get(name, {"count": 0, "success": 0, "failure": 0})
+        if name not in self.permitted_tools:
+            self.tool_usage_stats[name]["failure"] += 1
+            raise PermissionError(
+                f"You haven't been granted the right to call the tool '{name}'. You can call "
+                f"these tools: {','.join(self.permitted_tools)}. If you still need {name}, "
+                f"please explain how it works and why you need it and the administrator will "
+                f"consider granting permissions."
+            )
 
-            args_text = tool_call.function.arguments
-            arguments = try_everything(args_text)
-            if name not in self.permitted_tools:
-                self.tool_usage_stats[name]["failure"] += 1
-                raise PermissionError(
-                    f"You haven't been granted the right to call the tool '{name}'. You can call "
-                    f" these tools: {','.join(self.permitted_tools)}. If you still need {name}, "
-                    f"please explain how it works and why you need it and the administrator will "
-                    f"consider granting permissions."
-                )
-            if name in self._lookup:
-                self.tool_usage_stats[name]["count"] += 1
-                # TODO: assert pwd is self.root_folder already.
-                # with temporary_change_dir(self.root_folder):
-                try:
-                    # redirect according to media type
-                    original_name = name
-                    media_type, name = await self.convert_media_type_arg_to_method_name(arguments, name)
-
-                    result = self._lookup[name](arguments)
-                    self.tool_usage_stats[name]["success"] += 1
-
-                    # post process media types. If tool name changed that means
-                    # that the tool handled the media type itself.
-                    if media_type and original_name == name:
-                        # Converting ordinary python types to dict friendly types
-                        result = medias.convert_to_media_type(result, media_type)
-
-                    if result is None:
-                        raise FatalToolException("Never return None from a tool.")
-                    if result in ("", '""'):
-                        logger.warning(f"Blank result from {name}. Why? {arguments}")
-                        # raise FatalToolException("Blank result, why?.")
-                except FatalToolException as fatal_tool_exception:
-                    logger.error(fatal_tool_exception)
-                    # bot can't handle this, don't report, stop.
-                    raise
-                except FatalConfigurationError as fatal_configuration_exception:
-                    logger.error(fatal_configuration_exception)
-                    # bot can't handle this, don't report stop.
-                    raise
-                # pylint: disable=broad-exception-caught
-                except Exception as exception:
-                    logger.error(exception)
-                    self.tool_usage_stats[name]["failure"] += 1
-                    print(exception)
-                    traceback.print_exc()
-                    result = exception_to_rfc7807_dict(exception)
-                    logger.warning(f"Error in {name}: {result}")
-            elif name in self.plugin_tools:
-                # Refactor so plugin_tools are handled more like regular tools?
-                # TODO: change folder, mimetypes, error handling, call stats, etc.
-                tool_info = self.plugin_tools[name]
-                method_name = name
-                # TODO: refactor away this cryptic tuple
-                instance = tool_info[0]  # (instance, schema)
-                bots_kwargs = arguments
-                result = handle_tool(method_name, bots_kwargs, instance)
-            else:
-                self.tool_usage_stats[name]["failure"] += 1
-                raise TypeError(f"Unknown function name {name}")
-
-            # What is returning bytes?
-            if isinstance(result, bytes):
-                result = result.decode("utf-8")
-
+        if name in self._lookup:
+            self.tool_usage_stats[name]["count"] += 1
             try:
-                json_result = json.dumps(result, default=loosy_goosy_default_encoder).decode("utf-8")
-            except TypeError as type_error:
-                logger.error(type_error)
-                logger.error(f"Error encoding result: {type_error}")
-                logger.error(f"Result that json can't handle: {result}")
+                original_name = name
+                media_type, name = self._media_type_to_method_name(arguments, name)
+
+                result = self._lookup[name](arguments)
+                self.tool_usage_stats[name]["success"] += 1
+
+                if media_type and original_name == name:
+                    result = medias.convert_to_media_type(result, media_type)
+
+                if result is None:
+                    raise FatalToolException("Never return None from a tool.")
+                if result in ("", '""'):
+                    logger.warning(f"Blank result from {name}. Why? {arguments}")
+            except (FatalToolException, FatalConfigurationError):
                 raise
-            tool_result = {"tool_call_id": tool_call.id, "output": json_result}
-            write_json_to_logs(tool_call, f"tool_call_{name}")
-            write_json_to_logs(result, f"tool_result_{name}")
+            # pylint: disable=broad-exception-caught
+            except Exception as exception:
+                logger.error(exception)
+                traceback.print_exc()
+                self.tool_usage_stats[name]["failure"] += 1
+                result = exception_to_rfc7807_dict(exception)
+        elif name in self.plugin_tools:
+            tool_info = self.plugin_tools[name]
+            instance = tool_info[0]  # (instance, schema)
+            result = handle_tool(name, arguments, instance)
+        else:
+            self.tool_usage_stats[name]["failure"] += 1
+            raise TypeError(f"Unknown function name {name}")
 
-            results.append(tool_result)
+        if isinstance(result, bytes):
+            result = result.decode("utf-8")
 
-        # Let library user submit_tool_outputs and poll the run
-        logger.info(f"results: {results}")
-        return results
+        try:
+            return json.dumps(result, default=loosy_goosy_default_encoder).decode("utf-8")
+        except TypeError as type_error:
+            logger.error(f"Error encoding result for {name}: {type_error}")
+            logger.error(f"Result that json can't handle: {result}")
+            raise
 
-    async def convert_media_type_arg_to_method_name(self, arguments: dict[str, Any], name: str) -> tuple[str, str]:
-        """Convert media type argument to method name
+    def _media_type_to_method_name(self, arguments: dict[str, Any], name: str) -> tuple[str, str]:
+        """Pop a ``mime_type`` argument and redirect to a markdown variant if asked.
 
         Args:
-            arguments (dict[str, Any]): The arguments
-            name (str): The name of the tool
+            arguments (dict[str, Any]): The arguments (mutated to remove mime_type).
+            name (str): The tool name.
+
         Returns:
-            tuple[str, str]: The media type and method name
+            tuple[str, str]: The media type (or None) and the resolved method name.
         """
-        if "mime_type" in arguments:
-            media_type = arguments["mime_type"]
-            del arguments["mime_type"]
-        else:
-            media_type = None
+        media_type = arguments.pop("mime_type", None)
         if media_type == "markdown":
             name = name + "_markdown"
         return media_type, name

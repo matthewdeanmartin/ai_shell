@@ -26,12 +26,10 @@ def generate_the_schema(target_file: str) -> None:
     schemas = {}
     schemas["cat"] = convert_to_json_schema(ai_shell.CatTool)
     schemas["cut"] = convert_to_json_schema(ai_shell.CutTool)
-    schemas["ed"] = convert_to_json_schema(ai_shell.EdTool)
     schemas["sed"] = convert_to_json_schema(ai_shell.SedTool)
     schemas["insert"] = convert_to_json_schema(ai_shell.InsertTool)
     schemas["replace"] = convert_to_json_schema(ai_shell.ReplaceTool)
     schemas["headtail"] = convert_to_json_schema(ai_shell.HeadTailTool)
-    schemas["edlin"] = convert_to_json_schema(ai_shell.EdlinTool)
     schemas["find"] = convert_to_json_schema(ai_shell.FindTool)
     schemas["git"] = convert_to_json_schema(ai_shell.GitTool)
     schemas["patch"] = convert_to_json_schema(ai_shell.PatchTool)

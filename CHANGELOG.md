@@ -22,6 +22,9 @@ token-aware filesystem tools for any LLM agent.
   install.
 
 ### Changed
+- Unified diffs are now the primary edit path: `apply_git_patch` validates that
+  every target file is inside the root folder, and (when `auto_cat` is on) returns
+  the patched file contents so a clean exit isn't mistaken for a correct edit.
 - Tools are now invoked through a neutral `ToolKit.dispatch(name, arguments)`
   instead of an OpenAI-run object.
 - Linters/formatters/test-runners are now an optional `checkers` extra rather than

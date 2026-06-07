@@ -17,12 +17,13 @@ import traceback
 from collections.abc import Generator
 
 import dedlin
+from dedlin.basic_types import StringGeneratorProtocol
+from dedlin.command_sources import StringCommandGenerator
+
 from ai_shell.ai_logs.log_to_bash import log
 from ai_shell.cat_tool import CatTool
 from ai_shell.utils.config_manager import Config
 from ai_shell.utils.read_fs import sanitize_path
-from dedlin.basic_types import StringGeneratorProtocol
-from dedlin.command_sources import StringCommandGenerator
 
 logger = logging.getLogger(__name__)
 

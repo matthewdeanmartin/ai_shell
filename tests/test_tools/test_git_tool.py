@@ -10,7 +10,9 @@ from tests.util import config_for_tests
 
 def _git(repo_dir, *args):
     """Run a git command in repo_dir for test setup."""
-    env = dict(os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t")
+    env = dict(
+        os.environ, GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t", GIT_COMMITTER_EMAIL="t@t"
+    )
     return subprocess.run(
         ["git", "-C", repo_dir, *args], capture_output=True, text=True, check=True, env=env
     ).stdout.strip()

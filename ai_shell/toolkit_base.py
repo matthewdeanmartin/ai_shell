@@ -17,11 +17,7 @@ import orjson as json
 from ai_shell.import_plugins import convert_to_toolkit, handle_tool
 from ai_shell.utils import medias
 from ai_shell.utils.config_manager import Config
-from ai_shell.utils.json_utils import (
-    FatalConfigurationError,
-    exception_to_rfc7807_dict,
-    loosy_goosy_default_encoder,
-)
+from ai_shell.utils.json_utils import FatalConfigurationError, exception_to_rfc7807_dict, loosy_goosy_default_encoder
 
 logger = logging.getLogger(__name__)
 

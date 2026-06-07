@@ -20,8 +20,13 @@ from ai_shell.utils.json_utils import try_everything
 
 
 def test_try_everything():
-    assert try_everything(r"""{
+    assert (
+        try_everything(
+            r"""{
         "glob_pattern": "*.py",
         "regex": "(logger|logging\.|print)",
         "maximum_matches": 1
-    }""") == {"glob_pattern": "*.py", "regex": r"(logger|logging\.|print)", "maximum_matches": 1}
+    }"""
+        )
+        == {"glob_pattern": "*.py", "regex": r"(logger|logging\.|print)", "maximum_matches": 1}
+    )

@@ -9,12 +9,12 @@ import logging
 import logging.config
 import os
 
+import ai_todo
 from dotenv import load_dotenv
 
 import ai_shell
 import ai_shell.ai_logs.log_to_bash
 import ai_shell.demo_bots.demo_setup as demo_setup
-import ai_todo
 
 ai_shell.ai_logs.log_to_bash.LOGGING_ENABLED = True
 

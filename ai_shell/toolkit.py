@@ -14,7 +14,6 @@ from ai_shell.grep_tool import GrepTool
 from ai_shell.head_tail_tool import HeadTailTool
 from ai_shell.insert_tool import InsertTool
 from ai_shell.ls_tool import LsTool
-from ai_shell.toolkit_base import ToolKitBase
 from ai_shell.patch_tool import PatchTool
 from ai_shell.pycat_tool import PyCatTool
 from ai_shell.pytest_tool import PytestTool
@@ -23,6 +22,7 @@ from ai_shell.rewrite_tool import RewriteTool
 from ai_shell.sed_tool import SedTool
 from ai_shell.todo_tool import TodoTool
 from ai_shell.token_tool import TokenCounterTool
+from ai_shell.toolkit_base import ToolKitBase
 from ai_shell.utils.config_manager import Config
 
 # pylint: disable=unused-argument

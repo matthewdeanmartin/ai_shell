@@ -18,7 +18,9 @@ def count_lines_of_code(file_path: str) -> "SourceAnalysis":
     try:
         from pygount import SourceAnalysis
     except ImportError as exc:
-        raise RuntimeError("count_lines_of_code requires pygount. Install ai_shell[checkers] or the pygount package.") from exc
+        raise RuntimeError(
+            "count_lines_of_code requires pygount. Install ai_shell[checkers] or the pygount package."
+        ) from exc
 
     return SourceAnalysis.from_file(file_path, "pygount", encoding="utf-8")
 

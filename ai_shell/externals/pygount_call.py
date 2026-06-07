@@ -1,11 +1,12 @@
-"""
-Check for lines of code for when the bot blows away most of the file.
-"""
+"""Helpers for optional pygount-based line counting."""
 
-from pygount import SourceAnalysis
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from pygount import SourceAnalysis
 
 
-def count_lines_of_code(file_path: str) -> SourceAnalysis:
+def count_lines_of_code(file_path: str) -> "SourceAnalysis":
     """
     Check the lines of code in a file. File must exist.
     Args:
@@ -14,6 +15,11 @@ def count_lines_of_code(file_path: str) -> SourceAnalysis:
     Returns:
         SourceAnalysis: The analysis of the file, including line counts.
     """
+    try:
+        from pygount import SourceAnalysis
+    except ImportError as exc:
+        raise RuntimeError("count_lines_of_code requires pygount. Install ai_shell[checkers] or the pygount package.") from exc
+
     return SourceAnalysis.from_file(file_path, "pygount", encoding="utf-8")
 
 

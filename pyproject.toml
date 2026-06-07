@@ -47,6 +47,7 @@ checkers = [
     "pylint>=3.0.2",
     "ruff>=0.1.9",
     "black>=23.11.0",
+    "pygount>=3.0.0",
 ]
 
 [project.urls]
@@ -104,13 +105,10 @@ norecursedirs = ["vendor", "scripts"]
 #	fast: marks tests as fast (deselect with '-m "not fast"')
 
 [tool.isort]
-default_section = "THIRDPARTY"
-force_grid_wrap = 0
-include_trailing_comma = true
-known_first_party = ["dedlin"]
+profile = "black"
+known_first_party = ["ai_shell"]
 line_length = 120
-multi_line_output = 3
-use_parentheses = true
+skip_gitignore = true
 
 [tool.ruff]
 line-length = 320
@@ -158,7 +156,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 convention = "google"
 
 [tool.scriv]
-version = "literal: pyproject.toml: tool.poetry.version"
+version = "literal: pyproject.toml: project.version"
 format = "md"
 main_branches = "master, main, develop, dev"
 
@@ -170,14 +168,24 @@ check_untyped_defs = true
 [dependency-groups]
 dev = [
     "mypy>=1.8",
-    "pylint>=3.0",
+    "pylint[spelling]>=3.0",
     "ruff>=0.1.9",
     "black>=23.11.0",
+    "isort>=6.0.0",
+    "bandit>=1.8.6",
     "pytest>=7.4.3",
     "pytest-cov>=4.1.0",
     "pytest-snapshot>=0.9.0",
     "anyio>=4.2.0",
+    "pygount>=3.0.0",
     "pdoc>=15.0.4",
+    "pre-commit>=4.0.0",
+    "codespell>=2.4.1",
+    "mdformat>=1.0.0",
+    "interrogate>=1.7.0",
+    "pydoctest==0.2.1",
+    "metametameta>=0.1.5",
+    "keepachangelog-manager-fork[jiggle]>=6.1.1",
     "python-dotenv>=1.0.0",
     "types-jsonschema",
     "types-PyYAML",
@@ -185,6 +193,27 @@ dev = [
 ]
 
 [tool.uv]
+default-groups = ["dev"]
 
 [tool.uv.pip]
 universal = true
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101"]
+
+[tool.changelogmanager.versioning]
+scheme = "semver"
+
+[tool.changelogmanager.validation]
+enforce_preamble = true
+format = "auto"
+
+[tool.changelogmanager.defaults]
+error_format = "github"
+commit_schema = "keepachangelog"
+schema_version = "current"
+
+[[tool.changelogmanager.components]]
+name = "default"
+changelog = "CHANGELOG.md"

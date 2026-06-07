@@ -86,7 +86,9 @@ class LsTool:
         else:
             try:
                 # enumerate list to check if the path exists
-                entries = list(
+                # os.listdir order is OS-dependent (arbitrary on Linux), so sort
+                # for deterministic output that matches real `ls` behavior.
+                entries = sorted(
                     (_ for _ in os.listdir(path))
                     if all_files
                     else (entry for entry in os.listdir(path) if not entry.startswith("."))

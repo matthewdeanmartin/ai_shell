@@ -1,0 +1,34 @@
+---
+site_name: ai_shell
+site_url: https://ai-shell.readthedocs.io/
+site_author: Matthew Martin <matthewdeanmartin@gmail.com>
+site_description: Safer, sandboxed token-aware filesystem tools for LLM agents.
+repo_url: https://github.com/matthewdeanmartin/ai_shell
+theme:
+  name: readthedocs
+  features: [navigation.footer]
+edit_uri: edit/main/docs/
+markdown_extensions:
+  - attr_list
+  - codehilite
+  - toc:
+      permalink: true
+nav:
+  - Home: README.md
+  - Features: Features.md
+  - Manual: Manual.md
+  - Use Cases: UseCases.md
+  - Document Editing: DocumentEditing.md
+  - Design: Design.md
+  - Build Script Bot: build_script_bot.md
+  - API Reference: API.md
+  - Roadmap: TODO.md
+validation:
+  nav:
+    omitted_files: warn
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+plugins:
+  - search

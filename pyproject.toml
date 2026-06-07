@@ -1,5 +1,5 @@
 [project]
-name = "ai_shell"
+name = "ai-shell"
 version = "2.0.0"
 description = "Safer, sandboxed token-aware filesystem tools for LLM agents."
 authors = [{ name = "Matthew Martin", email = "matthewdeanmartin@gmail.com" }]
@@ -49,10 +49,15 @@ checkers = [
     "black>=23.11.0",
     "pygount>=3.0.0",
 ]
+docs = [
+    "mkdocs>=1.6.0",
+]
 
 [project.urls]
 Homepage = "https://github.com/matthewdeanmartin/ai_shell"
 Repository = "https://github.com/matthewdeanmartin/ai_shell"
+Documentation = "https://ai-shell.readthedocs.io/"
+"API Reference" = "https://matthewdeanmartin.github.io/ai_shell/"
 "Bug Tracker" = "https://github.com/matthewdeanmartin/ai_shell/issues"
 "Change Log" = "https://github.com/matthewdeanmartin/ai_shell/blob/main/CHANGELOG.md"
 
@@ -186,6 +191,7 @@ dev = [
     "pydoctest==0.2.1",
     "metametameta>=0.1.5",
     "keepachangelog-manager-fork[jiggle]>=6.1.1",
+    "mkdocs>=1.6.0",
     "python-dotenv>=1.0.0",
     "types-jsonschema",
     "types-PyYAML",

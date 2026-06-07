@@ -16,13 +16,13 @@ and a neutral dispatch table. Bring your own agent loop.
 ## Install
 
 ```shell
-pip install ai_shell
+pip install ai-shell
 ```
 
 Optional linters/formatters/test-runners used by the goal-checker helpers:
 
 ```shell
-pip install "ai_shell[checkers]"
+pip install "ai-shell[checkers]"
 ```
 
 ## Use as a library
@@ -94,5 +94,7 @@ Every file is read and written as UTF-8.
 ## Project links
 
 - [GitHub](https://github.com/matthewdeanmartin/ai_shell)
+- [Documentation](https://ai-shell.readthedocs.io/)
+- [API Reference](https://matthewdeanmartin.github.io/ai_shell/)
 - [PyPI](https://pypi.org/project/ai-shell/)
 - [Change Log](https://github.com/matthewdeanmartin/ai_shell/blob/main/CHANGELOG.md)

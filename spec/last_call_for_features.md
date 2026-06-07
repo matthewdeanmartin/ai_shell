@@ -77,6 +77,13 @@ move out of the headline path).
 | `backup_restore.py` | KEEP | underpins safe writes (`.bak`, `.bad`). |
 | `answer_tool.py` | DEMOTE | "report_*" structured-answer collector only matters to the bot loop. Keep the typed-report helpers, drop the self-certification coupling. |
 
+> **Known bug to fix in the safety pass (Phase 4):** `rewrite_tool`'s
+> `write_new_file` / `rewrite_file` do **not** reject absolute paths outside the
+> root folder — they raise `FileNotFoundError` instead of the expected
+> "File path must be within the root folder" `ValueError`. Two tests
+> (`test_*_failure_outside_root`) have been failing since before the refactor.
+> This is a real jail leak; fix when reworking the safety layer.
+
 ### 3.2 Safety / FS layer — KEEP (the moat)
 
 | Module | Disposition | Notes |

@@ -17,6 +17,7 @@ token-aware filesystem tools for any LLM agent.
 - The `ed` and `edlin` line-editor tools — edit via unified diffs (`apply_git_patch`)
   or `replace`/`insert`/`rewrite` instead.
 - Unimplemented stubs (regex-tester, tool-picker sub-bot) and their config flags.
+- The OpenAI-API JSON request logger and bundled sample logs / demo fixtures.
 - `gitpython`, `bug-trail-core`, and doc-only markdown dependencies from the core
   install.
 

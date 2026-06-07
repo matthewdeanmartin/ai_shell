@@ -2,7 +2,7 @@
 Code generate reverse client
 """
 
-import ai_shell.openai_schemas as schemas
+import ai_shell.schemas as schemas
 
 
 def generate_method_code(schema: dict, prologue: str, namespace: str):
@@ -26,11 +26,11 @@ def generate_method_code(schema: dict, prologue: str, namespace: str):
         "null": "None",
         "object": "Any",  # dict[str,Any] ?
         "['object']": "Any",
-        "list": "List[Any]",
+        "list": "list[Any]",
         "array": "list[Any]",
-        "['string', 'null']": "Optional[str]",
-        "['integer', 'null']": "Optional[int]",
-        "['number', 'null']": "Optional[float]",
+        "['string', 'null']": "str | None",
+        "['integer', 'null']": "int | None",
+        "['number', 'null']": "float | None",
     }
     for method_name, details in schema.items():
         arguments = details["properties"]
@@ -42,7 +42,12 @@ def generate_method_code(schema: dict, prologue: str, namespace: str):
         # Start method definition
         method_code += (
             f"    def {method_name}(self, arguments: dict[str, Any]) -> {return_type}:\n"
-            f'        """Generated Do Not Edit"""\n'
+            f'        """Generated Do Not Edit\n\n'
+            f"        Args:\n"
+            f"            arguments (dict[str, Any]): The arguments for the tool.\n\n"
+            f"        Returns:\n"
+            f"            Any: The result of the tool invocation.\n"
+            f'        """\n'
             f"        {prologue}\n\n"
         )
 
@@ -52,10 +57,17 @@ def generate_method_code(schema: dict, prologue: str, namespace: str):
                 continue
             # Determine if argument is required or optional
             required = arg_name in required_args
-            default_value = f"{arg_details['default']}" if "default" in arg_details else "= None"
+            if "default" in arg_details:
+                if isinstance(arg_details["default"], str):
+                    default_value = f"= {repr(arg_details['default'])}"
+                else:
+                    default_value = f"= {arg_details['default']}"
+            else:
+                default_value = "= None"
+
             default_clause = default_value if not required else ""
-            if default_clause and "string" in arg_details["type"]:
-                default_clause = f'"{default_clause}"'
+            if default_clause and default_clause.startswith("= "):
+                default_clause = default_clause[2:]
 
             # Construct and append the cast line
             arg_type = arg_details["type"]
@@ -82,16 +94,17 @@ def generate_the_toolkit(target_file: str) -> None:
         target_file (str): Target file to write the generated code.
     """
     tools = ""
-    for _ns, json_schema in schemas._SCHEMAS.items():
+    for _ns, json_schema in schemas.SCHEMAS.items():
         for tool, _ in json_schema.items():
             tools += f'            "{tool}" : self.{tool},\n'
 
     header = f"""\"\"\"
 Generate code, do not edit.
 \"\"\"
-from ai_shell.openai_support import ToolKitBase
-from typing import Any, cast, Callable, Optional
+from collections.abc import Callable
+from typing import Any, cast
 
+from ai_shell.toolkit_base import ToolKitBase
 from ai_shell.utils.config_manager import Config
 from ai_shell.cat_tool import CatTool
 from ai_shell.find_tool import FindTool
@@ -99,9 +112,7 @@ from ai_shell.git_tool import GitTool
 from ai_shell.grep_tool import GrepTool
 from ai_shell.ls_tool import LsTool
 from ai_shell.token_tool import TokenCounterTool
-from ai_shell.edlin_tool import EdlinTool
 from ai_shell.pycat_tool import PyCatTool
-from ai_shell.ed_tool import EdTool
 from ai_shell.cut_tool import CutTool
 from ai_shell.head_tail_tool import HeadTailTool
 from ai_shell.patch_tool import PatchTool
@@ -148,13 +159,15 @@ class ToolKit(ToolKitBase):
     prologue["pytest"] = "tool = PytestTool(self.root_folder, self.config)"
 
     # Generate method code
+    all_code = header
+    for ns, json_schema in schemas.SCHEMAS.items():
+        pro = prologue[ns]
+        method_code = generate_method_code(json_schema, pro, ns)
+        all_code += method_code
+
     with open(target_file, "w", encoding="utf-8") as code:
-        code.write(header)
-        for ns, json_schema in schemas._SCHEMAS.items():
-            pro = prologue[ns]
-            method_code = generate_method_code(json_schema, pro, ns)
-            code.write(method_code)
+        code.write(all_code.rstrip() + "\n")
 
 
 if __name__ == "__main__":
-    generate_the_toolkit("../../ai_shell/openai_toolkit.py")
+    generate_the_toolkit("../../ai_shell/toolkit.py")

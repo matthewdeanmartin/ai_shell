@@ -8,44 +8,56 @@ from tests.util import config_for_tests
 
 
 def test_apply_git_patch_success(tmp_path):
-    # Create a dummy patch content
+    # A real-ish unified diff header so file extraction + jail check pass.
     patch_content = "diff --git a/file.txt b/file.txt\nnew file mode 100644\nindex 0000000..e69de29"
 
-    # Initialize PatchTool with the temporary directory
     tool = PatchTool(str(tmp_path), config=config_for_tests())
+    tool.auto_cat = False  # don't try to cat a file that the mock didn't create
 
-    # Mock subprocess.run to simulate successful git apply
     with patch("subprocess.run") as mock_run:
         mock_run.return_value = subprocess.CompletedProcess(
             args=[], returncode=0, stdout="Patch applied successfully.", stderr=""
         )
-
-        # Call apply_git_patch and assert success
         message = tool.apply_git_patch(patch_content)
-        assert message == "Patch applied without exception, please verify by other means to see if it was successful."
+        assert "Patch applied without exception" in message
 
 
 def test_apply_git_patch_failure(tmp_path):
-    # Create a dummy patch content
-    patch_content = "invalid patch format"
+    patch_content = "diff --git a/file.txt b/file.txt\n--- a/file.txt\n+++ b/file.txt\n@@ -1 +1 @@\n-a\n+b\n"
 
-    # Initialize PatchTool with the temporary directory
     tool = PatchTool(str(tmp_path), config=config_for_tests())
 
-    # Mock subprocess.run to simulate a failed git apply
     with patch("subprocess.run") as mock_run:
-        mock_run.return_value = subprocess.CompletedProcess(args=[], returncode=1, stdout="", stderr="patch failed")
-
-        # Call apply_git_patch and expect a RuntimeError
+        mock_run.side_effect = subprocess.CalledProcessError(
+            returncode=1, cmd=["git", "apply"], output="", stderr="patch failed"
+        )
         with pytest.raises(RuntimeError) as excinfo:
             tool.apply_git_patch(patch_content)
         assert "Failed to apply patch" in str(excinfo.value)
 
 
+def test_apply_git_patch_outside_root_rejected(tmp_path):
+    # A patch targeting a parent-directory path must be rejected before any git call.
+    root = tmp_path / "project"
+    root.mkdir()
+    tool = PatchTool(str(root), config=config_for_tests())
+    sibling = (tmp_path / "secret.txt").resolve().as_posix()
+    patch_content = f"diff --git a/{sibling} b/{sibling}\n--- a/{sibling}\n+++ b/{sibling}\n"
+    with pytest.raises(ValueError) as excinfo:
+        tool.apply_git_patch(patch_content)
+    assert "outside the root folder" in str(excinfo.value)
+
+
+def test_apply_git_patch_no_targets_rejected(tmp_path):
+    tool = PatchTool(str(tmp_path), config=config_for_tests())
+    with pytest.raises(ValueError) as excinfo:
+        tool.apply_git_patch("this is not a diff at all")
+    assert "No target files" in str(excinfo.value)
+
+
 def test_extract_files_from_patch():
     tool = PatchTool("dummy_root_folder", config=config_for_tests())
 
-    # Example patch content
     patch_content = """
 diff --git a/file1.txt b/file1.txt
 new file mode 100644
@@ -60,6 +72,6 @@ index 0000000..e69de29
 """
 
     expected_files = {"file1.txt", "dir/file2.txt"}
-    extracted_files = tool._extract_files_from_patch(patch_content)
+    extracted_files = tool._extract_files_from_patch(patch_content)  # pylint: disable=protected-access
 
     assert extracted_files == expected_files, "Extracted files do not match expected files"

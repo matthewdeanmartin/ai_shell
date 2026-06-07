@@ -3,7 +3,7 @@
 ## Refactoring plans
 
 - Move all the tools to a plugin model
-   - Some plugins will be bundled
+  - Some plugins will be bundled
 
 ## Possible break-thrus
 

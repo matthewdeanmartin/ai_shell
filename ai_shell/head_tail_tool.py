@@ -30,7 +30,7 @@ class HeadTailTool:
 
         Args:
             file_path (str): Path to the file.
-            lines (int): Number of lines to return. Defaults to 10.
+            lines (int, optional): Number of lines to return. Defaults to 10.
 
         Returns:
             str: String containing the first 'lines' lines of the file.
@@ -44,7 +44,7 @@ class HeadTailTool:
         Args:
             file_path (str): Path to the file.
             lines (int): Number of lines to return. Ignored if byte_count is specified. Defaults to 10.
-            byte_count (Optional[int]): Number of bytes to return. If specified, overrides lines.
+            byte_count (int | None, optional): Number of bytes to return. If specified, overrides lines.
 
         Returns:
             list[str]: Lines or byte_count of bytes from the start of the file.
@@ -57,7 +57,7 @@ class HeadTailTool:
 
         Args:
             file_path (str): Path to the file.
-            lines (int): Number of lines to return. Defaults to 10.
+            lines (int, optional): Number of lines to return. Defaults to 10.
 
         Returns:
             str: String containing the last 'lines' lines of the file.
@@ -71,7 +71,7 @@ class HeadTailTool:
         Args:
             file_path (str): Path to the file.
             lines (int): Number of lines to return. Ignored if byte_count is specified. Defaults to 10.
-            byte_count (Optional[int]): Number of bytes to return. If specified, overrides lines.
+            byte_count (int | None, optional): Number of bytes to return. If specified, overrides lines.
 
         Returns:
             list[str]: Lines or bytes from the end of the file.
@@ -87,7 +87,7 @@ class HeadTailTool:
             file_path (str): Path to the file.
             lines (int): Number of lines to read. Ignored if byte_count is specified. Defaults to 10.
             mode (str): Operation mode, either 'head' or 'tail'. Defaults to 'head'.
-            byte_count (Optional[int]): Number of bytes to read. If specified, overrides lines.
+            byte_count (int | None, optional): Number of bytes to read. If specified, overrides lines.
 
         Returns:
             list[str]: Requested lines or bytes from the file.

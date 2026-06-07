@@ -1,21 +1,24 @@
 """
-Wrapper around GitPython and shell commands to git.
+Read-only git queries by shelling out to the git CLI.
+
+These are intentionally read-only (status/diff/log/show/branch). We shell out via
+``safe_subprocess`` (``shell=False``) rather than depend on GitPython, which is
+just sugar over the same commands.
 """
 
 import fnmatch
 import logging
 import os
+import shlex
 from typing import Any
 
-from git import Repo
-
 from ai_shell.ai_logs.log_to_bash import log
+from ai_shell.externals.subprocess_utils import CommandResult, safe_subprocess
 from ai_shell.utils.config_manager import Config
 
 logger = logging.getLogger(__name__)
 
 
-# TODO: Support automatically adding a branch on start of session.
 class GitTool:
     def __init__(self, root_folder: str, config: Config) -> None:
         """
@@ -25,12 +28,25 @@ class GitTool:
             root_folder (str): The root folder path for repo operations.
             config (Config): The developer input that bot shouldn't set.
         """
-        # Initialize the repository
         self.repo_path = root_folder
-        self.repo = Repo(root_folder)
         self.config = config
         self.auto_cat = config.get_flag("auto_cat", True)
         self.utf8_errors = config.get_value("utf8_errors", "surrogateescape")
+
+    def _git(self, args: str) -> CommandResult:
+        """Run a git command against the repo and return its result.
+
+        Args:
+            args (str): The git subcommand and arguments (already shell-safe).
+
+        Returns:
+            CommandResult: stdout/stderr/return_code of the command.
+        """
+        repo = shlex.quote(os.path.abspath(self.repo_path))
+        result = safe_subprocess("git", f"-C {repo} {args}")
+        if result.return_code != 0:
+            logger.warning("git %s failed: %s", args, result.stderr)
+        return result
 
     def is_ignored_by_gitignore(self, file_path: str, gitignore_path: str = ".gitignore") -> bool:
         """
@@ -46,28 +62,21 @@ class GitTool:
         Raises:
             FileNotFoundError: If the .gitignore file is not found.
         """
-        # Resolve the full path to the .gitignore file
         full_gitignore_path = os.path.join(self.repo_path, gitignore_path)
 
         if not os.path.isfile(full_gitignore_path):
             raise FileNotFoundError(f"No .gitignore file found at {full_gitignore_path}")
 
-        # Normalize file path
         file_path = os.path.abspath(file_path)
 
         with open(full_gitignore_path, encoding="utf-8", errors=self.utf8_errors) as gitignore:
             for line in gitignore:
                 line = line.strip()
-                # Skip empty lines and comments
                 if not line or line.startswith("#"):
                     continue
-
-                # Convert the .gitignore pattern to a glob pattern
                 gitignore_pattern = os.path.join(os.path.dirname(gitignore_path), line)
-
                 if fnmatch.fnmatch(file_path, gitignore_pattern):
                     return True
-
         return False
 
     @log()
@@ -77,23 +86,29 @@ class GitTool:
         Returns:
             dict[str, Any]: Structured `git status` response
         """
-        logger.info("git status")
-        changed_files = [item.a_path for item in self.repo.index.diff(None)]
-        untracked_files = self.repo.untracked_files
+        result = self._git("status --porcelain")
+        changed_files: list[str] = []
+        untracked_files: list[str] = []
+        for line in result.stdout.splitlines():
+            if not line:
+                continue
+            # porcelain format: 2-char status code, a space, then the path
+            path = line[3:].strip()
+            if line.startswith("??"):
+                untracked_files.append(path)
+            else:
+                changed_files.append(path)
         return {"changed_files": changed_files, "untracked_files": untracked_files}
 
     @log()
-    def get_current_branch(
-        self,
-    ) -> str:
+    def get_current_branch(self) -> str:
         """
         Retrieves the current branch name of the repository.
 
         Returns:
             str: The current branch name.
         """
-        logger.info("git branch --show-current")
-        return self.repo.active_branch.name
+        return self._git("branch --show-current").stdout.strip()
 
     @log()
     def get_recent_commits(self, n: int = 10, short_hash: bool = False) -> list[dict[str, Any]]:
@@ -102,18 +117,17 @@ class GitTool:
 
         Args:
             n (int, optional): The number of recent commits to retrieve. Defaults to 10.
-            short_hash (bool, optional): If True, return short hashes; otherwise, return full hashes. Defaults to False.
+            short_hash (bool, optional): If True, also return short hashes. Defaults to False.
 
         Returns:
-            list[dict[str, Any]]: A list of dictionaries, each containing 'short_hash' and 'full_hash' keys (if short_hash is True),
-                          or only 'full_hash' (if short_hash is False), representing the commit hashes.
+            list[dict[str, Any]]: One dict per commit with a 'full_hash' (and
+                                  'short_hash' when requested).
         """
-        logger.info(f"git log --pretty=format:%H -n {n}")
-        current_branch = self.get_current_branch()
-        commits = list(self.repo.iter_commits(current_branch, max_count=n))
+        result = self._git(f"log --pretty=format:%H -n {int(n)}")
+        hashes = [h for h in result.stdout.splitlines() if h]
         if short_hash:
-            return [{"short_hash": commit.hexsha[:7], "full_hash": commit.hexsha} for commit in commits]
-        return [{"full_hash": commit.hexsha} for commit in commits]
+            return [{"short_hash": h[:7], "full_hash": h} for h in hashes]
+        return [{"full_hash": h} for h in hashes]
 
     @log()
     def git_diff(self) -> list[dict[str, Any]]:
@@ -122,9 +136,8 @@ class GitTool:
         Returns:
             list[dict[str, Any]]: Structured `git diff` response
         """
-        logger.info("git diff --name-only")
-        diffs = self.repo.git.diff("HEAD", name_only=True).splitlines()
-        return [{"file": diff} for diff in diffs]
+        diffs = self._git("diff HEAD --name-only").stdout.splitlines()
+        return [{"file": diff} for diff in diffs if diff]
 
     @log()
     def git_log_file(self, filename: str) -> list[dict[str, Any]]:
@@ -136,8 +149,8 @@ class GitTool:
         Returns:
             list[dict[str, Any]]: Structured `git log` response
         """
-        logger.info(f"git log --pretty=format:%H -n 1 {filename}")
-        commits = self.repo.git.log("--pretty=format:%H - %an, %ar : %s", filename).splitlines()
+        result = self._git(f"log --pretty=format:%H - %an, %ar : %s -- {shlex.quote(filename)}")
+        commits = [c for c in result.stdout.splitlines() if c]
         return [{"commit": commit} for commit in commits]
 
     @log()
@@ -150,8 +163,8 @@ class GitTool:
         Returns:
             list of dict: Structured `git log` response
         """
-        logger.info(f"git log --pretty=format:%H -S {search_string}")
-        commits = self.repo.git.log("-S", search_string, "--pretty=format:%H - %an, %ar : %s").splitlines()
+        result = self._git(f"log -S {shlex.quote(search_string)} --pretty=format:%H - %an, %ar : %s")
+        commits = [c for c in result.stdout.splitlines() if c]
         return [{"commit": commit} for commit in commits]
 
     @log()
@@ -161,8 +174,8 @@ class GitTool:
         Returns:
             list[dict[str, Any]]: Structured `git show` response
         """
-        logger.info("git show --pretty=format:%H -n 1")
-        show_data = self.repo.git.show("--pretty=format:%H - %an, %ar : %s", n=1).splitlines()
+        result = self._git("show --no-patch --pretty=format:%H - %an, %ar : %s")
+        show_data = [d for d in result.stdout.splitlines() if d]
         return [{"data": data} for data in show_data]
 
     @log()
@@ -176,25 +189,6 @@ class GitTool:
         Returns:
             list[dict[str, Any]]: Structured `git diff` response
         """
-        logger.info(f"git diff --name-only {commit1} {commit2}")
-        diffs = self.repo.git.diff(commit1, commit2, name_only=True).splitlines()
+        result = self._git(f"diff {shlex.quote(commit1)} {shlex.quote(commit2)} --name-only")
+        diffs = [d for d in result.stdout.splitlines() if d]
         return [{"file": diff} for diff in diffs]
-
-
-if __name__ == "__main__":
-
-    def run() -> None:
-        """Test run"""
-        tool = GitTool("..", config=Config(".."))
-        current_branch = tool.get_current_branch()
-        print(f"Current branch: {current_branch}")
-        recent = tool.get_recent_commits(5, short_hash=True)
-        print(recent)
-        print(tool.git_status())
-        print(tool.git_diff())
-        print(tool.git_log_file(__file__))
-        print(tool.git_log_search("README"))
-        print(tool.git_show())
-        print(tool.git_diff_commit(recent[0]["short_hash"], recent[1]["short_hash"]))
-
-    run()

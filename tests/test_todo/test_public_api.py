@@ -4,8 +4,8 @@ from pathlib import Path
 import pytest
 
 from ai_shell import change_directory
-from ai_todo import TaskManager
-from ai_todo.models import Task, Work
+from ai_shell.todo import TaskManager
+from ai_shell.todo.models import Task, Work
 
 
 @pytest.fixture
@@ -20,15 +20,15 @@ def test_init(task_manager: TaskManager):
     assert isinstance(task_manager.work, Work), "work should be an instance of Work"
 
     # Check if the completed and incomplete files are correctly set
-    expected_completed_file = "todo_completed.toml"
-    expected_incomplete_file = "todo_incomplete.toml"
+    expected_completed_file = "TODO_done.md"
+    expected_incomplete_file = "TODO.md"
 
     assert task_manager.work.completed.file_path.endswith(
         expected_completed_file
-    ), "completed_file should be set to todo_completed.toml"
+    ), "completed_file should be set to TODO_done.md"
     assert task_manager.work.incomplete.file_path.endswith(
         expected_incomplete_file
-    ), "incomplete_file should be set to todo_incomplete.toml"
+    ), "incomplete_file should be set to TODO.md"
 
     # Verify that the files are in the current working directory
     cwd = os.path.abspath(os.getcwd())

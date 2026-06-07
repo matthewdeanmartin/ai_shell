@@ -1,147 +1,67 @@
-[tool.poetry]
+[project]
 name = "ai_shell"
-version = "1.0.4"
-description = "Filesystem Shell interface that an OpenAI Assitant can use as a tool."
-authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
-keywords = ["openai", "chatgpt", ]
+version = "2.0.0"
+description = "Safer, sandboxed token-aware filesystem tools for LLM agents."
+authors = [{ name = "Matthew Martin", email = "matthewdeanmartin@gmail.com" }]
+keywords = ["llm", "agent", "tools", "filesystem", "shell"]
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.12"
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.13",
 ]
-include = [
-    "ai_shell/**/*.py",
-    "ai_shell/**/*.md",
-    "ai_shell/**/*.txt",
-    "ai_shell/**/*.html",
-    "ai_shell/**/*.jinja",
-    "ai_todo/**/*.md.j2",
-    "ai_shell/py.typed",
-    "ai_todo/**/*.py",
-    "ai_todo/**/*.md",
-    "ai_todo/**/*.txt",
-    "ai_todo/**/*.html",
-    "ai_todo/**/*.jinja",
-    "ai_todo/**/*.md.j2",
-    "ai_todo/py.typed",
-    "ai_shell/fish_tank.zip"
+dependencies = [
+    # token counting + truncated-json repair
+    "untruncate-json>=1.0.0",
+    "tiktoken>=0.4.0",
+    # tool helpers
+    "stdlib-list>=0.10.0",
+    "inflect>=7.0.0",
+    # unified-diff apply (primary edit path)
+    "unidiff>=0.7.5",
+    # pycat support
+    "astor>=0.8.1",
+    # schema generation
+    "docstring-parser>=0.15",
+    "jsonschema>=4.20.0",
+    # config + media types
+    "toml>=0.10.2",
+    "jinja2>=3.1.2",
+    "pyyaml>=6.0.1",
+    "orjson>=3.9.10",
 ]
-exclude = [
-]
-license = "MIT"
-readme = "README.md"
-repository = "https://github.com/matthewdeanmartin/ai_shell"
-homepage = "https://github.com/matthewdeanmartin/ai_shell"
-documentation = "https://github.com/matthewdeanmartin/ai_shell"
 
-[tool.poetry.urls]
+[project.optional-dependencies]
+# Optional goal-checker integrations. Most users already have these binaries;
+# install only if you want to call them through ai_shell's wrappers.
+checkers = [
+    "pytest>=7.4.3",
+    "pytest-cov>=4.1.0",
+    "pylint>=3.0.2",
+    "ruff>=0.1.9",
+    "black>=23.11.0",
+    "pygount>=3.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/matthewdeanmartin/ai_shell"
+Repository = "https://github.com/matthewdeanmartin/ai_shell"
 "Bug Tracker" = "https://github.com/matthewdeanmartin/ai_shell/issues"
 "Change Log" = "https://github.com/matthewdeanmartin/ai_shell/blob/main/CHANGELOG.md"
 
-[tool.poetry.scripts]
-ai_shell = 'ai_shell.__main__:run'
-ais = 'ai_shell.__main__:run'
+[project.scripts]
+ai_shell = "ai_shell.__main__:run"
+ais = "ai_shell.__main__:run"
 
-[tool.poetry.dependencies]
-python = ">=3.12,<4.0"
-openai = ">=1.3.3"
-openai_multi_tool_use_parallel_patch = "*"
-
-# AI Glue
-untruncate-json = "^1.0.0"
-tiktoken = ">=0.4.0"
-
-# Prompt processing
-html2text = "^2020.1.16"
-# python object to markdown
-markpickle = "^1.6.1"
-# Markdown to plaintext (compression)
-markdown-it-py = "^3.0.0"
-mdit-plain = "^1.0.1"
-# Clean up markdown
-mdformat = ">=0.7.16"
-
-# Tools for AI Bots
-stdlib-list = "^0.10.0"
-inflect = "^7.0.0"
-
-# Git tool
-gitpython = ">=3.1.31"
-unidiff = ">=0.7.5"
-
-# pycat support
-# python-minifier = ">=2.9.0" not 3.12 compatible!
-astor = ">=0.8.1"
-
-# editors
-ed = ">=0.1.0"
-dedlin = ">=1.19.0"
-# check if editor removed code
-pygount = ">=1.6.1"
-
-# introspection toolkit_factory
-docstring-parser = ">=0.15"
-jsonschema = ">=4.20.0"
-
-# media types
-toml = ">=0.10.2"
-jinja2 = ">=3.1.2"
-pyyaml = ">=6.0.1"
-orjson = ">=3.9.10"
-
-# "external" tools to be used by goal checker
-pytest = ">=7.4.3"
-pytest-cov = ">=4.1.0"
-pylint = ">=3.0.2"
-ruff = ">=0.1.9"
-
-# logging
-bug-trail-core = ">=2.0.0"
-
-## Demo support
-#importlib_resources = ">=6.1.1"
-
-cli-tool-audit = ">=3.0.0"
-
-[tool.poetry.dev-dependencies]
-python-dotenv = ">=1.0.0"
-# various attempts to auto generate the jsonschema from toolkit_factory' metadata
-#dc-schema = ">=0.0.8"
-#pydantic = ">=2.5.2"
-## can't do methods on classes
-#pytojsonschema=">=1.11.1"
-
-# types
-mypy = ">=1.8.0"
-types-jsonschema = "*"
-types-PyYAML = "*"
-types-toml = "*"
-
-# build tools
-black = ">=23.11.0"
-
-# more testing
-pytest-snapshot = ">=0.9.0"
-# pytest-asyncio = ">=0.23.2"
-anyio = ">=4.2.0"
-trio = ">=0.23.2"
-
-pre-commit = ">=3.5.0"
-
-# docs
-interrogate = ">=1.5.0"
-pydoctest = ">=0.1.22"
-pdoc3 = ">=0.10.0"
-mdformat = ">=0.7.17"
-linkcheckmd = ">=1.4.0"
-codespell = ">=2.2.6"
-pyenchant = ">=3.2.2"
-metametameta = ">=0.1.0"
-# contract
-griffe = ">=0.38.1"
+[tool.hatch.build.targets.wheel]
+packages = ["ai_shell"]
 
 [tool.black]
 line-length = 120
@@ -167,8 +87,8 @@ exclude = '''
 )
 '''
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -185,29 +105,13 @@ norecursedirs = ["vendor", "scripts"]
 #	fast: marks tests as fast (deselect with '-m "not fast"')
 
 [tool.isort]
-default_section = "THIRDPARTY"
-force_grid_wrap = 0
-include_trailing_comma = true
-known_first_party = ["dedlin"]
+profile = "black"
+known_first_party = ["ai_shell"]
 line_length = 120
-multi_line_output = 3
-use_parentheses = true
+skip_gitignore = true
 
 [tool.ruff]
 line-length = 320
-
-# Enable Pyflakes `E` and `F` codes by default.
-select = ["E", "F",
-    "D", # docs
-    "UP", # pyupgrade
-    "B", # bugbear
-]
-ignore = [
-    "E722",
-    # only track structural problems with docstrings, not whitespace, nor missing
-    "D200", "D212", "D415","D411", "D205","D102", "D103", "D100","D107","D101","D104","D105",
-    "UP007", "UP038", # Not sure if | is well supported in lowever versions of python
-]
 
 # Exclude a variety of commonly ignored directories.
 exclude = [
@@ -232,62 +136,84 @@ exclude = [
     "node_modules",
     "venv",
 ]
-per-file-ignores = { }
-
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 # Assume Python 3.10.
 target-version = "py311"
 
+[tool.ruff.lint]
+# Enable Pyflakes `E` and `F` codes by default.
+select = ["E", "F", "D", "UP", "B"]
+ignore = [
+    "E722",
+    # only track structural problems with docstrings, not whitespace, nor missing
+    "D200", "D212", "D415", "D411", "D205", "D102", "D103", "D100", "D107", "D101", "D104", "D105",
+    "UP007", # Not sure if | is well supported in lowever versions of python
+]
+per-file-ignores = { }
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.scriv]
-version = "literal: pyproject.toml: tool.poetry.version"
+version = "literal: pyproject.toml: project.version"
 format = "md"
 main_branches = "master, main, develop, dev"
 
-[mypy]
-warn_return_any = true
+[tool.mypy]
 warn_unused_configs = true
-strict = true
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
+ignore_missing_imports = true
 check_untyped_defs = true
-strict_optional = true
-warn_redundant_casts = true
-warn_no_return = true
-
-[mypy.pygount]
-ignore_missing_imports = true
-
-[mypy.astor]
-ignore_missing_imports = true
-
-[tool.cli-tools]
-# python deps, don't really need to check, unless we make these optional and allow for pipx installation
-mypy = { version = ">=1.8.0" }
-pylint = { version = ">=3.0.2" }
-ruff = {  version = ">=0.1.9" }
-black = {  version = ">=23.11.0" }
-pygount = {  version = "*" }
-
-[tool.bug_trail]
-app_name= "ai_shell"
-app_author= "matthewdeanmartin"
-source_folder = "ai_shell"
-#ctags_file = "fish_tank.tags"
 
 [dependency-groups]
 dev = [
     "mypy>=1.8",
-    "pylint>=3.0",
+    "pylint[spelling]>=3.0",
+    "ruff>=0.1.9",
+    "black>=23.11.0",
+    "isort>=6.0.0",
+    "bandit>=1.8.6",
+    "pytest>=7.4.3",
+    "pytest-cov>=4.1.0",
+    "pytest-snapshot>=0.9.0",
+    "anyio>=4.2.0",
+    "pygount>=3.0.0",
+    "pdoc>=15.0.4",
+    "pre-commit>=4.0.0",
+    "codespell>=2.4.1",
+    "mdformat>=1.0.0",
+    "interrogate>=1.7.0",
+    "pydoctest==0.2.1",
+    "metametameta>=0.1.5",
+    "keepachangelog-manager-fork[jiggle]>=6.1.1",
+    "python-dotenv>=1.0.0",
+    "types-jsonschema",
+    "types-PyYAML",
+    "types-toml",
 ]
 
 [tool.uv]
+default-groups = ["dev"]
 
 [tool.uv.pip]
 universal = true
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101"]
+
+[tool.changelogmanager.versioning]
+scheme = "semver"
+
+[tool.changelogmanager.validation]
+enforce_preamble = true
+format = "auto"
+
+[tool.changelogmanager.defaults]
+error_format = "github"
+commit_schema = "keepachangelog"
+schema_version = "current"
+
+[[tool.changelogmanager.components]]
+name = "default"
+changelog = "CHANGELOG.md"

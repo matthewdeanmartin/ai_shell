@@ -1,29 +1,24 @@
-"""Metadata for ai_shell."""
+"""
+Information about this package.
+"""
 
-__all__ = [
-    "__title__",
-    "__version__",
-    "__description__",
-    "__author__",
-    "__author_email__",
-    "__keywords__",
-    "__status__",
-    "__license__",
-    "__readme__",
-    "__repository__",
-    "__homepage__",
-    "__documentation__",
-]
-
-__title__ = "ai_shell"
-__version__ = "1.0.4"
-__description__ = "Filesystem Shell interface that an OpenAI Assitant can use as a tool."
+__version__ = "2.0.0"
 __author__ = "Matthew Martin"
-__author_email__ = "matthewdeanmartin@gmail.com"
-__keywords__ = ["openai", "chatgpt"]
-__status__ = "3 - Alpha"
+__email__ = "matthewdeanmartin@gmail.com"
+__description__ = "Safer, sandboxed token-aware filesystem tools for LLM agents."
+__title__ = "ai_shell"
 __license__ = "MIT"
-__readme__ = "README.md"
-__repository__ = "https://github.com/matthewdeanmartin/ai_shell"
-__homepage__ = "https://github.com/matthewdeanmartin/ai_shell"
-__documentation__ = "https://github.com/matthewdeanmartin/ai_shell"
+__dependencies__ = [
+    "untruncate-json>=1.0.0",
+    "tiktoken>=0.4.0",
+    "stdlib-list>=0.10.0",
+    "inflect>=7.0.0",
+    "unidiff>=0.7.5",
+    "astor>=0.8.1",
+    "docstring-parser>=0.15",
+    "jsonschema>=4.20.0",
+    "toml>=0.10.2",
+    "jinja2>=3.1.2",
+    "pyyaml>=6.0.1",
+    "orjson>=3.9.10",
+]

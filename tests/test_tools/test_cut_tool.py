@@ -28,7 +28,7 @@ def test_is_in_ranges(index, ranges, expected):
 def create_test_file(tmp_path):
     # Create a temporary CSV file
     test_file = tmp_path / "test.csv"
-    with open(test_file, "w") as f:
+    with open(test_file, "w", encoding="utf-8") as f:
         f.write("Field1,Field2,Field3\n")
         f.write("A,B,C\n")
         f.write("D,E,F\n")

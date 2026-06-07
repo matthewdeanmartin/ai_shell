@@ -37,7 +37,7 @@ The bot sometimes fills in mime type when it is submitting a file thinking that 
 
 The bot finds it difficult to edit files. For many techniques, it can get close. In chat dialogs, the bot wants to
 regenerate the whole document to edit even a single character. Or it wants to use ad hoc diffs. This is problematic
-for programatic use.
+for programmatic use.
 
 ### Linux-Like Editing Strategies
 

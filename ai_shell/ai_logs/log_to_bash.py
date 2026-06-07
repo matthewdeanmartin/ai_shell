@@ -7,7 +7,7 @@ import os
 from collections.abc import Callable
 from typing import Any
 
-import ai_shell.openai_schemas as schemas
+import ai_shell.schemas as schemas
 
 # Determine the directory of the current file
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -108,7 +108,7 @@ def enable_logging(flag: bool) -> None:
 
 def method_to_command_subcommand(method_name: str) -> tuple[str, str]:
     """Convert a method name to a command and subcommand"""
-    schema = schemas._SCHEMAS
+    schema = schemas.SCHEMAS
     for ns, tools in schema.items():
         for name, _ in tools.items():
             if name == method_name:

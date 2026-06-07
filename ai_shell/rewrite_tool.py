@@ -147,8 +147,10 @@ class RewriteTool:
         if not is_file_in_root_folder(full_path, self.root_folder):
             raise ValueError("File path must be within the root folder.")
 
-        # not sure this is working right.
-        _unchanged_proportion, initial, unchanged, added, removed = file_similarity(full_path, text.split("\n"))
+        if not os.path.exists(full_path):
+            raise FileNotFoundError("File does not exist, use ls tool to see what files there are.")
+
+        _unchanged_proportion, initial, _unchanged, _added, removed = file_similarity(full_path, text.split("\n"))
         if self.only_add_text and removed > 0:
             raise TypeError("This would delete lines. Only add lines, do not remove them.")
         if self.only_add_text and len(text.split("\n")) < initial:
@@ -167,9 +169,6 @@ class RewriteTool:
         #     )
 
         try:
-            if not os.path.exists(full_path):
-                raise FileNotFoundError("File does not exist, use ls tool to see what files there are.")
-
             BackupRestore.backup_file(full_path)
 
             with open(full_path, "w", encoding="utf-8") as file:

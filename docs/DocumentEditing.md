@@ -42,7 +42,7 @@ background knowledge of how to use the multiline insert tool, while it has lots 
 ## Success vs Failure
 
 When the bot gets a success flag, it thinks the job is done and stops early. When the bot gets a failure, it
-sometimes assumes the task is impossible and gives up.  This is mitigated a little bit by returning the entire
+sometimes assumes the task is impossible and gives up. This is mitigated a little bit by returning the entire
 document after each edit so it can see what happened.
 
 ## Diff/Patch
@@ -56,7 +56,7 @@ Aider uses a [diff/patch approach with a lengthy prompt](https://github.com/paul
 ## Validated Format
 
 In the case of, say python code, the syntax can be validated and if the bot messed up the document, it can be
-reverted adn the bot can try again.
+reverted and the bot can try again.
 
 ## Guided Edit
 

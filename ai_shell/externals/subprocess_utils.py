@@ -45,8 +45,8 @@ def safe_subprocess(command_name: str, arg_string: str) -> CommandResult:
     # Split the command using shlex
     args = shlex.split(f"{command_name} {arg_string}")
     # Execute the command
-    process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)  # nosec
-    stdout, stderr = process.communicate()
-    # Get the return code
-    return_code = process.returncode
+    with subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False) as process:  # nosec
+        stdout, stderr = process.communicate()
+        # Get the return code
+        return_code = process.returncode
     return CommandResult(command_name, args, stdout.decode(), stderr.decode(), return_code)

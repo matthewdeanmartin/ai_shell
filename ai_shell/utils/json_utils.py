@@ -88,6 +88,7 @@ def try_everything(args_text: str) -> Any:
         raise RuntimeError(f"Infinite loop detected: {args_text}, {current_error}")
     if current_error:
         raise current_error
+    raise RuntimeError("Unexpected fall-through in try_everything")
 
 
 def exception_to_rfc7807_dict(exception: Exception) -> dict[str, Any]:

@@ -14,7 +14,7 @@ from ai_shell.grep_tool import GrepTool
 from ai_shell.head_tail_tool import HeadTailTool
 from ai_shell.insert_tool import InsertTool
 from ai_shell.ls_tool import LsTool
-from ai_shell.openai_support import ToolKitBase
+from ai_shell.toolkit_base import ToolKitBase
 from ai_shell.patch_tool import PatchTool
 from ai_shell.pycat_tool import PyCatTool
 from ai_shell.pytest_tool import PytestTool
@@ -957,8 +957,14 @@ class ToolKit(ToolKitBase):
                 "title",
             ),
         )
+        done_when = cast(str, arguments.get("done_when", ""))
         return tool.add_todo(
-            assignee=assignee, category=category, description=description, source_code_ref=source_code_ref, title=title
+            assignee=assignee,
+            category=category,
+            description=description,
+            source_code_ref=source_code_ref,
+            title=title,
+            done_when=done_when,
         )
 
     def list_valid_assignees(self, arguments: dict[str, Any]) -> Any:

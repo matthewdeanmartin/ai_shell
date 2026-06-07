@@ -7,7 +7,7 @@ import os
 from collections.abc import Callable
 from typing import Any
 
-import ai_shell.openai_schemas as schemas
+import ai_shell.schemas as schemas
 
 # Determine the directory of the current file
 current_dir = os.path.dirname(os.path.abspath(__file__))

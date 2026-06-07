@@ -1,185 +1,98 @@
 # ai_shell
 
-*ARCHIVED* because claude code, open code, gemeni cli, aider etc all exist.
+**Safe, token-aware filesystem tools for LLM agents.**
 
-This was written with Chat GPT 3.5 and 4. If I was going to do this again it would have a different architecture and would be written with a smarter bot.
+`ai_shell` is a library of familiar shell-like tools — `cat`, `ls`, `grep`,
+`find`, `head`/`tail`, `cut`, `sed`, `git`, unified-diff patching, and a few
+more — reimplemented in pure Python, **jailed to a root folder**, and tuned to
+return useful, **token-bounded** output (with optional markdown variants). They
+are **provider-agnostic**: wire them into any agent via the generated JSON Schemas
+and a neutral dispatch table. Bring your own agent loop.
 
+> **History:** this started in 2023 as an OpenAI-Assistant shell, before Claude
+> Code / aider / open-interpreter existed. That bot runtime has been removed; what
+> remains is the part that was actually worth keeping — the safe tools.
 
-## Description
-
-OpenAI-centric shell for giving safe, chat-optimized, filesystem access to an Assistant as a "tool".
-
-Even if you trust the bot to run bash directly on your machine or docker container, standard tools will run up your
-bill with excess tokens in the reply, or a command generates too few tokens and the bot doesn't know what is
-going on.
-
-This project is most similar to [Aider](https://github.com/paul-gauthier/aider). Also similar to [open-interpretor](https://github.com/OpenInterpreter/open-interpreter). Aider is more
-like IDE automation, open-interpretor is more like shell automation.
-
-This is an alternative to `code_interpreter`, tools running code in docker container locally, or tools running arbitrary
-shell code locally.
-
-When used as a library, this has some overlap with tool-use libraries that use introspection of types to tell bots how
-to execute functions.
-
-## Installation
-
-`pip install ai_shell`
-
-## Usage
-
-See these full examples. As long as the OPENAI_API_KEY environment variable is set, you can run these examples.
-
-- [Pylint bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/ai_shell/demo_bots/pylint_bot.py) will
-  attempt to
-  fix python
-  code lint issues.
-- [Test writer bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/ai_shell/demo_bots/test_writer_bot.py) will attempt to
-  write unit tests for python code.
-- [Tool tester bot](https://github.com/matthewdeanmartin/ai_shell/blob/main/ai_shell/demo_bots/tool_tester_bot.py) tries out tools
-  to see if they basically work.
-
-To execute demo bots, run these commands and follow initialization instructions if needed. They all expect to
-manipulate python code in an /src/ folder.
+## Install
 
 ```shell
-python -m ai_shell.demo_bots.docs_writer_bot
-python -m ai_shell.demo_bots.pylint_bot
-python -m ai_shell.demo_bots.test_writer_bot
-python -m ai_shell.demo_bots.tool_tester_bot
-python -m ai_shell.demo_bots.todo_bot
+pip install ai_shell
 ```
 
-This is the python interface to the tools, how you're expected to wire up the tool to your bot.
+Optional linters/formatters/test-runners used by the goal-checker helpers:
+
+```shell
+pip install "ai_shell[checkers]"
+```
+
+## Use as a library
+
+Each tool is a small class scoped to a root folder. Tools refuse to read or write
+outside that folder.
 
 ```python
 import ai_shell
 
-cat = ai_shell.CatTool(".")
-print(cat.cat(["file.py"]))
-print(cat.cat_markdown(["file.py"]))
+config = ai_shell.Config()
 
-ls = ai_shell.LsTool(".")
-print(ls.ls("docs"))
-print(ls.ls_markdown("docs"))
+cat = ai_shell.CatTool(".", config)
+print(cat.cat_markdown(["pyproject.toml"]))
+
+ls = ai_shell.LsTool(".", config)
+print(ls.ls_markdown(path="."))
 ```
 
-This is the smallest example to illustrate basic capabilities, also
-see [here](https://github.com/matthewdeanmartin/ai_shell/blob/main/example_tiny_bot.py).
+## Use with any tool-calling model
+
+`ai_shell` exposes JSON Schemas for the tools and a neutral dispatcher. Register
+the schemas with your model, then route each tool call through
+`ToolKit.dispatch(name, arguments)`:
 
 ```python
-import asyncio
 import ai_shell
+from ai_shell.tools_registry import ALL_TOOLS, initialize_all_tools
 
+# Pick the tools you want to expose.
+tool_names = ["ls", "cat_markdown", "grep", "apply_git_patch"]
+initialize_all_tools(keeps=tool_names)
 
-async def main():
-    def static_keep_going(toolkit: ai_shell.ToolKit):
-        usage = toolkit.get_tool_usage_for("ls")
-        if usage["count"] > 0:
-            return (
-                "Great job! You've used ls. Summarize in paragraph form and we're done."
-            )
-        return (
-            "You haven't used the ls tool yet. Do you have access to the ls tool? If"
-            " there is a problem report it to the report_text tool to end the session."
-        )
+toolkit = ai_shell.ToolKit(
+    root_folder=".", token_model="gpt-4o", global_max_lines=500,
+    permitted_tools=tool_names, config=ai_shell.Config(),
+)
 
-    # Creates temporary bots
-    bot = ai_shell.TaskBot(
-        ai_shell.Config(),
-        name="Folder inspection bot.",
-        bot_instructions="Run the ls tool and tell me what you see.",
-        model="gpt-4o-mini",
-        dialog_logger_md=ai_shell.DialogLoggerWithMarkdown("./tmp"),
-    )
-    await bot.initialize()
-    the_ask = f"""You are in the './' folder. You do not need to guess the pwd, it is './'. 
-    Run ls and tell me what you see in paragraph format."""
-    await bot.basic_tool_loop(
-        the_ask=the_ask,
-        root_folder="./src",
-        tool_names=[
-            "ls",
-            "report_text",
-        ],
-        keep_going_prompt=static_keep_going,
-    )
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
+# `ALL_TOOLS` holds the JSON Schemas to hand to your model.
+# When the model asks for a tool, dispatch it:
+result_json = toolkit.dispatch("ls", {"path": "."})
 ```
 
-This is the cli interface, which is intended for testing, not for bot usage.
+`dispatch` enforces the per-session tool allowlist, tracks usage stats, applies
+optional media-type conversion, and converts errors to RFC7807 JSON so a model can
+read and recover from them.
+
+## CLI (sanity harness)
+
+A generated CLI mirrors the tools — handy for checking a tool behaves before
+giving it to a model:
 
 ```shell
 ais cat_markdown --file-paths pyproject.toml
+ais grep --regex "def " --glob-pattern "ai_shell/*.py"
 ```
 
-## Features in Brief
+## Tools
 
-- Many cli-like tools interfaces, such as ls, cat, grep, head, tail, and git.
-- OpenAI glue for all cli tools.
-- UX with a bot in mind.
-- Security with mischievous but not especially malicious bot in mind.
-- Bot (Assistant) boilerplate help
-- Support for bots doing one shot tool use and goal function driven tool use.
-- Bot have extensibility points.
-- TODO: plugin system for tools.
+- **Read:** `ls`, `find`, `cat`, `grep`, `head`/`tail`, `cut`, `pycat`
+  (python-aware), `count_tokens`, and read-only `git` (status/diff/log/show/branch).
+- **Edit:** `apply_git_patch` (unified diff — the primary edit path), plus
+  `replace`, `insert`, `rewrite_file` / `write_new_file` for non-diff edits.
+- **Tasking:** a small TODO store (`ai_shell.todo`) for splitting work into
+  verifiable items — see [ai_shell/todo/README.md](ai_shell/todo/README.md).
 
-## Analogues supported today
+Every file is read and written as UTF-8.
 
-**Directories**: ls, find
-
-**Files**: cat, grep, head, tail
-
-**Editing**: sed, ed, edlin, patch, replace, insert, rewrite, write new
-
-**Data**: cut
-
-**Other**: pycat, token counter, git
-
-**Tasking**: todo
-
-n.b. Every file is read and written as utf-8 strings.
-
-## Prior Art
-
-Running "code interpretor" on your own machine
-- [open-interpretor](https://github.com/OpenInterpreter/open-interpreter) - This is the closest to ai_shell I've found.
-
-ai_shell draws inspiration from various command-line interface (CLI) tools and shell environments, integrating
-features from traditional shells with OpenAI's language models. It is designed to provide an easy and secure interface
-for AI-assisted file system interactions, keeping in mind both usability and safety.
-
-All of these use the Completions API (last I checked):
-- [openai-functions](https://pypi.org/project/openai-functions/)
-- [ActionWeaver](https://pypi.org/project/actionweaver/)
-- [openai-function-calling](https://pypi.org/project/openai-function-calling/)
-- [gptfunctionutils](https://pypi.org/project/gptfunctionutils/)
-- [openai-decorator](https://pypi.org/project/openai-decorator/)
-- [openai-agent](https://github.com/laipz8200/openai-agent])
-- [openai-func-parser](https://pypi.org/project/openai-func-parser/)
-- [openai-function-call](https://pypi.org/project/openai-function-call/)
-- [langjam.func_to_tool](https://pypi.org/project/langjam/)
-- [schemafunc](https://github.com/dmwyatt/schemafunc)
-
-
-Uses Assistant/Beta API
--[openai_assistant_toolkit](https://pypi.org/project/openai_assistant_toolkit/) minimal code in this library.
-
-
-## Documentation
-
-- [Features](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Features.md)
-- [Design](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Design.md)
-- [Use Cases](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/Usecases.md)
-- [TODO](https://github.com/matthewdeanmartin/ai_shell/blob/main/docs/TODO.md)
-- [API docs, pdoc3 style](https://matthewdeanmartin.github.io/ai_shell/)
-
-## Project Links
+## Project links
 
 - [GitHub](https://github.com/matthewdeanmartin/ai_shell)
 - [PyPI](https://pypi.org/project/ai-shell/)
-- [Bug Tracker](https://github.com/matthewdeanmartin/ai_shell/issues)
 - [Change Log](https://github.com/matthewdeanmartin/ai_shell/blob/main/CHANGELOG.md)

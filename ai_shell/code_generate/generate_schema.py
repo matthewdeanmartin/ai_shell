@@ -49,4 +49,4 @@ def generate_the_schema(target_file: str) -> None:
 
 
 if __name__ == "__main__":
-    generate_the_schema("../../ai_shell/openai_schemas.py")
+    generate_the_schema("../../ai_shell/schemas.py")

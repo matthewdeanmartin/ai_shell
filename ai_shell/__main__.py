@@ -331,6 +331,7 @@ def add_todo_command(args):
             description=args.description,
             source_code_ref=args.source_code_ref,
             title=args.title,
+            done_when=args.done_when,
         )
     )
 
@@ -1173,6 +1174,10 @@ def run():
     )
 
     add_todo_parser.add_argument("--description", dest="description", help="""A description of the task.""")
+
+    add_todo_parser.add_argument(
+        "--done-when", dest="done_when", default="", help="""Acceptance criteria: how to know the task is complete."""
+    )
 
     add_todo_parser.add_argument(
         "--mime-type",

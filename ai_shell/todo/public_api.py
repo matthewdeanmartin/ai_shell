@@ -1,14 +1,14 @@
 import os
 
-from ai_todo.models import Task, Work
-from ai_todo.views import assigned_incomplete_tasks_to_markdown, search_results_to_markdown
+from ai_shell.todo.models import Task, Work
+from ai_shell.todo.views import assigned_incomplete_tasks_to_markdown, search_results_to_markdown
 
 
 class TaskManager:
     def __init__(self, root_folder: str, valid_assignees: list[str]):
         # put these into the pwd folder, not root_folder.
-        completed_file = os.path.abspath("todo_completed.toml")
-        incomplete_file = os.path.abspath("todo_incomplete.toml")
+        completed_file = os.path.abspath("TODO_done.md")
+        incomplete_file = os.path.abspath("TODO.md")
         self.work = Work(completed_file, incomplete_file, valid_assignees)
         if not valid_assignees:
             raise ValueError("Need at least 1 assignee")
@@ -27,11 +27,17 @@ class TaskManager:
         return search_results_to_markdown(keyword, results)
 
     def add_task(
-        self, title: str, description: str, category: str, source_code_ref: str, assignee: str | None = None
+        self,
+        title: str,
+        description: str,
+        category: str,
+        source_code_ref: str,
+        assignee: str | None = None,
+        done_when: str = "",
     ) -> None:
         if assignee not in self.valid_assignees and assignee is not None:
             raise ValueError(f"Invalid assignee. These are valid {self.valid_assignees}")
-        new_task = Task(title, description, False, category, source_code_ref, assignee)
+        new_task = Task(title, description, False, category, source_code_ref, assignee, done_when)
         self.work.incomplete.add_task(new_task)
         self.work.incomplete.save_tasks()  # Save after adding task
 

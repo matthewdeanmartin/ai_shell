@@ -1,5 +1,5 @@
-from ai_todo.models import Task
-from ai_todo.views import assigned_incomplete_tasks_to_markdown, search_results_to_markdown
+from ai_shell.todo.models import Task
+from ai_shell.todo.views import assigned_incomplete_tasks_to_markdown, search_results_to_markdown
 
 
 def test_assigned_incomplete_tasks_to_markdown(snapshot):

@@ -6,8 +6,8 @@ The bot doesn't understand the assignee field.
 
 import logging
 
-import ai_todo
 from ai_shell.ai_logs.log_to_bash import log
+from ai_shell.todo.public_api import TaskManager
 from ai_shell.utils.config_manager import Config
 
 logger = logging.getLogger(__name__)
@@ -27,11 +27,17 @@ class TodoTool:
         self.root_folder: str = root_folder
         self.config = config
         self.roles = config.get_list("todo_roles")
-        self.task_manager = ai_todo.TaskManager(self.root_folder, self.roles)
+        self.task_manager = TaskManager(self.root_folder, self.roles)
 
     @log()
     def add_todo(
-        self, title: str, description: str, category: str, source_code_ref: str, assignee: str | None = None
+        self,
+        title: str,
+        description: str,
+        category: str,
+        source_code_ref: str,
+        assignee: str | None = None,
+        done_when: str = "",
     ) -> str:
         """
         Adds a new task to the task manager.
@@ -42,11 +48,13 @@ class TodoTool:
             category (str): The category of the task (e.g., 'bug', 'feature').
             source_code_ref (str): Reference to the source code related to the task.
             assignee (str, optional): The name of the assignee. Defaults to None.
+            done_when (str, optional): Acceptance criteria — how to know the task is
+                                       complete. Defaults to "".
 
         Returns:
             str: A confirmation message indicating successful addition of the task.
         """
-        self.task_manager.add_task(title, description, category, source_code_ref, assignee)
+        self.task_manager.add_task(title, description, category, source_code_ref, assignee, done_when)
         summary = self.task_manager.get_stats()
         return f"Successful added task {title}\n{summary}"
 

@@ -884,6 +884,10 @@ _SCHEMAS = {
                 "assignee": {"description": "The name of the assignee. Defaults to None.", "type": ["string", "null"]},
                 "category": {"description": "The category of the task (e.g., 'bug', 'feature').", "type": "string"},
                 "description": {"description": "A description of the task.", "type": "string"},
+                "done_when": {
+                    "description": "Acceptance criteria: how to know the task is complete.",
+                    "type": "string",
+                },
                 "mime_type": {
                     "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
                     "type": "string",

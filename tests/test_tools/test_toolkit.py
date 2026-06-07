@@ -1,7 +1,7 @@
 import pytest
 
-from ai_shell.openai_toolkit import ToolKit
-from ai_shell.openai_tools import just_tool_names
+from ai_shell.toolkit import ToolKit
+from ai_shell.tools_registry import just_tool_names
 from tests.util import config_for_tests
 
 pytestmark = pytest.mark.anyio

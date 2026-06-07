@@ -3,7 +3,7 @@ from os.path import dirname, join
 
 from jinja2 import Environment, FileSystemLoader
 
-from ai_todo.models import Task
+from ai_shell.todo.models import Task
 
 
 def assigned_incomplete_tasks_to_markdown(assignee_name: str, tasks: list[Task]):

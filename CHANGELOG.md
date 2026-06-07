@@ -18,7 +18,7 @@ token-aware filesystem tools for any LLM agent.
   or `replace`/`insert`/`rewrite` instead.
 - Unimplemented stubs (regex-tester, tool-picker sub-bot) and their config flags.
 - The OpenAI-API JSON request logger and bundled sample logs / demo fixtures.
-- `gitpython`, `bug-trail-core`, and doc-only markdown dependencies from the core
+- `bug-trail-core`, `markpickle`, and doc-only markdown dependencies from the core
   install.
 
 ### Changed
@@ -27,6 +27,11 @@ token-aware filesystem tools for any LLM agent.
   the patched file contents so a clean exit isn't mistaken for a correct edit.
 - Tools are now invoked through a neutral `ToolKit.dispatch(name, arguments)`
   instead of an OpenAI-run object.
+- The TODO task store now lives at `ai_shell.todo` and is stored as Markdown with
+  YAML frontmatter (`TODO.md` / `TODO_done.md`) instead of a private TOML format.
+  Tasks gained a `done_when` acceptance-criteria field for the goal loop.
+- Read-only `git` tools now shell out to the `git` CLI; `gitpython` is no longer a
+  direct dependency.
 - Linters/formatters/test-runners are now an optional `checkers` extra rather than
   required dependencies.
 - Packaging migrated from Poetry to standard PEP 621 (`uv`).

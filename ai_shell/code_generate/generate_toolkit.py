@@ -2,7 +2,7 @@
 Code generate reverse client
 """
 
-import ai_shell.openai_schemas as schemas
+import ai_shell.schemas as schemas
 
 
 def generate_method_code(schema: dict, prologue: str, namespace: str):
@@ -89,7 +89,7 @@ def generate_the_toolkit(target_file: str) -> None:
     header = f"""\"\"\"
 Generate code, do not edit.
 \"\"\"
-from ai_shell.openai_support import ToolKitBase
+from ai_shell.toolkit_base import ToolKitBase
 from typing import Any, cast, Callable, Optional
 
 from ai_shell.utils.config_manager import Config
@@ -155,4 +155,4 @@ class ToolKit(ToolKitBase):
 
 
 if __name__ == "__main__":
-    generate_the_toolkit("../../ai_shell/openai_toolkit.py")
+    generate_the_toolkit("../../ai_shell/toolkit.py")

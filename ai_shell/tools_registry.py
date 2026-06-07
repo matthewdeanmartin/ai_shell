@@ -1,8 +1,9 @@
 """
-All the tools are optimized for LLMs, but not openai specifically.
+Registry of tool JSON Schemas.
 
-This Toolkit and schemas handles some of the boilerplate for interfacing with
-the openai python client.
+The tools are optimized for LLMs but not for any specific vendor. JSON Schema is
+the lingua franca for tool-calling across providers; this module exposes the
+generated schemas and helpers to select which tools to expose.
 """
 
 import logging
@@ -10,7 +11,7 @@ from collections.abc import Collection
 from typing import Any, Union
 
 from ai_shell.ls_tool import LsTool
-from ai_shell.openai_schemas import _SCHEMAS
+from ai_shell.schemas import _SCHEMAS
 from ai_shell.utils.config_manager import Config
 
 logger = logging.getLogger(__name__)

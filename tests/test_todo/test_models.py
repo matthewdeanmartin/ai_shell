@@ -1,7 +1,7 @@
 import re
 
 from ai_shell.utils.read_fs import temporary_change_dir
-from ai_todo.models import Task, Todos, Work  # Replace 'your_module' with the actual module name
+from ai_shell.todo.models import Task, Todos, Work  # Replace 'your_module' with the actual module name
 
 
 def test_add_task(tmp_path):

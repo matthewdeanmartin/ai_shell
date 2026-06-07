@@ -19,8 +19,6 @@ dependencies = [
     # token counting + truncated-json repair
     "untruncate-json>=1.0.0",
     "tiktoken>=0.4.0",
-    # python object -> markdown (tool markdown variants)
-    "markpickle>=1.6.1",
     # tool helpers
     "stdlib-list>=0.10.0",
     "inflect>=7.0.0",
@@ -62,7 +60,10 @@ ai_shell = "ai_shell.__main__:run"
 ais = "ai_shell.__main__:run"
 
 [tool.hatch.build.targets.wheel]
-packages = ["ai_shell", "ai_todo"]
+packages = ["ai_shell"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"ai_shell/todo/templates" = "ai_shell/todo/templates"
 
 [tool.black]
 line-length = 120

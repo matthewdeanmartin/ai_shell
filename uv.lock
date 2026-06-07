@@ -16,7 +16,6 @@ dependencies = [
     { name = "inflect" },
     { name = "jinja2" },
     { name = "jsonschema" },
-    { name = "markpickle" },
     { name = "orjson" },
     { name = "pygount" },
     { name = "pyyaml" },
@@ -60,7 +59,6 @@ requires-dist = [
     { name = "inflect", specifier = ">=7.0.0" },
     { name = "jinja2", specifier = ">=3.1.2" },
     { name = "jsonschema", specifier = ">=4.20.0" },
-    { name = "markpickle", specifier = ">=1.6.1" },
     { name = "orjson", specifier = ">=3.9.10" },
     { name = "pygount", specifier = ">=1.6.1" },
     { name = "pylint", marker = "extra == 'checkers'", specifier = ">=3.0.2" },
@@ -594,18 +592,6 @@ wheels = [
 ]
 
 [[package]]
-name = "markpickle"
-version = "2.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "mistune" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/1a/52/fb024cec895b8a33d4782763eeba22b4eeb0713eab6b870abe6c14b607d8/markpickle-2.0.0.tar.gz", hash = "sha256:1bf616860d637168c267e72b0c405bb183f03ebc366751f78fe490ea1f8f27a7", size = 11514612, upload-time = "2026-03-26T14:25:55.15Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/61/18/a6a9a9efec100a1420747a1c6f67ce9e9583fd64bcb6fb2dcf58f6f0b76d/markpickle-2.0.0-py3-none-any.whl", hash = "sha256:f15ca612213ae3b94bdb30c7cb34cb7bb96f03df01fa6dd20b5f9742581dff3e", size = 60219, upload-time = "2026-03-26T14:25:53.282Z" },
-]
-
-[[package]]
 name = "markupsafe"
 version = "3.0.3"
 source = { registry = "https://pypi.org/simple" }
@@ -684,15 +670,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/d6/54/cfe61301667036ec958cb99bd3efefba235e65cdeb9c84d24a8293ba1d90/mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba", size = 8729, upload-time = "2022-08-14T12:40:10.846Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b3/38/89ba8ad64ae25be8de66a6d463314cf1eb366222074cfda9ee839c56a4b4/mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8", size = 9979, upload-time = "2022-08-14T12:40:09.779Z" },
-]
-
-[[package]]
-name = "mistune"
-version = "2.0.5"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/fb/6b/d8013058fcdb0088b4130164fc961e15c50d30302f60a349c16bdfda9770/mistune-2.0.5.tar.gz", hash = "sha256:0246113cb2492db875c6be56974a7c893333bf26cd92891c85f63151cee09d34", size = 75854, upload-time = "2023-02-07T05:42:06.739Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9f/e5/780d22d19543f339aad583304f58002975b586757aa590cbe7bea5cc6f13/mistune-2.0.5-py2.py3-none-any.whl", hash = "sha256:bad7f5d431886fcbaf5f758118ecff70d31f75231b34024a1341120340a65ce8", size = 24549, upload-time = "2023-02-07T05:42:05.089Z" },
 ]
 
 [[package]]

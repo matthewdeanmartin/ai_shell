@@ -62,9 +62,6 @@ ais = "ai_shell.__main__:run"
 [tool.hatch.build.targets.wheel]
 packages = ["ai_shell"]
 
-[tool.hatch.build.targets.wheel.force-include]
-"ai_shell/todo/templates" = "ai_shell/todo/templates"
-
 [tool.black]
 line-length = 120
 target-version = ['py39']

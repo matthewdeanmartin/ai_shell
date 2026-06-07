@@ -20,9 +20,7 @@ nav:
   - Use Cases: UseCases.md
   - Document Editing: DocumentEditing.md
   - Design: Design.md
-  - Build Script Bot: build_script_bot.md
   - API Reference: API.md
-  - Roadmap: TODO.md
 validation:
   nav:
     omitted_files: warn

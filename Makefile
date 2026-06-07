@@ -4,7 +4,7 @@ export PYTHONUTF8 := 1
 
 PACKAGE := ai_shell
 PYTHON_TARGETS := ai_shell tests
-PYLINT_MAIN_TARGETS := ai_shell
+PYLINT_MAIN_TARGETS := ai_shell/ai_logs ai_shell/code_generate ai_shell/externals ai_shell/plugins ai_shell/pyutils ai_shell/todo ai_shell/utils ai_shell/*.py
 PYLINT_TEST_TARGETS := tests
 MARKDOWN_TARGETS := README.md CHANGELOG.md docs/*.md
 ABOUT_FILE := ai_shell/__about__.py
@@ -46,9 +46,7 @@ sync:
 
 clean:
 	@$(UV) run python -c "from pathlib import Path; import shutil; \
-for path in ['build', 'dist', 'htmlcov', '.pytest_cache', '.ruff_cache', '.mypy_cache', '.coverage', 'junit.xml']; \
-    p = Path(path); \
-    shutil.rmtree(p, ignore_errors=True) if p.is_dir() else p.unlink(missing_ok=True)"
+[shutil.rmtree(p, ignore_errors=True) if p.is_dir() else p.unlink(missing_ok=True) for p in [Path(path) for path in ['build', 'dist', 'htmlcov', '.pytest_cache', '.ruff_cache', '.mypy_cache', '.coverage', 'junit.xml']]]"
 
 pre-commit-install:
 	@$(UV) run pre-commit install
@@ -101,7 +99,7 @@ pylint-tests:
 	@$(UV) run pylint --score=n --reports=n --rcfile=.pylintrc_tests $(PYLINT_TEST_TARGETS)
 
 pylint-spelling:
-	@$(UV) run pylint --score=n --reports=n --rcfile=.pylintrc_spell $(PYLINT_MAIN_TARGETS)
+	@$(UV) run pylint --ignore=logs --score=n --reports=n --rcfile=.pylintrc_spell $(PYLINT_MAIN_TARGETS)
 
 bandit:
 	@$(UV) run bandit -q -c pyproject.toml -r $(PACKAGE)
@@ -124,6 +122,7 @@ build-docs:
 make_docs: build-docs
 
 spell: pylint-spelling
+	@$(UV) run python -c "from pathlib import Path; import shutil; shutil.rmtree('ai_shell/logs', ignore_errors=True); Path('ai_shell/logs').mkdir(exist_ok=True)"
 	@$(UV) run codespell --ignore-words=private_dictionary.txt $(PACKAGE) tests README.md CHANGELOG.md docs
 
 check_spelling: spell

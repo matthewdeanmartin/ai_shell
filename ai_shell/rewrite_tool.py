@@ -150,7 +150,7 @@ class RewriteTool:
         if not os.path.exists(full_path):
             raise FileNotFoundError("File does not exist, use ls tool to see what files there are.")
 
-        _unchanged_proportion, initial, unchanged, added, removed = file_similarity(full_path, text.split("\n"))
+        _unchanged_proportion, initial, _unchanged, _added, removed = file_similarity(full_path, text.split("\n"))
         if self.only_add_text and removed > 0:
             raise TypeError("This would delete lines. Only add lines, do not remove them.")
         if self.only_add_text and len(text.split("\n")) < initial:

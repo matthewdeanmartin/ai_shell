@@ -35,9 +35,9 @@ class LsTool:
         """List directory contents, with options to include all files and detailed view.
 
         Args:
-            path (str, optional): The directory path to list. Defaults to the current directory '.'.
-            all_files (bool): If True, include hidden files. Defaults to False.
-            long (bool): If True, include details like permissions, owner, size, and modification date. Defaults to False.
+            path (str | None, optional): The directory path to list. Defaults to the current directory '.'.
+            all_files (bool, optional): If True, include hidden files. Defaults to False.
+            long (bool, optional): If True, include details like permissions, owner, size, and modification date. Defaults to False.
 
         Returns:
             str: The markdown representation of the ls command output.
@@ -67,12 +67,12 @@ class LsTool:
         List directory contents, with options to include all files and detailed view.
 
         Args:
-            path (str, optional): The directory path to list. Defaults to the current directory '.'.
-            all_files (bool): If True, include hidden files. Defaults to False.
-            long (bool): If True, include details like permissions, owner, size, and modification date. Defaults to False.
+            path (str | None, optional): The directory path to list. Defaults to the current directory '.'.
+            all_files (bool, optional): If True, include hidden files. Defaults to False.
+            long (bool, optional): If True, include details like permissions, owner, size, and modification date. Defaults to False.
 
         Returns:
-            List[str]: List of files and directories, optionally with details.
+            list[str] | str: List of files and directories, optionally with details.
         """
         logger.info(f"ls --path {path} --all_files {all_files} --long  {long}")
 

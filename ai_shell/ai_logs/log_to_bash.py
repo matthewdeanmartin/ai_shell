@@ -108,7 +108,7 @@ def enable_logging(flag: bool) -> None:
 
 def method_to_command_subcommand(method_name: str) -> tuple[str, str]:
     """Convert a method name to a command and subcommand"""
-    schema = schemas._SCHEMAS
+    schema = schemas.SCHEMAS
     for ns, tools in schema.items():
         for name, _ in tools.items():
             if name == method_name:

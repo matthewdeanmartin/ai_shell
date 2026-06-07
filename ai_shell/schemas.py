@@ -1,18 +1,18 @@
 """jsonschema for functions"""
 
-_SCHEMAS = {
+SCHEMAS = {
     "answer_collector": {
         "report_bool": {
             "description": "Report answer in bool format.",
             "properties": {
-                "answer": {"description": "The answer to be reported in bool format.", "type": "boolean"},
+                "answer": {"description": "The answer to be reported in bool " "format.", "type": "boolean"},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -22,14 +22,14 @@ _SCHEMAS = {
         "report_dict": {
             "description": "Report answer in dict format.",
             "properties": {
-                "answer": {"description": "The answer to be reported in dict format.", "type": ["object"]},
+                "answer": {"description": "The answer to be reported in dict " "format.", "type": ["object"]},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -39,14 +39,14 @@ _SCHEMAS = {
         "report_float": {
             "description": "Report answer in string format.",
             "properties": {
-                "answer": {"description": "The answer to be reported in float format.", "type": "number"},
+                "answer": {"description": "The answer to be reported in " "float format.", "type": "number"},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -56,14 +56,14 @@ _SCHEMAS = {
         "report_int": {
             "description": "Report answer in integer format",
             "properties": {
-                "answer": {"description": "The answer to be reported in integer format.", "type": "integer"},
+                "answer": {"description": "The answer to be reported in " "integer format.", "type": "integer"},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -73,14 +73,14 @@ _SCHEMAS = {
         "report_json": {
             "description": "Report answer in json format.",
             "properties": {
-                "answer": {"description": "The answer to be reported in json format.", "type": "string"},
+                "answer": {"description": "The answer to be reported in json " "format.", "type": "string"},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -90,14 +90,14 @@ _SCHEMAS = {
         "report_list": {
             "description": "Report answer in list format.",
             "properties": {
-                "answer": {"description": "The answer to be reported in list format.", "type": "string"},
+                "answer": {"description": "The answer to be reported in list " "format.", "type": "string"},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -107,14 +107,14 @@ _SCHEMAS = {
         "report_set": {
             "description": "Report answer in set format.",
             "properties": {
-                "answer": {"description": "The answer to be reported in set format.", "type": "array"},
+                "answer": {"description": "The answer to be reported in set " "format.", "type": "array"},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -124,14 +124,14 @@ _SCHEMAS = {
         "report_text": {
             "description": "Report answer in string format.",
             "properties": {
-                "answer": {"description": "The answer to be reported in string format.", "type": "string"},
+                "answer": {"description": "The answer to be reported in " "string format.", "type": "string"},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -141,14 +141,14 @@ _SCHEMAS = {
         "report_toml": {
             "description": "Report answer in toml format.",
             "properties": {
-                "answer": {"description": "The answer to be reported in toml format.", "type": "string"},
+                "answer": {"description": "The answer to be reported in toml " "format.", "type": "string"},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -158,14 +158,14 @@ _SCHEMAS = {
         "report_tuple": {
             "description": "Report answer in tuple format.",
             "properties": {
-                "answer": {"description": "The answer to be reported in tuple format.", "type": "array"},
+                "answer": {"description": "The answer to be reported in " "tuple format.", "type": "array"},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -175,14 +175,14 @@ _SCHEMAS = {
         "report_xml": {
             "description": "Report answer in xml format.",
             "properties": {
-                "answer": {"description": "The answer to be reported in xml format.", "type": "string"},
+                "answer": {"description": "The answer to be reported in xml " "format.", "type": "string"},
                 "comment": {
                     "default": "",
-                    "description": "Any comments, supplemental info about the answer.",
+                    "description": "Any comments, supplemental info " "about the answer.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -196,7 +196,7 @@ _SCHEMAS = {
             "properties": {
                 "file_paths": {"description": "A list of file paths to concatenate.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 },
                 "number_lines": {
@@ -206,7 +206,7 @@ _SCHEMAS = {
                 },
                 "squeeze_blank": {
                     "default": False,
-                    "description": "If True, consecutive blank lines are squeezed to one.",
+                    "description": "If True, consecutive blank lines are squeezed " "to one.",
                     "type": "boolean",
                 },
             },
@@ -214,11 +214,11 @@ _SCHEMAS = {
             "type": "object",
         },
         "cat_markdown": {
-            "description": "Concatenates the content of given file paths and formats them as markdown.",
+            "description": "Concatenates the content of given file paths and formats them as " "markdown.",
             "properties": {
                 "file_paths": {"description": "List of file paths to concatenate.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, " "or text/yaml inside the JSON.",
                     "type": "string",
                 },
                 "number_lines": {
@@ -228,7 +228,7 @@ _SCHEMAS = {
                 },
                 "squeeze_blank": {
                     "default": False,
-                    "description": "If True, consecutive blank lines are squeezed to one.",
+                    "description": "If True, consecutive blank lines are " "squeezed to one.",
                     "type": "boolean",
                 },
             },
@@ -241,12 +241,12 @@ _SCHEMAS = {
             "description": "Reads a file and extracts characters based on specified ranges.",
             "properties": {
                 "character_ranges": {
-                    "description": 'A string representing character ranges, e.g., "1-5,10".',
+                    "description": "A string representing character " 'ranges, e.g., "1-5,10".',
                     "type": "string",
                 },
                 "file_path": {"description": "The name of the file to process.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, " "or text/yaml inside the JSON.",
                     "type": "string",
                 },
             },
@@ -254,17 +254,20 @@ _SCHEMAS = {
             "type": "object",
         },
         "cut_fields": {
-            "description": "Reads a file and extracts fields based on specified ranges using the given delimiter.",
+            "description": "Reads a file and extracts fields based on specified ranges using the given " "delimiter.",
             "properties": {
                 "delimiter": {
                     "default": ",",
-                    "description": "A single character used as the field delimiter.",
+                    "description": "A single character used as the field " "delimiter.",
                     "type": "string",
                 },
-                "field_ranges": {"description": 'A string representing field ranges, e.g., "1-3,5".', "type": "string"},
+                "field_ranges": {
+                    "description": "A string representing field ranges, e.g., " '"1-3,5".',
+                    "type": "string",
+                },
                 "filename": {"description": "The name of the file to process.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 },
             },
@@ -272,17 +275,18 @@ _SCHEMAS = {
             "type": "object",
         },
         "cut_fields_by_name": {
-            "description": "Reads a file and extracts fields based on specified field names using the given delimiter.",
+            "description": "Reads a file and extracts fields based on specified field names "
+            "using the given delimiter.",
             "properties": {
                 "delimiter": {
                     "default": ",",
-                    "description": "A single character used as the field delimiter.",
+                    "description": "A single character used as the field " "delimiter.",
                     "type": "string",
                 },
                 "field_names": {"description": "A list of field names to extract.", "type": "string"},
                 "filename": {"description": "The name of the file to process.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside " "the JSON.",
                     "type": "string",
                 },
             },
@@ -292,17 +296,18 @@ _SCHEMAS = {
     },
     "find": {
         "find_files": {
-            "description": "Recursively search for files or directories matching given criteria in a directory and its subdirectories.",
+            "description": "Recursively search for files or directories matching given criteria in a "
+            "directory and its subdirectories.",
             "properties": {
                 "file_type": {"description": "The type to filter ('file' or 'directory').", "type": ["string", "null"]},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 },
                 "name": {"description": "The exact name to match filenames against.", "type": ["string", "null"]},
                 "regex": {"description": "The regex pattern to match filenames against.", "type": ["string", "null"]},
                 "size": {
-                    "description": "The size to filter files by, e.g., '+100' for files larger than 100 bytes.",
+                    "description": "The size to filter files by, e.g., '+100' for " "files larger than 100 bytes.",
                     "type": ["string", "null"],
                 },
             },
@@ -310,17 +315,24 @@ _SCHEMAS = {
             "type": "object",
         },
         "find_files_markdown": {
-            "description": "Recursively search for files or directories matching given criteria in a directory and its subdirectories.",
+            "description": "Recursively search for files or directories matching given "
+            "criteria in a directory and its subdirectories.",
             "properties": {
-                "file_type": {"description": "The type to filter ('file' or 'directory').", "type": ["string", "null"]},
+                "file_type": {
+                    "description": "The type to filter ('file' or " "'directory').",
+                    "type": ["string", "null"],
+                },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside " "the JSON.",
                     "type": "string",
                 },
-                "name": {"description": "The exact name to match filenames against.", "type": ["string", "null"]},
-                "regex": {"description": "The regex pattern to match filenames against.", "type": ["string", "null"]},
+                "name": {"description": "The exact name to match filenames " "against.", "type": ["string", "null"]},
+                "regex": {
+                    "description": "The regex pattern to match filenames " "against.",
+                    "type": ["string", "null"],
+                },
                 "size": {
-                    "description": "The size to filter files by, e.g., '+100' for files larger than 100 bytes.",
+                    "description": "The size to filter files by, e.g., " "'+100' for files larger than 100 bytes.",
                     "type": ["string", "null"],
                 },
             },
@@ -333,7 +345,7 @@ _SCHEMAS = {
             "description": "Retrieves the current branch name of the repository.",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside " "the JSON.",
                     "type": "string",
                 }
             },
@@ -344,17 +356,17 @@ _SCHEMAS = {
             "description": "Retrieves the most recent commit hashes from the current branch.",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside " "the JSON.",
                     "type": "string",
                 },
                 "n": {
                     "default": 10,
-                    "description": "The number of recent commits to retrieve. Defaults to 10.",
+                    "description": "The number of recent commits to retrieve. " "Defaults to 10.",
                     "type": "integer",
                 },
                 "short_hash": {
                     "default": False,
-                    "description": "If True, return short hashes; otherwise, return full hashes. Defaults to False.",
+                    "description": "If True, also return short hashes. " "Defaults to False.",
                     "type": "boolean",
                 },
             },
@@ -365,7 +377,7 @@ _SCHEMAS = {
             "description": "Returns the differences in the working directory.",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 }
             },
@@ -378,7 +390,7 @@ _SCHEMAS = {
                 "commit1": {"description": "First commit", "type": "string"},
                 "commit2": {"description": "Second commit", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside the " "JSON.",
                     "type": "string",
                 },
             },
@@ -390,7 +402,7 @@ _SCHEMAS = {
             "properties": {
                 "filename": {"description": "The path to the file.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, " "or text/yaml inside the JSON.",
                     "type": "string",
                 },
             },
@@ -401,7 +413,7 @@ _SCHEMAS = {
             "description": "Returns the commit history that matches the search string.",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, " "or text/yaml inside the JSON.",
                     "type": "string",
                 },
                 "search_string": {"description": "The search string.", "type": "string"},
@@ -413,7 +425,7 @@ _SCHEMAS = {
             "description": "Shows various types of objects (commits, tags, etc.).",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 }
             },
@@ -424,7 +436,7 @@ _SCHEMAS = {
             "description": "Returns the status of the repository.",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 }
             },
@@ -437,11 +449,14 @@ _SCHEMAS = {
                 "file_path": {"description": "The path of the file to check.", "type": "string"},
                 "gitignore_path": {
                     "default": ".gitignore",
-                    "description": "The path to the .gitignore file. Defaults to '.gitignore' in the current directory.",
+                    "description": "The path to the .gitignore "
+                    "file. Defaults to "
+                    "'.gitignore' in the "
+                    "current directory.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -451,21 +466,21 @@ _SCHEMAS = {
     },
     "grep": {
         "grep": {
-            "description": "Search for lines matching a regular expression in files specified by a glob pattern.",
+            "description": "Search for lines matching a regular expression in files specified by a glob " "pattern.",
             "properties": {
                 "glob_pattern": {"description": "A glob pattern string to specify files.", "type": "string"},
                 "maximum_matches_per_file": {
                     "default": -1,
-                    "description": "Maximum number of matches to return for one file.",
+                    "description": "Maximum number of matches to " "return for one file.",
                     "type": "integer",
                 },
                 "maximum_matches_total": {
                     "default": -1,
-                    "description": "Maximum number of matches to return total.",
+                    "description": "Maximum number of matches to return " "total.",
                     "type": "integer",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 },
                 "regex": {"description": "A regular expression string to search for.", "type": "string"},
@@ -479,22 +494,23 @@ _SCHEMAS = {
             "type": "object",
         },
         "grep_markdown": {
-            "description": "Search for lines matching a regular expression in files and returns markdown formatted results.",
+            "description": "Search for lines matching a regular expression in files and returns "
+            "markdown formatted results.",
             "properties": {
-                "glob_pattern": {"description": "A glob pattern string to specify files.", "type": "string"},
+                "glob_pattern": {"description": "A glob pattern string to specify " "files.", "type": "string"},
                 "maximum_matches": {
                     "default": -1,
-                    "description": "Maximum number of matches to return.",
+                    "description": "Maximum number of matches to " "return.",
                     "type": "integer",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, " "or text/yaml inside the JSON.",
                     "type": "string",
                 },
                 "regex": {"description": "A regular expression string to search for.", "type": "string"},
                 "skip_first_matches": {
                     "default": -1,
-                    "description": "Number of initial matches to skip.",
+                    "description": "Number of initial matches to " "skip.",
                     "type": "integer",
                 },
             },
@@ -507,17 +523,17 @@ _SCHEMAS = {
             "description": "Return the first 'lines' or 'byte_count' from a file.",
             "properties": {
                 "byte_count": {
-                    "description": "Number of bytes to return. If specified, overrides lines.",
+                    "description": "Number of bytes to return. If specified, " "overrides lines.",
                     "type": ["integer", "null"],
                 },
                 "file_path": {"description": "Path to the file.", "type": "string"},
                 "lines": {
                     "default": 10,
-                    "description": "Number of lines to return. Ignored if byte_count is specified. Defaults to 10.",
+                    "description": "Number of lines to return. Ignored if byte_count " "is specified. Defaults to 10.",
                     "type": "integer",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 },
             },
@@ -530,11 +546,11 @@ _SCHEMAS = {
                 "file_path": {"description": "Path to the file.", "type": "string"},
                 "lines": {
                     "default": 10,
-                    "description": "Number of lines to return. Defaults to 10.",
+                    "description": "Number of lines to return. Defaults to " "10.",
                     "type": "integer",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside " "the JSON.",
                     "type": "string",
                 },
             },
@@ -545,22 +561,22 @@ _SCHEMAS = {
             "description": "Read lines or bytes from the start ('head') or end ('tail') of a file.",
             "properties": {
                 "byte_count": {
-                    "description": "Number of bytes to read. If specified, overrides lines.",
+                    "description": "Number of bytes to read. If specified, " "overrides lines.",
                     "type": ["integer", "null"],
                 },
                 "file_path": {"description": "Path to the file.", "type": "string"},
                 "lines": {
                     "default": 10,
-                    "description": "Number of lines to read. Ignored if byte_count is specified. Defaults to 10.",
+                    "description": "Number of lines to read. Ignored if " "byte_count is specified. Defaults to 10.",
                     "type": "integer",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, " "or text/yaml inside the JSON.",
                     "type": "string",
                 },
                 "mode": {
                     "default": "head",
-                    "description": "Operation mode, either 'head' or 'tail'. Defaults to 'head'.",
+                    "description": "Operation mode, either 'head' or 'tail'. " "Defaults to 'head'.",
                     "type": "string",
                 },
             },
@@ -571,17 +587,17 @@ _SCHEMAS = {
             "description": "Return the last 'lines' or 'bytes' from a file.",
             "properties": {
                 "byte_count": {
-                    "description": "Number of bytes to return. If specified, overrides lines.",
+                    "description": "Number of bytes to return. If specified, " "overrides lines.",
                     "type": ["integer", "null"],
                 },
                 "file_path": {"description": "Path to the file.", "type": "string"},
                 "lines": {
                     "default": 10,
-                    "description": "Number of lines to return. Ignored if byte_count is specified. Defaults to 10.",
+                    "description": "Number of lines to return. Ignored if byte_count " "is specified. Defaults to 10.",
                     "type": "integer",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 },
             },
@@ -594,11 +610,11 @@ _SCHEMAS = {
                 "file_path": {"description": "Path to the file.", "type": "string"},
                 "lines": {
                     "default": 10,
-                    "description": "Number of lines to return. Defaults to 10.",
+                    "description": "Number of lines to return. Defaults to " "10.",
                     "type": "integer",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside " "the JSON.",
                     "type": "string",
                 },
             },
@@ -608,42 +624,53 @@ _SCHEMAS = {
     },
     "insert": {
         "insert_text_after_context": {
-            "description": "Inserts a given text immediately after a specified context in a file.",
+            "description": "Inserts a given text immediately after a specified " "context in a file.",
             "properties": {
                 "context": {
-                    "description": "The context string to search for in the file. The text is\ninserted after the line containing this context.",
+                    "description": "The context string to search "
+                    "for in the file. The text "
+                    "is\n"
+                    "inserted after the line "
+                    "containing this context.",
                     "type": "string",
                 },
                 "file_path": {
-                    "description": "The path of the file in which the text is to be inserted.",
+                    "description": "The path of the file in " "which the text is to be " "inserted.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 },
-                "text_to_insert": {"description": "The text to insert into the file.", "type": "string"},
+                "text_to_insert": {"description": "The text to insert " "into the file.", "type": "string"},
             },
             "required": ["file_path", "context", "text_to_insert"],
             "type": "object",
         },
         "insert_text_after_multiline_context": {
-            "description": "Inserts text immediately after a specified multiline context in a file.",
+            "description": "Inserts text immediately after a specified " "multiline context in a file.",
             "properties": {
                 "context_lines": {
-                    "description": "A list of strings representing the multiline\ncontext to search for in the file.",
+                    "description": "A list of "
+                    "strings "
+                    "representing "
+                    "the "
+                    "multiline\n"
+                    "context to "
+                    "search for "
+                    "in the file.",
                     "type": "string",
                 },
                 "file_path": {
-                    "description": "The path of the file in which the text is to be inserted.",
+                    "description": "The path of the " "file in which " "the text is to " "be inserted.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as " "text/csv, " "text/markdown, " "or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
                 "text_to_insert": {
-                    "description": "The text to insert into the file after the context.",
+                    "description": "The text to " "insert into " "the file " "after the " "context.",
                     "type": "string",
                 },
             },
@@ -654,19 +681,23 @@ _SCHEMAS = {
             "description": "Inserts text at the start or end of a file.",
             "properties": {
                 "file_path": {
-                    "description": "The path of the file in which the text is to be inserted.",
+                    "description": "The path of the file in " "which the text is to be " "inserted.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as " "text/csv, text/markdown, " "or text/yaml inside the " "JSON.",
                     "type": "string",
                 },
                 "position": {
                     "default": "end",
-                    "description": "The position where the text should be inserted.\nShould be either 'start' or 'end'. Defaults to 'end'.",
+                    "description": "The position where the "
+                    "text should be inserted.\n"
+                    "Should be either 'start' "
+                    "or 'end'. Defaults to "
+                    "'end'.",
                     "type": "string",
                 },
-                "text_to_insert": {"description": "The text to insert into the file.", "type": "string"},
+                "text_to_insert": {"description": "The text to insert " "into the file.", "type": "string"},
             },
             "required": ["file_path", "text_to_insert"],
             "type": "object",
@@ -683,15 +714,16 @@ _SCHEMAS = {
                 },
                 "long": {
                     "default": False,
-                    "description": "If True, include details like permissions, owner, size, and modification date. Defaults to False.",
+                    "description": "If True, include details like permissions, owner, size, "
+                    "and modification date. Defaults to False.",
                     "type": "boolean",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
                 "path": {
-                    "description": "The directory path to list. Defaults to the current directory '.'.",
+                    "description": "The directory path to list. Defaults to the current " "directory '.'.",
                     "type": ["string", "null"],
                 },
             },
@@ -699,25 +731,26 @@ _SCHEMAS = {
             "type": "object",
         },
         "ls_markdown": {
-            "description": "List directory contents, with options to include all files and detailed view.",
+            "description": "List directory contents, with options to include all files and detailed " "view.",
             "properties": {
                 "all_files": {
                     "default": False,
-                    "description": "If True, include hidden files. Defaults to False.",
+                    "description": "If True, include hidden files. Defaults to " "False.",
                     "type": "boolean",
                 },
                 "long": {
                     "default": False,
-                    "description": "If True, include details like permissions, owner, size, and modification date. Defaults to False.",
+                    "description": "If True, include details like permissions, owner, "
+                    "size, and modification date. Defaults to False.",
                     "type": "boolean",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 },
                 "path": {
                     "default": ".",
-                    "description": "The directory path to list. Defaults to the current directory '.'.",
+                    "description": "The directory path to list. Defaults to the " "current directory '.'.",
                     "type": ["string", "null"],
                 },
             },
@@ -727,13 +760,13 @@ _SCHEMAS = {
     },
     "patch": {
         "apply_git_patch": {
-            "description": "Apply a git patch to the files in the root folder.",
+            "description": "Apply a unified (git) diff to the files in the root folder.",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside " "the JSON.",
                     "type": "string",
                 },
-                "patch_content": {"description": "The content of the git patch.", "type": "string"},
+                "patch_content": {"description": "The content of the unified/git " "diff.", "type": "string"},
             },
             "required": ["patch_content"],
             "type": "object",
@@ -741,25 +774,28 @@ _SCHEMAS = {
     },
     "pycat": {
         "format_code_as_markdown": {
-            "description": "Combine all Python files in a directory into a single Markdown file.",
+            "description": "Combine all Python files in a directory into a single " "Markdown file.",
             "properties": {
-                "base_path": {"description": "The base path of the directory to start traversing.", "type": "string"},
+                "base_path": {
+                    "description": "The base path of the " "directory to start " "traversing.",
+                    "type": "string",
+                },
                 "header": {
-                    "description": "A header string to be included at the beginning of the Markdown file.",
+                    "description": "A header string to be included " "at the beginning of the Markdown " "file.",
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
                 "no_comments": {
                     "default": False,
-                    "description": "Whether to exclude comments from the output. Defaults to False.",
+                    "description": "Whether to exclude comments " "from the output. Defaults " "to False.",
                     "type": "boolean",
                 },
                 "no_docs": {
                     "default": False,
-                    "description": "Whether to exclude docstrings from the output. Defaults to False.",
+                    "description": "Whether to exclude docstrings " "from the output. Defaults to " "False.",
                     "type": "boolean",
                 },
             },
@@ -772,7 +808,7 @@ _SCHEMAS = {
             "description": "Runs pytest on tests in tests folder..",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 }
             },
@@ -786,7 +822,7 @@ _SCHEMAS = {
             "properties": {
                 "file_path": {"description": "The path to the file.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside the " "JSON.",
                     "type": "string",
                 },
                 "new_text": {"description": "The new text to replace the old text.", "type": "string"},
@@ -796,24 +832,28 @@ _SCHEMAS = {
             "type": "object",
         },
         "replace_line_by_line": {
-            "description": "Replaces occurrences of a specified text with new text in a range of lines in a file.",
+            "description": "Replaces occurrences of a specified text with new text in a " "range of lines in a file.",
             "properties": {
                 "file_path": {"description": "The path to the file.", "type": "string"},
                 "line_end": {
                     "default": -1,
-                    "description": "The ending line number (0-indexed) for the replacement.\nIf -1, it goes to the end of the file. Defaults to -1.",
+                    "description": "The ending line number "
+                    "(0-indexed) for the "
+                    "replacement.\n"
+                    "If -1, it goes to the end of "
+                    "the file. Defaults to -1.",
                     "type": "integer",
                 },
                 "line_start": {
                     "default": 0,
-                    "description": "The starting line number (0-indexed) for the replacement.\nDefaults to 0.",
+                    "description": "The starting line number " "(0-indexed) for the " "replacement.\n" "Defaults to 0.",
                     "type": "integer",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
-                "new_text": {"description": "The new text to replace the old text.", "type": "string"},
+                "new_text": {"description": "The new text to replace the old " "text.", "type": "string"},
                 "old_text": {"description": "The text to be replaced.", "type": "string"},
             },
             "required": ["file_path", "old_text", "new_text"],
@@ -824,11 +864,14 @@ _SCHEMAS = {
             "properties": {
                 "file_path": {"description": "The path to the file.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
-                "regex_match_expression": {"description": "The regular expression pattern to match.", "type": "string"},
-                "replacement": {"description": "The text to replace the matched pattern.", "type": "string"},
+                "regex_match_expression": {
+                    "description": "The regular " "expression pattern " "to match.",
+                    "type": "string",
+                },
+                "replacement": {"description": "The text to replace the " "matched pattern.", "type": "string"},
             },
             "required": ["file_path", "regex_match_expression", "replacement"],
             "type": "object",
@@ -836,11 +879,11 @@ _SCHEMAS = {
     },
     "rewrite": {
         "rewrite_file": {
-            "description": "Backup and rewrite an existing file at file_path within the root_folder.",
+            "description": "Backup and rewrite an existing file at file_path within the " "root_folder.",
             "properties": {
-                "file_path": {"description": "The relative path to the file to be rewritten.", "type": "string"},
+                "file_path": {"description": "The relative path to the file to be " "rewritten.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside the " "JSON.",
                     "type": "string",
                 },
                 "text": {"description": "The new content to write into the file.", "type": "string"},
@@ -851,9 +894,9 @@ _SCHEMAS = {
         "write_new_file": {
             "description": "Write a new file at file_path within the root_folder.",
             "properties": {
-                "file_path": {"description": "The relative path to the file to be written.", "type": "string"},
+                "file_path": {"description": "The relative path to the file to be " "written.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml inside " "the JSON.",
                     "type": "string",
                 },
                 "text": {"description": "The content to write into the file.", "type": "string"},
@@ -864,12 +907,13 @@ _SCHEMAS = {
     },
     "sed": {
         "sed": {
-            "description": "Transform the contents of a file located at file_path as per the provided sed-like commands.",
+            "description": "Transform the contents of a file located at file_path as per the provided sed-like "
+            "commands.",
             "properties": {
                 "commands": {"description": "A list of sed-like commands for text transformation.", "type": "string"},
                 "file_path": {"description": "The path of the file to be transformed.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 },
             },
@@ -882,18 +926,19 @@ _SCHEMAS = {
             "description": "Adds a new task to the task manager.",
             "properties": {
                 "assignee": {"description": "The name of the assignee. Defaults to None.", "type": ["string", "null"]},
-                "category": {"description": "The category of the task (e.g., 'bug', 'feature').", "type": "string"},
+                "category": {"description": "The category of the task (e.g., 'bug', " "'feature').", "type": "string"},
                 "description": {"description": "A description of the task.", "type": "string"},
                 "done_when": {
-                    "description": "Acceptance criteria: how to know the task is complete.",
+                    "default": "",
+                    "description": "Acceptance criteria — how to know the task " "is\n" 'complete. Defaults to "".',
                     "type": "string",
                 },
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, or " "text/yaml inside the JSON.",
                     "type": "string",
                 },
                 "source_code_ref": {
-                    "description": "Reference to the source code related to the task.",
+                    "description": "Reference to the source code related to " "the task.",
                     "type": "string",
                 },
                 "title": {"description": "The title of the task.", "type": "string"},
@@ -905,7 +950,7 @@ _SCHEMAS = {
             "description": "Lists the valid assignees for tasks.",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 }
             },
@@ -913,11 +958,12 @@ _SCHEMAS = {
             "type": "object",
         },
         "query_todos_by_assignee": {
-            "description": "Queries tasks assigned to a specific assignee. Currently, the assignee is hard-coded as 'Developer'.",
+            "description": "Queries tasks assigned to a specific assignee. Currently, the "
+            "assignee is hard-coded as 'Developer'.",
             "properties": {
-                "assignee_name": {"description": "The name of the assignee to query tasks for.", "type": "string"},
+                "assignee_name": {"description": "The name of the assignee " "to query tasks for.", "type": "string"},
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
             },
@@ -925,15 +971,19 @@ _SCHEMAS = {
             "type": "object",
         },
         "query_todos_by_regex": {
-            "description": "Queries tasks by a keyword in their title, using a regular expression pattern.",
+            "description": "Queries tasks by a keyword in their title, using a regular " "expression pattern.",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
                 "regex_pattern": {
                     "default": "[\\s\\S]+",
-                    "description": 'The regular expression pattern to match in task titles.\nDefaults to "[\\s\\S]+", which matches any title.',
+                    "description": "The regular expression "
+                    "pattern to match in task "
+                    "titles.\n"
+                    'Defaults to "[\\s\\S]+", '
+                    "which matches any title.",
                     "type": "string",
                 },
             },
@@ -944,10 +994,10 @@ _SCHEMAS = {
             "description": "Marks a task as finished based on its title.",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, text/markdown, " "or text/yaml inside the JSON.",
                     "type": "string",
                 },
-                "title": {"description": "The title of the task to be marked as finished.", "type": "string"},
+                "title": {"description": "The title of the task to be marked as " "finished.", "type": "string"},
             },
             "required": ["title"],
             "type": "object",
@@ -958,7 +1008,7 @@ _SCHEMAS = {
             "description": "Count the number of tokens in a string.",
             "properties": {
                 "mime_type": {
-                    "description": "Return value as text/csv, text/markdown, or text/yaml inside the JSON.",
+                    "description": "Return value as text/csv, " "text/markdown, or text/yaml " "inside the JSON.",
                     "type": "string",
                 },
                 "text": {"description": "The text to count the tokens in.", "type": "string"},

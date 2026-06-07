@@ -95,7 +95,14 @@ class ToolKit(ToolKitBase):
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
     def report_bool(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -104,16 +111,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_bool(answer=answer, comment=comment)
 
     def report_dict(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -122,16 +131,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_dict(answer=answer, comment=comment)
 
     def report_float(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -140,16 +151,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_float(answer=answer, comment=comment)
 
     def report_int(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -158,16 +171,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_int(answer=answer, comment=comment)
 
     def report_json(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -176,16 +191,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_json(answer=answer, comment=comment)
 
     def report_list(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -194,16 +211,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_list(answer=answer, comment=comment)
 
     def report_set(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -212,16 +231,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_set(answer=answer, comment=comment)
 
     def report_text(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -230,16 +251,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_text(answer=answer, comment=comment)
 
     def report_toml(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -248,16 +271,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_toml(answer=answer, comment=comment)
 
     def report_tuple(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -266,16 +291,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_tuple(answer=answer, comment=comment)
 
     def report_xml(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         self.tool_answer_collector = AnswerCollectorTool(self.root_folder, self.config)
 
         answer = cast(
@@ -284,16 +311,18 @@ class ToolKit(ToolKitBase):
                 "answer",
             ),
         )
-        comment = cast(
-            str,
-            arguments.get(
-                "comment",
-            ),
-        )
+        comment = cast(str, arguments.get("comment", ""))
         return self.tool_answer_collector.report_xml(answer=answer, comment=comment)
 
     def cat(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = CatTool(self.root_folder, self.config)
 
         file_paths = cast(
@@ -307,7 +336,14 @@ class ToolKit(ToolKitBase):
         return tool.cat(file_paths=file_paths, number_lines=number_lines, squeeze_blank=squeeze_blank)
 
     def cat_markdown(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = CatTool(self.root_folder, self.config)
 
         file_paths = cast(
@@ -321,7 +357,14 @@ class ToolKit(ToolKitBase):
         return tool.cat_markdown(file_paths=file_paths, number_lines=number_lines, squeeze_blank=squeeze_blank)
 
     def cut_characters(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = CutTool(self.root_folder, self.config)
 
         character_ranges = cast(
@@ -339,7 +382,14 @@ class ToolKit(ToolKitBase):
         return tool.cut_characters(character_ranges=character_ranges, file_path=file_path)
 
     def cut_fields(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = CutTool(self.root_folder, self.config)
 
         delimiter = cast(str, arguments.get("delimiter", ","))
@@ -358,7 +408,14 @@ class ToolKit(ToolKitBase):
         return tool.cut_fields(delimiter=delimiter, field_ranges=field_ranges, filename=filename)
 
     def cut_fields_by_name(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = CutTool(self.root_folder, self.config)
 
         delimiter = cast(str, arguments.get("delimiter", ","))
@@ -377,7 +434,14 @@ class ToolKit(ToolKitBase):
         return tool.cut_fields_by_name(delimiter=delimiter, field_names=field_names, filename=filename)
 
     def find_files(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = FindTool(self.root_folder, self.config)
 
         file_type = cast(
@@ -407,7 +471,14 @@ class ToolKit(ToolKitBase):
         return tool.find_files(file_type=file_type, name=name, regex=regex, size=size)
 
     def find_files_markdown(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = FindTool(self.root_folder, self.config)
 
         file_type = cast(
@@ -437,13 +508,27 @@ class ToolKit(ToolKitBase):
         return tool.find_files_markdown(file_type=file_type, name=name, regex=regex, size=size)
 
     def get_current_branch(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GitTool(self.root_folder, self.config)
 
         return tool.get_current_branch()
 
     def get_recent_commits(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GitTool(self.root_folder, self.config)
 
         n = cast(int, arguments.get("n", 10))
@@ -451,13 +536,27 @@ class ToolKit(ToolKitBase):
         return tool.get_recent_commits(n=n, short_hash=short_hash)
 
     def git_diff(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GitTool(self.root_folder, self.config)
 
         return tool.git_diff()
 
     def git_diff_commit(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GitTool(self.root_folder, self.config)
 
         commit1 = cast(
@@ -475,7 +574,14 @@ class ToolKit(ToolKitBase):
         return tool.git_diff_commit(commit1=commit1, commit2=commit2)
 
     def git_log_file(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GitTool(self.root_folder, self.config)
 
         filename = cast(
@@ -487,7 +593,14 @@ class ToolKit(ToolKitBase):
         return tool.git_log_file(filename=filename)
 
     def git_log_search(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GitTool(self.root_folder, self.config)
 
         search_string = cast(
@@ -499,19 +612,40 @@ class ToolKit(ToolKitBase):
         return tool.git_log_search(search_string=search_string)
 
     def git_show(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GitTool(self.root_folder, self.config)
 
         return tool.git_show()
 
     def git_status(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GitTool(self.root_folder, self.config)
 
         return tool.git_status()
 
     def is_ignored_by_gitignore(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GitTool(self.root_folder, self.config)
 
         file_path = cast(
@@ -524,7 +658,14 @@ class ToolKit(ToolKitBase):
         return tool.is_ignored_by_gitignore(file_path=file_path, gitignore_path=gitignore_path)
 
     def grep(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GrepTool(self.root_folder, self.config)
 
         glob_pattern = cast(
@@ -551,7 +692,14 @@ class ToolKit(ToolKitBase):
         )
 
     def grep_markdown(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = GrepTool(self.root_folder, self.config)
 
         glob_pattern = cast(
@@ -576,7 +724,14 @@ class ToolKit(ToolKitBase):
         )
 
     def head(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = HeadTailTool(self.root_folder, self.config)
 
         byte_count = cast(
@@ -595,7 +750,14 @@ class ToolKit(ToolKitBase):
         return tool.head(byte_count=byte_count, file_path=file_path, lines=lines)
 
     def head_markdown(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = HeadTailTool(self.root_folder, self.config)
 
         file_path = cast(
@@ -608,7 +770,14 @@ class ToolKit(ToolKitBase):
         return tool.head_markdown(file_path=file_path, lines=lines)
 
     def head_tail(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = HeadTailTool(self.root_folder, self.config)
 
         byte_count = cast(
@@ -628,7 +797,14 @@ class ToolKit(ToolKitBase):
         return tool.head_tail(byte_count=byte_count, file_path=file_path, lines=lines, mode=mode)
 
     def tail(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = HeadTailTool(self.root_folder, self.config)
 
         byte_count = cast(
@@ -647,7 +823,14 @@ class ToolKit(ToolKitBase):
         return tool.tail(byte_count=byte_count, file_path=file_path, lines=lines)
 
     def tail_markdown(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = HeadTailTool(self.root_folder, self.config)
 
         file_path = cast(
@@ -660,7 +843,14 @@ class ToolKit(ToolKitBase):
         return tool.tail_markdown(file_path=file_path, lines=lines)
 
     def insert_text_after_context(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = InsertTool(self.root_folder, self.config)
 
         context = cast(
@@ -684,7 +874,14 @@ class ToolKit(ToolKitBase):
         return tool.insert_text_after_context(context=context, file_path=file_path, text_to_insert=text_to_insert)
 
     def insert_text_after_multiline_context(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = InsertTool(self.root_folder, self.config)
 
         context_lines = cast(
@@ -710,7 +907,14 @@ class ToolKit(ToolKitBase):
         )
 
     def insert_text_at_start_or_end(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = InsertTool(self.root_folder, self.config)
 
         file_path = cast(
@@ -729,7 +933,14 @@ class ToolKit(ToolKitBase):
         return tool.insert_text_at_start_or_end(file_path=file_path, position=position, text_to_insert=text_to_insert)
 
     def ls(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = LsTool(self.root_folder, self.config)
 
         all_files = cast(bool, arguments.get("all_files", False))
@@ -743,7 +954,14 @@ class ToolKit(ToolKitBase):
         return tool.ls(all_files=all_files, long=long, path=path)
 
     def ls_markdown(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = LsTool(self.root_folder, self.config)
 
         all_files = cast(bool, arguments.get("all_files", False))
@@ -752,7 +970,14 @@ class ToolKit(ToolKitBase):
         return tool.ls_markdown(all_files=all_files, long=long, path=path)
 
     def apply_git_patch(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = PatchTool(self.root_folder, self.config)
 
         patch_content = cast(
@@ -764,7 +989,14 @@ class ToolKit(ToolKitBase):
         return tool.apply_git_patch(patch_content=patch_content)
 
     def format_code_as_markdown(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = PyCatTool(self.root_folder, self.config)
 
         base_path = cast(
@@ -786,13 +1018,27 @@ class ToolKit(ToolKitBase):
         )
 
     def pytest(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = PytestTool(self.root_folder, self.config)
 
         return tool.pytest()
 
     def replace_all(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = ReplaceTool(self.root_folder, self.config)
 
         file_path = cast(
@@ -816,7 +1062,14 @@ class ToolKit(ToolKitBase):
         return tool.replace_all(file_path=file_path, new_text=new_text, old_text=old_text)
 
     def replace_line_by_line(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = ReplaceTool(self.root_folder, self.config)
 
         file_path = cast(
@@ -844,7 +1097,14 @@ class ToolKit(ToolKitBase):
         )
 
     def replace_with_regex(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = ReplaceTool(self.root_folder, self.config)
 
         file_path = cast(
@@ -870,7 +1130,14 @@ class ToolKit(ToolKitBase):
         )
 
     def rewrite_file(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = RewriteTool(self.root_folder, self.config)
 
         file_path = cast(
@@ -888,7 +1155,14 @@ class ToolKit(ToolKitBase):
         return tool.rewrite_file(file_path=file_path, text=text)
 
     def write_new_file(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = RewriteTool(self.root_folder, self.config)
 
         file_path = cast(
@@ -906,7 +1180,14 @@ class ToolKit(ToolKitBase):
         return tool.write_new_file(file_path=file_path, text=text)
 
     def sed(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = SedTool(self.root_folder, self.config)
 
         commands = cast(
@@ -924,7 +1205,14 @@ class ToolKit(ToolKitBase):
         return tool.sed(commands=commands, file_path=file_path)
 
     def add_todo(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = TodoTool(self.root_folder, self.config)
 
         assignee = cast(
@@ -945,6 +1233,7 @@ class ToolKit(ToolKitBase):
                 "description",
             ),
         )
+        done_when = cast(str, arguments.get("done_when", ""))
         source_code_ref = cast(
             str,
             arguments.get(
@@ -957,24 +1246,37 @@ class ToolKit(ToolKitBase):
                 "title",
             ),
         )
-        done_when = cast(str, arguments.get("done_when", ""))
         return tool.add_todo(
             assignee=assignee,
             category=category,
             description=description,
+            done_when=done_when,
             source_code_ref=source_code_ref,
             title=title,
-            done_when=done_when,
         )
 
     def list_valid_assignees(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = TodoTool(self.root_folder, self.config)
 
         return tool.list_valid_assignees()
 
     def query_todos_by_assignee(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = TodoTool(self.root_folder, self.config)
 
         assignee_name = cast(
@@ -986,14 +1288,28 @@ class ToolKit(ToolKitBase):
         return tool.query_todos_by_assignee(assignee_name=assignee_name)
 
     def query_todos_by_regex(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = TodoTool(self.root_folder, self.config)
 
-        regex_pattern = cast(str, arguments.get("regex_pattern", r"[\s\S]+"))
+        regex_pattern = cast(str, arguments.get("regex_pattern", "[\\s\\S]+"))
         return tool.query_todos_by_regex(regex_pattern=regex_pattern)
 
     def remove_todo(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = TodoTool(self.root_folder, self.config)
 
         title = cast(
@@ -1005,7 +1321,14 @@ class ToolKit(ToolKitBase):
         return tool.remove_todo(title=title)
 
     def count_tokens(self, arguments: dict[str, Any]) -> Any:
-        """Generated Do Not Edit"""
+        """Generated Do Not Edit
+
+        Args:
+            arguments (dict[str, Any]): The arguments for the tool.
+
+        Returns:
+            Any: The result of the tool invocation.
+        """
         tool = TokenCounterTool(self.root_folder, self.config)
 
         text = cast(

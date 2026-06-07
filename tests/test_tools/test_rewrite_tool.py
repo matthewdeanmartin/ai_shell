@@ -15,7 +15,7 @@ def test_write_new_file_success(tmp_path):
 
         assert "File written to" in message
         assert file_path in message
-        with open(tmp_path / file_path) as file:
+        with open(tmp_path / file_path, encoding="utf-8") as file:
             assert file.read() == content
 
 
@@ -55,7 +55,7 @@ def test_rewrite_file_success(tmp_path):
         message = tool.rewrite_file(file_path, new_content)
 
         assert message == f"File rewritten to {file_path}, please view to verify contents."
-        with open(tmp_path / file_path) as file:
+        with open(tmp_path / file_path, encoding="utf-8") as file:
             assert file.read() == new_content
 
 

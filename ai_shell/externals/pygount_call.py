@@ -16,7 +16,7 @@ def count_lines_of_code(file_path: str) -> "SourceAnalysis":
         SourceAnalysis: The analysis of the file, including line counts.
     """
     try:
-        from pygount import SourceAnalysis
+        from pygount import SourceAnalysis  # pylint: disable=import-outside-toplevel
     except ImportError as exc:
         raise RuntimeError(
             "count_lines_of_code requires pygount. Install ai_shell[checkers] or the pygount package."

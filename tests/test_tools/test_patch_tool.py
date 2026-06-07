@@ -72,6 +72,6 @@ index 0000000..e69de29
 """
 
     expected_files = {"file1.txt", "dir/file2.txt"}
-    extracted_files = tool._extract_files_from_patch(patch_content)
+    extracted_files = tool._extract_files_from_patch(patch_content)  # pylint: disable=protected-access
 
     assert extracted_files == expected_files, "Extracted files do not match expected files"

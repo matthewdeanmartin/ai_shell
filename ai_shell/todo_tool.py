@@ -47,7 +47,7 @@ class TodoTool:
             description (str): A description of the task.
             category (str): The category of the task (e.g., 'bug', 'feature').
             source_code_ref (str): Reference to the source code related to the task.
-            assignee (str, optional): The name of the assignee. Defaults to None.
+            assignee (str | None, optional): The name of the assignee. Defaults to None.
             done_when (str, optional): Acceptance criteria — how to know the task is
                                        complete. Defaults to "".
 

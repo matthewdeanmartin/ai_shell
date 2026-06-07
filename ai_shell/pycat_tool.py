@@ -37,8 +37,8 @@ class PyCatTool:
         self,
         base_path: str,
         header: str,
-        no_docs: bool = False,
-        no_comments: bool = False,
+        no_docs: bool = False,  # pylint: disable=unused-argument
+        no_comments: bool = False,  # pylint: disable=unused-argument
     ) -> str:
         """
         Combine all Python files in a directory into a single Markdown file.

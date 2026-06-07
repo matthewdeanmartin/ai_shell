@@ -114,8 +114,7 @@ def convert_to_json_schema(cls) -> dict[str, Any]:
 
         if require_descriptions and not description:
             raise TypeError(f"Missing description : {method_name}")
-        else:
-            schema["description"] = description
+        schema["description"] = description
 
         for arg_name, arg_type, default in details["args"]:
             # Skipping 'self' argument

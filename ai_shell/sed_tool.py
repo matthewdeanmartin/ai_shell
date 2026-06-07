@@ -102,7 +102,7 @@ class SedTool:
         # don't know how to fix the covariant/invariant typing issue here
         lines: list[str] = input_text.split("\n")
 
-        for i in range(len(lines)):
+        for i, _ in enumerate(lines):
             for command in commands:
                 if command.startswith("s/") and re.match(r"s/.+/.*/", command):
                     # Regex substitution: s/regex/replacement/flags

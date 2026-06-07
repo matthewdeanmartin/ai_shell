@@ -43,10 +43,10 @@ class FindTool:
         Recursively search for files or directories matching given criteria in a directory and its subdirectories.
 
         Args:
-            name (Optional[str]): The exact name to match filenames against.
-            regex (Optional[str]): The regex pattern to match filenames against.
-            file_type (Optional[str]): The type to filter ('file' or 'directory').
-            size (Optional[str]): The size to filter files by, e.g., '+100' for files larger than 100 bytes.
+            name (str | None, optional): The exact name to match filenames against.
+            regex (str | None, optional): The regex pattern to match filenames against.
+            file_type (str | None, optional): The type to filter ('file' or 'directory').
+            size (str | None, optional): The size to filter files by, e.g., '+100' for files larger than 100 bytes.
 
         Returns:
             list[str]: A list of paths to files or directories that match the criteria.
@@ -119,10 +119,10 @@ class FindTool:
         Recursively search for files or directories matching given criteria in a directory and its subdirectories.
 
         Args:
-            name (Optional[str]): The exact name to match filenames against.
-            regex (Optional[str]): The regex pattern to match filenames against.
-            file_type (Optional[str]): The type to filter ('file' or 'directory').
-            size (Optional[str]): The size to filter files by, e.g., '+100' for files larger than 100 bytes.
+            name (str | None, optional): The exact name to match filenames against.
+            regex (str | None, optional): The regex pattern to match filenames against.
+            file_type (str | None, optional): The type to filter ('file' or 'directory').
+            size (str | None, optional): The size to filter files by, e.g., '+100' for files larger than 100 bytes.
 
         Returns:
             str: Markdown of paths to files or directories that match the criteria.

@@ -44,7 +44,7 @@ def is_valid_python_file(file_name: str) -> bool:
     """
     with open(file_name, encoding="utf-8") as file:
         contents = file.read()
-    is_valid, error = is_valid_python_source(contents)
+    is_valid, _error = is_valid_python_source(contents)
     return is_valid
 
 
@@ -108,12 +108,12 @@ class ValidateModule:
                 return results_so_far
         mypy_result = externals.invoke_mypy(self.module_path)
         if mypy_result.return_code == 2:
-            results_so_far.append(black_result)
+            results_so_far.append(mypy_result)
             if early_exit:
                 return results_so_far
         pylint_result = externals.invoke_pylint(self.module_path, 1.0)
         if pylint_result.return_code in (1, 2):
-            results_so_far.append(black_result)
+            results_so_far.append(pylint_result)
             if early_exit:
                 return results_so_far
 

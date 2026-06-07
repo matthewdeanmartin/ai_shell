@@ -5,7 +5,7 @@ from ai_shell.todo.views import assigned_incomplete_tasks_to_markdown, search_re
 
 
 class TaskManager:
-    def __init__(self, root_folder: str, valid_assignees: list[str]):
+    def __init__(self, root_folder: str, valid_assignees: list[str]):  # pylint: disable=unused-argument
         # put these into the pwd folder, not root_folder.
         completed_file = os.path.abspath("TODO_done.md")
         incomplete_file = os.path.abspath("TODO.md")

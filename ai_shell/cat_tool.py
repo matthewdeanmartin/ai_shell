@@ -45,8 +45,8 @@ class CatTool:
 
         Args:
             file_paths (list[str]): List of file paths to concatenate.
-            number_lines (bool): If True, number all output lines.
-            squeeze_blank (bool): If True, consecutive blank lines are squeezed to one.
+            number_lines (bool, optional): If True, number all output lines.
+            squeeze_blank (bool, optional): If True, consecutive blank lines are squeezed to one.
 
         Returns:
             str: The concatenated and formatted content as a string.
@@ -70,8 +70,8 @@ class CatTool:
 
         Args:
             file_paths (list[str]): A list of file paths to concatenate.
-            number_lines (bool): If True, number all output lines.
-            squeeze_blank (bool): If True, consecutive blank lines are squeezed to one.
+            number_lines (bool, optional): If True, number all output lines.
+            squeeze_blank (bool, optional): If True, consecutive blank lines are squeezed to one.
 
         Returns:
             Generator[str, None, None]

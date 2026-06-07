@@ -17,12 +17,12 @@ def test_simple():
                 bool: Description for return value.
             """
 
-        def method2(self, arg3, arg4: float = 3.14) -> bool:
+        def method2(self, _arg3, _arg4: float = 3.14) -> bool:
             """Method2
 
             Args:
-                arg3: Description for arg3.
-                arg4 (float): Description for arg4.
+                _arg3: Description for arg3.
+                _arg4 (float): Description for arg4.
 
             Returns:
                 bool: Description for return value.
@@ -51,13 +51,13 @@ def test_with_docstring():
                 arg2 (str): Description for arg2.
             """
 
-        def method2(self, arg3, arg4: float = 3.14) -> bool:
+        def method2(self, _arg3, _arg4: float = 3.14) -> bool:
             """
             Short description for method2.
 
             Args:
-                arg3: Description for arg3.
-                arg4 (float): Description for arg4.
+                _arg3: Description for arg3.
+                _arg4 (float): Description for arg4.
             """
             return True
 
@@ -73,7 +73,7 @@ class TestClassForMethodInfo:
     def method1(self, param1: int, param2: str = "default"):
         """A test method"""
 
-    def method2(self, param3: bool) -> float:
+    def method2(self, _param3: bool) -> float:
         """Another test method"""
         return 3.14
 
@@ -84,7 +84,7 @@ def test_extract_class_methods_details():
             "args": [("self", None, None), ("param1", int, None), ("param2", str, "default")],
             "return_type": None,
         },
-        "method2": {"args": [("self", None, None), ("param3", bool, None)], "return_type": float},
+        "method2": {"args": [("self", None, None), ("_param3", bool, None)], "return_type": float},
     }
 
     actual_output = extract_class_methods_details(TestClassForMethodInfo)

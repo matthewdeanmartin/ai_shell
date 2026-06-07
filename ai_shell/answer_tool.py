@@ -74,7 +74,7 @@ class AnswerCollectorTool:
 
         Args:
             answer (list[str]): The answer to be reported in list format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
         Returns:
             str: A string indicating that the response has been received.
@@ -89,7 +89,7 @@ class AnswerCollectorTool:
         """Report answer in integer format
         Args:
             answer (int): The answer to be reported in integer format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
 
         Returns:
@@ -106,7 +106,7 @@ class AnswerCollectorTool:
 
         Args:
             answer (float): The answer to be reported in float format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
         Returns:
             str: A string indicating that the response has been received.
@@ -122,7 +122,7 @@ class AnswerCollectorTool:
 
         Args:
             answer (dict[str, Any]): The answer to be reported in dict format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
         Returns:
             str: A string indicating that the response has been received.
@@ -138,7 +138,7 @@ class AnswerCollectorTool:
 
         Args:
             answer (str): The answer to be reported in string format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
         Returns:
             str: A string indicating that the response has been received.
@@ -154,7 +154,7 @@ class AnswerCollectorTool:
 
         Args:
             answer (bool): The answer to be reported in bool format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
         Returns:
             str: A string indicating that the response has been received.
@@ -170,7 +170,7 @@ class AnswerCollectorTool:
 
         Args:
             answer (tuple): The answer to be reported in tuple format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
         Returns:
             str: A string indicating that the response has been received.
@@ -186,7 +186,7 @@ class AnswerCollectorTool:
 
         Args:
             answer (set): The answer to be reported in set format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
         Returns:
             str: A string indicating that the response has been received.
@@ -202,7 +202,7 @@ class AnswerCollectorTool:
 
         Args:
             answer (str): The answer to be reported in json format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
         Returns:
             str: A string indicating that the response has been received.
@@ -218,7 +218,7 @@ class AnswerCollectorTool:
 
         Args:
             answer (str): The answer to be reported in xml format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
         Returns:
             str: A string indicating that the response has been received.
@@ -234,7 +234,7 @@ class AnswerCollectorTool:
 
         Args:
             answer (str): The answer to be reported in toml format.
-            comment (str): Any comments, supplemental info about the answer.
+            comment (str, optional): Any comments, supplemental info about the answer.
 
         Returns:
             str: A string indicating that the response has been received.

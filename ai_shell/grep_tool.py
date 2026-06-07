@@ -68,8 +68,8 @@ class GrepTool:
         Args:
             regex (str): A regular expression string to search for.
             glob_pattern (str): A glob pattern string to specify files.
-            skip_first_matches (int): Number of initial matches to skip.
-            maximum_matches (int): Maximum number of matches to return.
+            skip_first_matches (int, optional): Number of initial matches to skip.
+            maximum_matches (int, optional): Maximum number of matches to return.
 
         Returns:
             str: Markdown formatted string of grep results.
@@ -104,9 +104,9 @@ class GrepTool:
         Args:
             regex (str): A regular expression string to search for.
             glob_pattern (str): A glob pattern string to specify files.
-            skip_first_matches (int): Number of initial matches to skip.
-            maximum_matches_per_file (int): Maximum number of matches to return for one file.
-            maximum_matches_total (int): Maximum number of matches to return total.
+            skip_first_matches (int, optional): Number of initial matches to skip.
+            maximum_matches_per_file (int, optional): Maximum number of matches to return for one file.
+            maximum_matches_total (int, optional): Maximum number of matches to return total.
 
         Returns:
             GrepResults: The results of the grep operation.

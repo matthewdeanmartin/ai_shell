@@ -72,7 +72,7 @@ def generate_the_cli(target_file: str) -> None:
         target_file (str): The target file path for the generated code.
     """
     tools = ""
-    for _ns, json_schema in schemas._SCHEMAS.items():
+    for _ns, json_schema in schemas.SCHEMAS.items():
         for tool, _ in json_schema.items():
             tools += f'            "{tool}" : self.{tool},\n'
 
@@ -145,19 +145,16 @@ import argparse
 from ai_shell.utils.console_utils import pretty_console
 from ai_shell.utils.config_manager import Config
 from ai_shell.__about__ import __version__, __description__
-
-CONFIG = Config()
-# pylint: disable=unused-argument
 """
 
     for _key, value in meta.items():
         header += f"\nfrom {value['module']} import {value['class']}"
-    header += "\n\n"
+    header += "\n\nCONFIG = Config()\n# pylint: disable=unused-argument\n"
 
     middle = ""
     for ns, data in meta.items():
         middle += "\n"
-        for method, method_data in schemas._SCHEMAS[ns].items():
+        for method, method_data in schemas.SCHEMAS[ns].items():
             middle += "\n"
             middle += f"def {method}_command(args):\n"
             middle += f'    """Invoke {method}"""\n'
@@ -166,17 +163,17 @@ CONFIG = Config()
             for arg_name, _arg_details in cast(dict[str, Any], method_data["properties"]).items():
                 if arg_name != "mime_type":
                     # don't know how to handle mime types in CLI yet.
-                    middle += f"\n        {arg_name} = args.{arg_name},"
+                    middle += f"\n        {arg_name}=args.{arg_name},"
             middle += "\n    ))"
 
     argparse_part = """\n\ndef run():
-        \"\"\"Create the main parser\"\"\"
-        program = 'ais'
-        parser = argparse.ArgumentParser(
+    \"\"\"Create the main parser\"\"\"
+    program = 'ais'
+    parser = argparse.ArgumentParser(
         prog=program,
         allow_abbrev=False,
         description=__description__,
-        epilog=f\"\"\"
+        epilog=\"\"\"
     Examples:
 
         ais cat hello.py
@@ -190,42 +187,37 @@ CONFIG = Config()
         version=f"%(prog)s {__version__}",
         help="Show program's version number and exit.",
     )
-        
-        )
-        subparsers = parser.add_subparsers(dest='subcommand', help='sub-command help')
-    """
+
+    subparsers = parser.add_subparsers(dest='subcommand', help='sub-command help')
+"""
     for ns, _data in meta.items():
-        for method, method_data in schemas._SCHEMAS[ns].items():
-            escaped_method_description = (
-                cast(str, method_data.get("description", "")).replace("'", "\\'").replace("\n", "\\n")
-            )
+        for method, method_data in schemas.SCHEMAS[ns].items():
+            escaped_method_description = cast(str, method_data.get("description", ""))
             argparse_part += f'    # Create a parser for the "{method}" command\n'
-            argparse_part += f"""    {method}_parser = subparsers.add_parser('{method}', help=\"\"\"{escaped_method_description}.\"\"\")\n"""
+            argparse_part += f"    {method}_parser = subparsers.add_parser('{method}', help={repr(escaped_method_description + '.')})\n"
             for arg_name, arg_details in cast(dict[str, Any], method_data["properties"]).items():
                 dashed_arg_name = arg_name.replace("_", "-")
-                escaped_description = arg_details.get("description", "").replace("'", "\\'")
+                escaped_description = arg_details.get("description", "")
 
-                argparse_part += f"\n    {method}_parser.add_argument('--{dashed_arg_name}', "
+                argparse_part += f"    {method}_parser.add_argument('--{dashed_arg_name}', "
                 bool_part = ""
                 if arg_details["type"] == "boolean":
                     bool_part = "action='store_true', "
 
-                if method_data.get("default"):
+                if "default" in arg_details:
+                    help_text = f"{escaped_description}, defaults to {arg_details['default']}"
                     argparse_part += (
-                        f"    dest='{arg_name}', {bool_part} default={method_data['default']},\n"
-                        f"    help='{escaped_description}, defaults to {method_data['default']}')\n"
+                        f"dest='{arg_name}', {bool_part}default={repr(arg_details['default'])}, "
+                        f"help={repr(help_text)})\n"
                     )
                 else:
-                    argparse_part += f'    dest=\'{arg_name}\', {bool_part} help="""{escaped_description}""")\n'
-
-                # if list
-                # cat_parser.add_argument('file_paths', nargs='+', type=str, help='Paths to the files to be concatenated')
+                    argparse_part += f"dest='{arg_name}', {bool_part}help={repr(escaped_description)})\n"
 
             argparse_part += f"    {method}_parser.set_defaults(func={method}_command)\n\n"
 
-    argparse_part += """        # Parse the arguments
-        args = parser.parse_args()
-    """
+    argparse_part += """    # Parse the arguments
+    args = parser.parse_args()
+"""
 
     footer = """
     # Execute the appropriate command

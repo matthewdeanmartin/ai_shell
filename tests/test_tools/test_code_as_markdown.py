@@ -27,7 +27,7 @@ def python_files(tmp_path):
     return tmp_path, files_content
 
 
-def test_format_code_with_python_files(python_files, tmp_path):
+def test_format_code_with_python_files(python_files):
     base_path, files_content = python_files
 
     tool = PyCatTool(str(base_path), config=config_for_tests())
@@ -41,16 +41,16 @@ def test_format_code_with_python_files(python_files, tmp_path):
         assert f"## {file_name}\n\n```python\n{file_content}\n```\n\n" in content
 
 
-def test_format_code_empty_directory(python_files, tmp_path):
-    base_path, files_content = python_files
+def test_format_code_empty_directory(python_files):
+    base_path, _ = python_files
     tool = PyCatTool(str(base_path), config=config_for_tests())
-    content = tool.format_code_as_markdown(str(tmp_path), header="Empty Dir Header")
+    content = tool.format_code_as_markdown(str(base_path), header="Empty Dir Header")
 
     assert "# Empty Dir Header Source Code\n\n" in content
     # Additional checks can be added to ensure no file content is included
 
 
-def test_format_code_with_tree_header(python_files, tmp_path):
+def test_format_code_with_tree_header(python_files):
     base_path, _ = python_files
     tool = PyCatTool(str(base_path), config=config_for_tests())
     content = tool.format_code_as_markdown(str(base_path), header="tree")

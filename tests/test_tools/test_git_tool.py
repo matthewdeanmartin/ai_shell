@@ -25,11 +25,12 @@ def test_repo():
     _git(repo_dir, "checkout", "-b", "main")
 
     gitignore_path = os.path.join(repo_dir, ".gitignore")
-    with open(gitignore_path, "w") as f:
+    with open(gitignore_path, "w", encoding="utf-8") as f:
         f.write("*.log\n*.tmp\n")
 
     for filename in ["test.txt", "ignored.log", "another.tmp"]:
-        open(os.path.join(repo_dir, filename), "w").close()
+        with open(os.path.join(repo_dir, filename), "w", encoding="utf-8") as f:
+            pass
 
     # ignored.log / another.tmp match .gitignore, so git won't add them — that's fine.
     _git(repo_dir, "add", "test.txt", ".gitignore")
@@ -52,7 +53,7 @@ def test_git_status(test_repo):
     tool = GitTool(test_repo, config=config_for_tests())
 
     untracked_file = os.path.join(test_repo, "untracked.txt")
-    with open(untracked_file, "w") as f:
+    with open(untracked_file, "w", encoding="utf-8") as f:
         f.write("untracked content")
 
     status = tool.git_status()
@@ -67,7 +68,7 @@ def test_git_diff(test_repo):
 def test_git_log_file(test_repo):
     tool = GitTool(test_repo, config=config_for_tests())
     file_path = os.path.join(test_repo, "log.txt")
-    with open(file_path, "w") as f:
+    with open(file_path, "w", encoding="utf-8") as f:
         f.write("initial content")
     _git(test_repo, "add", "log.txt")
     _git(test_repo, "commit", "-m", "Initial commit for log")
@@ -78,7 +79,7 @@ def test_git_log_search(test_repo):
     tool = GitTool(test_repo, config=config_for_tests())
     unique_message = "Unique commit message for search"
     file_path = os.path.join(test_repo, "search.txt")
-    with open(file_path, "w") as f:
+    with open(file_path, "w", encoding="utf-8") as f:
         f.write("content")
     _git(test_repo, "add", "search.txt")
     _git(test_repo, "commit", "-m", unique_message)
@@ -102,7 +103,7 @@ def test_get_recent_commits(test_repo):
     _git(test_repo, "checkout", "main")
     for i in range(5):
         file_path = os.path.join(test_repo, f"file{i}.txt")
-        with open(file_path, "w") as f:
+        with open(file_path, "w", encoding="utf-8") as f:
             f.write(f"content {i}")
         _git(test_repo, "add", f"file{i}.txt")
         _git(test_repo, "commit", "-m", f"Commit {i}")
@@ -116,7 +117,7 @@ def test_git_diff_commit(test_repo):
     _git(test_repo, "checkout", "main")
     commit1 = _git(test_repo, "rev-parse", "HEAD")
     file_path2 = os.path.join(test_repo, "diffcommit.txt")
-    with open(file_path2, "w") as f:
+    with open(file_path2, "w", encoding="utf-8") as f:
         f.write("more content")
     _git(test_repo, "add", "diffcommit.txt")
     _git(test_repo, "commit", "-m", "Second commit")

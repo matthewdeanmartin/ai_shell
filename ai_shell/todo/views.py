@@ -15,7 +15,7 @@ def assigned_incomplete_tasks_to_markdown(assignee_name: str, tasks: list[Task])
 
     # Load template
     template_dir = join(dirname(__file__), "templates")  # Adjust path as necessary
-    env = Environment(loader=FileSystemLoader(template_dir))
+    env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
     template = env.get_template("task_report_template.md.j2")
 
     # Render template
@@ -34,7 +34,7 @@ def search_results_to_markdown(search_keyword, tasks):
         matching_tasks = tasks
     # Load template
     template_dir = join(dirname(__file__), "templates")  # Adjust path as necessary
-    env = Environment(loader=FileSystemLoader(template_dir))
+    env = Environment(loader=FileSystemLoader(template_dir), autoescape=True)
     template = env.get_template("search_results_template.md.j2")
 
     # Render template

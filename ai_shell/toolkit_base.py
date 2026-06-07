@@ -8,6 +8,7 @@ handling, and error-to-RFC7807 conversion.
 """
 
 import logging
+import os
 import traceback
 from collections.abc import Callable
 from typing import Any
@@ -43,8 +44,6 @@ class ToolKitBase:
             permitted_tools (list[str]): The tools the caller is allowed to invoke.
             config (Config): Developer config the model shouldn't set.
         """
-        import os
-
         self.root_folder = os.path.abspath(root_folder)
         self.token_model = token_model
         self.global_max_lines = global_max_lines

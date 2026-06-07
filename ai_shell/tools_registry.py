@@ -11,7 +11,7 @@ from collections.abc import Collection
 from typing import Any, Union
 
 from ai_shell.ls_tool import LsTool
-from ai_shell.schemas import _SCHEMAS
+from ai_shell.schemas import SCHEMAS
 from ai_shell.utils.config_manager import Config
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ def just_tool_names() -> list[str]:
         list[str]: A list of tool names
     """
     names = []
-    for _ns, tools in _SCHEMAS.items():
+    for _ns, tools in SCHEMAS.items():
         for name, _schema in tools.items():
             names.append(name)
     return names
@@ -46,7 +46,7 @@ def initialize_all_tools(skips: list[str] | None = None, keeps: list[str] | None
     else:
         keep = [name for name in just_tool_names() if name not in skips]
 
-    for _ns, tools in _SCHEMAS.items():
+    for _ns, tools in SCHEMAS.items():
         for name, schema in tools.items():
             function_style: dict[str, Union[str, Collection[str]]] = {"name": name}
             parameters = {"type": "object", "properties": schema["properties"], "required": schema["required"]}

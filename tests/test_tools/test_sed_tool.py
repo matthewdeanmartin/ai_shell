@@ -8,7 +8,7 @@ def test_regex_substitution():
     commands = ["s/World/Universe/"]
     expected_output = "Hello Universe\nThis is a test"
     tool = SedTool(".", config=config_for_tests())
-    assert tool._process_sed(input_text, commands) == expected_output
+    assert tool._process_sed(input_text, commands) == expected_output  # pylint: disable=protected-access
 
 
 def test_print():
@@ -16,7 +16,7 @@ def test_print():
     commands = ["p"]
     expected_output = input_text  # 'p' should print each line as it is
     tool = SedTool(".", config=config_for_tests())
-    assert tool._process_sed(input_text, commands) == expected_output
+    assert tool._process_sed(input_text, commands) == expected_output  # pylint: disable=protected-access
 
 
 def test_append():
@@ -24,7 +24,7 @@ def test_append():
     commands = ["a\\Appended text"]
     expected_output = "Hello World\nAppended text"
     tool = SedTool(".", config=config_for_tests())
-    assert tool._process_sed(input_text, commands) == expected_output
+    assert tool._process_sed(input_text, commands) == expected_output  # pylint: disable=protected-access
 
 
 def test_insert():
@@ -32,7 +32,7 @@ def test_insert():
     commands = ["i\\Inserted text"]
     expected_output = "Inserted text\nHello World"
     tool = SedTool(".", config=config_for_tests())
-    assert tool._process_sed(input_text, commands) == expected_output
+    assert tool._process_sed(input_text, commands) == expected_output  # pylint: disable=protected-access
 
 
 def test_change():
@@ -40,4 +40,4 @@ def test_change():
     commands = ["2c\\Changed line"]
     expected_output = "Hello World\nChanged line"
     tool = SedTool(".", config=config_for_tests())
-    assert tool._process_sed(input_text, commands) == expected_output
+    assert tool._process_sed(input_text, commands) == expected_output  # pylint: disable=protected-access

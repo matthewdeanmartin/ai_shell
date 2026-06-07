@@ -30,7 +30,7 @@ def find_function_code(file_path, function_name):
                     end_line = start[0] - 1
                     return file_path, function_name, (function_line, end_line)
 
-            if token_type == tokenize.NAME and token_string == "def" and depth == 0:
+            if token_type == tokenize.NAME and token_string == "def" and depth == 0:  # nosec
                 next_token, _ = next(tokens), next(tokens)  # Skip 'def' and get the function name
                 if next_token.string == function_name:
                     function_line = start[0]
